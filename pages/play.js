@@ -140,7 +140,7 @@ export default function Play() {
   return (
     <div>
       <Head>
-        <title>CIP64 Playground</title>
+        <title>CIP54 Playground</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
         
