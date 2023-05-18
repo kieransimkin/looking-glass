@@ -170,7 +170,7 @@ export default function Home() {
     return (
     <div>
       <Head>
-        <title>CIP54 Playground</title>
+        <title>Smart NFT Playground</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

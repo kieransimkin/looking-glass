@@ -261,9 +261,9 @@ const Header = (props) => {
 
                 {!walletApi &&
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <Link href="/play"><Button size={buttonsize} className={buttonclass} sx={{margin: 0, padding: 0}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
+                            <Button size={buttonsize} className={buttonclass} sx={{margin: 0, padding: 0}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
                             {connectContent}
-                            </Button></Link>
+                            </Button>
                         </div>
                         
                 }

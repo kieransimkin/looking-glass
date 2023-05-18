@@ -13,7 +13,8 @@ import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import Image from "next/image";
 import AddFeatureDialog from "./dialogs/AddFeatureDialog";
-import { Add, PlusOneOutlined } from "@material-ui/icons";
+import { Add, PlusOneOutlined, ExpandMore, ChevronRight, Delete, TurnedInRounded } from "@material-ui/icons";
+import { TreeView, TreeItem } from "@material-ui/lab";
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.background.paper, 0.9);
   const second = alpha(theme.palette.background.default, 0.9);
@@ -40,28 +41,156 @@ const useStyles = makeStyles(theme => {
   };
 });
 const FeatureSelector = (props) => {
-  const {children} = props;
+  const {children, onChange, defaultUses} = props;
   const theme = useTheme();
   const [addFeatureOpen, setAddFeatureOpen] = useState(false);
+  const [features, setFeatures] = useState([]);
   const classes = useStyles(props);
+  
+  const getFeatureTree = (f) => { 
+    let featureTree = {};
+    for (var c=0; c<f.length; c++) { 
+      if (f[c]?.renderer) { 
+        // There can be only one renderer
+        featureTree.renderer = f[c]?.renderer
+      }
+      if (f[c]?.libraries) { 
+        if (!featureTree?.libraries) { 
+          featureTree.libraries=[];
+        }
+        featureTree.libraries.push(f[c].libraries);
+      }
+      if (f[c]?.tokens) { 
+        if (!featureTree?.tokens) { 
+          featureTree.tokens=[];
+        }
+        featureTree.tokens.push(f[c].tokens);
+      }
+      if (f[c]?.transactions) { 
+        if (!featureTree.transactions) { 
+          featureTree.transactions=[];
+        }
+        featureTree.transactions.push(f[c].transactions);
+      }
+    }
+    return featureTree;
+  }
+  
+  // This is a yucky way to acheive the initial page load from save:
+  if (defaultUses && (!features || features.length<1)) { 
+    setFeatures(defaultUses);
+    onChange(getFeatureTree(defaultUses));
+  }
+  const featureTree = getFeatureTree(features);
+
   const closeAddFeature = () => { 
     setAddFeatureOpen(false);
   }
   const addFeatureClick = () => { 
     setAddFeatureOpen(true);
   }
-  
+  const deleteItem = (options) => { 
+    return function () { 
+      const newFeatures = features.filter((feature) => { 
+        if (options.transactions && options.transactions == feature.transactions) {
+          return false;
+        }
+        if (options.tokens && options.tokens == feature.tokens) { 
+          return false;
+        }
+        if (options.libraries && options.libraries.name == feature.libraries?.name && options.libraries.version == feature.libraries?.version) {
+          return false;
+        }
+        if (options.renderer && options.renderer == feature.renderer) { 
+          return false;
+        }
+        return true;
+      })
+      setFeatures(newFeatures);
+      onChange(getFeatureTree(newFeatures));
+    }
+  }
+  const importChange = (change) => { 
+    // Todo - remove duplicates, or previous renderers
+    const newFeatures = features.filter((feature) => { 
+      if (change.transactions && change.transactions == feature.transactions) {
+        return false;
+      }
+      if (change.tokens && change.tokens == feature.tokens) { 
+        return false;
+      }
+      
+      if (change.libraries && change.libraries.name == feature.libraries?.name && change.libraries.version == feature.libraries?.version) {
+        return false;
+      }
+      if (change.renderer && feature.renderer) { 
+        return false;
+      }
+      return true;
+    })
+    setFeatures([...newFeatures, change])
+    onChange(getFeatureTree([...newFeatures, change]));
+  }
+  let librariesHTML = '';
+  let tokensHTML = '';
+  let transactionsHTML = '';
+  let rendererHTML = '';
+  let nodeId=0;
+  if (featureTree?.libraries) { 
+    const librariesItems = featureTree.libraries.map((library) => <TreeItem nodeId={String(nodeId++)} label={library.name+' - '+library.version} onIconClick={deleteItem({libraries:{name: library.name, version: library.version}})} icon={<Delete />}/>);
+    librariesHTML = (<TreeItem nodeId={String(nodeId++)} label="Libraries">
+                      {librariesItems}
+                    </TreeItem>);
+  }
+  if (featureTree?.tokens) { 
+    const tokensItems = featureTree.tokens.map((token) => <TreeItem nodeId={String(nodeId++)} onIconClick={deleteItem({tokens: token})} label={token}  icon={<Delete />}/>);
+    tokensHTML = (<TreeItem nodeId={String(nodeId++)} label="Tokens">
+                    {tokensItems}
+                  </TreeItem>);
+  }
+  if (featureTree?.transactions) { 
+    const transactionsItems = featureTree.transactions.map((transaction) => <TreeItem nodeId={String(nodeId++)} onIconClick={deleteItem({transactions:transaction})} label={transaction} icon={<Delete />} />);
+    transactionsHTML = (<TreeItem nodeId={String(nodeId++)} label="Transactions">
+                          {transactionsItems}
+                        </TreeItem>);
+  }
+  if (featureTree?.renderer) { 
+    rendererHTML = (<TreeItem nodeId={String(nodeId++)} label="Renderer">
+                      <TreeItem nodeId={String(nodeId++)} label={featureTree.renderer} icon={<Delete />} onIconClick={deleteItem({renderer: featureTree.renderer})} />
+                    </TreeItem>);
+  }
+  const expanded = [];
+  for (var c=0; c<=nodeId; c++) { 
+    expanded.push(String(c));
+  }
   return (
     <div className={classes.root}>
-    <Button startIcon=<Add /> onClick={addFeatureClick} color="primary" variant="outlined">Add Feature</Button>
-    <AddFeatureDialog open={addFeatureOpen} onClose={closeAddFeature} />
+      <Button startIcon=<Add /> onClick={addFeatureClick} color="primary" variant="outlined">Add Feature</Button>
+      <AddFeatureDialog onImportChange={importChange} open={addFeatureOpen} onClose={closeAddFeature} />
+      
+      <TreeView
+      disableSelection={true}
+      multiSelect={false}
+      expanded={expanded}
+  aria-label="file system navigator"
+  defaultExpandIcon={<ChevronRight />}
+  defaultCollapseIcon={<ExpandMore />}
+>
+{librariesHTML}
+{tokensHTML}
+{transactionsHTML}
+{rendererHTML}
+
+  </TreeView>
+  
     </div>
 
 
   );
 }
 FeatureSelector.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  defaultUses: PropTypes.array
   
 };
 export default FeatureSelector;

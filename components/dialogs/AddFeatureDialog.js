@@ -1,36 +1,22 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {useTheme, Button, CircularProgress} from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import StepWizard from "react-step-wizard";
 import WalletContext from '../WalletContext';
-import { mkBase, postData, buildWitnessed, getData, refreshWallet } from '../../utils/Api';
-import { containsSpecialPolicy } from '../../utils/Helpers';
 import { Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-import { ContentPasteSearchOutlined } from '@mui/icons-material';
-
-import ReactCountryFlag from 'react-country-flag/dist';
-
-import CheckIcon from '@material-ui/icons/Check';
+import axios from 'axios';
 import {TextField} from '@material-ui/core';
-
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomDialog from '../CustomDialog';
-
+import { validBech32Address } from '../../utils/CSL'
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
@@ -161,30 +147,129 @@ const Step2 = ({ featureType, previousStep, goToStep, nextStep, currentStep, han
   } else if (featureType=='renderer') { 
     return <Step2Renderer featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
   }
-
 }
 
 const Step2Libraries = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
   const theme = useTheme();
   
   const [enableNext, setEnableNext] = useState(false);
-  
+  const [name, setName] = useState('');
+  const [search, setSearch] = useState('');
+  const [version, setVersion] = useState('');
+  const [open, setOpen] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const loading = open && options.length === 0 && search.length!=0;
   const wallet = useContext(WalletContext);
   const classes = useStyles();
-  
+
+  const onChange = (e,v) => { 
+    if (!v?.name || !v?.version) return;
+    setName(v.name);
+    setVersion(v.version);
+    if (v.name.length>0 && v.version.length>0) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const handleNameChange = (e) => { 
+    const val = e.target.value;
+    setName(val);
+    if (val.length>0 && version.length>0) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const handleVersionChange = (e) => { 
+    const val = e.target.value;
+    setVersion(val);
+    if (name.length>0 && val.length>0) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const complete = () => { 
+    onImportChange({libraries: {name, version}});
+    handleClose();
+  }
+  const formatOptionLabel = ({name, version, homepage}) => { 
+    return (
+    <div style={{ display: "flex", "flexDirection":"column" }}>
+    <Typography variant="button">{name}</Typography>
+    
+    <Typography variant="caption">{version}</Typography>
+    </div>
+    );
+  }
+  const searchChange = (e, val) => { 
+    setSearch(e.target.value);
+    setOptions([]);
+    axios.get('https://api.cdnjs.com/libraries?fields=version,homepage&limit=5&search='+e.target.value).then((results) => { 
+        if (results.data.results.length<1) { 
+          setOptions([{name:'Nothing Found'}])
+        } else { 
+          setOptions([...results.data.results]);
+        }
+
+    })
+  }
   return <>
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Choose Library
-      </DialogTitle>
-      
-      
+      </DialogTitle>      
       <Typography variant="body1">Select which libraries you would like to include from the list below:</Typography>
       <br />&nbsp;<br />
-      
+      <Autocomplete
+        style={{ width: 500 }}
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
+        options={options}
+        renderOption={formatOptionLabel}
+        getOptionLabel={(option)=>option.name}
+        onChange={onChange}
+        filterOptions={(x) => x} 
+        loading={loading}
+        renderInput={(params) => (
+          <TextField
+            onChange={searchChange}
+            
+            {...params}
+            label="Search cdnjs..."
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
+          />
+        )}
+      />
+      <div style={{minHeight: '300px'}}>
       <br />
-     </DialogContent>
-     <DialogButtons previousStep={previousStep} nextStep={nextStep} enableNext={enableNext} />
+      &nbsp;
+      <br />
+        <Typography variant='subtitle1'>Manually enter library names or versions here.<br />Be aware that libraries will be loaded from cdnjs</Typography><br />
+        <br />
+        <TextField style={{width:'440px'}} autoFocus onChange={handleNameChange} label="Library Name" variant='outlined' value={name}/>
+        <br />
+        &nbsp;
+        <br />
+        <TextField style={{width:'440px'}} autoFocus onChange={handleVersionChange} label="Version" variant='outlined' value={version} />
+      </div>
+      <br />
+    </DialogContent>
+    <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />
     
   </>;
 };
@@ -203,7 +288,7 @@ const Step2Tokens = ({ previousStep, goToStep, nextStep, currentStep, handleClos
     setType(val);
     if (val=='address') { 
 
-      if (addr && addr.length>0) { 
+      if (addr && addr.length>0 && validBech32Address(addr)) { 
         setEnableNext(true);  
       } else { 
         setEnableNext(false);
@@ -216,7 +301,7 @@ const Step2Tokens = ({ previousStep, goToStep, nextStep, currentStep, handleClos
   }
   const handleAddrChange = (e) => { 
     setAddr(e.target.value);
-    if (e.target.value.length>0) { 
+    if (e.target.value.length>0 && validBech32Address(e.target.value)) { 
       setEnableNext(true);
     } else { 
       setEnableNext(false);
@@ -225,7 +310,6 @@ const Step2Tokens = ({ previousStep, goToStep, nextStep, currentStep, handleClos
   const complete = () => { 
     onImportChange({tokens: type=='own' ? 'own' :addr});
     handleClose();
-    console.log('complete');
   }
   return <>
     <DialogContent className={classes.dialog}>
@@ -251,7 +335,7 @@ const Step2Tokens = ({ previousStep, goToStep, nextStep, currentStep, handleClos
             <Typography>Another address or stake key</Typography>
             <Typography variant='caption'>Import the tokens that are held by the owner of this NFT</Typography>
             <br />
-            <TextField autoFocus onChange={handleAddrChange} ref={addrFieldRef} disabled={type!='address'} label="Address" variant='outlined'/>
+            <TextField style={{width:'500px'}} autoFocus onChange={handleAddrChange} ref={addrFieldRef} disabled={type!='address'} label="Address" variant='outlined'/>
           </div>
         </div>
       </RadioGroup>
@@ -266,10 +350,37 @@ const Step2Transactions = ({ previousStep, goToStep, nextStep, currentStep, hand
   const theme = useTheme();
   
   const [enableNext, setEnableNext] = useState(false);
-  
+  const [addr, setAddr] = useState(null);
+  const [type, setType] = useState(null);
   const wallet = useContext(WalletContext);
+  const addrFieldRef = useRef();
   const classes = useStyles();
-  
+  const handleChange = (e, val) => { 
+    setType(val);
+    if (val=='address') {
+      if (addr && addr.length>0 && validBech32Address(addr)) { 
+        setEnableNext(true);  
+      } else { 
+        setEnableNext(false);
+      }
+    } else if (val=='own') { 
+      setEnableNext(true);
+    }
+    if (e) e.preventDefault();
+    return false;
+  }
+  const handleAddrChange = (e) => { 
+    setAddr(e.target.value);
+    if (e.target.value.length>0 && validBech32Address(e.target.value)) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const complete = () => { 
+    onImportChange({transactions: type=='own' ? 'own' :addr});
+    handleClose();
+  }
   return <>
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
@@ -280,10 +391,29 @@ const Step2Transactions = ({ previousStep, goToStep, nextStep, currentStep, hand
       <Typography variant="body1">Select which address you&apos;d like to import the transactions from</Typography>
       <br />&nbsp;<br />
       
+      <RadioGroup aria-label="type" name="type" onChange={handleChange}>
+        <div className={classes.row}>
+          <Radio value="own" checked={type=='own'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'own')}>
+            <Typography>Own</Typography>
+            <Typography variant='caption'>Import the transactions of the owner of this NFT</Typography>
+          </div>
+        </div>
+        <br />
+        <div className={classes.row}>
+          <Radio value="address" checked={type=='address'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'address')}>
+            <Typography>Another address or stake key</Typography>
+            <Typography variant='caption'>Import the transactions from another address or stake key</Typography>
+            <br />
+            <TextField style={{width:'500px'}} autoFocus onChange={handleAddrChange} ref={addrFieldRef} disabled={type!='address'} label="Address" variant='outlined'/>
+          </div>
+        </div>
+      </RadioGroup>
       <br />
      </DialogContent>
-     <DialogButtons previousStep={previousStep} nextStep={nextStep} enableNext={enableNext} />
-    
+     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />
+
   </>;
 };
 
@@ -291,10 +421,24 @@ const Step2Renderer = ({ previousStep, goToStep, nextStep, currentStep, handleCl
   const theme = useTheme();
   
   const [enableNext, setEnableNext] = useState(false);
+  const [asset, setAsset] = useState('');
   
   const wallet = useContext(WalletContext);
+  
   const classes = useStyles();
   
+  const handleAssetChange = (e) => { 
+    setAsset(e.target.value);
+    if (e.target.value.length>0) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const complete = () => { 
+    onImportChange({renderer: asset});
+    handleClose();
+  }
   return <>
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
@@ -304,11 +448,10 @@ const Step2Renderer = ({ previousStep, goToStep, nextStep, currentStep, handleCl
       
       <Typography variant="body1">Select which asset you&apos;d like to function as the renderer for this NFT</Typography>
       <br />&nbsp;<br />
-      
+      <TextField value={asset} style={{width:'500px'}} autoFocus onChange={handleAssetChange} label="Asset" variant='outlined'/>
       <br />
      </DialogContent>
-     <DialogButtons previousStep={previousStep} nextStep={nextStep} enableNext={enableNext} />
-    
+     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    
   </>;
 };
 
@@ -357,25 +500,22 @@ const DialogTitle = (props) => {
 
 
 const AddFeatureDialog = (props) => {
-  const { onClose, open } = props;  
+  const { onClose, open, onImportChange } = props;  
   const [featureType, setFeatureType] = useState(null);
 
   const theme = useTheme();
   const classes=useStyles();
     const handleClose =  (_, reason) => {
       if (reason !== "backdropClick") {
-        onClose(null);
-        
+        onClose(null); 
       }
-      
     };
     const onFeatureTypeChange = (e,val) => { 
       setFeatureType(val);
-      
     }
 
     const importChange = (change) => { 
-      console.log(change);
+      onImportChange(change);
     }
     
     return (
@@ -394,6 +534,7 @@ const AddFeatureDialog = (props) => {
 }
 AddFeatureDialog.propTypes = {
     open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    onImportChange: PropTypes.func.isRequired
 };
 export default AddFeatureDialog;

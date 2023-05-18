@@ -195,3 +195,21 @@ h2 {
     left: 1px;
   }
 }
+.cm-content {
+  white-space: pre-wrap;
+  word-break: normal;
+  word-wrap: break-word;
+}
+.cm-editor { 
+  flex-grow: 1
+}
+.rc-divider { 
+  min-width: 0.4em;
+  min-height: 0.4em;
+}
+.rc-divider-horizontal { 
+  cursor:ew-resize;
+}
+.rc-divider-vertical { 
+  cursor:ns-resize;
+}

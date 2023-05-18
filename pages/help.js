@@ -77,14 +77,14 @@ export default function Account() {
   return (
     <div>
       <Head>
-        <title>Page 2</title>
+        <title>CIP54 Help</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
       <div className={classes.bg} />
       <Typography color="textPrimary" variant='h1' align="center" className={classes.heading}>
-          Page 2
+          Some information about CIP54 here
         </Typography><br />
       <main className={classes.main}>
     
