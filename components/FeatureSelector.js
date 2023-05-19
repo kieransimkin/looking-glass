@@ -44,11 +44,12 @@ const FeatureSelector = (props) => {
   const {children, onChange, defaultUses} = props;
   const theme = useTheme();
   const [addFeatureOpen, setAddFeatureOpen] = useState(false);
-  const [features, setFeatures] = useState([]);
+  const [features, setFeatures] = useState(null);
   const classes = useStyles(props);
   
   const getFeatureTree = (f) => { 
     let featureTree = {};
+    if (!f) return featureTree;
     for (var c=0; c<f.length; c++) { 
       if (f[c]?.renderer) { 
         // There can be only one renderer
@@ -75,9 +76,9 @@ const FeatureSelector = (props) => {
     }
     return featureTree;
   }
-  
+
   // This is a yucky way to acheive the initial page load from save:
-  if (defaultUses && (!features || features.length<1)) { 
+  if (defaultUses && !features) { 
     setFeatures(defaultUses);
     onChange(getFeatureTree(defaultUses));
   }

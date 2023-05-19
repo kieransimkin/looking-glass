@@ -21,10 +21,14 @@ import SimulationSelector from './SimulationSelector';
 import { postData, getData } from '../utils/Api'
 import SmartNFTPortal from './SmartNFTPortal';
 import MetadataEditor from './MetadataEditor';
+
+import * as cheerio from 'cheerio';
+
 let programCodeTimer = null;
 
 
 import * as React from "react";
+import { minify } from 'html-minifier-terser';
 
 
 
@@ -215,17 +219,59 @@ const Playground = function (props) {
   const [random, setRandom] = useState(Math.random());
 
 
-  const updateMetadataJSON = (m, ft, s, pc) => { 
-    const json = { 
-      uses: ft,
-      files: [
-        {
+  const updateMetadataJSON = (m, ft, s, programCode) => { 
+    const json = { };
+    const $ = cheerio.load(programCode);
+    
+
+    //console.log(min);
+    console.log('XXXXXX');
+    $('script').each(function(i, elm) {
+      
+    });
+    minify(programCode, {removeAttributeQuotes: true}).then((pc) => { 
+      const files = [];
+      for (const [key,value] of Object.entries(m)) { 
+        if (key=='uses') { 
+          continue;
+        }
+        
+        if (key=='files') { 
+          // Always add the actual program code as the first file
+          
+          files.push({
+            'mediaType': "text/html",
+            'src': 'data:text/html,'+encodeURIComponent(pc)
+          });
+          if (typeof value == "string") { 
+            continue;
+          }
+          for (const file of value) { 
+            
+            
+            files.push(file);
+          }
+          continue;
+        }
+        json[key]=value;
+      }
+      json.uses = ft;
+      if (files.length<1) { 
+  
+        // If we didn't add any files, we still need to add our program code:
+        
+        files.push({
           'mediaType': "text/html",
           'src': 'data:text/html,'+encodeURIComponent(pc)
-        }
-      ]
-    }
-    setMetadataJSON(json);
+        });
+      }
+      json.files = files;
+      
+      
+      
+      setMetadataJSON(json);
+    })
+    
   }
   const defaultProgramCode = props.programCode;
   if (defaultProgramCode && (!programCode || programCode=='')) { 
@@ -274,6 +320,10 @@ const Playground = function (props) {
     }, 1000);
     
   }
+  const metadataChange = (e) => { 
+    setMetadata(e);
+    updateMetadataJSON(e, featureTree, simulation, programCode);
+  }
   const refreshProgram = (e) => { 
     setRandom(Math.random())
   }
@@ -302,7 +352,7 @@ const Playground = function (props) {
             <Typography style={{}} variant='caption'>{JSON.stringify(metadataJSON,null,"\t").length} bytes</Typography>
             </div>
             <div><LinearProgress variant='determinate' value={progressValue} /></div>
-            <MetadataEditor />
+            <MetadataEditor defaultMetadata={props.metadata} onChange={metadataChange} />
             <CodeMirror
               editable={false}
               value={JSON.stringify(metadataJSON, null, "\t")}

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {useTheme, Button, CircularProgress} from '@material-ui/core';
+import {useTheme, Button, CircularProgress, TextareaAutosize} from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,6 +17,9 @@ import {TextField} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomDialog from '../CustomDialog';
 import { validBech32Address } from '../../utils/CSL'
+import CodeMirror from '@uiw/react-codemirror';
+import { EditorView } from '@codemirror/view';
+import { javascript } from '@codemirror/lang-javascript';
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
@@ -98,7 +101,7 @@ const Step1 = ({nextStep, onFieldTypeChange, goToStep, currentStep, handleClose}
       <br />&nbsp;<br />
       <RadioGroup aria-label="type" name="type" onChange={handleChange}>
         <div className={classes.row}>
-          <Radio value="libraries" checked={fieldType=='string'} onChange={handleChange} name="type-radio" />
+          <Radio value="string" checked={fieldType=='string'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'string')}>
             <Typography>String</Typography>
             <Typography variant='caption'>Simple text field</Typography>
@@ -106,7 +109,7 @@ const Step1 = ({nextStep, onFieldTypeChange, goToStep, currentStep, handleClose}
         </div>
         <br />
         <div className={classes.row}>
-          <Radio value="tokens" checked={fieldType=='json'} onChange={handleChange} name="type-radio" />
+          <Radio value="json" checked={fieldType=='json'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'json')}>
             <Typography>JSON</Typography>
             <Typography variant='caption'>Advanced field using JSON - use this if you want to specify arrays</Typography>
@@ -122,6 +125,127 @@ const Step1 = ({nextStep, onFieldTypeChange, goToStep, currentStep, handleClose}
      <DialogButtons previousStep={null} nextStep={nextStep} enableNext={enableNext} />
   </>;
 };
+const Step2 = ({ fieldType, previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  if (fieldType=='string') { 
+    return <Step2String fieldType={fieldType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>
+  } else if (fieldType=='json') { 
+    return <Step2JSON fieldType={fieldType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
+  
+  }
+}
+
+const Step2String = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  const theme = useTheme();
+  
+  const [enableNext, setEnableNext] = useState(false);
+  const [string, setString] = useState('');
+  const [fieldName, setFieldName] = useState('');
+  
+  const wallet = useContext(WalletContext);
+  
+  const classes = useStyles();
+  
+  const handleStringChange = (e) => { 
+    setString(e.target.value);
+    if (e.target.value.length>0 && fieldName?.length>0) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const handleFieldNameChange = (e) => { 
+    setFieldName(e.target.value);
+    if (e.target.value.length>0 && string?.length>0) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const complete = () => { 
+    onImportChange({fieldName, string});
+    handleClose();
+  }
+  return <>
+    <DialogContent className={classes.dialog}>
+      <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
+        Enter string field
+      </DialogTitle>
+      
+      
+      <Typography variant="body1">Enter field name and a value for this field</Typography>
+      <br />
+      <TextField value={fieldName} style={{width:'300px'}} autoFocus onChange={handleFieldNameChange} label="Field Name" variant='outlined'/>
+      <TextField value={string} style={{width:'300px'}} autoFocus onChange={handleStringChange} label="Value" variant='outlined'/>
+      <br />
+     </DialogContent>
+     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    
+  </>;
+};
+const Step2JSON = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  const theme = useTheme();
+  
+  const [enableNext, setEnableNext] = useState(false);
+  const [json, setJSON] = useState("{\n\n}");
+  const [fieldName, setFieldName] = useState('');
+  
+  const wallet = useContext(WalletContext);
+  
+  const classes = useStyles();
+  
+  const handleJSONChange = (e) => { 
+    setJSON(e);
+    let parsed=true;
+    try {
+      JSON.parse(e);
+    } catch (ex) { 
+      parsed=false;
+    }
+    if (e.length>0 && fieldName?.length>0 && parsed) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const handleFieldNameChange = (e) => { 
+    setFieldName(e.target.value);
+    if (e.target.value.length>0 && json?.length>0) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const complete = () => { 
+    onImportChange({fieldName, json});
+    handleClose();
+  }
+  return <>
+    <DialogContent className={classes.dialog}>
+      <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
+        Enter JSON field
+      </DialogTitle>
+      
+      
+      <Typography variant="body1">Enter field name and a value for this field</Typography>
+      <br />&nbsp;<br />
+      <TextField value={fieldName} style={{width:'500px'}} autoFocus onChange={handleFieldNameChange} label="Field Name" variant='outlined'/>
+      <br />&nbsp;<br />
+      <CodeMirror
+              editable={true}
+              value={json}
+              style={{outline:'1px solid rgba(0,0,0,0.3)'}}
+              height="inherit"
+              theme={theme.palette.type}
+              extensions={[EditorView.lineWrapping, javascript({ json: true})]}
+              onChange={handleJSONChange}
+            />
+      
+      
+      <br />
+     </DialogContent>
+     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    
+  </>;
+};
+
 const DialogButtons = ({previousStep, nextStep, enableNext, nextStepLabel}) => { 
   const theme = useTheme();
   const classes=useStyles();
@@ -192,6 +316,7 @@ const AddFieldDialog = (props) => {
           
             <StepWizard>
             <Step1 onFieldTypeChange={onFieldTypeChange} handleClose={handleClose} />
+            <Step2 fieldType={fieldType} onImportChange={importChange} handleClose={handleClose} />
             </StepWizard>
           
         </CustomDialog>
