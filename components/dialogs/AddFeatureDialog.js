@@ -32,8 +32,15 @@ const useStyles = makeStyles(theme => {
     paddingRight: '0em'
   },
   row: { 
+    display: 'flex'
+  },
+  table: { 
     display: 'flex',
-    alignItems: 'center'
+    flexDirection:'column'
+  },
+  column: { 
+    display: 'flex',
+    flexDirection: 'row'
   },
   closeButton: {
     position: 'relative',
@@ -97,11 +104,14 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       <Typography variant="body1">Select which Smart NFT feature you would like to add:</Typography>
       <br />&nbsp;<br />
       <RadioGroup aria-label="type" name="type" onChange={handleChange}>
+      <table>
+        <tr><td>
+        
         <div className={classes.row}>
-          <Radio value="libraries" checked={featureType=='libraries'} onChange={handleChange} name="type-radio" />
-          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'libraries')}>
-            <Typography>Libraries</Typography>
-            <Typography variant='caption'>Import standard Javascript libraries for use in your NFT</Typography>
+          <Radio value="minttx" checked={featureType=='minttx'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'minttx')}>
+            <Typography>Mint TX</Typography>
+            <Typography variant='caption'>Import the mint TX</Typography>
           </div>
         </div>
         <br />
@@ -109,7 +119,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
           <Radio value="tokens" checked={featureType=='tokens'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'tokens')}>
             <Typography>Tokens</Typography>
-            <Typography variant='caption'>Import a list of tokens held by a particular address</Typography>
+            <Typography variant='caption'>Import tokens held by an address</Typography>
           </div>
         </div>
         <br />
@@ -117,7 +127,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
           <Radio value="utxos" checked={featureType=='utxos'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'utxos')}>
             <Typography>UTXOs</Typography>
-            <Typography variant='caption'>Import a list of utxos held by a particular address</Typography>
+            <Typography variant='caption'>Import utxos held by an address</Typography>
           </div>
         </div>
         <br />
@@ -125,7 +135,23 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
           <Radio value="transactions" checked={featureType=='transactions'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'transactions')}>
             <Typography>Transactions</Typography>
-            <Typography variant='caption'>Import a list of the most recent transactions at an address</Typography>
+            <Typography variant='caption'>Import transactions of an address</Typography>
+          </div>
+        </div>
+      </td><td>
+      <div className={classes.row}>
+          <Radio value="libraries" checked={featureType=='libraries'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'libraries')}>
+            <Typography>Libraries</Typography>
+            <Typography variant='caption'>Import Javascript libraries</Typography>
+          </div>
+        </div>
+        <br />
+        <div className={classes.row}>
+          <Radio value="files" checked={featureType=='files'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'files')}>
+            <Typography>Files</Typography>
+            <Typography variant='caption'>Import images &amp; media from other NFTs</Typography>
           </div>
         </div>
         <br />
@@ -133,10 +159,12 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
           <Radio value="renderer" checked={featureType=='renderer'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'renderer')}>
             <Typography>Renderer</Typography>
-            <Typography variant='caption'>Specify that another token provides the rendering code for this NFT</Typography>
+            <Typography variant='caption'>Another token renders this NFT</Typography>
           </div>
         </div>
         <br />
+      </td></tr></table>
+      <br />
       </RadioGroup>
     
   
