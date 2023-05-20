@@ -64,18 +64,71 @@ const SmartNFTPortal = (props) => {
             librariesHTML+='<script src="'+smartImports.libraries[c]+'"></script>'
         }
     }
-    
+    librariesHTML+=getPortalAPIScripts(smartImports);
     if (metadata && metadata.files && metadata.files[0]) { 
         let blob = dataURItoString(metadata.files[0].src);
-        blob = '<html data-id="'+random+'" ><head>'+librariesHTML+'</head><body style="padding: 0; margin: 0;"}>'+blob+'</body></html>';
+        blob = '<html data-id="'+random+'" ><head>'+librariesHTML+'</head><body style="padding: 0; margin: 0px; min-width: 100%; min-height: 100%;"}>'+blob+'</body></html>';
     
         //console.log(blob);
         src='data:text/html,'+encodeURIComponent(blob)
             //console.log(src);
     }
     return (
-        <iframe style={style} scrolling="no" sandbox="allow-scripts" src={src} />
+        <iframe style={style}  sandbox="allow-scripts" src={src} />
     );
+}
+const getPortalAPIScripts = (smartImports) => { 
+
+    let ret="<script>\n";
+    ret+="if (!window.cardano) window.cardano={};\n";
+    ret+="if (!window.cardano.nft) window.cardano.nft={};\n";
+    ret+="if (!window.cardano.nft._data) window.cardano.nft._data={};\n";
+
+    ret+="window.cardano.nft._data.ownerAddr="+JSON.stringify(smartImports?.ownerAddr)+";\n";
+    ret+="window.cardano.nft._data.fetchedAt="+JSON.stringify(smartImports?.fetchedAt)+";\n";
+    if (smartImports?.utxos) { 
+        ret+='window.cardano.nft._data.utxos='+JSON.stringify(smartImports?.utxos)+";\n";
+    }
+    if (smartImports?.tokens) { 
+        ret+='window.cardano.nft._data.tokens='+JSON.stringify(smartImports.tokens)+";\n";
+    }
+    if (smartImports?.transactions) { 
+        ret+='window.cardano.nft._data.transactions='+JSON.stringify(smartImports.transactions)+";\n";
+        
+    }
+    ret+='</script>';
+    ret+=`
+        <script>
+            window.cardano.nft.getTransactions = async (which, paginate=null) => { 
+                if (paginate) { 
+                    console.error('Smart NFT API does not support result pagination yet');
+                }
+                if (which=='own') { 
+                    which=window.cardano.nft._data.ownerAddr;
+                }
+                return {transactions: window.cardano.nft._data.transactions[which], fetchedAt: window.cardano.nft._data.fetchedAt};
+            }
+            window.cardano.nft.getTokens = async (which, paginate=null) => { 
+                if (paginate) { 
+                    console.error('Smart NFT API does not support result pagination yet');
+                }
+                if (which=='own') { 
+                    which=window.cardano.nft._data.ownerAddr;
+                }
+                return {tokens: window.cardano.nft._data.tokens[which], fetchedAt: window.cardano.nft._data.fetchedAt};
+            }
+            window.cardano.nft.getUTXOs = async (which, paginate=null) => { 
+                if (paginate) { 
+                    console.error('Smart NFT API does not support result pagination yet');
+                }
+                if (which=='own') {
+                    which=window.cardano.nft._data.ownerAddr;
+                }
+                return {utxos: window.cardano.nft._data.utxos[which], fetchedAt: window.cardano.nft._data.fetchedAt};
+            }
+        </script>
+    `;
+    return ret;
 }
 
 

@@ -5,7 +5,7 @@ export default async function Browse(req, res) {
     //await pgClient.connect();
     const {metadata, walletAddr} = req.body;
     const featureTree = metadata?.uses;
-    const ret = {libraries:[], css: [], tokens: {}, utxos: {}, transactions: {}};
+    const ret = {libraries:[], css: [], tokens: {}, utxos: {}, transactions: {}, ownerAddr: walletAddr, fetchedAt: new Date()};
     if (featureTree?.libraries?.length>0) { 
         const librariesResult = await getLibraries(featureTree);
         ret.libraries=librariesResult.libraries;
@@ -20,7 +20,6 @@ export default async function Browse(req, res) {
     if (featureTree?.transactions?.length>0) { 
         ret.transactions = await getTransactions(featureTree, walletAddr);
     }
-    console.log(ret);
 
     res.status(200).json(ret);
     
@@ -113,7 +112,7 @@ async function getTransactions(featureTree, walletAddr) {
     ORDER BY tx.id DESC
     
     
-    limit 1000
+    limit 20
         `,[stakeAddress]);
         
         ret[stakeAddress] = txs.rows

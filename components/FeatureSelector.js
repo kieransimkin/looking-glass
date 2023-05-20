@@ -82,12 +82,16 @@ const FeatureSelector = (props) => {
     }
     return featureTree;
   }
-
+  
   // This is a yucky way to acheive the initial page load from save:
-  if (defaultUses && !features) { 
-    setFeatures(defaultUses);
-    onChange(getFeatureTree(defaultUses));
-  }
+  useEffect(() => { 
+    if (defaultUses && !features) { 
+      setFeatures(defaultUses);
+      onChange(getFeatureTree(defaultUses));
+    }
+  })
+   
+  
   const featureTree = getFeatureTree(features);
 
   const closeAddFeature = () => { 
@@ -154,32 +158,32 @@ const FeatureSelector = (props) => {
   let utxosHTML = '';
   let nodeId=0;
   if (featureTree?.libraries) { 
-    const librariesItems = featureTree.libraries.map((library) => <TreeItem nodeId={String(nodeId++)} label={library.name+' - '+library.version} onIconClick={deleteItem({libraries:{name: library.name, version: library.version}})} icon={<Delete />}/>);
-    librariesHTML = (<TreeItem nodeId={String(nodeId++)} label="Libraries">
+    const librariesItems = featureTree.libraries.map((library) => <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label={library.name+' - '+library.version} onIconClick={deleteItem({libraries:{name: library.name, version: library.version}})} icon={<Delete />}/>);
+    librariesHTML = (<TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="Libraries">
                       {librariesItems}
                     </TreeItem>);
   }
   if (featureTree?.tokens) { 
-    const tokensItems = featureTree.tokens.map((token) => <TreeItem nodeId={String(nodeId++)} onIconClick={deleteItem({tokens: token})} label={token}  icon={<Delete />}/>);
-    tokensHTML = (<TreeItem nodeId={String(nodeId++)} label="Tokens">
+    const tokensItems = featureTree.tokens.map((token) => <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} onIconClick={deleteItem({tokens: token})} label={token}  icon={<Delete />}/>);
+    tokensHTML = (<TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="Tokens">
                     {tokensItems}
                   </TreeItem>);
   }
   if (featureTree?.utxos) { 
-    const utxosItems = featureTree.utxos.map((utxo) => <TreeItem nodeId={String(nodeId++)} onIconClick={deleteItem({utxos: utxo})} label={utxo}  icon={<Delete />}/>);
-    utxosHTML = (<TreeItem nodeId={String(nodeId++)} label="UTXOs">
+    const utxosItems = featureTree.utxos.map((utxo) => <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} onIconClick={deleteItem({utxos: utxo})} label={utxo}  icon={<Delete />}/>);
+    utxosHTML = (<TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="UTXOs">
                     {utxosItems}
                   </TreeItem>);
   }
   if (featureTree?.transactions) { 
-    const transactionsItems = featureTree.transactions.map((transaction) => <TreeItem nodeId={String(nodeId++)} onIconClick={deleteItem({transactions:transaction})} label={transaction} icon={<Delete />} />);
-    transactionsHTML = (<TreeItem nodeId={String(nodeId++)} label="Transactions">
+    const transactionsItems = featureTree.transactions.map((transaction) => <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} onIconClick={deleteItem({transactions:transaction})} label={transaction} icon={<Delete />} />);
+    transactionsHTML = (<TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="Transactions">
                           {transactionsItems}
                         </TreeItem>);
   }
   if (featureTree?.renderer) { 
-    rendererHTML = (<TreeItem nodeId={String(nodeId++)} label="Renderer">
-                      <TreeItem nodeId={String(nodeId++)} label={featureTree.renderer} icon={<Delete />} onIconClick={deleteItem({renderer: featureTree.renderer})} />
+    rendererHTML = (<TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="Renderer">
+                      <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label={featureTree.renderer} icon={<Delete />} onIconClick={deleteItem({renderer: featureTree.renderer})} />
                     </TreeItem>);
   }
   const expanded = [];

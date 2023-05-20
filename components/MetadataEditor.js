@@ -66,11 +66,13 @@ const MetadataEditor = (props) => {
     onChange(newMetadata);
   }
    // This is a yucky way to acheive the initial page load from save:
-   if (defaultMetadata && !metadata) { 
-    setMetadata(defaultMetadata);
-    onChange(defaultMetadata);
-  }
-  
+  useEffect(() => { 
+    if (defaultMetadata && !metadata) { 
+      setMetadata(defaultMetadata);
+      onChange(defaultMetadata);
+    }
+  })
+   
   const closeAddField = () => { 
     setAddFieldOpen(false);
   }

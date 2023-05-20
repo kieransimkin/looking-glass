@@ -214,7 +214,7 @@ const Playground = function (props) {
   const [programCode, setProgramCode] = useState('');
   const [smartImports, setSmartImports] = useState({});
   const [simulation, setSimulation] = useState(defaultAddr);
-  const [metadataJSON, setMetadataJSON] = useState('');
+  const [metadataJSON, setMetadataJSON] = useState({});
   const [portalLoading, setPortalLoading] = useState(false);
   const [random, setRandom] = useState(Math.random());
 
@@ -282,6 +282,7 @@ const Playground = function (props) {
     postData('/getSmartImports',{metadata, walletAddr: simulation}).then((data)=> { 
       data.json().then((json) => { 
         setSmartImports(json);
+        
         setPortalLoading(false);
       });
     });
@@ -316,7 +317,7 @@ const Playground = function (props) {
   const metadataChange = (e) => { 
     setMetadata(e);
     const mdJSON = updateMetadataJSON(e, featureTree, simulation, programCode);
-    updateSmartImports(mdJSON, s);
+    updateSmartImports(mdJSON, simulation);
   }
   const refreshProgram = (e) => { 
     setRandom(Math.random())
@@ -392,8 +393,8 @@ const Playground = function (props) {
 
 Playground.propTypes = {
   programCode: PropTypes.string,
-  metadata: PropTypes.array,
-  uses: PropTypes.object
+  metadata: PropTypes.object,
+  uses: PropTypes.array
     
 };
 export default Playground;
