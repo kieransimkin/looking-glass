@@ -67,6 +67,12 @@ const FeatureSelector = (props) => {
         }
         featureTree.tokens.push(f[c].tokens);
       }
+      if (f[c]?.utxos) { 
+        if (!featureTree?.utxos) { 
+          featureTree.utxos=[];
+        }
+        featureTree.utxos.push(f[c].utxos);
+      }
       if (f[c]?.transactions) { 
         if (!featureTree.transactions) { 
           featureTree.transactions=[];
@@ -99,6 +105,9 @@ const FeatureSelector = (props) => {
         if (options.tokens && options.tokens == feature.tokens) { 
           return false;
         }
+        if (options.utxos && options.utxos == feature.utxos) { 
+          return false;
+        }
         if (options.libraries && options.libraries.name == feature.libraries?.name && options.libraries.version == feature.libraries?.version) {
           return false;
         }
@@ -113,22 +122,28 @@ const FeatureSelector = (props) => {
   }
   const importChange = (change) => { 
     // Todo - remove duplicates, or previous renderers
-    const newFeatures = features.filter((feature) => { 
-      if (change.transactions && change.transactions == feature.transactions) {
-        return false;
-      }
-      if (change.tokens && change.tokens == feature.tokens) { 
-        return false;
-      }
-      
-      if (change.libraries && change.libraries.name == feature.libraries?.name && change.libraries.version == feature.libraries?.version) {
-        return false;
-      }
-      if (change.renderer && feature.renderer) { 
-        return false;
-      }
-      return true;
-    })
+    console.log(change);
+    let newFeatures=[];
+    if (features) { 
+      newFeatures = features.filter((feature) => { 
+        if (change.transactions && change.transactions == feature.transactions) {
+          return false;
+        }
+        if (change.tokens && change.tokens == feature.tokens) { 
+          return false;
+        }
+        if (change.utxos && change.utxos == feature.utxos) { 
+          return false;
+        }
+        if (change.libraries && change.libraries.name == feature.libraries?.name && change.libraries.version == feature.libraries?.version) {
+          return false;
+        }
+        if (change.renderer && feature.renderer) { 
+          return false;
+        }
+        return true;
+      })
+    }
     setFeatures([...newFeatures, change])
     onChange(getFeatureTree([...newFeatures, change]));
   }
@@ -136,6 +151,7 @@ const FeatureSelector = (props) => {
   let tokensHTML = '';
   let transactionsHTML = '';
   let rendererHTML = '';
+  let utxosHTML = '';
   let nodeId=0;
   if (featureTree?.libraries) { 
     const librariesItems = featureTree.libraries.map((library) => <TreeItem nodeId={String(nodeId++)} label={library.name+' - '+library.version} onIconClick={deleteItem({libraries:{name: library.name, version: library.version}})} icon={<Delete />}/>);
@@ -147,6 +163,12 @@ const FeatureSelector = (props) => {
     const tokensItems = featureTree.tokens.map((token) => <TreeItem nodeId={String(nodeId++)} onIconClick={deleteItem({tokens: token})} label={token}  icon={<Delete />}/>);
     tokensHTML = (<TreeItem nodeId={String(nodeId++)} label="Tokens">
                     {tokensItems}
+                  </TreeItem>);
+  }
+  if (featureTree?.utxos) { 
+    const utxosItems = featureTree.utxos.map((utxo) => <TreeItem nodeId={String(nodeId++)} onIconClick={deleteItem({utxos: utxo})} label={utxo}  icon={<Delete />}/>);
+    utxosHTML = (<TreeItem nodeId={String(nodeId++)} label="UTXOs">
+                    {utxosItems}
                   </TreeItem>);
   }
   if (featureTree?.transactions) { 
@@ -179,6 +201,7 @@ const FeatureSelector = (props) => {
 >
 {librariesHTML}
 {tokensHTML}
+{utxosHTML}
 {transactionsHTML}
 {rendererHTML}
 

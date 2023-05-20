@@ -114,6 +114,14 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
         </div>
         <br />
         <div className={classes.row}>
+          <Radio value="utxos" checked={featureType=='utxos'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'utxos')}>
+            <Typography>UTXOs</Typography>
+            <Typography variant='caption'>Import a list of utxos held by a particular address</Typography>
+          </div>
+        </div>
+        <br />
+        <div className={classes.row}>
           <Radio value="transactions" checked={featureType=='transactions'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'transactions')}>
             <Typography>Transactions</Typography>
@@ -146,6 +154,8 @@ const Step2 = ({ featureType, previousStep, goToStep, nextStep, currentStep, han
     return <Step2Transactions featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
   } else if (featureType=='renderer') { 
     return <Step2Renderer featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
+  } else if (featureType=='utxos') {
+    return <Step2UTXOs featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
   }
 }
 
@@ -333,7 +343,79 @@ const Step2Tokens = ({ previousStep, goToStep, nextStep, currentStep, handleClos
           <Radio value="address" checked={type=='address'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'address')}>
             <Typography>Another address or stake key</Typography>
+            <Typography variant='caption'>Import the tokens that are held by another address</Typography>
+            <br />
+            <TextField style={{width:'500px'}} autoFocus onChange={handleAddrChange} ref={addrFieldRef} disabled={type!='address'} label="Address" variant='outlined'/>
+          </div>
+        </div>
+      </RadioGroup>
+      <br />
+     </DialogContent>
+     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />
+    
+  </>;
+};
+
+const Step2UTXOs = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  const theme = useTheme();
+  
+  const [enableNext, setEnableNext] = useState(false);
+  const [addr, setAddr] = useState(null);
+  const [type, setType] = useState(null);
+  const wallet = useContext(WalletContext);
+  const addrFieldRef = useRef();
+  const classes = useStyles();
+
+  const handleChange = (e, val) => { 
+    setType(val);
+    if (val=='address') { 
+
+      if (addr && addr.length>0 && validBech32Address(addr)) { 
+        setEnableNext(true);  
+      } else { 
+        setEnableNext(false);
+      }
+    } else if (val=='own') { 
+      setEnableNext(true);
+    }
+    if (e) e.preventDefault();
+    return false;
+  }
+  const handleAddrChange = (e) => { 
+    setAddr(e.target.value);
+    if (e.target.value.length>0 && validBech32Address(e.target.value)) { 
+      setEnableNext(true);
+    } else { 
+      setEnableNext(false);
+    }
+  }
+  const complete = () => { 
+    onImportChange({utxos: type=='own' ? 'own' :addr});
+    handleClose();
+  }
+  return <>
+    <DialogContent className={classes.dialog}>
+      <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
+        Choose address
+      </DialogTitle>
+      
+      
+      <Typography variant="body1">Select which address you&apos;d like to import the utxos from</Typography>
+      <br />&nbsp;<br />
+      <RadioGroup aria-label="type" name="type" onChange={handleChange}>
+        <div className={classes.row}>
+          <Radio value="own" checked={type=='own'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'own')}>
+            <Typography>Own</Typography>
             <Typography variant='caption'>Import the tokens that are held by the owner of this NFT</Typography>
+          </div>
+        </div>
+        <br />
+        <div className={classes.row}>
+          <Radio value="address" checked={type=='address'} onChange={handleChange} name="type-radio" />
+          <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'address')}>
+            <Typography>Another address or stake key</Typography>
+            <Typography variant='caption'>Import the utxos that are held by another address</Typography>
             <br />
             <TextField style={{width:'500px'}} autoFocus onChange={handleAddrChange} ref={addrFieldRef} disabled={type!='address'} label="Address" variant='outlined'/>
           </div>

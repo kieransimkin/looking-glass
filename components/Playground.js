@@ -229,49 +229,47 @@ const Playground = function (props) {
     $('script').each(function(i, elm) {
       
     });
-    minify(programCode, {removeAttributeQuotes: true}).then((pc) => { 
-      const files = [];
-      for (const [key,value] of Object.entries(m)) { 
-        if (key=='uses') { 
-          continue;
-        }
-        
-        if (key=='files') { 
-          // Always add the actual program code as the first file
-          
-          files.push({
-            'mediaType': "text/html",
-            'src': 'data:text/html,'+encodeURIComponent(pc)
-          });
-          if (typeof value == "string") { 
-            continue;
-          }
-          for (const file of value) { 
-            
-            
-            files.push(file);
-          }
-          continue;
-        }
-        json[key]=value;
+    const pc = programCode; // Todo - minify here
+    const files = [];
+    for (const [key,value] of Object.entries(m)) { 
+      if (key=='uses') { 
+        continue;
       }
-      json.uses = ft;
-      if (files.length<1) { 
-  
-        // If we didn't add any files, we still need to add our program code:
+      
+      if (key=='files') { 
+        // Always add the actual program code as the first file
         
         files.push({
           'mediaType': "text/html",
           'src': 'data:text/html,'+encodeURIComponent(pc)
         });
+        if (typeof value == "string") { 
+          continue;
+        }
+        for (const file of value) { 
+          
+          
+          files.push(file);
+        }
+        continue;
       }
-      json.files = files;
+      json[key]=value;
+    }
+    json.uses = ft;
+    if (files.length<1) { 
+         // If we didn't add any files, we still need to add our program code:
+      
+      files.push({
+        'mediaType': "text/html",
+        'src': 'data:text/html,'+encodeURIComponent(pc)
+      });
+    }
+    json.files = files;
       
       
       
-      setMetadataJSON(json);
-    })
-    
+    setMetadataJSON(json);
+    return json;  
   }
   const defaultProgramCode = props.programCode;
   if (defaultProgramCode && (!programCode || programCode=='')) { 
@@ -279,9 +277,9 @@ const Playground = function (props) {
     updateMetadataJSON(metadata,featureTree,simulation, defaultProgramCode);
   }
 
-  const updateSmartImports = (ft, simulation) => { 
+  const updateSmartImports = (metadata, simulation) => { 
     setPortalLoading(true);
-    postData('/getSmartImports',{featureTree: ft, walletAddr: simulation}).then((data)=> { 
+    postData('/getSmartImports',{metadata, walletAddr: simulation}).then((data)=> { 
       data.json().then((json) => { 
         setSmartImports(json);
         setPortalLoading(false);
@@ -297,19 +295,14 @@ const Playground = function (props) {
       ft.tokens = ft.tokens[0];
     }
     setFeatureTree(ft);
-    updateMetadataJSON(metadata,ft,simulation, programCode);
-    updateSmartImports(ft, simulation);
-    console.log('got feature change');
-    console.log(ft);
+    const mdJSON = updateMetadataJSON(metadata, ft, simulation, programCode);
+    updateSmartImports(mdJSON, simulation);
   }
   const simulationChange = (s) => { 
     if (!s) return;
-
-    console.log('Got simulation change');
-    console.log(s);
     setSimulation(s);
-    updateMetadataJSON(metadata,featureTree,s, programCode);
-    updateSmartImports(featureTree, s);
+    const mdJSON = updateMetadataJSON(metadata, featureTree, s, programCode);
+    updateSmartImports(mdJSON, s);
   }
   
   const programCodeChange = (e) => { 
@@ -322,7 +315,8 @@ const Playground = function (props) {
   }
   const metadataChange = (e) => { 
     setMetadata(e);
-    updateMetadataJSON(e, featureTree, simulation, programCode);
+    const mdJSON = updateMetadataJSON(e, featureTree, simulation, programCode);
+    updateSmartImports(mdJSON, s);
   }
   const refreshProgram = (e) => { 
     setRandom(Math.random())

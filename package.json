@@ -38,6 +38,7 @@
     "next": "^13.4.1",
     "next-page-transitions": "^1.0.0-beta.2",
     "nextjs-google-analytics": "^2.2.0",
+    "pg": "^8.11.0",
     "rc-dock": "^3.2.17",
     "react": "18.2.0",
     "react-codemirror": "^1.0.0",
