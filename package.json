@@ -26,6 +26,8 @@
     "@observablehq/plot": "^0.6.0",
     "@uiw/react-codemirror": "^4.19.16",
     "axios": "^1.4.0",
+    "bech32": "^2.0.0",
+    "blake2b": "^2.1.4",
     "buffer": "^6.0.3",
     "cbor": "^8.1.0",
     "cheerio": "^1.0.0-rc.12",

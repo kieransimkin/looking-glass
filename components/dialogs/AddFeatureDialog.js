@@ -151,7 +151,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
           <Radio value="files" checked={featureType=='files'} onChange={handleChange} name="type-radio" />
           <div style={{cursor: 'pointer'}} onClick={()=> handleChange(null,'files')}>
             <Typography>Files</Typography>
-            <Typography variant='caption'>Import images &amp; media from other NFTs</Typography>
+            <Typography variant='caption'>Import images &amp; media</Typography>
           </div>
         </div>
         <br />
@@ -184,6 +184,10 @@ const Step2 = ({ featureType, previousStep, goToStep, nextStep, currentStep, han
     return <Step2Renderer featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
   } else if (featureType=='utxos') {
     return <Step2UTXOs featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
+  } else if (featureType=='minttx') { 
+    return <Step2MintTx featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
+  } else if (featureType=='files') { 
+    return <Step2Files featureType={featureType} previousStep={previousStep} goToStep={goToStep} nextStep={nextStep} currentStep={currentStep} handleClose={handleClose} onImportChange={onImportChange}/>    
   }
 }
 
@@ -559,6 +563,56 @@ const Step2Renderer = ({ previousStep, goToStep, nextStep, currentStep, handleCl
       <Typography variant="body1">Select which asset you&apos;d like to function as the renderer for this NFT</Typography>
       <br />&nbsp;<br />
       <TextField value={asset} style={{width:'500px'}} autoFocus onChange={handleAssetChange} label="Asset" variant='outlined'/>
+      <br />
+     </DialogContent>
+     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    
+  </>;
+};
+
+const Step2MintTx = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  const theme = useTheme();  
+  const [enableNext, setEnableNext] = useState(true);  
+  const wallet = useContext(WalletContext);  
+  const classes = useStyles();  
+
+  const complete = () => { 
+    onImportChange({mintTx: true});
+    handleClose();
+  }
+  return <>
+    <DialogContent className={classes.dialog}>
+      <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
+        Adding Mint TX info
+      </DialogTitle>
+           
+      <Typography variant="body1">Adding this metadata option enables you to read the txHash of the minting transaction of this token</Typography>
+      <br />&nbsp;<br />
+      
+      <br />
+     </DialogContent>
+     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    
+  </>;
+};
+
+const Step2Files = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  const theme = useTheme();  
+  const [enableNext, setEnableNext] = useState(true);  
+  const wallet = useContext(WalletContext);  
+  const classes = useStyles();  
+
+  const complete = () => { 
+    onImportChange({files: true});
+    handleClose();
+  }
+  return <>
+    <DialogContent className={classes.dialog}>
+      <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
+        Adding file import API
+      </DialogTitle>
+           
+      <Typography variant="body1">Adding this metadata option enables you to read the files that are attached to NFTs</Typography>
+      <br />&nbsp;<br />
+      
       <br />
      </DialogContent>
      <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    

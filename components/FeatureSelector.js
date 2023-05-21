@@ -1,20 +1,13 @@
 import { useState , useEffect, useRef } from "react";
 import PropTypes from 'prop-types';
 import {IconButton, useTheme, Button} from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import ArrowUpIcon from '@material-ui/icons/ArrowDropUp'
-import ArrowDownIcon from '@material-ui/icons/ArrowDropDown'
-import { Typography } from "@material-ui/core";
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import Image from "next/image";
 import AddFeatureDialog from "./dialogs/AddFeatureDialog";
 import { Add, PlusOneOutlined, ExpandMore, ChevronRight, Delete, TurnedInRounded } from "@material-ui/icons";
 import { TreeView, TreeItem } from "@material-ui/lab";
+
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.background.paper, 0.9);
   const second = alpha(theme.palette.background.default, 0.9);
@@ -24,7 +17,6 @@ const useStyles = makeStyles(theme => {
   }
   return {
     root: {
-
 
     },
     cardContent: { 
@@ -40,6 +32,7 @@ const useStyles = makeStyles(theme => {
     },
   };
 });
+
 const FeatureSelector = (props) => {
   const {children, onChange, defaultUses} = props;
   const theme = useTheme();
@@ -54,6 +47,12 @@ const FeatureSelector = (props) => {
       if (f[c]?.renderer) { 
         // There can be only one renderer
         featureTree.renderer = f[c]?.renderer
+      }
+      if (f[c]?.mintTx) { 
+        featureTree.mintTx = f[c]?.mintTx;
+      }
+      if (f[c]?.files) { 
+        featureTree.files = f[c]?.files;
       }
       if (f[c]?.libraries) { 
         if (!featureTree?.libraries) { 
@@ -90,7 +89,6 @@ const FeatureSelector = (props) => {
       onChange(getFeatureTree(defaultUses));
     }
   })
-   
   
   const featureTree = getFeatureTree(features);
 
@@ -118,6 +116,12 @@ const FeatureSelector = (props) => {
         if (options.renderer && options.renderer == feature.renderer) { 
           return false;
         }
+        if (options.mintTx && options.mintTx == feature.mintTx) { 
+          return false;
+        }
+        if (options.files && options.files == feature.files) { 
+          return false;
+        }
         return true;
       })
       setFeatures(newFeatures);
@@ -125,8 +129,6 @@ const FeatureSelector = (props) => {
     }
   }
   const importChange = (change) => { 
-    // Todo - remove duplicates, or previous renderers
-    console.log(change);
     let newFeatures=[];
     if (features) { 
       newFeatures = features.filter((feature) => { 
@@ -145,6 +147,12 @@ const FeatureSelector = (props) => {
         if (change.renderer && feature.renderer) { 
           return false;
         }
+        if (change.mintTx && feature.mintTx) { 
+          return false;
+        }
+        if (change.files && feature.files) { 
+          return false;
+        }
         return true;
       })
     }
@@ -156,6 +164,8 @@ const FeatureSelector = (props) => {
   let transactionsHTML = '';
   let rendererHTML = '';
   let utxosHTML = '';
+  let mintTxHTML = '';
+  let filesHTML = '';
   let nodeId=0;
   if (featureTree?.libraries) { 
     const librariesItems = featureTree.libraries.map((library) => <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label={library.name+' - '+library.version} onIconClick={deleteItem({libraries:{name: library.name, version: library.version}})} icon={<Delete />}/>);
@@ -186,6 +196,17 @@ const FeatureSelector = (props) => {
                       <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label={featureTree.renderer} icon={<Delete />} onIconClick={deleteItem({renderer: featureTree.renderer})} />
                     </TreeItem>);
   }
+  if (featureTree?.mintTx) { 
+    mintTxHTML = (<TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="Mint Tx">
+                      <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="API Enabled" icon={<Delete />} onIconClick={deleteItem({mintTx: featureTree.mintTx})} />
+    </TreeItem>);
+  }
+  
+  if (featureTree?.files) { 
+    filesHTML = (<TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="Files">
+                      <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label="API Enabled" icon={<Delete />} onIconClick={deleteItem({files: featureTree.files})} />
+    </TreeItem>);
+  }
   const expanded = [];
   for (var c=0; c<=nodeId; c++) { 
     expanded.push(String(c));
@@ -203,17 +224,15 @@ const FeatureSelector = (props) => {
   defaultExpandIcon={<ChevronRight />}
   defaultCollapseIcon={<ExpandMore />}
 >
-{librariesHTML}
+{mintTxHTML}
 {tokensHTML}
 {utxosHTML}
 {transactionsHTML}
+{librariesHTML}
+{filesHTML}
 {rendererHTML}
-
   </TreeView>
-  
     </div>
-
-
   );
 }
 FeatureSelector.propTypes = {

@@ -20,6 +20,12 @@ export default async function Browse(req, res) {
     if (featureTree?.transactions?.length>0) { 
         ret.transactions = await getTransactions(featureTree, walletAddr);
     }
+    if (featureTree?.mintTx) { 
+        ret.mintTx='TODO';
+    }
+    if (featureTree?.files) { 
+        ret.files=true;
+    }
 
     res.status(200).json(ret);
     
