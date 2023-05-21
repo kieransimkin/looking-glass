@@ -157,9 +157,6 @@ const Playground = function (props) {
       });
     }
     json.files = files;
-      
-      
-      
     setMetadataJSON(json);
     return json;  
   }
@@ -173,8 +170,7 @@ const Playground = function (props) {
     setPortalLoading(true);
     postData('/getSmartImports',{metadata, walletAddr: simulation}).then((data)=> { 
       data.json().then((json) => { 
-        setSmartImports(json);
-        
+        setSmartImports(json);        
         setPortalLoading(false);
       });
     });
@@ -203,8 +199,7 @@ const Playground = function (props) {
     programCodeTimer = setTimeout(()=> { 
       setProgramCode(e)
       updateMetadataJSON(metadata,featureTree,simulation, e);
-    }, 1000);
-    
+    }, 1000);    
   }
   const metadataChange = (e) => { 
     setMetadata(e);
@@ -229,12 +224,9 @@ const Playground = function (props) {
       <Head>
         <title>Smart NFT Playground</title>
         <meta name="description" content="" />
-        <link rel="icon" href="/favicon.ico" />
-        
-      </Head>
-      
-      <div className={classes.bg} />
-      
+        <link rel="icon" href="/favicon.ico" />        
+      </Head>      
+      <div className={classes.bg} />      
       <DividerBox onDragEnd={refreshProgram} style={{position: 'absolute', left: 10, top: 10, right: 10, bottom: 10}}>
         <DividerBox mode='vertical' style={{width: '20%', minWidth: 350}}>
         
@@ -253,8 +245,7 @@ const Playground = function (props) {
               value={JSON.stringify(metadataJSON, null, "\t")}
               height="inherit"
               theme={theme.palette.type}
-              extensions={[EditorView.lineWrapping, javascript({ json: true})]}
-          
+              extensions={[EditorView.lineWrapping, javascript({ json: true})]}          
             />
           </div>
         </DividerBox>

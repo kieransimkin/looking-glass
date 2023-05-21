@@ -1,20 +1,12 @@
 import { useState , useEffect, useRef } from "react";
 import PropTypes from 'prop-types';
 import {IconButton, useTheme, Button} from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import ArrowUpIcon from '@material-ui/icons/ArrowDropUp'
-import ArrowDownIcon from '@material-ui/icons/ArrowDropDown'
-import { Typography } from "@material-ui/core";
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
-import Image from "next/image";
 import AddFieldDialog from "./dialogs/AddFieldDialog";
 import { Add, PlusOneOutlined, ExpandMore, ChevronRight, Delete, TurnedInRounded } from "@material-ui/icons";
 import { TreeView, TreeItem } from "@material-ui/lab";
+
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.background.paper, 0.9);
   const second = alpha(theme.palette.background.default, 0.9);
@@ -24,7 +16,6 @@ const useStyles = makeStyles(theme => {
   }
   return {
     root: {
-
 
     },
     cardContent: { 
@@ -85,7 +76,7 @@ const MetadataEditor = (props) => {
   for (const [key,value] of Object.entries(metadata)) { 
     // Todo make this recurse into json objects and build a tree view from them
     metadataListHTML.push(
-    <TreeItem nodeId={String(nodeId++)} label={key+': '+((typeof value == "object") ? JSON.stringify(value, null, "\t") : value)} onIconClick={deleteMetadata(key)} icon={<Delete />} />
+    <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label={key+': '+((typeof value == "object") ? JSON.stringify(value, null, "\t") : value)} onIconClick={deleteMetadata(key)} icon={<Delete />} />
     );
   }
   }
@@ -96,7 +87,6 @@ const MetadataEditor = (props) => {
       <TreeView
       disableSelection={true}
       multiSelect={false}
-      
   aria-label="file system navigator"
   defaultExpandIcon={<ChevronRight />}
   defaultCollapseIcon={<ExpandMore />}
@@ -104,8 +94,6 @@ const MetadataEditor = (props) => {
       {metadataListHTML}
       </TreeView>
     </div>
-
-
   );
 }
 MetadataEditor.propTypes = {

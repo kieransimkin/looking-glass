@@ -112,10 +112,14 @@ const SmartNFTPortal = (props) => {
         });
     }
     const onGetUTXOs = (e) => { 
-        const result=[3];
-        iFrameRef.current.contentWindow.postMessage({'request':'getUTXOs',which: e.data.which, page: e.data.page, result}, '*')
+        postData('/getUTXOs',{unit: e.data.unit, which: e.data.which, page: e.data.page}).then((res) => { 
+            if (res.status == 200) {
+                res.json().then(result => {      
+                    iFrameRef.current.contentWindow.postMessage({'request':'getUTXOs',which: e.data.which, page: e.data.page, result}, '*')
+                });
+            }
+        });       
     }
-
 
     if (smartImports && smartImports.libraries && smartImports.libraries.length>0) { 
         for (var c=0; c<smartImports.libraries.length; c++) {

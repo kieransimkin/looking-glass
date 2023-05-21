@@ -1,20 +1,12 @@
 
-import Container from '@material-ui/core/Container'
 import Header from './Header'
-import Image from 'next/image'
-import Typography from '@material-ui/core/Typography'
 import { styled, useTheme } from '@mui/material/styles';
-import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import {ThemeProvider, createTheme} from '@material-ui/core/styles'
 import WalletContext from './WalletContext'
-//import { ThemeProvider, createTheme } from '@mui/material/styles';
-
 import { mkBase, postData, buildWitnessed, getData, refreshWallet } from '../utils/Api';
-import { SportsRugbySharp } from '@mui/icons-material'
 const drawerWidth = 240;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-  
   flexGrow: 1,
   marginRight:'100px',
   padding: theme.spacing(3),
@@ -109,18 +101,12 @@ const Layout = ({children}) => {
         <ThemeProvider theme={thisTheme}>
             <WalletContext.Provider value={walletState}>
                     <Header onThemeChange={onThemeChange} onWalletChange={onWalletChange} />
-                    
                     <Main open={true}>
                     {children}
                     </Main>
-                    
-                    
-                    
-            
             </WalletContext.Provider>
         </ThemeProvider>
         </div>
-        
     )
 }
 export default Layout

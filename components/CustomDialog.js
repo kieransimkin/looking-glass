@@ -25,8 +25,6 @@ const useStyles = makeStyles((theme) => {
 const CustomDialog = (props) => { 
     const {children, url} = props;
     const classes=useStyles();
-
-
     return (
         <Dialog 
         

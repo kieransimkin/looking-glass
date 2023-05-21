@@ -12,14 +12,12 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import axios from 'axios';
 import {TextField} from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomDialog from '../CustomDialog';
-import { validBech32Address } from '../../utils/CSL'
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import { javascript } from '@codemirror/lang-javascript';
+
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
@@ -73,7 +71,6 @@ const useStyles = makeStyles(theme => {
   }
 }});
 
-
 const Step1 = ({nextStep, onFieldTypeChange, goToStep, currentStep, handleClose}) => { 
   const wallet = useContext(WalletContext);
   const [fieldType, setFieldType] = useState(null);
@@ -95,8 +92,7 @@ const Step1 = ({nextStep, onFieldTypeChange, goToStep, currentStep, handleClose}
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
         Select field type
-      </DialogTitle>
-    
+      </DialogTitle>    
       <Typography variant="body1">Select either simple text or JSON field:</Typography>
       <br />&nbsp;<br />
       <RadioGroup aria-label="type" name="type" onChange={handleChange}>
@@ -114,13 +110,9 @@ const Step1 = ({nextStep, onFieldTypeChange, goToStep, currentStep, handleClose}
             <Typography>JSON</Typography>
             <Typography variant='caption'>Advanced field using JSON - use this if you want to specify arrays</Typography>
           </div>
-        </div>
-        
+        </div>      
         <br />
       </RadioGroup>
-    
-  
-  
      </DialogContent>
      <DialogButtons previousStep={null} nextStep={nextStep} enableNext={enableNext} />
   </>;
@@ -136,13 +128,10 @@ const Step2 = ({ fieldType, previousStep, goToStep, nextStep, currentStep, handl
 
 const Step2String = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
   const theme = useTheme();
-  
   const [enableNext, setEnableNext] = useState(false);
   const [string, setString] = useState('');
   const [fieldName, setFieldName] = useState('');
-  
   const wallet = useContext(WalletContext);
-  
   const classes = useStyles();
   
   const handleStringChange = (e) => { 
@@ -170,8 +159,6 @@ const Step2String = ({ previousStep, goToStep, nextStep, currentStep, handleClos
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Enter string field
       </DialogTitle>
-      
-      
       <Typography variant="body1">Enter field name and a value for this field</Typography>
       <br />
       <TextField value={fieldName} style={{width:'300px'}} autoFocus onChange={handleFieldNameChange} label="Field Name" variant='outlined'/>
@@ -223,8 +210,6 @@ const Step2JSON = ({ previousStep, goToStep, nextStep, currentStep, handleClose,
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Enter JSON field
       </DialogTitle>
-      
-      
       <Typography variant="body1">Enter field name and a value for this field</Typography>
       <br />&nbsp;<br />
       <TextField value={fieldName} style={{width:'500px'}} autoFocus onChange={handleFieldNameChange} label="Field Name" variant='outlined'/>
@@ -238,8 +223,6 @@ const Step2JSON = ({ previousStep, goToStep, nextStep, currentStep, handleClose,
               extensions={[EditorView.lineWrapping, javascript({ json: true})]}
               onChange={handleJSONChange}
             />
-      
-      
       <br />
      </DialogContent>
      <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    
@@ -288,7 +271,6 @@ const DialogTitle = (props) => {
     </MuiDialogTitle>
   );
 };
-
 
 const AddFieldDialog = (props) => {
   const { onClose, open, onImportChange } = props;  

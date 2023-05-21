@@ -26,9 +26,7 @@ const useStyles = makeStyles(theme => {
       filter: 'drop-shadow(9px 5px 8px rgba(0,0,0,0.25))',
       background: `linear-gradient(120deg, ${first} 0%, ${second} 100%)`,
       backgroundImage: bgi,
-      
-      width: '100%',
-
+      width: '100%'
     },
     cardContent: { 
       '& a': { 

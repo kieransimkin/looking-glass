@@ -6,8 +6,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import WalletContext from './WalletContext';
 import Image from 'next/image';
 import { makeStyles } from "@material-ui/core/styles";
 import CustomDialog from './CustomDialog';

@@ -1,20 +1,9 @@
 import { useContext, useState , useEffect, useRef } from "react";
 import PropTypes from 'prop-types';
 import {IconButton, useTheme, Button, TextField, RadioGroup, Radio} from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import ArrowUpIcon from '@material-ui/icons/ArrowDropUp'
-import ArrowDownIcon from '@material-ui/icons/ArrowDropDown'
 import { Typography } from "@material-ui/core";
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
-import Image from "next/image";
-import AddFeatureDialog from "./dialogs/AddFeatureDialog";
-import { Add, PlusOneOutlined, ExpandMore, ChevronRight, Delete, TurnedInRounded } from "@material-ui/icons";
-import { TreeView, TreeItem } from "@material-ui/lab";
 import WalletContext from "./WalletContext";
 import { validAddress, getStakeFromAny } from "../utils/CSL";
 
@@ -87,32 +76,24 @@ const SimulationSelector = (props) => {
   }
   let selectText = "Emulate token being in this wallet:"
   let walletChoice = "";
-  
 
   if (wallet?.api) { 
     selectText='';
     walletChoice=(
       <div className={classes.column}>
         <Typography variant="body2">Emulate token being in:</Typography>
-        
         <RadioGroup className={classes.column} aria-label="simulationtype" name="simulationtype" onChange={handleTypeChange}>
           <div className={classes.column}>
             <Radio size="small" value="own" checked={type=='own'} onChange={handleTypeChange} name="type-radio" />
             <div style={{cursor: 'pointer'}} onClick={()=> handleTypeChange(null,'own')}>
               <Typography variant="body2">My wallet</Typography>
-              
             </div>
-            
-          
           </div>
           <div className={classes.column}>
             <Radio size='small' value="address" checked={type=='address'} onChange={handleTypeChange} name="type-radio" />
             <div style={{cursor: 'pointer'}} onClick={()=> handleTypeChange(null,'address')}>
-              <Typography variant="body2">This address:</Typography>
-              
-            </div>
-            
-          
+              <Typography variant="body2">This address:</Typography>    
+            </div>          
           </div>
         </RadioGroup>
       </div>
@@ -124,15 +105,11 @@ const SimulationSelector = (props) => {
       <Typography variant="body2">{selectText}</Typography>
       <TextField inputProps={{
           style: {
-            height: "16px",
-            
+            height: "16px",            
             fontSize: '0.8em'
           },
         }} className={classes.text} size="small" style={{flexGrow: 1,  flexBasis: 'max-content'}} autoFocus onChange={handleAddrChange} label="" variant='outlined' value={addr}/>
-      
     </div>
-
-
   );
 }
 SimulationSelector.propTypes = {

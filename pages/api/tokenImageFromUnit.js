@@ -1,6 +1,4 @@
 
-import { TransactionUnspentOutput } from "@emurgo/cardano-serialization-lib-nodejs";
-import { Buffer } from 'buffer';
 import { tokenImageFromUnit } from "../../utils/NFTCDN";
 
 export default function Browse(req, res) {
@@ -10,7 +8,5 @@ export default function Browse(req, res) {
   }  else { 
     result = tokenImageFromUnit(  req.query.unit);
   }
-  
   res.status(200).json({url:result});
-  
 }

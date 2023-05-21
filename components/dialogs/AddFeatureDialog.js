@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => {
   
   return {
   root: {
-    
     paddingTop: 0,
     paddingLeft: 0,
     paddingRight: '0em'
@@ -62,7 +61,6 @@ const useStyles = makeStyles(theme => {
     letterSpacing: '0.02em',
     borderRadius: '1.5em'
   },
-  
   input: { 
       backgroundImage: bgImg,
       backgroundRepeat: 'repeat',
@@ -92,7 +90,6 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
 
   const classes = useStyles();
   const policies = Object.keys(wallet.assets.tokens);
-  
   const theme = useTheme();
   
   return <>
@@ -104,7 +101,8 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       <Typography variant="body1">Select which Smart NFT feature you would like to add:</Typography>
       <br />&nbsp;<br />
       <RadioGroup aria-label="type" name="type" onChange={handleChange}>
-      <table>
+      <table><tbody>
+      
         <tr><td>
         
         <div className={classes.row}>
@@ -163,12 +161,9 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
           </div>
         </div>
         <br />
-      </td></tr></table>
+      </td></tr></tbody></table>
       <br />
       </RadioGroup>
-    
-  
-  
      </DialogContent>
      <DialogButtons previousStep={null} nextStep={nextStep} enableNext={enableNext} />
   </>;
@@ -193,7 +188,6 @@ const Step2 = ({ featureType, previousStep, goToStep, nextStep, currentStep, han
 
 const Step2Libraries = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
   const theme = useTheme();
-  
   const [enableNext, setEnableNext] = useState(false);
   const [name, setName] = useState('');
   const [search, setSearch] = useState('');
@@ -312,7 +306,6 @@ const Step2Libraries = ({ previousStep, goToStep, nextStep, currentStep, handleC
       <br />
     </DialogContent>
     <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />
-    
   </>;
 };
 
@@ -357,9 +350,7 @@ const Step2Tokens = ({ previousStep, goToStep, nextStep, currentStep, handleClos
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Choose address
-      </DialogTitle>
-      
-      
+      </DialogTitle>    
       <Typography variant="body1">Select which address you&apos;d like to import the tokens from</Typography>
       <br />&nbsp;<br />
       <RadioGroup aria-label="type" name="type" onChange={handleChange}>
@@ -384,13 +375,11 @@ const Step2Tokens = ({ previousStep, goToStep, nextStep, currentStep, handleClos
       <br />
      </DialogContent>
      <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />
-    
   </>;
 };
 
 const Step2UTXOs = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
   const theme = useTheme();
-  
   const [enableNext, setEnableNext] = useState(false);
   const [addr, setAddr] = useState(null);
   const [type, setType] = useState(null);
@@ -456,7 +445,6 @@ const Step2UTXOs = ({ previousStep, goToStep, nextStep, currentStep, handleClose
       <br />
      </DialogContent>
      <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />
-    
   </>;
 };
 
@@ -499,9 +487,7 @@ const Step2Transactions = ({ previousStep, goToStep, nextStep, currentStep, hand
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Choose address
-      </DialogTitle>
-      
-      
+      </DialogTitle>    
       <Typography variant="body1">Select which address you&apos;d like to import the transactions from</Typography>
       <br />&nbsp;<br />
       
@@ -527,18 +513,14 @@ const Step2Transactions = ({ previousStep, goToStep, nextStep, currentStep, hand
       <br />
      </DialogContent>
      <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />
-
   </>;
 };
 
 const Step2Renderer = ({ previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
-  const theme = useTheme();
-  
+  const theme = useTheme();  
   const [enableNext, setEnableNext] = useState(false);
-  const [asset, setAsset] = useState('');
-  
-  const wallet = useContext(WalletContext);
-  
+  const [asset, setAsset] = useState('');  
+  const wallet = useContext(WalletContext);  
   const classes = useStyles();
   
   const handleAssetChange = (e) => { 
@@ -557,9 +539,7 @@ const Step2Renderer = ({ previousStep, goToStep, nextStep, currentStep, handleCl
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Choose asset
-      </DialogTitle>
-      
-      
+      </DialogTitle>     
       <Typography variant="body1">Select which asset you&apos;d like to function as the renderer for this NFT</Typography>
       <br />&nbsp;<br />
       <TextField value={asset} style={{width:'500px'}} autoFocus onChange={handleAssetChange} label="Asset" variant='outlined'/>
@@ -583,11 +563,9 @@ const Step2MintTx = ({ previousStep, goToStep, nextStep, currentStep, handleClos
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Adding Mint TX info
-      </DialogTitle>
-           
+      </DialogTitle>           
       <Typography variant="body1">Adding this metadata option enables you to read the txHash of the minting transaction of this token</Typography>
-      <br />&nbsp;<br />
-      
+      <br />&nbsp;<br />      
       <br />
      </DialogContent>
      <DialogButtons previousStep={previousStep} nextStep={complete} nextStepLabel='Add' enableNext={enableNext} />    
@@ -656,8 +634,6 @@ const DialogTitle = (props) => {
           ) : null}
         </div> 
       </div>
-      
-      
     </MuiDialogTitle>
   );
 };
@@ -684,7 +660,6 @@ const AddFeatureDialog = (props) => {
     
     return (
       <div>
-      
         <CustomDialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
           
             <StepWizard>

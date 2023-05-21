@@ -98,20 +98,12 @@ const Header = (props) => {
 
     const { height, width } = useWindowDimensions();
     
-    let theWord = '';
+    
     let connectContent = <PowerIcon fontSize='small' sx={{padding: 0, margin: 0}} />;
-    let buttonsize='small';
-    let buttonclass='nopadbtn';
-    let menubuttonsize='small';
-    
-        menubuttonsize='medium';
-    
-        theWord='The';
-        buttonsize='medium';
-        buttonclass='nomwbtn';
-        
-    
 
+    const buttonsize='medium';
+    const buttonclass='nomwbtn';
+        
     const connectWallet = useCallback((callback, failCallback) => { 
         if (!walletCtx || !walletCtx.api) { 
             setCallbackFn({fn: callback, fail: failCallback});
@@ -132,23 +124,18 @@ const Header = (props) => {
             });
         }
     });
-    
 
     const className = (hide) ? classes.hidden : classes.root;
-    
     
     const toggleVisibility = useCallback((hide, cursor) => {
       setHide(hide);
     }, []);
     
-
     const onMouseMove = useCallback(() => {
         clearTimeout(timer);
     
         if (hide) {
-
           toggleVisibility(!hide, 'default');
-          
         }
     
         timer = setTimeout(() => {
@@ -169,7 +156,6 @@ const Header = (props) => {
         window.addEventListener('keyup', onMouseMove);
         window.addEventListener('scroll', onMouseMove);
 
-    
         return () => {
           window.removeEventListener('mousemove', onMouseMove);
           window.removeEventListener('click', onMouseMove);
@@ -236,8 +222,6 @@ const Header = (props) => {
         const newMode = darkMode==='light'?'dark':'light';
         setDarkMode(newMode);
         onThemeChange(newMode);
-        
-        
     }
 
     const handleLogout = () => { 
@@ -256,9 +240,6 @@ const Header = (props) => {
               }}
                     
              variant="persistent" anchor='right' open={!hide} className={className}>
-                
-
-
                 {!walletApi &&
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
                             <Button size={buttonsize} className={buttonclass} sx={{margin: 0, padding: 0}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
@@ -313,8 +294,6 @@ const Header = (props) => {
                             </Menu>
                         </div>
                     }
-                    
-      
                     {!walletApi &&
                         <>
                         <Link href="/play">
@@ -329,13 +308,8 @@ const Header = (props) => {
                         </Link>
                         </>
                     }
-                
                 <WalletSelector selectedValue={wallet} open={walletOpen} onClose={handleWalletClose} />
             </Drawer>
-        
-        
-        
-
     )
 }
 Header.propTypes = {
