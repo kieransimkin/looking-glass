@@ -4,7 +4,7 @@ import Blake2b from "blake2b";
 import { bech32 } from "bech32";
 
 
-function tokenImageFromUnit(unit: string, params: any = {} ) { 
+function tokenImageFromUnit(unit, params = {} ) { 
     if (!process.env.NFTCDN_KEY) throw new Error("Missing environment variables: NFTCDN_KEY")
     if (!unit || unit.length < 57) { 
       return null;
@@ -24,7 +24,7 @@ function tokenImageFromUnit(unit: string, params: any = {} ) {
     return buildUrl(bech, params);
 }
 
-function buildUrl(token: any, params: any) {
+function buildUrl(token, params) {
     if (!process.env.NETWORK) throw new Error("Missing environment variables: NETWORK")
 
     const uri = "/image";

@@ -72,7 +72,15 @@ function hexToAscii(str1)
     return new TextDecoder().decode(ia);
   
   }
+const labelIsCIP68 = function(label) {
+    if (!label) return false;
+    return label == REFERENCE_TOKEN_LABEL || label == USER_TOKEN_LABEL;
+}
+export const REFERENCE_TOKEN_LABEL = 100;
+export const USER_TOKEN_LABEL = 222;
+export const CIP25_LABEL = 721;
 export {
+	labelIsCIP68,
 	dataURItoString,
 	ucfirst,
 	ApiResponse,

@@ -42,8 +42,6 @@ const SmartNFTPortal = (props) => {
         }
     }
     const onGetTokenThumb = (e) => { 
-        const buffer = new ArrayBuffer(8);
-        const uInt8View = new Uint8Array(buffer); const originalLength = uInt8View.length; for (var i = 0; i < originalLength; ++i) { uInt8View[i] = i; }
         getData('/tokenImageFromUnit?unit='+e.data.unit+'&size=256').then((res) => { 
             if (res.status == 200) {
                 res.json().then(body => {      
@@ -55,6 +53,8 @@ const SmartNFTPortal = (props) => {
                         })
                     })
                 })
+            } else { 
+                iFrameRef.current.contentWindow.postMessage({'request':'getTokenThumb','unit':e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');
             }
         });
     }
@@ -70,17 +70,21 @@ const SmartNFTPortal = (props) => {
                         })
                     })
                 })
+            } else { 
+                iFrameRef.current.contentWindow.postMessage({'request':'getTokenImage','unit':e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');
             }
         });
     }
     const onGetFile = (e) => { 
-        postData('/getFile',{unit: e.data.unit, id: e.data.id}).then((res) => {
+        postData('/getFile',{unit: e.data.unit, id: e.data.id, metadata: e.data.metadata}).then((res) => {
             if (res.status == 200) {
                 res.blob().then(blob => { 
                     blob.arrayBuffer().then((buffer) => { 
                         iFrameRef.current.contentWindow.postMessage({'request':'getFile','id':e.data.id,'unit':e.data.unit, buffer},'*',[buffer]);
                     });
                 });
+            } else { 
+                iFrameRef.current.contentWindow.postMessage({'request':'getFile','id':e.data.id,'unit':e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');
             }
         })        
     }
@@ -90,6 +94,8 @@ const SmartNFTPortal = (props) => {
                 res.json().then(result => {      
                     iFrameRef.current.contentWindow.postMessage({'request':'getMetadata',unit: e.data.unit, result},'*')
                 });
+            } else { 
+                iFrameRef.current.contentWindow.postMessage({'request':'getMetadata',unit: e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*')
             }
         });      
     }
@@ -99,6 +105,8 @@ const SmartNFTPortal = (props) => {
                 res.json().then(result => {      
                     iFrameRef.current.contentWindow.postMessage({'request':'getTransactions',which: e.data.which, page: e.data.page, result},'*');   
                 });
+            } else { 
+                iFrameRef.current.contentWindow.postMessage({'request':'getTransactions',which: e.data.which, page: e.data.page, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');   
             }
         });        
     }
@@ -108,6 +116,8 @@ const SmartNFTPortal = (props) => {
                 res.json().then(result => {      
                     iFrameRef.current.contentWindow.postMessage({'request':'getTokens', which: e.data.which, page: e.data.page, result },'*')
                 })
+            } else { 
+                iFrameRef.current.contentWindow.postMessage({'request':'getTokens', which: e.data.which, page: e.data.page, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*')
             }
         });
     }
@@ -117,6 +127,8 @@ const SmartNFTPortal = (props) => {
                 res.json().then(result => {      
                     iFrameRef.current.contentWindow.postMessage({'request':'getUTXOs',which: e.data.which, page: e.data.page, result}, '*')
                 });
+            } else { 
+                iFrameRef.current.contentWindow.postMessage({'request':'getUTXOs',which: e.data.which, page: e.data.page, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}}, '*')
             }
         });       
     }
@@ -132,10 +144,13 @@ const SmartNFTPortal = (props) => {
         blob = '<html data-id="'+random+'" ><head>'+librariesHTML+'</head><body style="padding: 0; margin: 0px; min-width: 100%; min-height: 100%;"}>'+blob+'</body></html>';
         src='data:text/html,'+encodeURIComponent(blob)
     }
+    // Here the actual iframe that does all the work:
     return (
         <iframe ref={iFrameRef} style={style} sandbox="allow-scripts" src={src} />
     );
 }
+
+// This is the API that's provided to the child iframe:
 const getPortalAPIScripts = (smartImports, metadata) => { 
 
     let ret="<script>\n";
@@ -169,7 +184,7 @@ const getPortalAPIScripts = (smartImports, metadata) => {
             console.error('Attempt to use getTokenImage without importing files API');
         }
         window.cardano.nft.getFile = async (id=null, unit=null) => { 
-            console.error('Attempt to use getTokenThumb without importing files API');
+            console.error('Attempt to use getFile without importing files API');
         }
     `;
     
@@ -178,9 +193,12 @@ const getPortalAPIScripts = (smartImports, metadata) => {
         window.cardano.nft.getTokenThumb = async (unit) => {
             return new Promise(async (resolve,reject) => { 
                 const messageHandler = (e) => { 
-                    if (e.data.request=='getTokenThumb' && e.data.unit == unit) {
+                    if (e.data.request=='getTokenThumb' && e.data.unit == unit && !e.data.error) {
                         window.removeEventListener('message',messageHandler);
                         resolve(e.data.buffer);
+                    } else if (e.data.request=='getTokenThumb' && e.data.unit == unit && e.data.error) { 
+                        window.removeEventListener('message',messageHandler);
+                        reject(e.data.error);
                     }
                 }
                 window.addEventListener('message',messageHandler);
@@ -190,25 +208,31 @@ const getPortalAPIScripts = (smartImports, metadata) => {
         window.cardano.nft.getTokenImage = async (unit) => { 
             return new Promise(async (resolve, reject) => { 
                 const messageHandler = (e) => { 
-                    if (e.data.request=='getTokenImage' && e.data.unit == unit) { 
+                    if (e.data.request=='getTokenImage' && e.data.unit == unit && !e.data.error) { 
                         window.removeEventListener('message',messageHandler);
                         resolve(e.data.buffer);
+                    } else if (e.data.request=='getTokenImage' && e.data.unit == unit && e.data.error) { 
+                        window.removeEventListener('message',messageHandler);
+                        reject(e.data.error);
                     }
                 }
                 window.addEventListener('message',messageHandler);
                 parent.postMessage({request:'getTokenImage',unit},'*')
             });
         }
-        window.cardano.nft.getFile = async (id=null, unit=null) => { 
+        window.cardano.nft.getFile = async (id=null, unit='own') => { 
             return new Promise(async (resolve, reject) => { 
                 const messageHandler = (e) => { 
-                    if (e.data.request=='getFile' && e.data.id == id && e.data.unit == unit) { 
+                    if (e.data.request=='getFile' && e.data.id == id && e.data.unit == unit && !e.data.error) { 
                         window.removeEventListener('message',messageHandler);
                         resolve(e.data.buffer);
+                    } else if (e.data.request=='getFile' && e.data.id == id && e.data.unit == unit && e.data.error) { 
+                        window.removeEventListener('message',messageHandler);
+                        reject(e.data.error);
                     }
                 }
                 window.addEventListener('message',messageHandler);
-                parent.postMessage({request:'getFile',id,unit},'*');
+                parent.postMessage({request:'getFile',id,unit, metadata:window.cardano.nft._data.metadata},'*');
             });
         }
         `;
@@ -229,9 +253,12 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 if (unit=='own') return window.cardano.nft._data.metadata;
                 return new Promise(async (resolve, reject) => { 
                     const messageHandler = (e) => { 
-                        if (e.data.request=='getMetadata' && e.data.unit==unit) { 
+                        if (e.data.request=='getMetadata' && e.data.unit==unit && !e.data.error) { 
                             window.removeEventListener('message',messageHandler);
                             resolve(e.data.result);
+                        } else if (e.data.request=='getMetadata' && e.data.unit==unit && e.data.error) { 
+                            window.removeEventListener('message',messageHandler);
+                            reject(e.data.error);;
                         }
                     }
                     window.addEventListener('message',messageHandler);
@@ -250,9 +277,12 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 } else if (window.cardano.nft._data.transactions[which]) { 
                     return new Promise(async (resolve, reject) => { 
                         const messageHandler = (e) => { 
-                            if (e.data.request=='getTransactions' && e.data.which==which && e.data.page==page) { 
+                            if (e.data.request=='getTransactions' && e.data.which==which && e.data.page==page && !e.data.error) { 
                                 window.removeEventListener('message',messageHandler);
                                 resolve(e.data.result);
+                            } else if (e.data.request=='getTransactions' && e.data.which==which && e.data.page==page && e.data.error) { 
+                                window.removeEventListener('message',messageHandler);
+                                reject(e.data.error);
                             }
                         }
                         window.addEventListener('message',messageHandler);
@@ -271,9 +301,12 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 } else if (window.cardano.nft._data.tokens[which]) { 
                     return new Promise(async (resolve, reject) => { 
                         const messageHandler = (e) => { 
-                            if (e.data.request=='getTokens' && e.data.which==which && e.data.page==page) { 
+                            if (e.data.request=='getTokens' && e.data.which==which && e.data.page==page && !e.data.error) { 
                                 window.removeEventListener('message',messageHandler);
                                 resolve(e.data.result);
+                            } else if (e.data.request=='getTokens' && e.data.which==which && e.data.page==page && e.data.error) { 
+                                window.removeEventListener('message',messageHandler);
+                                reject(e.data.error);
                             }
                         }
                         window.addEventListener('message',messageHandler);
@@ -292,9 +325,12 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 } else if (window.cardano.nft._data.utxos[which]) { 
                     return new Promise(async (resolve, reject) => { 
                         const messageHandler = (e) => { 
-                            if (e.data.request=='getUTXOs' && e.data.which==which && e.data.page==page) { 
+                            if (e.data.request=='getUTXOs' && e.data.which==which && e.data.page==page && !e.data.error) { 
                                 window.removeEventListener('message', messageHandler);
                                 resolve(e.data.result);
+                            } else if (e.data.request=='getUTXOs' && e.data.which==which && e.data.page==page && e.data.error) { 
+                                window.removeEventListener('message', messageHandler);
+                                reject(e.data.error);
                             }
                         }
                         window.addEventListener('message',messageHandler);
