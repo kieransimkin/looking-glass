@@ -2,7 +2,12 @@ import { getTokens, getUTXOs, getTransactions, getLibraries, getMintTx } from '.
 export default async function Browse(req, res) {
     const {metadata, walletAddr} = req.body;
     const featureTree = metadata?.uses;
-    const ret = {libraries:[], css: [], tokens: {}, utxos: {}, transactions: {}, ownerAddr: walletAddr, fetchedAt: new Date()};
+    const mockTokenUnit = 'Un-minted'
+    const mockMintTx = {
+        txHash:'',
+        metadata: []
+    }
+    const ret = {libraries:[], css: [], tokens: {}, utxos: {}, transactions: {}, ownerAddr: walletAddr, fetchedAt: new Date(), tokenUnit: mockTokenUnit};
     if (featureTree?.libraries?.length>0) { 
         const librariesResult = await getLibraries(featureTree);
         ret.libraries=librariesResult.libraries;
@@ -18,7 +23,7 @@ export default async function Browse(req, res) {
         ret.transactions = await getTransactions(featureTree, walletAddr);
     }
     if (featureTree?.mintTx) { 
-        ret.mintTx='un-minted';
+        ret.mintTx=mockMintTx;
     }
     if (featureTree?.files) { 
         ret.files=true;

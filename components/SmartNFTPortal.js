@@ -146,7 +146,7 @@ const SmartNFTPortal = (props) => {
         });      
     }
     const onGetTransactions = (e) => { 
-        postData('/getTransactions',{unit: e.data.unit, which: e.data.which, page: e.data.page}).then((res) => { 
+        postData('/getTransactions',{which: e.data.which, page: e.data.page}).then((res) => { 
             if (res.status == 200) {
                 res.json().then(result => {      
                     iFrameRef.current.contentWindow.postMessage({
@@ -170,7 +170,7 @@ const SmartNFTPortal = (props) => {
         });        
     }
     const onGetTokens = (e) => { 
-        postData('/getTokens',{unit: e.data.unit, which: e.data.which, page: e.data.page}).then((res) => { 
+        postData('/getTokens',{which: e.data.which, page: e.data.page}).then((res) => { 
             if (res.status == 200) {
                 res.json().then(result => {      
                     iFrameRef.current.contentWindow.postMessage({
@@ -194,7 +194,7 @@ const SmartNFTPortal = (props) => {
         });
     }
     const onGetUTXOs = (e) => { 
-        postData('/getUTXOs',{unit: e.data.unit, which: e.data.which, page: e.data.page}).then((res) => { 
+        postData('/getUTXOs',{which: e.data.which, page: e.data.page}).then((res) => { 
             if (res.status == 200) {
                 res.json().then(result => {      
                     iFrameRef.current.contentWindow.postMessage({
@@ -245,6 +245,7 @@ const getPortalAPIScripts = (smartImports, metadata) => {
 
     ret+="window.cardano.nft._data.ownerAddr="+JSON.stringify(smartImports?.ownerAddr)+";\n";
     ret+="window.cardano.nft._data.fetchedAt="+JSON.stringify(smartImports?.fetchedAt)+";\n";
+    ret+="window.cardano.nft._data.tokenUnit="+JSON.stringify(smartImports.tokenUnit)+";\n";
     ret+="window.cardano.nft._data.metadata="+JSON.stringify(metadata)+";\n";
     if (smartImports?.utxos) { 
         ret+='window.cardano.nft._data.utxos='+JSON.stringify(smartImports.utxos)+";\n";
@@ -270,6 +271,10 @@ const getPortalAPIScripts = (smartImports, metadata) => {
         }
         window.cardano.nft.getFile = async (id=null, unit=null) => { 
             console.error('Attempt to use getFile without importing files API');
+        }
+        window.cardano.nft.getMetadata = async (unit='own') => { 
+            if (unit=='own') return window.cardano.nft._data.metadata;
+            console.error('Attempt to use getMetadata on an external NFT without importing files API');
         }
     `;
     
@@ -320,6 +325,22 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 parent.postMessage({request:'getFile',id,unit, metadata:window.cardano.nft._data.metadata},'*');
             });
         }
+        window.cardano.nft.getMetadata = async (unit='own') => { 
+            if (unit=='own') return window.cardano.nft._data.metadata;
+            return new Promise(async (resolve, reject) => { 
+                const messageHandler = (e) => { 
+                    if (e.data.request=='getMetadata' && e.data.unit==unit && !e.data.error) { 
+                        window.removeEventListener('message',messageHandler);
+                        resolve(e.data.result);
+                    } else if (e.data.request=='getMetadata' && e.data.unit==unit && e.data.error) { 
+                        window.removeEventListener('message',messageHandler);
+                        reject(e.data.error);;
+                    }
+                }
+                window.addEventListener('message',messageHandler);
+                parent.postMessage({request:'getMetadata', unit},'*')
+            });
+        }
         `;
     }
     ret+=`
@@ -332,24 +353,13 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 if (window.cardano.nft._data.mintTx) return window.cardano.nft._data.mintTx;
                 console.error('Attempt to use mintTx without importing the API');
             }
+            window.cardano.nft.getTokenUnit = async () => { 
+                return window.cardano.nft._data.tokenUnit;
+            }
             // This is a shortcut so you can get this data synchronously
             window.cardano.nft.mintTx = window.cardano.nft._data.mintTx;
-            window.cardano.nft.getMetadata = async (unit='own') => { 
-                if (unit=='own') return window.cardano.nft._data.metadata;
-                return new Promise(async (resolve, reject) => { 
-                    const messageHandler = (e) => { 
-                        if (e.data.request=='getMetadata' && e.data.unit==unit && !e.data.error) { 
-                            window.removeEventListener('message',messageHandler);
-                            resolve(e.data.result);
-                        } else if (e.data.request=='getMetadata' && e.data.unit==unit && e.data.error) { 
-                            window.removeEventListener('message',messageHandler);
-                            reject(e.data.error);;
-                        }
-                    }
-                    window.addEventListener('message',messageHandler);
-                    parent.postMessage({request:'getMetadata', unit},'*')
-                });
-            }
+            window.cardano.nft.tokenUnit = window.cardano.nft._data.tokenUnit;
+
             // This is a shortcut to get the metadata for the current token synchronously
             window.cardano.nft.metadata = window.cardano.nft._data.metadata;
             

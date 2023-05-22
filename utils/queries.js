@@ -16,84 +16,88 @@ export async function getTransactions(featureTree, walletAddr) {
         }
         // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
         stakeAddress = getStakeFromAny(stakeAddress);
-        let txs = await pgClient.query(`
-        SELECT 
-        encode(tx.hash,'hex') AS hash, 
-        tx.out_sum,
-        tx.fee,
-        tx.deposit,
-        tx.size,
-        tx.invalid_before,
-        tx.invalid_hereafter,
-        tx.script_size,
-        block.block_no, 
-        block.time,
-        (
-            SELECT json_agg(row_to_json(X))
-            FROM (
-                SELECT 
-                    to2.index,
-                    to2.address,
-                    to2.address_has_script,
-                    to2.value,
-                    to2.data_hash, 
-                    (
-                        SELECT json_agg(row_to_json(X2)) FROM 
-                            (
-                                SELECT 
-                                    matx2.quantity, 
-                                    concat(encode(ma2.policy,'hex'), encode(ma2.name, 'hex')) AS unit
-                                FROM ma_tx_out matx2 
-                                    LEFT JOIN multi_asset ma2 ON (ma2.id=matx2.ident) 
-                                WHERE matx2.tx_out_id=to2.id
-                            ) AS X2
-                    ) AS multiasset 
-                FROM tx_out to2 WHERE tx_id=tx.id
-            ) AS X
-        ) AS outputs,
-        (
-            SELECT json_agg(row_to_json(X))
-            FROM (
-                SELECT 
-                    to2.index,
-                    to2.address,
-                    to2.address_has_script,
-                    to2.value,
-                    to2.data_hash,
-                    encode(tx2.hash, 'hex') AS hash,
-                    (
-                        SELECT json_agg(row_to_json(X2)) FROM 
-                        (
-                            SELECT
-                                matx2.quantity, 
-                                concat(encode(ma2.policy,'hex'), encode(ma2.name, 'hex')) AS unit
-                            FROM ma_tx_out matx2
-                                LEFT JOIN multi_asset ma2 ON (ma2.id=matx2.ident)
-                            WHERE matx2.tx_out_id=to2.id
-                        ) AS X2
-                    ) AS multiasset 
-                FROM tx_in 
-                    LEFT JOIN tx_out to2 ON to2.tx_id=tx_in.tx_out_id AND to2.index=tx_in.tx_out_index 
-                    LEFT JOIN tx tx2 ON tx2.id=to2.tx_id
-                WHERE tx_in.tx_in_id=tx.id
-            ) AS X
-        ) AS inputs
-    FROM tx
-        JOIN tx_out         ON (tx.id = tx_out.tx_id)
-        JOIN stake_address s1  ON (s1.id = tx_out.stake_address_id)
-        JOIN block          ON (block.id = tx.block_id)
-    WHERE valid_contract = 'true'
-        AND (s1.view = $1::TEXT)
-    GROUP BY tx.id, block.id
-    ORDER BY tx.id DESC
-    limit 20
-        `,[stakeAddress]);
+        const txs = await getTransactionsFromStake(stakeAddress);
         
         ret[stakeAddress] = txs.rows
     }
     return ret;
 }
-
+export async function getTransactionsFromStake(stakeAddress, page=0) { 
+    let txs = await pgClient.query(`
+    SELECT 
+    encode(tx.hash,'hex') AS hash, 
+    tx.out_sum,
+    tx.fee,
+    tx.deposit,
+    tx.size,
+    tx.invalid_before,
+    tx.invalid_hereafter,
+    tx.script_size,
+    block.block_no, 
+    block.time,
+    (
+        SELECT json_agg(row_to_json(X))
+        FROM (
+            SELECT 
+                to2.index,
+                to2.address,
+                to2.address_has_script,
+                to2.value,
+                to2.data_hash, 
+                (
+                    SELECT json_agg(row_to_json(X2)) FROM 
+                        (
+                            SELECT 
+                                matx2.quantity, 
+                                concat(encode(ma2.policy,'hex'), encode(ma2.name, 'hex')) AS unit
+                            FROM ma_tx_out matx2 
+                                LEFT JOIN multi_asset ma2 ON (ma2.id=matx2.ident) 
+                            WHERE matx2.tx_out_id=to2.id
+                        ) AS X2
+                ) AS multiasset 
+            FROM tx_out to2 WHERE tx_id=tx.id
+        ) AS X
+    ) AS outputs,
+    (
+        SELECT json_agg(row_to_json(X))
+        FROM (
+            SELECT 
+                to2.index,
+                to2.address,
+                to2.address_has_script,
+                to2.value,
+                to2.data_hash,
+                encode(tx2.hash, 'hex') AS hash,
+                (
+                    SELECT json_agg(row_to_json(X2)) FROM 
+                    (
+                        SELECT
+                            matx2.quantity, 
+                            concat(encode(ma2.policy,'hex'), encode(ma2.name, 'hex')) AS unit
+                        FROM ma_tx_out matx2
+                            LEFT JOIN multi_asset ma2 ON (ma2.id=matx2.ident)
+                        WHERE matx2.tx_out_id=to2.id
+                    ) AS X2
+                ) AS multiasset 
+            FROM tx_in 
+                LEFT JOIN tx_out to2 ON to2.tx_id=tx_in.tx_out_id AND to2.index=tx_in.tx_out_index 
+                LEFT JOIN tx tx2 ON tx2.id=to2.tx_id
+            WHERE tx_in.tx_in_id=tx.id
+        ) AS X
+    ) AS inputs
+FROM tx
+    JOIN tx_out         ON (tx.id = tx_out.tx_id)
+    JOIN stake_address s1  ON (s1.id = tx_out.stake_address_id)
+    JOIN block          ON (block.id = tx.block_id)
+WHERE valid_contract = 'true'
+    AND (s1.view = $1::TEXT)
+GROUP BY tx.id, block.id
+ORDER BY tx.id DESC
+LIMIT 20
+OFFSET $2
+    `,[stakeAddress, 20*page]);
+    return txs;
+}
 export async function getTokens(featureTree, walletAddr) { 
     const ret = {};
     let tokens = featureTree.tokens;
@@ -107,25 +111,31 @@ export async function getTokens(featureTree, walletAddr) {
         }
         // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
         stakeAddress = getStakeFromAny(stakeAddress);
-        let assets = await pgClient.query(`
-        SELECT 
-            concat(encode(multi_asset.policy, 'hex'), encode(multi_asset.name, 'hex')) AS unit, 
-            sum(ma_tx_out.quantity) as quantity
-        FROM multi_asset 
-            JOIN ma_tx_out      ON (ma_tx_out.ident = multi_asset.id) 
-            JOIN tx_out         ON (tx_out.id = ma_tx_out.tx_out_id)
-            JOIN utxo_view      ON (utxo_view.id = ma_tx_out.tx_out_id) 
-            JOIN stake_address  ON (stake_address.id = utxo_view.stake_address_id)
-            JOIN tx             ON (tx.id = utxo_view.tx_id)
-        WHERE (stake_address.view = $1::TEXT)
-                AND tx.valid_contract = 'true'
-        GROUP BY concat(encode(multi_asset.policy, 'hex'), encode(multi_asset.name, 'hex')) 
-        `, [stakeAddress]);
+        const assets = await getTokensFromStake(stakeAddress);
         ret[stakeAddress]=assets.rows;
         
     }
     return ret;
 }
+
+export async function getTokensFromStake(stakeAddress, page=0) { 
+    let assets = await pgClient.query(`
+    SELECT 
+        concat(encode(multi_asset.policy, 'hex'), encode(multi_asset.name, 'hex')) AS unit, 
+        sum(ma_tx_out.quantity) as quantity
+    FROM multi_asset 
+        JOIN ma_tx_out      ON (ma_tx_out.ident = multi_asset.id) 
+        JOIN tx_out         ON (tx_out.id = ma_tx_out.tx_out_id)
+        JOIN utxo_view      ON (utxo_view.id = ma_tx_out.tx_out_id) 
+        JOIN stake_address  ON (stake_address.id = utxo_view.stake_address_id)
+        JOIN tx             ON (tx.id = utxo_view.tx_id)
+    WHERE (stake_address.view = $1::TEXT)
+            AND tx.valid_contract = 'true'
+    GROUP BY concat(encode(multi_asset.policy, 'hex'), encode(multi_asset.name, 'hex')) 
+    `, [stakeAddress]);
+    return assets;
+}
+
 export async function getUTXOs(featureTree, walletAddr) { 
     const ret = {};
     let utxos = featureTree.utxos;
@@ -139,37 +149,41 @@ export async function getUTXOs(featureTree, walletAddr) {
         }
         // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
         stakeAddress = getStakeFromAny(stakeAddress);
-        let utres = await pgClient.query(`
-        SELECT 
-            encode(tx.hash,'hex') as txHash, 
-            tx_out."index", 
-            tx_out.address, 
-            tx_out.value,
-		    (
-                SELECT json_agg(row_to_json(X2)) FROM 
-                (
-                    SELECT
-                        matx2.quantity, 
-                        concat(encode(ma2.policy,'hex'), encode(ma2.name, 'hex')) AS unit
-                    FROM ma_tx_out matx2
-                        LEFT JOIN multi_asset ma2 ON (ma2.id=matx2.ident)
-                    WHERE matx2.tx_out_id=tx_out.id
-                ) AS X2
-            ) AS multiasset,
-            CASE WHEN d1.value IS NOT NULL THEN d1.value WHEN d2.value IS NOT NULL THEN d2.value ELSE NULL END datum
-        FROM utxo_view
-          JOIN tx_out         ON (tx_out.id = utxo_view.id)
-          JOIN stake_address  ON (stake_address.id = utxo_view.stake_address_id)
-          JOIN tx             ON (tx.id = utxo_view.tx_id)
-          LEFT JOIN datum d1  ON (d1.hash = tx_out.data_hash AND d1.tx_id = tx.id)
-          LEFT JOIN datum d2  ON (d2.id = tx_out.inline_datum_id)
-            WHERE (stake_address.view = $1::TEXT)
-                AND tx.valid_contract = 'true'`, [stakeAddress]);
-            
+       
+        const utres = await getUTXOsFromStake(stakeAddress);
         ret[stakeAddress]=utres.rows;
         
     }
     return ret;
+}
+export async function getUTXOsFromStake(stakeAddress, page=0) { 
+    let utres = await pgClient.query(`
+    SELECT 
+        encode(tx.hash,'hex') as txHash, 
+        tx_out."index", 
+        tx_out.address, 
+        tx_out.value,
+        (
+            SELECT json_agg(row_to_json(X2)) FROM 
+            (
+                SELECT
+                    matx2.quantity, 
+                    concat(encode(ma2.policy,'hex'), encode(ma2.name, 'hex')) AS unit
+                FROM ma_tx_out matx2
+                    LEFT JOIN multi_asset ma2 ON (ma2.id=matx2.ident)
+                WHERE matx2.tx_out_id=tx_out.id
+            ) AS X2
+        ) AS multiasset,
+        CASE WHEN d1.value IS NOT NULL THEN d1.value WHEN d2.value IS NOT NULL THEN d2.value ELSE NULL END datum
+    FROM utxo_view
+      JOIN tx_out         ON (tx_out.id = utxo_view.id)
+      JOIN stake_address  ON (stake_address.id = utxo_view.stake_address_id)
+      JOIN tx             ON (tx.id = utxo_view.tx_id)
+      LEFT JOIN datum d1  ON (d1.hash = tx_out.data_hash AND d1.tx_id = tx.id)
+      LEFT JOIN datum d2  ON (d2.id = tx_out.inline_datum_id)
+        WHERE (stake_address.view = $1::TEXT)
+            AND tx.valid_contract = 'true'`, [stakeAddress]);
+    return utres;
 }
 export async function getLibraries(featureTree) { 
     const ret = {libraries: [], css: []};

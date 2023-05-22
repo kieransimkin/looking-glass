@@ -26,7 +26,7 @@ export default async function Browse(req, res) {
     }
   }
   if (!file) { 
-    return res.status(404).json({});
+    return res.status(404).json({error: 'File Not Found'});
   }
   let result={mediaType: file.mediaType};
   if (file.src.substring(0,7)=='ipfs://') {
@@ -49,7 +49,7 @@ export default async function Browse(req, res) {
   } else if (file.src.substring(0,7)=='http://') { 
     result.buffer = (await axios.get(file.src.substring(7))).data;
   }
-  res.setHeader('Content-type',file.mediaType);
+  res.setHeader('Content-type',result.mediaType);
   res.status(200);
   res.send(Buffer.from(result.buffer));
   

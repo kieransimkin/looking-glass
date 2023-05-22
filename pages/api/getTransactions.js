@@ -1,7 +1,12 @@
 
 
-export default function Browse(req, res) {
+import { getTransactionsFromStake } from "../../utils/queries";
+import { getStakeFromAny } from "../../utils/CSL";
+export default async function Browse(req, res) {
+  let {which, page} = req.body;
   let result={};
-
+  which = getStakeFromAny(which);
+  result.transactions = await getTransactionsFromStake(which,page);
+  result.fetchedAt = new Date();
   res.status(200).json(result);
 }
