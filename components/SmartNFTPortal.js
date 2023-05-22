@@ -48,13 +48,24 @@ const SmartNFTPortal = (props) => {
                     fetch(body.url).then((img) => { 
                         img.blob().then((blob) => { 
                             blob.arrayBuffer().then((buffer) => { 
-                                iFrameRef.current.contentWindow.postMessage({'request':'getTokenThumb','unit':e.data.unit, buffer},'*', [buffer]);
+                                iFrameRef.current.contentWindow.postMessage({
+                                    request: 'getTokenThumb',
+                                    unit: e.data.unit, 
+                                    buffer
+                                },'*', [buffer]);
                             });
                         })
                     })
                 })
             } else { 
-                iFrameRef.current.contentWindow.postMessage({'request':'getTokenThumb','unit':e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');
+                iFrameRef.current.contentWindow.postMessage({
+                    request: 'getTokenThumb',
+                    unit: e.data.unit, 
+                    error: {
+                        message: 'HTTP Error '+res.status+' from backend API', 
+                        code: res.status
+                    }
+                }, '*');
             }
         });
     }
@@ -65,13 +76,24 @@ const SmartNFTPortal = (props) => {
                     fetch(body.url).then((img) => { 
                         img.blob().then((blob) => { 
                             blob.arrayBuffer().then((buffer) => { 
-                                iFrameRef.current.contentWindow.postMessage({'request':'getTokenImage','unit':e.data.unit, buffer},'*', [buffer]);
+                                iFrameRef.current.contentWindow.postMessage({
+                                    request: 'getTokenImage',
+                                    unit: e.data.unit, 
+                                    buffer
+                                },'*', [buffer]);
                             });
                         })
                     })
                 })
             } else { 
-                iFrameRef.current.contentWindow.postMessage({'request':'getTokenImage','unit':e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');
+                iFrameRef.current.contentWindow.postMessage({
+                    request: 'getTokenImage',
+                    unit: e.data.unit, 
+                    error: {
+                        message: 'HTTP Error '+res.status+' from backend API', 
+                        code: res.status
+                    }
+                },'*');
             }
         });
     }
@@ -80,11 +102,24 @@ const SmartNFTPortal = (props) => {
             if (res.status == 200) {
                 res.blob().then(blob => { 
                     blob.arrayBuffer().then((buffer) => { 
-                        iFrameRef.current.contentWindow.postMessage({'request':'getFile','id':e.data.id,'unit':e.data.unit, buffer},'*',[buffer]);
+                        iFrameRef.current.contentWindow.postMessage({
+                            request: 'getFile',
+                            id: e.data.id,
+                            unit: e.data.unit, 
+                            buffer
+                        },'*',[buffer]);
                     });
                 });
             } else { 
-                iFrameRef.current.contentWindow.postMessage({'request':'getFile','id':e.data.id,'unit':e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');
+                iFrameRef.current.contentWindow.postMessage({
+                    request: 'getFile',
+                    id: e.data.id,
+                    unit: e.data.unit, 
+                    error: {
+                        message: 'HTTP Error '+res.status+' from backend API', 
+                        code: res.status
+                    }
+                },'*');
             }
         })        
     }
@@ -92,10 +127,21 @@ const SmartNFTPortal = (props) => {
         postData('/getMetadata',{unit: e.data.unit}).then((res) => {
             if (res.status == 200) {
                 res.json().then(result => {      
-                    iFrameRef.current.contentWindow.postMessage({'request':'getMetadata',unit: e.data.unit, result},'*')
+                    iFrameRef.current.contentWindow.postMessage({
+                        request: 'getMetadata',
+                        unit: e.data.unit, 
+                        result
+                    },'*')
                 });
             } else { 
-                iFrameRef.current.contentWindow.postMessage({'request':'getMetadata',unit: e.data.unit, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*')
+                iFrameRef.current.contentWindow.postMessage({
+                    request: 'getMetadata',
+                    unit: e.data.unit, 
+                    error: {
+                        message: 'HTTP Error '+res.status+' from backend API', 
+                        code: res.status
+                    }
+                },'*')
             }
         });      
     }
@@ -103,10 +149,23 @@ const SmartNFTPortal = (props) => {
         postData('/getTransactions',{unit: e.data.unit, which: e.data.which, page: e.data.page}).then((res) => { 
             if (res.status == 200) {
                 res.json().then(result => {      
-                    iFrameRef.current.contentWindow.postMessage({'request':'getTransactions',which: e.data.which, page: e.data.page, result},'*');   
+                    iFrameRef.current.contentWindow.postMessage({
+                        request: 'getTransactions',
+                        which: e.data.which, 
+                        page: e.data.page, 
+                        result
+                    },'*');   
                 });
             } else { 
-                iFrameRef.current.contentWindow.postMessage({'request':'getTransactions',which: e.data.which, page: e.data.page, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*');   
+                iFrameRef.current.contentWindow.postMessage({
+                    request: 'getTransactions',
+                    which: e.data.which, 
+                    page: e.data.page, 
+                    error: {
+                        message: 'HTTP Error '+res.status+' from backend API', 
+                        code: res.status
+                    }
+                },'*');   
             }
         });        
     }
@@ -114,10 +173,23 @@ const SmartNFTPortal = (props) => {
         postData('/getTokens',{unit: e.data.unit, which: e.data.which, page: e.data.page}).then((res) => { 
             if (res.status == 200) {
                 res.json().then(result => {      
-                    iFrameRef.current.contentWindow.postMessage({'request':'getTokens', which: e.data.which, page: e.data.page, result },'*')
+                    iFrameRef.current.contentWindow.postMessage({
+                        request: 'getTokens', 
+                        which: e.data.which, 
+                        page: e.data.page,
+                        result 
+                    },'*')
                 })
             } else { 
-                iFrameRef.current.contentWindow.postMessage({'request':'getTokens', which: e.data.which, page: e.data.page, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}},'*')
+                iFrameRef.current.contentWindow.postMessage({
+                    request: 'getTokens', 
+                    which: e.data.which, 
+                    page: e.data.page, 
+                    error: {
+                        message: 'HTTP Error '+res.status+' from backend API', 
+                        code: res.status
+                    }
+                },'*')
             }
         });
     }
@@ -125,10 +197,23 @@ const SmartNFTPortal = (props) => {
         postData('/getUTXOs',{unit: e.data.unit, which: e.data.which, page: e.data.page}).then((res) => { 
             if (res.status == 200) {
                 res.json().then(result => {      
-                    iFrameRef.current.contentWindow.postMessage({'request':'getUTXOs',which: e.data.which, page: e.data.page, result}, '*')
+                    iFrameRef.current.contentWindow.postMessage({
+                        request: 'getUTXOs',
+                        which: e.data.which,
+                        page: e.data.page, 
+                        result
+                    }, '*')
                 });
             } else { 
-                iFrameRef.current.contentWindow.postMessage({'request':'getUTXOs',which: e.data.which, page: e.data.page, error: {message: 'HTTP Error '+res.status+' from backend API', code: res.status}}, '*')
+                iFrameRef.current.contentWindow.postMessage({
+                    request: 'getUTXOs',
+                    which: e.data.which, 
+                    page: e.data.page, 
+                    error: {
+                        message: 'HTTP Error '+res.status+' from backend API', 
+                        code: res.status
+                    }
+                }, '*')
             }
         });       
     }
