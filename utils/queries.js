@@ -14,7 +14,6 @@ export async function getTransactions(featureTree, walletAddr) {
         if (stakeAddress == 'own') {
             stakeAddress=walletAddr;
         }
-        // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
         stakeAddress = getStakeFromAny(stakeAddress);
         const txs = await getTransactionsFromStake(stakeAddress);
         
@@ -22,6 +21,7 @@ export async function getTransactions(featureTree, walletAddr) {
     }
     return ret;
 }
+// Todo - detect full addresses rather than stake addresses and do a slightly different query for them
 export async function getTransactionsFromStake(stakeAddress, page=0) { 
     let txs = await pgClient.query(`
     SELECT 
@@ -109,7 +109,6 @@ export async function getTokens(featureTree, walletAddr) {
         if (stakeAddress == 'own') {
             stakeAddress=walletAddr;
         }
-        // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
         stakeAddress = getStakeFromAny(stakeAddress);
         const assets = await getTokensFromStake(stakeAddress);
         ret[stakeAddress]=assets.rows;
@@ -118,6 +117,7 @@ export async function getTokens(featureTree, walletAddr) {
     return ret;
 }
 
+// Todo - detect full addresses rather than stake addresses and do a slightly different query for them
 export async function getTokensFromStake(stakeAddress, page=0) { 
     let assets = await pgClient.query(`
     SELECT 
@@ -136,6 +136,7 @@ export async function getTokensFromStake(stakeAddress, page=0) {
     return assets;
 }
 
+
 export async function getUTXOs(featureTree, walletAddr) { 
     const ret = {};
     let utxos = featureTree.utxos;
@@ -147,7 +148,7 @@ export async function getUTXOs(featureTree, walletAddr) {
         if (stakeAddress == 'own') {
             stakeAddress=walletAddr;
         }
-        // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
+        
         stakeAddress = getStakeFromAny(stakeAddress);
        
         const utres = await getUTXOsFromStake(stakeAddress);
@@ -156,6 +157,7 @@ export async function getUTXOs(featureTree, walletAddr) {
     }
     return ret;
 }
+// Todo - detect full addresses rather than stake addresses and do a slightly different query for them
 export async function getUTXOsFromStake(stakeAddress, page=0) { 
     let utres = await pgClient.query(`
     SELECT 
