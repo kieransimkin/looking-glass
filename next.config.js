@@ -3,7 +3,7 @@ const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 
 const {join} = require('path');
 const {access, symlink} = require('fs/promises')
-/*
+
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
@@ -57,19 +57,12 @@ const nextConfig = {
         }
       })(),
     );
-    
+    */
   // Important: return the modified config
     //return newconfig
 		return config;
 	},
 }
-
-//*/
-const nextConfig = {
-  reactStrictMode: false,
-  swcMinify: true
-}
-
 function patchWasmModuleImport(config, isServer) {
   config.experiments = Object.assign(config.experiments || {}, {
       asyncWebAssembly: true,
