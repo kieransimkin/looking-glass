@@ -7,11 +7,11 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   webpack: function (config, options) {
-    const {isServer} = options;
+    
 		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
     config.resolve.fallback = { fs: false, path: false };
 
-
+    patchWasmModuleImport(config, options.isServer);
     // Trying to hide annoying warnings from serialization lib, none of this works, but leaving it here so I know what I've tried:
     config.stats={};
     config.stats.warningsFilter =[/emurgo/i]
@@ -23,6 +23,7 @@ const nextConfig = {
 
     // There is some weird bug with dynamic wasm imports (again, triggered by serialization lib), this workaround is from github:
     // https://github.com/vercel/next.js/issues/25852
+    /*
     config.plugins.push(
       new (class {
         apply(compiler) {
@@ -45,8 +46,7 @@ const nextConfig = {
                   }
                 }
     
-                await symlink(to, '/vercel/path0/.next/server/static', 'junction');
-                console.log(`created symlink '/vercel/path0/.next/server/static' -> ${to}`);
+                
                 await symlink(to, from, 'junction');
                 console.log(`created symlink ${from} -> ${to}`);
               }
@@ -55,10 +55,29 @@ const nextConfig = {
         }
       })(),
     );
+    */
   // Important: return the modified config
     //return newconfig
 		return config;
 	},
 }
+function patchWasmModuleImport(config, isServer) {
+  config.experiments = Object.assign(config.experiments || {}, {
+      asyncWebAssembly: true,
+  });
 
+  config.optimization.moduleIds = 'named';
+
+  config.module.rules.push({
+      test: /\.wasm$/,
+      type: 'webassembly/async',
+  });
+
+  // TODO: improve this function -> track https://github.com/vercel/next.js/issues/25852
+  if (isServer) {
+      config.output.webassemblyModuleFilename = './../static/wasm/[modulehash].wasm';
+  } else {
+      config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
+  }
+}
 module.exports = nextConfig
