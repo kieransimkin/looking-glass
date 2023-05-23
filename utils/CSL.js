@@ -1,7 +1,10 @@
 const networkId = process.env.NETWORK?.toLowerCase() == "testnet" ? 0 : 1
-import * as CSL from "@emurgo/cardano-serialization-lib-browser"
-
-
+import * as CSLb from "@emurgo/cardano-serialization-lib-browser"
+import * as CSLs from "@emurgo/cardano-serialization-lib-nodejs"
+let CSL = CSLs;
+if (process.browser) { 
+    CSL = CSLb;
+}
 export function getStake(baseAddress) {
     const address = CSL.BaseAddress.from_address(CSL.Address.from_bech32(baseAddress))
     if (!address) return

@@ -467,7 +467,7 @@
   resolved "https://registry.yarnpkg.com/@emurgo/cardano-serialization-lib-browser/-/cardano-serialization-lib-browser-11.4.0.tgz#53b5f26fac06e4f6bdef7a11eb57aebf403b1ef4"
   integrity sha512-VWMvLRBFo7MAYh42zledURFs5BpMTWvkP4DzsLNbyJxZlwjDS+bPyehJVyGc116d2gq8NHFmANbfdeuK8ffJ7A==
 
-"@emurgo/cardano-serialization-lib-nodejs@^11.1.0":
+"@emurgo/cardano-serialization-lib-nodejs@^11.4.0":
   version "11.4.0"
   resolved "https://registry.yarnpkg.com/@emurgo/cardano-serialization-lib-nodejs/-/cardano-serialization-lib-nodejs-11.4.0.tgz#2a47d1cbdbfe6ad96ea55ba03d6cbec90497ea9d"
   integrity sha512-dMiofDcqv+IrAITCgWBZmsMLqwv2xImDsJDSrKiYYG1zRKaL8XfMOxx6S0WEnKVj5/343Q5FFURYcSu3iBRNMQ==
