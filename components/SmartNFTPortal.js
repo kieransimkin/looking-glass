@@ -16,7 +16,7 @@ const SmartNFTPortal = (props) => {
         return () => { 
             window.removeEventListener("message", onMessage)
         }
-      }, [onMessage]);
+      }, []);
       
     if (loading) { 
         return <CircularProgress style={{marginTop: '2em', marginLeft: 'auto', marginRight: 'auto'}} />;
