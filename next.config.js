@@ -8,7 +8,7 @@ const nextConfig = {
     webpack5: false
   },
   webpack: function (config, options) {
-		config.experiments = { asyncWebAssembly: false, syncWebAssembly: false, layers: true,topLevelAwait: true };
+		config.experiments = { asyncWebAssembly: false, syncWebAssembly: true, layers: true,topLevelAwait: true };
     config.resolve.fallback = { fs: false, path: false };
 
     // Trying to hide annoying warnings from serialization lib, none of this works, but leaving it here so I know what I've tried:
