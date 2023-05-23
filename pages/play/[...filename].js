@@ -14,9 +14,10 @@ export default  function CIP54Playground(params) {
     let {filename} = router.query;  
     
     if (!filename) filename=[''];
-    if (filename.includes('..')) return;// some basic sanitizing to avoid people being sneaky with ".."
+    
     
     useEffect(() => { 
+        if (filename.includes('..')) return;
         if (filename.join('/').length>0) {
             import('../../public/demos/'+filename.join('/')+'/metadata.json').then((m) => {
                 setMetadata(m.default)
@@ -49,7 +50,7 @@ export default  function CIP54Playground(params) {
             })
         }
     })
-    
+    if (filename.includes('..')) return;// some basic sanitizing to avoid people being sneaky with ".."
     /*
     
     */

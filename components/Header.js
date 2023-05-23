@@ -274,7 +274,7 @@ const Header = (props) => {
                             <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
                             <Link href="/help"><MenuItem>Help</MenuItem></Link>
                             <NestedMenuItem label="Examples" parentMenuOpen={Boolean(anchorEl)}>
-                                <a rel="nofollow" target="_blank" href="/examples"><MenuItem>Contents</MenuItem></a>
+                                <a  rel="noopener noreferrer" target="_blank" href="/examples"><MenuItem>Contents</MenuItem></a>
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem>
                             <Link href="/account"><MenuItem onClick={handleClose}>My Account</MenuItem></Link>
