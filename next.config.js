@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 
-const {join} = require('node:path');
-const {access, symlink} = require('node:fs/promises')
+const {join} = require('path');
+const {access, symlink} = require('fs/promises')
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
@@ -11,7 +11,7 @@ const nextConfig = {
 		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
     config.resolve.fallback = { fs: false, path: false };
 
-    
+
     // Trying to hide annoying warnings from serialization lib, none of this works, but leaving it here so I know what I've tried:
     config.stats={};
     config.stats.warningsFilter =[/emurgo/i]
