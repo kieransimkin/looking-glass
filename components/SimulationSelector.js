@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core";
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import WalletContext from "./WalletContext";
-import { validAddress, getStakeFromAny } from "../utils/CSL";
+import { validAddress, getStakeFromAny } from "../utils/CSLBrowser";
 
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.background.paper, 0.9);

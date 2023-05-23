@@ -16,7 +16,7 @@ import axios from 'axios';
 import {TextField} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomDialog from '../CustomDialog';
-import { validBech32Address } from '../../utils/CSL'
+import { validBech32Address } from '../../utils/CSLBrowser'
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
