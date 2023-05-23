@@ -16,7 +16,6 @@ const ExamplesMenuItems = (props) => {
         </NestedMenuItem>);
         
     }
-    console.log(items);
     return (
         <>
         {items}

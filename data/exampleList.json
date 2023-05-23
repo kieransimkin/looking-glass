@@ -23,6 +23,11 @@
         "title":"Cube",
         "slug":"cube",
         "description":""
+      },
+      {
+        "title":"Token Cubes",
+        "slug":"token-cubes",
+        "description":""
       }
     ]
   }
