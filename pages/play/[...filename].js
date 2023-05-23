@@ -15,7 +15,6 @@ export default  function CIP54Playground(params) {
     
     if (!filename) filename=[''];
     
-    
     useEffect(() => { 
         if (filename.includes('..')) return;
         if (filename.join('/').length>0) {

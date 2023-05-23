@@ -69,7 +69,7 @@ const WalletSelector = (props) => {
     }
 
     // Init
-    useEffect(pollWallets,[]);
+    useEffect(pollWallets,[pollWallets]);
     
     let walletList = wallets.wallets;
     let link = false;
