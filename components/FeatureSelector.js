@@ -88,7 +88,7 @@ const FeatureSelector = (props) => {
       setFeatures(defaultUses);
       onChange(getFeatureTree(defaultUses));
     }
-  },[defaultUses, features, onChange])
+  },[defaultUses, features])
   
   const featureTree = getFeatureTree(features);
 
