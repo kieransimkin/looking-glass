@@ -17,10 +17,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import { useWindowDimensions } from '../utils/Hooks'
+import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import PropTypes from 'prop-types';
 import WalletContext from '../components/WalletContext';
 import { Drawer } from '@material-ui/core';
-import { HelpOutline, HelpTwoTone, KingBed, SportsKabaddi } from '@material-ui/icons';
+import { HelpOutline, HelpTwoTone, Home, KingBed, SportsKabaddi } from '@material-ui/icons';
+import NestedMenuItem from 'material-ui-nested-menu-item';
+import ExamplesMenuItems from './ExamplesMenuItems';
 
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
@@ -262,6 +265,7 @@ const Header = (props) => {
                                 anchorEl={document.getElementById('drawer')}
                                 keepMounted
                                 open={Boolean(anchorEl)}
+                                getContentAnchorEl={null} 
                                 onClose={handleClose}
                                 anchorOrigin={{
                                     vertical: 'bottom',
@@ -272,6 +276,11 @@ const Header = (props) => {
                                     horizontal: 'left',
                                 }}
                             >
+                            <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
+                            
+                            <NestedMenuItem label="Examples" parentMenuOpen={Boolean(anchorEl)}>
+                                    <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
+                            </NestedMenuItem>
                             <Link href="/account"><MenuItem onClick={handleClose}>My Account</MenuItem></Link>
                                 
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
@@ -290,15 +299,27 @@ const Header = (props) => {
                                     </ToggleButton>
                                     </ToggleButtonGroup>
                                 </MenuItem>
+                                
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
                         </div>
                     }
                     {!walletApi &&
+                        
                         <>
+                        <Link href="/">
+                            <Button size='large' startIcon=<Home /> color={(router.route=='/') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
+                                Home
+                            </Button>
+                        </Link>
                         <Link href="/play">
                             <Button size='large' startIcon=<SportsKabaddi /> color={(router.route=='/play') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
                                 Play
+                            </Button>
+                        </Link>
+                        <Link href="/examples">
+                            <Button size='large' startIcon=<CastForEducationIcon /> color={router.route=='/examples' ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
+                                Examples
                             </Button>
                         </Link>
                         <Link href="/help">

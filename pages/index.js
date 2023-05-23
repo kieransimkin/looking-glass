@@ -4,7 +4,10 @@ import { CircularProgress, Typography } from '@material-ui/core';
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import PauseIcon from '@material-ui/icons/Pause';
+import Image from 'next/image';
+import { Carousel } from 'react-responsive-carousel';
 import { useState , useEffect, useRef } from "react";
+import PictureCard from '../components/PictureCard'
 import Card from '@material-ui/core/Card'
 
 const useStyles = makeStyles(theme => { 
@@ -175,10 +178,58 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="fullscreen">
-   <div className="bottom-button" style={{position:'fixed', bottom:'3em', width:'100%', textAlign:'center', transition: `opacity 0.8s ease`, opacity: autoPlay ? 0 : 1 }}> 
-    
-      </div>
+      <main className="fullscreen"> <Carousel 
+        selectedItem={currentSlide}
+        onChange={updateCurrentSlide}
+        autoFocus={true} 
+        showThumbs={false} 
+        showStatus={false} 
+        useKeyboardArrows 
+        autoPlay={autoPlay} 
+        stopOnHover={false} 
+        infiniteLoop={true} 
+        interval={7000} 
+        className="presentation-mode"
+        >
+        <div key="content-1" className="my-slide content" onClick={toggleOnOff}>
+            <div className={classes.bgImageCont}>
+                <Image onLoad={onLoad} className={classes.bgImage} alt="Cave Paintings" src="/cubebackground.jpg" layout='fill'  />
+            </div>
+            <div className={classes.content + ' slide-content'}>
+                <div style={{display:'flex',flexDirection:'column', minHeight:'60vh', justifyContent: 'space-between'}}>
+                    <div>
+                        <Typography variant="h1" classes={{root: classes.bigHead}}> What is art?</Typography>
+                    </div> 
+                    <div style={{textAlign: 'right'}}>
+                        <Typography variant="h2" classes={{root: classes.littleHead}}>A question, perhaps as old as art itself</Typography>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div key="content-2" className="my-slide content" onClick={toggleOnOff}>
+            <div className={classes.bgImageCont}>
+                <Image className={classes.bgImage} alt="Grafitti" src="/grafitti.jpg" width={4244} height={2653}  />
+            </div>
+            <div className={classes.content + ' slide-content'}>
+                <Typography variant="h1" classes={{root: classes.bigHead}}>A most basic message</Typography><br />&nbsp;<br />
+                <div style={{textAlign: 'right'}}>
+                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;This is me&rdquo;</Typography>
+                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;I was here&rdquo;</Typography>
+                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;This meant something&rdquo;</Typography>
+                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;Remember me&rdquo;</Typography>
+                </div>
+            </div>
+        </div>
+       
+    </Carousel>
+    <div className="bottom-button" style={{position:'fixed', bottom:'3em', width:'100%', textAlign:'center', transition: `opacity 0.8s ease`, opacity: autoPlay ? 0 : 1 }}> 
+    <Card style={{cursor: 'pointer', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}} onClick={toggleOnOff}>
+    <Typography variant="h4">
+        {loadingContent}
+        </Typography>
+    </Card>
+    </div>
       </main>
     </div>
   )

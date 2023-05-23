@@ -1,7 +1,22 @@
+
 body {
   margin:0 0 0 0;
   padding: 0 0 0 0 ;
   letter-spacing: 0.10em;
+}
+:-webkit-any-link {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+:-moz-any-link {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+:any-link {
+  color: inherit;
+  text-decoration: inherit;
 }
 button, .MuiButton-root { 
   letter-spacing: 0.02em;

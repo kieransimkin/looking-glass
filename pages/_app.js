@@ -6,10 +6,13 @@ import { PageTransition } from "next-page-transitions";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {useRouter} from 'next/router';
 import { GoogleAnalytics } from "nextjs-google-analytics";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+
 const TIMEOUT = 400;
 function CIP54Playground({ Component, pageProps }) {
   
   const router = useRouter();
+  console.log("%c Ignore cardano serialization lib errors, it likes to throw them. ","background: lightgreen; color: black;")
     return (
       <>
       <GoogleAnalytics trackPageViews />

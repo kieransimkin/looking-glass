@@ -125,7 +125,7 @@ const WalletSelector = (props) => {
                         <ListItemAvatar>
                         <Avatar style={{backgroundColor:'white'}}>
                             {logo && 
-                                <Image src={logo} width="40" height="40" />
+                                <Image src={logo} width="40" height="40" alt={wallet} />
                             }
                         </Avatar>
                         </ListItemAvatar>

@@ -1,0 +1,30 @@
+[
+  {
+    "title":"Basic",
+    "slug":"basic",
+    "examples":[
+      {
+        "title":"Show API",
+        "slug":"show-api",
+        "description":"An example showing the very basics of how to access the API"
+      },
+      {
+        "title":"Token List",
+        "slug":"token-list",
+        "description":""
+      }
+    ]
+  },
+  {
+    "title":"Three.js",
+    "slug":"three.js",
+    "examples":[
+      {
+        "title":"Cube",
+        "slug":"cube",
+        "description":""
+      }
+    ]
+  }
+
+]

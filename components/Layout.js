@@ -8,8 +8,8 @@ import { mkBase, postData, buildWitnessed, getData, refreshWallet } from '../uti
 const drawerWidth = 240;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   flexGrow: 1,
-  marginRight:'100px',
-  padding: theme.spacing(3),
+ // marginRight:'100px',
+  //padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -97,7 +97,7 @@ const Layout = ({children}) => {
     }
     let thisTheme = themeState==='light' ? lightTheme : darkTheme;
     return (
-        <div style={{height: '100vh', fontFamily: "'MuseoModerno', cursive", backgroundColor:thisTheme.palette.background.default, color: thisTheme.palette.text.primary}}>
+        <div style={{height: '100vh', overflow:'hidden', fontFamily: "'MuseoModerno', cursive", backgroundColor:thisTheme.palette.background.default, color: thisTheme.palette.text.primary}}>
         <ThemeProvider theme={thisTheme}>
             <WalletContext.Provider value={walletState}>
                     <Header onThemeChange={onThemeChange} onWalletChange={onWalletChange} />
