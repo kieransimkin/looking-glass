@@ -98,9 +98,6 @@ const Header = (props) => {
     const classes = useStyles(props);
     const router = useRouter();
     const walletCtx = useContext(WalletContext);
-
-    const { height, width } = useWindowDimensions();
-    
     
     let connectContent = <PowerIcon fontSize='small' sx={{padding: 0, margin: 0}} />;
 
@@ -156,7 +153,7 @@ const Header = (props) => {
         window.addEventListener('click', onMouseMove);
         window.addEventListener('touchstart', onMouseMove);
         window.addEventListener('touchmove', onMouseMove);
-        window.addEventListener('keyup', onMouseMove);
+        //window.addEventListener('keyup', onMouseMove);
         window.addEventListener('scroll', onMouseMove);
 
         return () => {
@@ -164,7 +161,7 @@ const Header = (props) => {
           window.removeEventListener('click', onMouseMove);
           window.removeEventListener('touchstart', onMouseMove);
           window.removeEventListener('touchmove', onMouseMove);
-          window.removeEventListener('keyup', onMouseMove);
+          //window.removeEventListener('keyup', onMouseMove);
           window.removeEventListener('scroll', onMouseMove);
         };
     }, [onMouseMove]);
@@ -234,8 +231,6 @@ const Header = (props) => {
         setAnchorEl(null);
     }
 
-    const drawerWidth = 240;
-
     return (
         
             <Drawer  id="drawer"  classes={{
@@ -277,19 +272,22 @@ const Header = (props) => {
                                 }}
                             >
                             <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
-                            
+                            <Link href="/help"><MenuItem>Help</MenuItem></Link>
                             <NestedMenuItem label="Examples" parentMenuOpen={Boolean(anchorEl)}>
-                                    <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
+                                <a rel="nofollow" target="_blank" href="/examples"><MenuItem>Contents</MenuItem></a>
+                                <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem>
                             <Link href="/account"><MenuItem onClick={handleClose}>My Account</MenuItem></Link>
                                 
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
+                                <div style={{position: 'relative', top:'0px', width:'70px'}}>
                                 <ToggleButtonGroup
                                     value={darkMode}
+                                    size="small"
                                     exclusive
                                     onChange={toggleDarkMode}
                                     aria-label="text alignment"
-                                    style={{paddingLeft:'20px'}}
+                                    style={{paddingLeft:'10px', position: 'absolute', top:'-1.1em'}}
                                     >
                                     <ToggleButton value="dark" aria-label="left aligned">
                                         🌞
@@ -298,6 +296,7 @@ const Header = (props) => {
                                         🌙
                                     </ToggleButton>
                                     </ToggleButtonGroup>
+                                </div>
                                 </MenuItem>
                                 
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>

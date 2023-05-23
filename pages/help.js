@@ -87,6 +87,7 @@ export default function Account() {
           Some information about CIP54 here
         </Typography><br />
       <main className={classes.main}>
+    The Smart NFT Playground allows you to develop and test NFTs inside a runtime environment which is fully compliant with the CIP54 specification. In fact, this is the reference implementation of the specification.
     
       </main>
     </div>
