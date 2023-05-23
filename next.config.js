@@ -10,6 +10,7 @@ const nextConfig = {
     const {isServer} = options;
 		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
     config.resolve.fallback = { fs: false, path: false };
+
     
     // Trying to hide annoying warnings from serialization lib, none of this works, but leaving it here so I know what I've tried:
     config.stats={};
@@ -19,7 +20,6 @@ const nextConfig = {
         exclude: /emurgo/
       })
     );
-
 
     // There is some weird bug with dynamic wasm imports (again, triggered by serialization lib), this workaround is from github:
     // https://github.com/vercel/next.js/issues/25852

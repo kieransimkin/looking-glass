@@ -62,7 +62,7 @@ const MetadataEditor = (props) => {
       setMetadata(defaultMetadata);
       onChange(defaultMetadata);
     }
-  },[metadata,defaultMetadata])
+  })
    
   const closeAddField = () => { 
     setAddFieldOpen(false);
