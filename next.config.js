@@ -6,6 +6,7 @@ const {access, symlink} = require('fs/promises')
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  output:'standalone',
   webpack: function (config, options) {
     
 		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
