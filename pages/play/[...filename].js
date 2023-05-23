@@ -50,7 +50,7 @@ export default  function CIP54Playground(params) {
             })
         }
     })
-    if (filename.includes('..')) return;// some basic sanitizing to avoid people being sneaky with ".."
+    if (filename.includes('..')) return "Why have you done this?";// some basic sanitizing to avoid people being sneaky with ".."
     /*
     
     */
