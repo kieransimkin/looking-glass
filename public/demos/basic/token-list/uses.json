@@ -1,0 +1,14 @@
+[
+{
+    "tokens": "own"
+},
+{
+    "files": true
+},
+{
+    "libraries": { 
+        "name":"jquery",
+        "version":"3.7.0"   
+    }
+}
+]

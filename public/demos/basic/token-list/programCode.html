@@ -1,0 +1,32 @@
+<ul id="output">
+
+</ul>
+<script>
+    
+    
+    const nft = window.cardano.nft;
+    
+    nft.getTokens().then((tokens) => { 
+        
+	    
+	    
+        for (var c=0; c<tokens.tokens.length; c++) { 
+            const token = tokens.tokens[c];
+            
+            //if (token.quantity!=1) continue;
+            nft.getTokenThumbUrl(token.unit).then((image) => { 
+                const img = document.createElement("img");
+      img.src = image
+      img.height = 100;
+      img.onload = () => {
+        URL.revokeObjectURL(img.src);
+        $('#output').append(img);
+      };
+                
+            });
+        
+        }
+        
+    });
+
+</script>

@@ -1,0 +1,14 @@
+[
+{
+    "tokens": "own"
+},
+{
+    "files": true
+},
+{
+    "libraries": { 
+        "name":"three.js",
+        "version":"0.152.2"
+    }
+}
+]

@@ -16,11 +16,11 @@ export async function getTransactions(featureTree, walletAddr) {
         }
         stakeAddress = getStakeFromAny(stakeAddress);
         const txs = await getTransactionsFromStake(stakeAddress);
-        
-        ret[stakeAddress] = txs.rows
+        ret[stakeAddress] = txs;
     }
     return ret;
 }
+
 // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
 export async function getTransactionsFromStake(stakeAddress, page=0) { 
     let txs = await pgClient.query(`
@@ -96,8 +96,10 @@ ORDER BY tx.id DESC
 LIMIT 20
 OFFSET $2
     `,[stakeAddress, 20*page]);
+    txs=txs.rows;
     return txs;
 }
+
 export async function getTokens(featureTree, walletAddr) { 
     const ret = {};
     let tokens = featureTree.tokens;
@@ -111,7 +113,7 @@ export async function getTokens(featureTree, walletAddr) {
         }
         stakeAddress = getStakeFromAny(stakeAddress);
         const assets = await getTokensFromStake(stakeAddress);
-        ret[stakeAddress]=assets.rows;
+        ret[stakeAddress]=assets;
         
     }
     return ret;
@@ -133,9 +135,9 @@ export async function getTokensFromStake(stakeAddress, page=0) {
             AND tx.valid_contract = 'true'
     GROUP BY concat(encode(multi_asset.policy, 'hex'), encode(multi_asset.name, 'hex')) 
     `, [stakeAddress]);
+    assets=assets.rows;
     return assets;
 }
-
 
 export async function getUTXOs(featureTree, walletAddr) { 
     const ret = {};
@@ -148,15 +150,13 @@ export async function getUTXOs(featureTree, walletAddr) {
         if (stakeAddress == 'own') {
             stakeAddress=walletAddr;
         }
-        
         stakeAddress = getStakeFromAny(stakeAddress);
-       
         const utres = await getUTXOsFromStake(stakeAddress);
-        ret[stakeAddress]=utres.rows;
-        
+        ret[stakeAddress]=utres;
     }
     return ret;
 }
+
 // Todo - detect full addresses rather than stake addresses and do a slightly different query for them
 export async function getUTXOsFromStake(stakeAddress, page=0) { 
     let utres = await pgClient.query(`
@@ -185,8 +185,10 @@ export async function getUTXOsFromStake(stakeAddress, page=0) {
       LEFT JOIN datum d2  ON (d2.id = tx_out.inline_datum_id)
         WHERE (stake_address.view = $1::TEXT)
             AND tx.valid_contract = 'true'`, [stakeAddress]);
+    utres=utres.rows;
     return utres;
 }
+
 export async function getLibraries(featureTree) { 
     const ret = {libraries: [], css: []};
     for (var c=0; c<featureTree.libraries.length; c++ ) { 
@@ -221,6 +223,7 @@ export async function getLibraries(featureTree) {
     }
     return ret;
 }
+
 export const getMetadata = async (unit) => { 
     if (!unit || unit.length<1) return null;
     const { label, name, policyId, assetName} = fromUnit(unit)
@@ -241,6 +244,7 @@ export const getMetadata = async (unit) => {
     }
     return metadata;
 }
+
 export const getMintTx = async (unit) => { 
     let mintTx = await pgClient.query(`
     SELECT 
@@ -266,6 +270,7 @@ export const getMintTx = async (unit) => {
     `, [unit.substring(0,56), unit.substring(56)]);
     return mintTx.rows[0];
 }
+
 export const getCIP68Metadata = async (unit) => { 
     
     // Try normal datum first

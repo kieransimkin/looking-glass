@@ -51,6 +51,7 @@ const SmartNFTPortal = (props) => {
                                 iFrameRef.current.contentWindow.postMessage({
                                     request: 'getTokenThumb',
                                     unit: e.data.unit, 
+                                    mediaType: img.mediaType,
                                     buffer
                                 },'*', [buffer]);
                             });
@@ -79,6 +80,7 @@ const SmartNFTPortal = (props) => {
                                 iFrameRef.current.contentWindow.postMessage({
                                     request: 'getTokenImage',
                                     unit: e.data.unit, 
+                                    mediaType: img.mediaType,
                                     buffer
                                 },'*', [buffer]);
                             });
@@ -106,6 +108,7 @@ const SmartNFTPortal = (props) => {
                             request: 'getFile',
                             id: e.data.id,
                             unit: e.data.unit, 
+                            mediaType: res.mediaType,
                             buffer
                         },'*',[buffer]);
                     });
@@ -266,11 +269,20 @@ const getPortalAPIScripts = (smartImports, metadata) => {
         window.cardano.nft.getTokenThumb = async (unit) => {
             console.error('Attempt to use getTokenThumb without importing files API');
         }
+        window.cardano.nft.getTokenThumbUrl = async (unit) => {
+            console.error('Attempt to use getTokenThumbUrl without importing files API');
+        }
         window.cardano.nft.getTokenImage = async (unit) => { 
             console.error('Attempt to use getTokenImage without importing files API');
         }
+        window.cardano.nft.getTokenImageUrl = async (unit) => { 
+            console.error('Attempt to use getTokenImageUrl without importing files API');
+        }
         window.cardano.nft.getFile = async (id=null, unit=null) => { 
             console.error('Attempt to use getFile without importing files API');
+        }
+        window.cardano.nft.getFileUrl = async (id=null, unit=null) => { 
+            console.error('Attempt to use getFileUrl without importing files API');
         }
         window.cardano.nft.getMetadata = async (unit='own') => { 
             if (unit=='own') return window.cardano.nft._data.metadata;
@@ -295,6 +307,9 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 parent.postMessage({request:'getTokenThumb',unit},'*');
             });
         }
+        window.cardano.nft.getTokenThumbUrl = async (unit) => { 
+            return URL.createObjectURL(new Blob([await window.cardano.nft.getTokenThumb(unit)]));
+        }
         window.cardano.nft.getTokenImage = async (unit) => { 
             return new Promise(async (resolve, reject) => { 
                 const messageHandler = (e) => { 
@@ -310,6 +325,9 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 parent.postMessage({request:'getTokenImage',unit},'*')
             });
         }
+        window.cardano.nft.getTokenImageUrl = async (unit) => { 
+            return URL.createObjectURL(new Blob([await window.cardano.nft.getTokenImage(unit)]));
+        }
         window.cardano.nft.getFile = async (id=null, unit='own') => { 
             return new Promise(async (resolve, reject) => { 
                 const messageHandler = (e) => { 
@@ -324,6 +342,9 @@ const getPortalAPIScripts = (smartImports, metadata) => {
                 window.addEventListener('message',messageHandler);
                 parent.postMessage({request:'getFile',id,unit, metadata:window.cardano.nft._data.metadata},'*');
             });
+        }
+        window.cardano.getFileUrl = async (id=null, unit='own') => { 
+            return URL.createObjectURL(new Blob([await window.cardano.nft.getFile(id, unit)]));
         }
         window.cardano.nft.getMetadata = async (unit='own') => { 
             if (unit=='own') return window.cardano.nft._data.metadata;
