@@ -32,7 +32,7 @@ const nextConfig = {
               if (isServer) {
                 const from = join(compiler.options.output.path, '../static');
                 const to = join(compiler.options.output.path, 'static');
-    
+                
                 try {
                   await access(from);
                   console.log(`${from} already exists`);
@@ -45,6 +45,8 @@ const nextConfig = {
                   }
                 }
     
+                await symlink(to, '/vercel/path0/.next/server/static', 'junction');
+                console.log(`created symlink '/vercel/path0/.next/server/static' -> ${to}`);
                 await symlink(to, from, 'junction');
                 console.log(`created symlink ${from} -> ${to}`);
               }
