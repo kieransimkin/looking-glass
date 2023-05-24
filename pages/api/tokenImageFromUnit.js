@@ -10,7 +10,6 @@ export default async function Browse(req, res) {
   }
   const axiosResult = await axios.get(result, {responseType: 'arraybuffer'});
   res.setHeader('Content-Type',axiosResult.headers["content-type"]);
-  console.log(axiosResult.headers['content-type']);
   res.status(200);
   res.send(Buffer.from(axiosResult.data));
   

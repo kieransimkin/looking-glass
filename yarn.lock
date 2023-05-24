@@ -3509,11 +3509,6 @@ markdown-table@^3.0.0:
   resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-3.0.3.tgz#e6331d30e493127e031dd385488b5bd326e4a6bd"
   integrity sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==
 
-material-ui-nested-menu-item@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/material-ui-nested-menu-item/-/material-ui-nested-menu-item-1.0.2.tgz#9d0999e7a70816f84e9caa0c3ad68948da719d66"
-  integrity sha512-LZb8xI0FrAI/A3P2vT3CB9bmSoOFWOK0dikTc1t9VvEpp1a8hZkbVUz7VhETnoLUYu3NXCkgulmXcl3zitqI9A==
-
 mdast-util-definitions@^5.0.0:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/mdast-util-definitions/-/mdast-util-definitions-5.1.2.tgz#9910abb60ac5d7115d6819b57ae0bcef07a3f7a7"

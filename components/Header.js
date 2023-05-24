@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 import WalletContext from '../components/WalletContext';
 import { Drawer } from '@material-ui/core';
 import { HelpOutline, HelpTwoTone, Home, KingBed, SportsKabaddi } from '@material-ui/icons';
-import NestedMenuItem from 'material-ui-nested-menu-item';
+import NestedMenuItem from './NestedMenuItem';
 import ExamplesMenuItems from './ExamplesMenuItems';
 
 const useStyles = makeStyles(theme => { 
@@ -273,7 +273,7 @@ const Header = (props) => {
                             >
                             <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
                             <Link href="/help"><MenuItem>Help</MenuItem></Link>
-                            <NestedMenuItem label="Examples" parentMenuOpen={Boolean(anchorEl)}>
+                            <NestedMenuItem direction="left" label="Examples" parentMenuOpen={Boolean(anchorEl)}>
                                 <a  rel="noopener noreferrer" target="_blank" href="/examples"><MenuItem>Contents</MenuItem></a>
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem>

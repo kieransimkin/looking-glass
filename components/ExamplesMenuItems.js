@@ -1,6 +1,7 @@
 
 import { MenuItem } from "@material-ui/core";
-import NestedMenuItem from "material-ui-nested-menu-item";
+
+import NestedMenuItem from "./NestedMenuItem";
 import Link from "next/link";
 import exampleList from '../data/exampleList.json';
 const ExamplesMenuItems = (props) => { 
@@ -11,7 +12,7 @@ const ExamplesMenuItems = (props) => {
         for (const example of item.examples) { 
             examples.push(<a key={example.slug} target="_blank" rel="noopener noreferrer" href={'/play/'+item.slug+'/'+example.slug}><MenuItem>{example.title}</MenuItem></a>);
         }
-        items.push(<NestedMenuItem key={'l'+item.slug} label={item.title} parentMenuOpen={parentMenuOpen}>
+        items.push(<NestedMenuItem direction="left" key={'l'+item.slug} label={item.title} parentMenuOpen={parentMenuOpen}>
             {examples}
         </NestedMenuItem>);
         
