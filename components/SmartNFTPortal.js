@@ -45,7 +45,7 @@ const SmartNFTPortal = (props) => {
         getData('/tokenImageFromUnit?unit='+e.data.unit+'&size=256').then((res) => { 
             if (res.status == 200) {
                 res.json().then(body => {      
-                    fetch(body.url).then((img) => { 
+                    fetch(body.url,{referrer:''}).then((img) => { 
                         img.blob().then((blob) => { 
                             blob.arrayBuffer().then((buffer) => { 
                                 iFrameRef.current.contentWindow.postMessage({
@@ -74,7 +74,7 @@ const SmartNFTPortal = (props) => {
         getData('/tokenImageFromUnit?unit='+e.data.unit).then((res) => { 
             if (res.status == 200) {
                 res.json().then(body => {      
-                    fetch(body.url).then((img) => { 
+                    fetch(body.url, {referrer: ''}).then((img) => { 
                         img.blob().then((blob) => { 
                             blob.arrayBuffer().then((buffer) => { 
                                 iFrameRef.current.contentWindow.postMessage({
