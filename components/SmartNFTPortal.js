@@ -42,58 +42,50 @@ const SmartNFTPortal = (props) => {
         }
     }
     const onGetTokenThumb = (e) => { 
-        getData('/tokenImageFromUnit?unit='+e.data.unit+'&size=256').then((res) => { 
-            if (res.status == 200) {
-                res.json().then(body => {      
-                    fetch(body.url,{referrer:''}).then((img) => { 
-                        img.blob().then((blob) => { 
-                            blob.arrayBuffer().then((buffer) => { 
-                                iFrameRef.current.contentWindow.postMessage({
-                                    request: 'getTokenThumb',
-                                    unit: e.data.unit, 
-                                    mediaType: img.mediaType,
-                                    buffer
-                                },'*', [buffer]);
-                            });
-                        })
-                    })
-                })
+        getData('/tokenImageFromUnit?unit='+e.data.unit+'&size=256').then((img) => { 
+            if (img.status == 200) {
+                img.blob().then((blob) => { 
+                    blob.arrayBuffer().then((buffer) => { 
+                        iFrameRef.current.contentWindow.postMessage({
+                            request: 'getTokenThumb',
+                            unit: e.data.unit, 
+                            mediaType: img.mediaType,
+                            buffer
+                        },'*', [buffer]);
+                    });
+                })                    
             } else { 
                 iFrameRef.current.contentWindow.postMessage({
                     request: 'getTokenThumb',
                     unit: e.data.unit, 
                     error: {
-                        message: 'HTTP Error '+res.status+' from backend API', 
-                        code: res.status
+                        message: 'HTTP Error '+img.status+' from backend API', 
+                        code: img.status
                     }
                 }, '*');
             }
         });
     }
     const onGetTokenImage = (e) => { 
-        getData('/tokenImageFromUnit?unit='+e.data.unit).then((res) => { 
-            if (res.status == 200) {
-                res.json().then(body => {      
-                    fetch(body.url, {referrer: ''}).then((img) => { 
-                        img.blob().then((blob) => { 
-                            blob.arrayBuffer().then((buffer) => { 
-                                iFrameRef.current.contentWindow.postMessage({
-                                    request: 'getTokenImage',
-                                    unit: e.data.unit, 
-                                    mediaType: img.mediaType,
-                                    buffer
-                                },'*', [buffer]);
-                            });
-                        })
-                    })
+        getData('/tokenImageFromUnit?unit='+e.data.unit).then((img) => { 
+            if (img.status == 200) {
+                img.blob().then((blob) => { 
+                    blob.arrayBuffer().then((buffer) => { 
+                        iFrameRef.current.contentWindow.postMessage({
+                            request: 'getTokenImage',
+                            unit: e.data.unit, 
+                            mediaType: img.mediaType,
+                            buffer
+                        },'*', [buffer]);
+                    });
                 })
             } else { 
                 iFrameRef.current.contentWindow.postMessage({
                     request: 'getTokenImage',
                     unit: e.data.unit, 
                     error: {
-                        message: 'HTTP Error '+res.status+' from backend API', 
-                        code: res.status
+                        message: 'HTTP Error '+img.status+' from backend API', 
+                        code: img.status
                     }
                 },'*');
             }
