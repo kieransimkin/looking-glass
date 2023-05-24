@@ -42,6 +42,9 @@ const MetadataEditor = (props) => {
       const newMetadata = {...metadata};  
       delete newMetadata[key];
       setMetadata(newMetadata);
+      if (!defaultMetadata && props.loadStored) { 
+        localStorage.setItem('cip54-metadata', JSON.stringify(newMetadata));
+      }
       onChange(newMetadata);
     }
   }
@@ -52,8 +55,10 @@ const MetadataEditor = (props) => {
     } else if (newItem?.json) { 
       newMetadata[newItem.fieldName]=JSON.parse(newItem.json);
     }
-    
     setMetadata(newMetadata);
+    if (!defaultMetadata && props.loadStored) { 
+      localStorage.setItem('cip54-metadata',JSON.stringify(newMetadata))
+    }
     onChange(newMetadata);
   }
    // This is a yucky way to acheive the initial page load from save:
@@ -61,7 +66,10 @@ const MetadataEditor = (props) => {
     if (defaultMetadata && !metadata) { 
       setMetadata(defaultMetadata);
       onChange(defaultMetadata);
-    }
+     } else if (props.loadStored && !metadata && !defaultMetadata & typeof localStorage != 'undefined' && localStorage.getItem('cip54-metadata')) { 
+      setMetadata(JSON.parse(localStorage.getItem('cip54-metadata')));
+      onChange(JSON.parse(localStorage.getItem('cip54-metadata')));
+     }
   })
    
   const closeAddField = () => { 
@@ -98,7 +106,8 @@ const MetadataEditor = (props) => {
 }
 MetadataEditor.propTypes = {
   onChange: PropTypes.func.isRequired,
-  defaultMetadata: PropTypes.object
+  defaultMetadata: PropTypes.object,
+  loadStored: PropTypes.bool
   
 };
 export default MetadataEditor;

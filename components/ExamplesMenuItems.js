@@ -10,7 +10,7 @@ const ExamplesMenuItems = (props) => {
     for (const item of exampleList) { 
         let examples=[];
         for (const example of item.examples) { 
-            examples.push(<a key={example.slug} target="_blank" rel="noopener noreferrer" href={'/play/'+item.slug+'/'+example.slug}><MenuItem>{example.title}</MenuItem></a>);
+            examples.push(<a key={example.slug} href={'/play/'+item.slug+'/'+example.slug}><MenuItem>{example.title}</MenuItem></a>);
         }
         items.push(<NestedMenuItem direction="left" key={'l'+item.slug} label={item.title} parentMenuOpen={parentMenuOpen}>
             {examples}

@@ -87,6 +87,9 @@ const FeatureSelector = (props) => {
     if (defaultUses && !features) { 
       setFeatures(defaultUses);
       onChange(getFeatureTree(defaultUses));
+    } else if (props.loadStored && !features && !defaultUses & typeof localStorage != 'undefined' && localStorage.getItem('cip54-features')) { 
+      setFeatures(JSON.parse(localStorage.getItem('cip54-features')));
+      onChange(getFeatureTree(defaultUses));
     }
   })
   
@@ -125,6 +128,9 @@ const FeatureSelector = (props) => {
         return true;
       })
       setFeatures(newFeatures);
+      if (!defaultUses && props.loadStored) { 
+        localStorage.setItem('cip54-features',JSON.stringify(newFeatures));
+      }
       onChange(getFeatureTree(newFeatures));
     }
   }
@@ -157,6 +163,9 @@ const FeatureSelector = (props) => {
       })
     }
     setFeatures([...newFeatures, change])
+    if (!defaultUses && props.loadStored) { 
+      localStorage.setItem('cip54-features',JSON.stringify([...newFeatures, change]))
+    }
     onChange(getFeatureTree([...newFeatures, change]));
   }
   let librariesHTML = '';
@@ -237,7 +246,8 @@ const FeatureSelector = (props) => {
 }
 FeatureSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
-  defaultUses: PropTypes.array
+  defaultUses: PropTypes.array,
+  loadStored: PropTypes.bool
   
 };
 export default FeatureSelector;
