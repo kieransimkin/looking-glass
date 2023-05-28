@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import ArrowUpIcon from '@material-ui/icons/ArrowDropUp'
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown'
 import { Typography } from "@material-ui/core";
+import Link from "next/link";
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import Image from "next/image";
@@ -24,28 +25,56 @@ const useStyles = makeStyles(theme => {
     },
     cardContent: { 
       padding: '0 !important'
+    },
+    actionArea: { 
+      height: '100%'
     }
   };
 });
 const PictureCard = (props) => {
-  const {src, alt, width, height} = props;
+  const {src, alt, width, height, href, target} = props;
   const theme = useTheme();
   const classes = useStyles(props);
 
-  return (
-    <Card className={classes.root} raised={true} variant="elevation">
-    
-
-      <CardContent className={classes.cardContent}>
-        <Image src={src} width={width} height={height} layout="responsive" alt={alt}/>
-      </CardContent>
-  </Card>
-  );
+  const cardContent = (
+    <CardContent className={classes.cardContent}>
+      <Image src={src} width={width} height={height} layout="responsive" alt={alt}/>
+    </CardContent>
+  )
+  if (href && target) { 
+    return (
+      <Card className={classes.root} raised={true} variant="elevation">
+          <a target={target} rel="noreferrer" href={href}>
+            <CardActionArea className={classes.actionArea}>
+              {cardContent}
+            </CardActionArea>
+          </a>
+      </Card>
+    );
+  } else if (href) { 
+    return (
+      <Card className={classes.root} raised={true} variant="elevation">
+          <Link href={href}>
+            <CardActionArea className={classes.actionArea}>
+              {cardContent}
+            </CardActionArea>
+          </Link>
+      </Card>
+    );
+  } else { 
+    return (
+      <Card className={classes.root} raised={true} variant="elevation">
+        {cardContent}
+      </Card>
+    );
+  }
 }
 PictureCard.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired
+  alt: PropTypes.string.isRequired,
+  href: PropTypes.string,
+  target: PropTypes.string
 };
 export default PictureCard;

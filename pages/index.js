@@ -5,10 +5,13 @@ import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import PauseIcon from '@material-ui/icons/Pause';
 import Image from 'next/image';
+import VideoCard from '../components/VideoCard';
 import { Carousel } from 'react-responsive-carousel';
 import { useState , useEffect, useRef } from "react";
 import PictureCard from '../components/PictureCard'
 import Card from '@material-ui/core/Card'
+import ExamplesButton from '../components/ExamplesButton';
+import PlaygroundButton from '../components/PlaygroundButton'
 
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.primary.main, 0.8);
@@ -191,33 +194,42 @@ export default function Home() {
         interval={7000} 
         className="presentation-mode"
         >
-        <div key="content-1" className="my-slide content" onClick={toggleOnOff}>
-            <div className={classes.bgImageCont}>
-                <Image onLoad={onLoad} className={classes.bgImage} alt="Cave Paintings" src="/cubebackground.jpg" layout='fill'  />
+       <div key="content-1" className="my-slide content" onClick={toggleOnOff}>
+            <div className={classes.bg}>
+                
             </div>
-            <div className={classes.content + ' slide-content'}>
-                <div style={{display:'flex',flexDirection:'column', minHeight:'60vh', justifyContent: 'space-between'}}>
-                    <div>
-                        <Typography variant="h1" classes={{root: classes.bigHead}}> What is art?</Typography>
-                    </div> 
-                    <div style={{textAlign: 'right'}}>
-                        <Typography variant="h2" classes={{root: classes.littleHead}}>A question, perhaps as old as art itself</Typography>
+            <div className={classes.wideContent + ' slide-content'}>
+                <div className="row" style={{display:'flex', alignItems: 'center', gap:'2em'}}>     
+                    <div className="column">
+                        <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart NFTs</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                        <Typography variant="h3" classes={{root: classes.subtleLittleHead}}><em>A flexible framework for Javascript NFTs on Cardano</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                        
+                    </div>
+                    <div className="column" style={{minWidth:'40%', flexGrow: 1}}>
+                        <VideoCard src="/cubes.mp4" onLoad={onLoad} />
+                        
                     </div>
                 </div>
             </div>
-            
         </div>
         <div key="content-2" className="my-slide content" onClick={toggleOnOff}>
-            <div className={classes.bgImageCont}>
-                <Image className={classes.bgImage} alt="Grafitti" src="/grafitti.jpg" width={4244} height={2653}  />
+            <div className={classes.bg2}>
+                
             </div>
-            <div className={classes.content + ' slide-content'}>
-                <Typography variant="h1" classes={{root: classes.bigHead}}>A most basic message</Typography><br />&nbsp;<br />
-                <div style={{textAlign: 'right'}}>
-                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;This is me&rdquo;</Typography>
-                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;I was here&rdquo;</Typography>
-                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;This meant something&rdquo;</Typography>
-                    <Typography variant="h2" classes={{root: classes.littleHead}}>&ldquo;Remember me&rdquo;</Typography>
+            <div className={classes.wideContent + ' slide-content'}>
+                <div className="row" style={{display:'flex', alignItems: 'center', gap:'2em'}}>     
+                    
+                    <div className="column" style={{minWidth:'40%',maxWidth: '50%',flexGrow: 1}}>
+                        <PictureCard src="/token-cubes-screenshot.png" alt="Token cubes screenshot" width={2111} height={1907} />
+                        
+                    </div>
+                    <div className="column">
+                        <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Get Started</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                        <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>Press a button</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                        <ExamplesButton /> &nbsp; <PlaygroundButton />
+                        
+                        
+                    </div>
                 </div>
             </div>
         </div>

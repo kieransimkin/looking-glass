@@ -6,12 +6,14 @@
       {
         "title":"Show API",
         "slug":"show-api",
-        "description":"An example showing the very basics of how to access the API"
+        "description":"An example showing the very basics of how to access the API",
+        "thumbnail":"basic-show-api.png"
       },
       {
         "title":"Token List",
         "slug":"token-list",
-        "description":""
+        "description":"Shows how to get the list of tokens held by the current owner of the NFT, also uses the files API to get images for each token and display them in a list.",
+        "thumbnail":"basic-token-list.png"
       }
     ]
   },
@@ -22,12 +24,14 @@
       {
         "title":"Cube",
         "slug":"cube",
-        "description":""
+        "description":"Shows how to import the Three.js libary and use it to render a very simple wireframe cube.",
+        "thumbnail":"three.js-cube.png"
       },
       {
         "title":"Token Cubes",
         "slug":"token-cubes",
-        "description":""
+        "description":"Shows how to use the files API to import token images and then use them as textures in Three.js",
+        "thumbnail":"three.js-token-cubes.png"
       }
     ]
   }

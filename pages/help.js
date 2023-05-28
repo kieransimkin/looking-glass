@@ -1,16 +1,29 @@
 import Head from 'next/head'
 import WalletContext from '../components/WalletContext'
-import { Typography } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import BuildIcon from '@material-ui/icons/Build';
+import PublicIcon from '@material-ui/icons/Public';
+import RemoteIcon from '@material-ui/icons/SettingsRemote';
+import Divider from '@material-ui/core/Divider';
+import PictureCard from '../components/PictureCard';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
+import VideoCard from '../components/VideoCard'
+import ContentCard from '../components/ContentCard'
+import Link from 'next/link';
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.primary.main, 0.8);
   const second = alpha(theme.palette.secondary.main, 0.4);
   const darkfirst = alpha(theme.palette.primary.main, 0.2);
   const darksecond = alpha(theme.palette.secondary.main, 0.2);
-  let bg=`linear-gradient(125deg, ${first} 0%, ${second} 100%),linear-gradient(0deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%),url('/fibres-texture3.jpg') !important`;
+  let bg=`linear-gradient(125deg, ${first} 0%, ${second} 100%),linear-gradient(0deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%),url('/paisley.jpg') !important`;
   if (theme.palette.type=='dark') { 
-    bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 100%), url('/fibres-texture3.jpg') !important`;
+    bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 100%), url('/paisley.jpg') !important`;
    
   }
   return {
@@ -84,10 +97,81 @@ export default function Account() {
       
       <div className={classes.bg} />
       <Typography color="textPrimary" variant='h1' align="center" className={classes.heading}>
-          Some information about CIP54 here
+          About CIP54
         </Typography><br />
       <main className={classes.main}>
-    The Smart NFT Playground allows you to develop and test NFTs inside a runtime environment which is fully compliant with the CIP54 specification. In fact, this is the reference implementation of the specification.
+      
+        &nbsp;<br />&nbsp;
+        <Container maxWidth="xl" className={classes.container}>
+          <div className={classes.row+' row'}>
+            <div className={classes.smallCol+' column'}> 
+              <PictureCard href="https://cips.cardano.org/cips/cip54/" target="_blank" height={862} width={1498} alt="CIP54 screenshot" src="/cip54-screenshot.png" />
+            </div>
+            <div className={classes.bigCol+' column'}>
+              <ContentCard>
+              <Typography variant="h2" color="textSecondary">
+                What is CIP54?
+              </Typography><br />
+              <Typography variant="body1">
+                The CIP54 standard allows a HTML+Javascript NFT to receive information about the current state of the blockchain, as well as import files and libraries.
+              </Typography><br />
+             
+              
+             
+              </ContentCard>
+            </div> 
+          </div>
+          <br />&nbsp;<br />
+          <div className={classes.row+' row'}>
+            
+            <div className={classes.bigCol+' column'}>
+            <ContentCard>
+              <Typography variant="h2" color="textSecondary">
+                The Playground
+              </Typography><br />
+              <Typography variant="body1">
+              The Smart NFT Playground allows you to develop and test NFTs inside a runtime environment which is fully compliant with the CIP54 specification. In fact, this is the reference implementation of the specification.
+              </Typography><br />
+              
+              <List className={classes.list}>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <BuildIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Add CIP54 Features" secondary="" />
+                </ListItem>
+                <Divider variant="middle" component="li" />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <RemoteIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Write NFT Code" secondary="" />
+                </ListItem>
+                <Divider variant="middle" component="li" />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <PublicIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Mint NFT" secondary="" />
+                </ListItem>
+              </List>
+ 
+              
+              </ContentCard>
+            </div> 
+            <div className={classes.smallCol+' column'}> 
+              <PictureCard src="/token-cubes-screenshot.png" alt="Token cubes screenshot" width={2111} height={1907} />
+            </div>
+          </div>
+          <br />&nbsp;<br />
+          </Container>
+    
     
       </main>
     </div>

@@ -6,7 +6,7 @@ import {ThemeProvider, createTheme} from '@material-ui/core/styles'
 import WalletContext from './WalletContext'
 import { mkBase, postData, buildWitnessed, getData, refreshWallet } from '../utils/Api';
 const drawerWidth = 240;
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   flexGrow: 1,
  // marginRight:'100px',
   //padding: theme.spacing(3),

@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import WalletContext from '../components/WalletContext'
-import { Typography } from '@material-ui/core';
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
+import { Typography, Container } from '@material-ui/core';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
+import exampleList from '../data/exampleList.json';
+import ExampleCard from '../components/ExampleCard';
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.primary.main, 0.8);
   const second = alpha(theme.palette.secondary.main, 0.4);
@@ -16,7 +18,11 @@ const useStyles = makeStyles(theme => {
   return {
     root: {
       display: 'flex', 
-      width:'100%'
+      width:'100%',
+      gap: '2em',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      alignItems: 'stretch'
     },
     row: { 
       display: 'flex',
@@ -40,6 +46,7 @@ const useStyles = makeStyles(theme => {
       top: 0,
       left: 0,
       right: 0,
+      overflowY: 'auto',
       '&:after': {
         content: "''",
         position: 'fixed',
@@ -74,6 +81,14 @@ const useStyles = makeStyles(theme => {
 
 export default function Account() {
   const classes=useStyles();
+  const examples = [];
+  for (const category of exampleList) { 
+    for (const example of category.examples) { 
+      examples.push( 
+        <ExampleCard categorySlug={category.slug} example={example} />
+      )
+    }
+  }
   return (
     <div>
       <Head>
@@ -81,13 +96,19 @@ export default function Account() {
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
       <div className={classes.bg} />
       <Typography color="textPrimary" variant='h1' align="center" className={classes.heading}>
-          Some information about CIP54 here
+          Examples
         </Typography><br />
       <main className={classes.main}>
-    
+      
+        &nbsp;<br />&nbsp;
+        <Container maxWidth="xl" className={classes.container}>
+        
+        <div className={classes.root}>
+        {examples}
+        </div>
+        </Container>    
       </main>
     </div>
     

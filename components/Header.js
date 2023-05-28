@@ -273,12 +273,11 @@ const Header = (props) => {
                             >
                             <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
                             <Link href="/help"><MenuItem>Help</MenuItem></Link>
+                            <Link href="/play"><MenuItem>Play</MenuItem></Link>
                             <NestedMenuItem direction="left" label="Examples" parentMenuOpen={Boolean(anchorEl)}>
                                 <a href="/examples"><MenuItem>Contents</MenuItem></a>
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
-                            </NestedMenuItem>
-                            <Link href="/account"><MenuItem onClick={handleClose}>My Account</MenuItem></Link>
-                                
+                            </NestedMenuItem>                              
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'70px'}}>
                                 <ToggleButtonGroup
@@ -312,7 +311,7 @@ const Header = (props) => {
                             </Button>
                         </Link>
                         <Link href="/play">
-                            <Button size='large' startIcon=<SportsKabaddi /> color={(router.route=='/play') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
+                            <Button size='large' startIcon=<SportsKabaddi /> color={(router.route.substring(0,5)=='/play') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
                                 Play
                             </Button>
                         </Link>
