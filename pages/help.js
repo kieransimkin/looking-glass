@@ -180,7 +180,7 @@ export default function Account() {
                 Buy / Sell / Trade
               </Typography><br />
               <Typography variant="body1">
-                Buy, sell or trade your Smart NFTs at <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a>, with native
+                Buy, sell or trade your Smart NFTs at <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a>, with native support for CIP54 assets right in the marketplace.
               </Typography><br />
              
               
