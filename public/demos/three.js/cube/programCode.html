@@ -1,64 +1,66 @@
 <div id="scene-container" style="height:100%; overflow: hidden;"/>
 <script>
-// Get a reference to the container element that will hold our scene
-const container = document.querySelector('#scene-container');
+    // This example shows how to set up a basic scene with Three.js 
+    // This is based on one of the Three.js example programs
 
-// create a Scene
-const scene = new THREE.Scene();
+    // Get a reference to the container element that will hold our scene
+    const container = document.querySelector('#scene-container');
 
-// Set the background color
-scene.background = new THREE.Color('purple');
+    // create a Scene
+    const scene = new THREE.Scene();
 
-// Create a camera
-const fov = 20; // AKA Field of View
-const aspect = container.clientWidth / container.clientHeight;
-const near = 0.1; // the near clipping plane
-const far = 100; // the far clipping plane
+    // Set the background color
+    scene.background = new THREE.Color('purple');
 
-const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    // Create a camera
+    const fov = 20; // AKA Field of View
+    const aspect = container.clientWidth / container.clientHeight;
+    const near = 0.1; // the near clipping plane
+    const far = 100; // the far clipping plane
 
-// every object is initially created at ( 0, 0, 0 )
-// move the camera back so we can view the scene
-camera.position.set(0, 0, 10);
+    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
-// create a geometry
-const geometry = new THREE.BoxBufferGeometry(2, 2, 2);
+    // every object is initially created at ( 0, 0, 0 )
+    // move the camera back so we can view the scene
+    camera.position.set(0, 0, 10);
 
-// create a default (white) Basic material
-const material = new THREE.MeshBasicMaterial({wireframe: true});
+    // create a geometry
+    const geometry = new THREE.BoxBufferGeometry(2, 2, 2);
 
-// create a Mesh containing the geometry and material
-const cube = new THREE.Mesh(geometry, material);
-var SPEED = 0.01;
+    // create a default (white) Basic material
+    const material = new THREE.MeshBasicMaterial({wireframe: true});
 
-function rotateCube() {
-    cube.rotation.x -= SPEED * 2;
-    cube.rotation.y -= SPEED;
-    cube.rotation.z -= SPEED * 3;
-}
+    // create a Mesh containing the geometry and material
+    const cube = new THREE.Mesh(geometry, material);
+    var SPEED = 0.01;
 
+    function rotateCube() {
+        cube.rotation.x -= SPEED * 2;
+        cube.rotation.y -= SPEED;
+        cube.rotation.z -= SPEED * 3;
+    }
 
-// add the mesh to the scene
-scene.add(cube);
+    // add the mesh to the scene
+    scene.add(cube);
 
-// create the renderer
-const renderer = new THREE.WebGLRenderer();
-function render() {
-  
-    requestAnimationFrame(render);
-    rotateCube();
+    // create the renderer
+    const renderer = new THREE.WebGLRenderer();
+    function render() {
+    
+        requestAnimationFrame(render);
+        rotateCube();
+        renderer.render(scene, camera);
+    }
+    render();
+    // next, set the renderer to the same size as our container element
+    renderer.setSize(container.clientWidth, container.clientHeight);
+
+    // finally, set the pixel ratio so that our scene will look good on HiDPI displays
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    // add the automatically created <canvas> element to the page
+    container.append(renderer.domElement);
+
+    // render, or 'create a still image', of the scene
     renderer.render(scene, camera);
-}
-render();
-// next, set the renderer to the same size as our container element
-renderer.setSize(container.clientWidth, container.clientHeight);
-
-// finally, set the pixel ratio so that our scene will look good on HiDPI displays
-renderer.setPixelRatio(window.devicePixelRatio);
-
-// add the automatically created <canvas> element to the page
-container.append(renderer.domElement);
-
-// render, or 'create a still image', of the scene
-renderer.render(scene, camera);
 </script>

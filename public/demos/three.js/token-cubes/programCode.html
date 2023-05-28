@@ -1,47 +1,46 @@
 <div id="scene-container" style="height:100%; overflow: hidden;"/>
 <script>
-    let camera, scene, renderer;
-	  const meshes = [];
-    const nft = window.cardano.nft;
-    const container = document.querySelector('#scene-container');
-    const aspect = container.clientWidth / container.clientHeight;
+  let camera, scene, renderer;
+	const meshes = [];
+  const nft = window.cardano.nft;
+  const container = document.querySelector('#scene-container');
+  const aspect = container.clientWidth / container.clientHeight;
+  nft.getTokens().then((tokens) => { 
+	  init(tokens);      
+  });
 
-    nft.getTokens().then((tokens) => { 
-	    init(tokens);      
-    });
-
-    function init(tokens) {
-      renderer = new THREE.WebGLRenderer( { antialias: true } );
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      container.append(renderer.domElement);
-		  camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 2000 );
-		  camera.position.z = 1000;
-		  scene = new THREE.Scene();
-		  const geometry = new THREE.BoxGeometry( 200, 200, 200 );
-      const maxTokens = 300;
-	    for (var c=0;c<tokens.tokens.length && c<maxTokens; c++) { 
-        const token = tokens.tokens[c];
-        const texture=loadTextureFromUnit(renderer.getContext(), token.unit);
-        const material1 = new THREE.MeshBasicMaterial( {map: texture} );		
-			  meshes.push( new THREE.Mesh( geometry, material1 ) );
+  function init(tokens) {
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.append(renderer.domElement);
+	  camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 2000 );
+	  camera.position.z = 1000;
+		scene = new THREE.Scene();
+		const geometry = new THREE.BoxGeometry( 200, 200, 200 );
+    const maxTokens = 300;
+	  for (var c=0;c<tokens.tokens.length && c<maxTokens; c++) { 
+      const token = tokens.tokens[c];
+      const texture=loadTextureFromUnit(renderer.getContext(), token.unit);
+      const material1 = new THREE.MeshBasicMaterial( {map: texture} );		
+		 meshes.push( new THREE.Mesh( geometry, material1 ) );
+    }
+    let perRow = 20;
+		let x = startX = -1800; // Startt x
+    let startY = -500;
+    let xSpacing = 300;
+    let ySpacing = 300;
+		for ( let i = 0; i < meshes.length; ++ i, x += xSpacing ) {
+		  const mesh = meshes[ i ];
+		  mesh.position.x = x;
+		  mesh.position.y = (Math.floor(i/perRow)*ySpacing)+startY;
+      if (i%perRow ==0  && i!=0) { 
+        x=startX;
       }
-      let perRow = 20;
-		  let x = startX = -1800; // Startt x
-      let startY = -500;
-      let xSpacing = 300;
-      let ySpacing = 300;
-		  for ( let i = 0; i < meshes.length; ++ i, x += xSpacing ) {
-			  const mesh = meshes[ i ];
-			  mesh.position.x = x;
-			  mesh.position.y = (Math.floor(i/perRow)*ySpacing)+startY;
-        if (i%perRow ==0  && i!=0) { 
-          x=startX;
-        }
-			  scene.add( mesh );
-		  }
-		  window.addEventListener( 'resize', onWindowResize );
-      animate();
+			scene.add( mesh );
+		}
+		window.addEventListener( 'resize', onWindowResize );
+    animate();
 	}
 
 	function onWindowResize() {
@@ -125,6 +124,4 @@
   function isPowerOf2(value) {
     return (value & (value - 1)) === 0;
   } 
-
-
 </script>

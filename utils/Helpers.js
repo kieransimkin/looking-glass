@@ -76,10 +76,54 @@ const labelIsCIP68 = function(label) {
     if (!label) return false;
     return label == REFERENCE_TOKEN_LABEL || label == USER_TOKEN_LABEL;
 }
+
+const getFeatureTree = (f) => { 
+  let featureTree = {};
+  if (!f) return featureTree;
+  for (var c=0; c<f.length; c++) { 
+    if (f[c]?.renderer) { 
+      // There can be only one renderer
+      featureTree.renderer = f[c]?.renderer
+    }
+    if (f[c]?.mintTx) { 
+      featureTree.mintTx = f[c]?.mintTx;
+    }
+    if (f[c]?.files) { 
+      featureTree.files = f[c]?.files;
+    }
+    if (f[c]?.libraries) { 
+      if (!featureTree?.libraries) { 
+        featureTree.libraries=[];
+      }
+      featureTree.libraries.push(f[c].libraries);
+    }
+    if (f[c]?.tokens) { 
+      if (!featureTree?.tokens) { 
+        featureTree.tokens=[];
+      }
+      featureTree.tokens.push(f[c].tokens);
+    }
+    if (f[c]?.utxos) { 
+      if (!featureTree?.utxos) { 
+        featureTree.utxos=[];
+      }
+      featureTree.utxos.push(f[c].utxos);
+    }
+    if (f[c]?.transactions) { 
+      if (!featureTree.transactions) { 
+        featureTree.transactions=[];
+      }
+      featureTree.transactions.push(f[c].transactions);
+    }
+  }
+  return featureTree;
+}
+
 export const REFERENCE_TOKEN_LABEL = 100;
 export const USER_TOKEN_LABEL = 222;
 export const CIP25_LABEL = 721;
 export {
+  getFeatureTree,
 	labelIsCIP68,
 	dataURItoString,
 	ucfirst,

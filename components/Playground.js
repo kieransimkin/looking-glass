@@ -20,7 +20,9 @@ import DividerBox from './DividerBox'
 import * as cheerio from 'cheerio';
 let programCodeTimer = null;
 import * as React from "react";
+import { getFeatureTree } from '../utils/Helpers';
 import { minify } from 'html-minifier-terser';
+
 
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.primary.main, 0.8);
@@ -100,6 +102,9 @@ const useStyles = makeStyles(theme => {
 
 const Playground = function (props) {
   const classes=useStyles();
+  const defaultUses = props.uses;
+  const defaultMetadata = props.metadata;
+
   const theme = useTheme();
   const defaultAddr = 'stake1uxyldhxclla0fpltcgjkak567hy93nm44vq6vxqryy9trtsv3mhl9'
   const [featureTree, setFeatureTree] = useState({});
@@ -164,10 +169,7 @@ const Playground = function (props) {
   useEffect(() => { 
     if (defaultProgramCode && (!programCode || programCode=='')) { 
       setProgramCode(defaultProgramCode);
-      updateMetadataJSON(metadata,featureTree,simulation, defaultProgramCode);
-    } else if (props.loadStored && (!programCode || programCode=='') && typeof localStorage != 'undefined' && localStorage.getItem('cip54-programCode')) { 
-      setProgramCode(localStorage.getItem('cip54-programCode'));
-      updateMetadataJSON(metadata,featureTree,simulation, localStorage.getItem('cip54-programCode'));
+      updateMetadataJSON(defaultMetadata,getFeatureTree(defaultUses),simulation, defaultProgramCode);  
     }
   }); 
 
@@ -209,7 +211,7 @@ const Playground = function (props) {
       updateMetadataJSON(metadata,featureTree,simulation, e);
     }, 1000);    
   }
-  const metadataChange = (e) => { 
+  const metadataChange = (e) => {    
     setMetadata(e);
     const mdJSON = updateMetadataJSON(e, featureTree, simulation, programCode);
     updateSmartImports(mdJSON, simulation);
@@ -239,7 +241,7 @@ const Playground = function (props) {
         <DividerBox mode='vertical' style={{width: '20%', minWidth: 350}}>
         
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}} >
-            <FeatureSelector defaultUses={props.uses} onChange={featureChange} loadStored={props.loadStored} />
+            <FeatureSelector defaultUses={defaultUses} onChange={featureChange} loadStored={props.loadStored} />
           </div>
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', flexDirection:'column', justifyContent:'flex-start', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}}> 
             <div style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
@@ -247,7 +249,7 @@ const Playground = function (props) {
             <Typography style={{}} variant='caption'>{JSON.stringify(metadataJSON,null,"\t").length} bytes</Typography>
             </div>
             <div><LinearProgress variant='determinate' value={progressValue} /></div>
-            <MetadataEditor defaultMetadata={props.metadata} onChange={metadataChange} loadStored={props.loadStored} />
+            <MetadataEditor defaultMetadata={defaultMetadata} onChange={metadataChange} loadStored={props.loadStored} />
             <CodeMirror
               editable={false}
               value={JSON.stringify(metadataJSON, null, "\t")}
@@ -283,7 +285,7 @@ Playground.propTypes = {
   programCode: PropTypes.string,
   metadata: PropTypes.object,
   uses: PropTypes.array,
-  loadStored: true
+  loadStored: PropTypes.bool
     
 };
 export default Playground;

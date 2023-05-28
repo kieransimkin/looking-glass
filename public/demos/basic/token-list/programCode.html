@@ -1,32 +1,32 @@
 <ul id="output">
 
 </ul>
-<script>
-    
+<script>  
+    // This example shows how to request the list of tokens held by the NFT's owner
+    // And use the files API to import thumbnails for each of those tokens
     
     const nft = window.cardano.nft;
-    
-    nft.getTokens().then((tokens) => { 
-        
-	    
-	    
-        for (var c=0; c<tokens.tokens.length; c++) { 
-            const token = tokens.tokens[c];
-            
-            //if (token.quantity!=1) continue;
-            nft.getTokenThumbUrl(token.unit).then((image) => { 
-                const img = document.createElement("img");
-      img.src = image
-      img.height = 100;
-      img.onload = () => {
-        URL.revokeObjectURL(img.src);
-        $('#output').append(img);
-      };
-                
-            });
-        
-        }
-        
-    });
+    // Get a list of the tokens owned by the owner of this NFT
+    nft.getTokens().then((tokens) => {   
 
+        // For each token, get a URL for the thumbnail image:
+        for (var c=0; c<tokens.tokens.length; c++) { 
+            const token = tokens.tokens[c];            
+            nft.getTokenThumbUrl(token.unit).then((image) => { 
+
+                // dynamically create an image tag 
+                const img = document.createElement("img");
+
+                // Set the URL to the thumbnail URL we received
+                img.src = image
+                img.height = 100;
+                img.onload = () => {
+                    // Free memory associated with data: url
+                    URL.revokeObjectURL(img.src);
+                    // Add image to the DOM
+                    $('#output').append(img);
+                };
+            });
+        }
+    });
 </script>

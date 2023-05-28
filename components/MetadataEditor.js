@@ -66,9 +66,6 @@ const MetadataEditor = (props) => {
     if (defaultMetadata && !metadata) { 
       setMetadata(defaultMetadata);
       onChange(defaultMetadata);
-     } else if (props.loadStored && !metadata && !defaultMetadata & typeof localStorage != 'undefined' && localStorage.getItem('cip54-metadata')) { 
-      setMetadata(JSON.parse(localStorage.getItem('cip54-metadata')));
-      onChange(JSON.parse(localStorage.getItem('cip54-metadata')));
      }
   })
    

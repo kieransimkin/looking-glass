@@ -2,6 +2,14 @@ import Head from 'next/head'
 import Playground from '../components/Playground';
 
 export default function Play() {
+  let playgroundTag = <Playground loadStore />;
+  if (typeof localStorage != 'undefined' && localStorage.getItem('cip54-metadata')) { 
+    playgroundTag = <Playground 
+                      uses={JSON.parse(localStorage.getItem('cip54-features'))} 
+                      metadata={JSON.parse(localStorage.getItem('cip54-metadata'))} 
+                      programCode={localStorage.getItem('cip54-programCode')} 
+                    />
+  }
   return (
     <div>
       <Head>
@@ -10,7 +18,7 @@ export default function Play() {
         <link rel="icon" href="/favicon.ico" />
         
       </Head>
-      <Playground loadStored />
+      {playgroundTag}
     </div>
     
   )

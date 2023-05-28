@@ -7,6 +7,7 @@ import Image from "next/image";
 import AddFeatureDialog from "./dialogs/AddFeatureDialog";
 import { Add, PlusOneOutlined, ExpandMore, ChevronRight, Delete, TurnedInRounded } from "@material-ui/icons";
 import { TreeView, TreeItem } from "@material-ui/lab";
+import { getFeatureTree } from "../utils/Helpers";
 
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.background.paper, 0.9);
@@ -40,55 +41,12 @@ const FeatureSelector = (props) => {
   const [features, setFeatures] = useState(null);
   const classes = useStyles(props);
   
-  const getFeatureTree = (f) => { 
-    let featureTree = {};
-    if (!f) return featureTree;
-    for (var c=0; c<f.length; c++) { 
-      if (f[c]?.renderer) { 
-        // There can be only one renderer
-        featureTree.renderer = f[c]?.renderer
-      }
-      if (f[c]?.mintTx) { 
-        featureTree.mintTx = f[c]?.mintTx;
-      }
-      if (f[c]?.files) { 
-        featureTree.files = f[c]?.files;
-      }
-      if (f[c]?.libraries) { 
-        if (!featureTree?.libraries) { 
-          featureTree.libraries=[];
-        }
-        featureTree.libraries.push(f[c].libraries);
-      }
-      if (f[c]?.tokens) { 
-        if (!featureTree?.tokens) { 
-          featureTree.tokens=[];
-        }
-        featureTree.tokens.push(f[c].tokens);
-      }
-      if (f[c]?.utxos) { 
-        if (!featureTree?.utxos) { 
-          featureTree.utxos=[];
-        }
-        featureTree.utxos.push(f[c].utxos);
-      }
-      if (f[c]?.transactions) { 
-        if (!featureTree.transactions) { 
-          featureTree.transactions=[];
-        }
-        featureTree.transactions.push(f[c].transactions);
-      }
-    }
-    return featureTree;
-  }
+  
   
   // This is a yucky way to acheive the initial page load from save:
   useEffect(() => { 
     if (defaultUses && !features) { 
       setFeatures(defaultUses);
-      onChange(getFeatureTree(defaultUses));
-    } else if (props.loadStored && !features && !defaultUses & typeof localStorage != 'undefined' && localStorage.getItem('cip54-features')) { 
-      setFeatures(JSON.parse(localStorage.getItem('cip54-features')));
       onChange(getFeatureTree(defaultUses));
     }
   })
