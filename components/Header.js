@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => {
         fontFamily: "'MuseoModerno', cursive"
     },
     hidden: { 
-        
+        display: 'inline',
         //backdropFilter: `blur(2px)`,
         boxShadow: `2px 2px 20px 7px rgba(0,0,0,0.20)`,
         borderBottom: `2px solid rgba(0,0,0,0.4)`,

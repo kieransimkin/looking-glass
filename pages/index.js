@@ -176,7 +176,7 @@ export default function Home() {
     return (
     <div>
       <Head>
-        <title>Smart NFT Playground</title>
+        <title>Cardano Smart NFT Playground</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
