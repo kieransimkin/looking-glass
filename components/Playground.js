@@ -169,7 +169,7 @@ const Playground = function (props) {
   useEffect(() => { 
     if (defaultProgramCode && (!programCode || programCode=='')) { 
       setProgramCode(defaultProgramCode);
-      updateMetadataJSON(defaultMetadata,getFeatureTree(defaultUses),simulation, defaultProgramCode);  
+      updateMetadataJSON(defaultMetadata, getFeatureTree(defaultUses), simulation, defaultProgramCode);  
     }
   }); 
 
