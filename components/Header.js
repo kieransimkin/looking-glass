@@ -275,7 +275,7 @@ const Header = (props) => {
                             <Link href="/help"><MenuItem>Help</MenuItem></Link>
                             <Link href="/play"><MenuItem>Play</MenuItem></Link>
                             <NestedMenuItem direction="left" label="Examples" parentMenuOpen={Boolean(anchorEl)}>
-                                <a href="/examples"><MenuItem>Contents</MenuItem></a>
+                                <Link href="/examples"><MenuItem>Contents</MenuItem></Link>
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem>                              
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
