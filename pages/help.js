@@ -170,6 +170,25 @@ export default function Account() {
             </div>
           </div>
           <br />&nbsp;<br />
+          <div className={classes.row+' row'}>
+            <div className={classes.smallCol+' column'}> 
+              <PictureCard href="https://plutus.art/" target="_blank" height={288} width={288} alt="CIP54 screenshot" src="/plutus5x.png" />
+            </div>
+            <div className={classes.bigCol+' column'}>
+              <ContentCard>
+              <Typography variant="h2" color="textSecondary">
+                Buy / Sell / Trade
+              </Typography><br />
+              <Typography variant="body1">
+                Buy, sell or trade your Smart NFTs at <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a>, with native
+              </Typography><br />
+             
+              
+             
+              </ContentCard>
+            </div> 
+          </div>
+          <br />&nbsp;<br />
           </Container>
     
     

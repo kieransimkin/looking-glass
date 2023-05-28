@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => {
     return {
     
     root: {
-        
+        display: 'inline',
         //backdropFilter: `blur(2px)`,
         boxShadow: `2px 2px 20px 7px rgba(0,0,0,0.20)`,
       //background:``,
