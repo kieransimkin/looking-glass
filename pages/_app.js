@@ -8,29 +8,54 @@ import {useRouter} from 'next/router';
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    console.error([error, info.componentStack]);
+  }
+
+  render() {
+    //if (this.state.hasError) {
+      // You can render any custom fallback UI
+     // return this.props.fallback;
+   // }
+    return this.props.children;
+  }
+}
+
 const TIMEOUT = 400;
 function CIP54Playground({ Component, pageProps }) {
   
   const router = useRouter();
   console.log("%c Ignore cardano serialization lib errors, it likes to throw them. ","background: lightgreen; color: black;")
-    return (
-      <>
+  return (
+    <>
       <GoogleAnalytics trackPageViews />
-      <Layout>
-        <PageTransition
-          timeout={TIMEOUT}
-          classNames="page-transition"
-          loadingComponent={<CircularProgress />}
-          loadingDelay={500}
-          loadingTimeout={{
-            enter: TIMEOUT,
-            exit: 0
-          }}
-          loadingClassNames="loading-indicator"
-        >
-          <Component key={router.route} {...pageProps} />
-        </PageTransition>
-      </Layout>
+      <ErrorBoundary>
+        <Layout>
+          <PageTransition
+            timeout={TIMEOUT}
+            classNames="page-transition"
+            loadingComponent={<CircularProgress />}
+            loadingDelay={500}
+            loadingTimeout={{
+              enter: TIMEOUT,
+              exit: 0
+            }}
+            loadingClassNames="loading-indicator"
+          >
+            <Component key={router.route} {...pageProps} />
+          </PageTransition>
+        </Layout>
+      </ErrorBoundary>
         <style>{`
           .page-transition-enter {
             opacity: 0;
