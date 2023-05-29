@@ -14,13 +14,14 @@ import 'rc-dock/dist/rc-dock-dark.css';
 import FeatureSelector from './FeatureSelector';
 import SimulationSelector from './SimulationSelector';
 import { postData, getData } from '../utils/Api'
-import SmartNFTPortal from './SmartNFTPortal';
+import { SmartNFTPortal } from 'smartnftportal';
 import MetadataEditor from './MetadataEditor';
 import DividerBox from './DividerBox'
 import * as cheerio from 'cheerio';
 let programCodeTimer = null;
 import * as React from "react";
 import { getFeatureTree } from '../utils/Helpers';
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 import { minify } from 'html-minifier-terser';
 
 
@@ -128,6 +129,7 @@ const Playground = function (props) {
     });
     const pc = programCode; // Todo - minify here
     const files = [];
+    if (!m) m={};
     for (const [key,value] of Object.entries(m)) { 
       if (key=='uses') { 
         continue;
@@ -168,8 +170,10 @@ const Playground = function (props) {
   const defaultProgramCode = props.programCode;
   useEffect(() => { 
     if (defaultProgramCode && (!programCode || programCode=='')) { 
-      setProgramCode(defaultProgramCode);
-      updateMetadataJSON(defaultMetadata, getFeatureTree(defaultUses), simulation, defaultProgramCode);  
+      process.nextTick(() => { 
+        setProgramCode(defaultProgramCode);
+        updateMetadataJSON(defaultMetadata, getFeatureTree(defaultUses), simulation, defaultProgramCode);  
+      })
     }
   }); 
 
@@ -272,7 +276,7 @@ const Playground = function (props) {
           </div>
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '350px', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'stretch', padding: 5, borderRadius: '5px', backgroundColor: theme.palette.background.default}}>
             <SimulationSelector defaultAddr={defaultAddr} onChange={simulationChange} />
-            <SmartNFTPortal random={random} loading={portalLoading} style={{flexGrow: 1, overflowY: 'hidden', overflowX: 'hidden', border:'1px solid black'}} smartImports={smartImports} metadata={metadataJSON} />
+            <SmartNFTPortal loadingContent=<CircularProgress style={{marginTop: '2em', marginLeft: 'auto', marginRight: 'auto'}} /> random={random} loading={portalLoading} style={{flexGrow: 1, overflowY: 'hidden', overflowX: 'hidden', border:'1px solid black'}} smartImports={smartImports} metadata={metadataJSON} />
           </div>
         </DividerBox>
       </DividerBox>

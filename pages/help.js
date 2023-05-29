@@ -85,7 +85,7 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-export default function Account() {
+export default function Help() {
   const classes=useStyles();
   return (
     <div>

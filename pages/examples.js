@@ -79,7 +79,7 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-export default function Account() {
+export default function Examples() {
   const classes=useStyles();
   const examples = [];
   for (const category of exampleList) { 
