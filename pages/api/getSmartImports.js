@@ -1,33 +1,13 @@
-import { getTokens, getUTXOs, getTransactions, getLibraries, getMintTx } from '../../utils/queries.js';
+import { init, getSmartImports } from "libcip54"
+import pgClient from "../../utils/dbsync";
 export default async function Browse(req, res) {
+    init(process.env.NETWORK?.toLowerCase(), pgClient);
     const {metadata, walletAddr} = req.body;
     const featureTree = metadata?.uses;
     const mockTokenUnit = 'Un-minted'
-    const mockMintTx = {
-        txHash:'',
-        metadata: []
-    }
-    const ret = {libraries:[], css: [], tokens: {}, utxos: {}, transactions: {}, ownerAddr: walletAddr, fetchedAt: new Date(), tokenUnit: mockTokenUnit};
-    if (featureTree?.libraries?.length>0) { 
-        const librariesResult = await getLibraries(featureTree);
-        ret.libraries=librariesResult.libraries;
-        ret.css=librariesResult.css;
-    }
-    if (featureTree?.tokens?.length>0) { 
-        ret.tokens = await getTokens(featureTree, walletAddr);
-    }
-    if (featureTree?.utxos?.length>0) { 
-        ret.utxos = await getUTXOs(featureTree, walletAddr);
-    }
-    if (featureTree?.transactions?.length>0) { 
-        ret.transactions = await getTransactions(featureTree, walletAddr);
-    }
-    if (featureTree?.mintTx) { 
-        ret.mintTx=mockMintTx;
-    }
-    if (featureTree?.files) { 
-        ret.files=true;
-    }
+
+    const ret = await getSmartImports(featureTree, walletAddr, mockTokenUnit);
+
     res.status(200).json(ret);
 }
 

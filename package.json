@@ -36,6 +36,7 @@
     "filereader": "^0.10.3",
     "fs": "^0.0.1-security",
     "html-minifier-terser": "^7.2.0",
+    "libcip54": "^1.0.5",
     "lucid-cardano": "^0.10.5",
     "mapbox-gl": "^2.10.0",
     "next": "12.3.1",

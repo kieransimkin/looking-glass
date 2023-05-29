@@ -41,13 +41,13 @@ const FeatureSelector = (props) => {
   const [features, setFeatures] = useState(null);
   const classes = useStyles(props);
   
-  
-  
   // This is a yucky way to acheive the initial page load from save:
   useEffect(() => { 
     if (defaultUses && !features) { 
-      setFeatures(defaultUses);
-      onChange(getFeatureTree(defaultUses));
+      process.nextTick(() => { 
+        setFeatures(defaultUses);
+        onChange(getFeatureTree(defaultUses));
+      })
     }
   })
   

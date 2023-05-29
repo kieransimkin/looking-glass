@@ -1,8 +1,9 @@
 import axios from "axios";
-import { getMetadata } from "../../utils/queries";
-
+import { getMetadata, init } from "libcip54"
+import pgClient from "../../utils/dbsync";
 
 export default async function Browse(req, res) {
+  init(process.env.NETWORK?.toLowerCase(), pgClient);
   let {metadata, unit, id} = req.body;
   let file = null;
   if (unit=='own') { 
