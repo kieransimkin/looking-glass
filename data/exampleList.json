@@ -32,6 +32,12 @@
         "slug":"token-cubes",
         "description":"Shows how to use the files API to import token images and then use them as textures in Three.js",
         "thumbnail":"three.js-token-cubes.png"
+      },
+      {
+        "title":"Smart Life",
+        "slug":"smart-life",
+        "description":"This is the first collection to mint with CIP54 - demonstrates how to load a Three.js font from a font NFT",
+        "thumbnail":"three.js-token-cubes.png"
       }
     ]
   }

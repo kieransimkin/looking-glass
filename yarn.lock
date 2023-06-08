@@ -5120,10 +5120,10 @@ slash@^3.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
-smartnftportal@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/smartnftportal/-/smartnftportal-1.0.5.tgz#b0bf3c23652cd58e8935b90fdb4407de6d6003dc"
-  integrity sha512-m8+4iwHm+BvD4iS0OhV7TwUzPLHZd/8/F9qmjQeRIWA4qrRHAJng1GOGfc9jbYfRv4kOqls1gUebXosLLPb3zA==
+smartnftportal@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/smartnftportal/-/smartnftportal-1.0.21.tgz#2d2f45bada35f28306e443cb4ee5bd8005060208"
+  integrity sha512-KnMZv9LDw6zTZ60dgXJx1BBweEJglCm4aye7ZEX4CNSeqe7VTknQeJZPM4OipoWH10iDC6J19drYCHze86mkmw==
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "@babel/preset-react" "^7.22.3"
