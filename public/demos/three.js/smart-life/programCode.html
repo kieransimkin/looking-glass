@@ -1,27 +1,19 @@
-<script>
-	let mIn=(t,b=1)=>{
-		if(b)t.style.outline='1px solid black'
-		t.style.backgroundColor='white'
-	},
-	mOu=(t)=>{
-		t.style.outline='none';t.style.backgroundColor=''
-	}
-</script>
-<div id=f-ct style=height:100%;overflow:hidden;font-family:sans-serif><div id=info style="transition:all;opacity:1;max-width:300px;background-color:aliceblue;position:absolute;top:0;left:0;border-radius:20px;outline:1px solid rgba(0,0,0,0.5);box-shadow:2px 2px 10px 1px rgba(0,0,0,0.5);margin:1em;padding:0.5em 0.5em 2em 0.5em">
-	<div id=hide onMouseOver=mIn(this) onMouseOut=mOu(this) style="cursor:pointer;position:absolute;right:0;top:0;margin:2px;padding:5px 10px;border-radius:20px">&#10006;</div>
-	<div id=show onMouseOver=mIn(this,0) onMouseOut=mOu(this) style="cursor:pointer;position:absolute;left:0;right:0;text-align:center;bottom:0;margin:1px;padding:5px 10px;border-radius:20px">&#x25BC;</div>
-	<h1 style="white-space:nowrap;margin:0 30px 10px 30px;font-size:13pt">Smart Life</h1>
+<script>let mIn=(t,b=1)=>{if(b)t.style.outline='1px solid black';t.style.backgroundColor='white';},mOu=(t)=>{t.style.outline='none';t.style.backgroundColor='';}</script>
+<style>h1{white-space:nowrap;margin:0 30px 10px 30px;font-size:13pt}td,th,.u,.l{border:1px solid black;width:1em;height:1em}.s{border:none;text-align:center}.sc{border:none;width:1em;}.sb{border-right: 1px dashed black}th{background:black;}.i{cursor:pointer;position:absolute;padding:5px 10px}.br{border-radius:20px}.tr{transition:opacity 1s, max-width 1s, max-height 1s;}.u,.l{margin:auto}.u{background-color:black}</style>
+<div id=f-ct style=height:100%;overflow:hidden;font-family:sans-serif><div id=info class="br tr" style="opacity:1;max-width:500px;background-color:aliceblue;position:absolute;top:0;left:0;outline:1px solid rgba(0,0,0,0.5);box-shadow:2px 2px 10px 1px rgba(0,0,0,0.5);margin:1em;padding:0.5em 0.5em 2em 0.5em">
+	<div id=hide onMouseOver=mIn(this) onMouseOut=mOu(this) class="i br" style=right:0;top:0;margin:2px>&#10006;</div>
+	<div id=show onMouseOver=mIn(this,0) onMouseOut=mOu(this) class="i br s" style=left:0;right:0;bottom:0;margin:1px>&#x25BC;</div>
+	<h1 class=s>Smart Life</h1>
 	
-		Rule: <b id=rN></b><br>
-		Generations: <b id=Y></b>
-	<div style=max-height:0;opacity:0;transition:all;overflow:hidden id=hid>
+	Rule: <b id=rN></b><br>
+	Generations: <b id=Y></b>
+	<div class=tr style=max-height:0;max-width:0;opacity:0;overflow:hidden id=hid>
 		Spin: <input type=checkbox checked id=sp>
-	  <div id=lOpts style=display:none>
-		Sparkles: <input type=checkbox id=spk>
-	  </div>
-
+		<div id=lOpts style=display:none>
+			Sparkles: <input type=checkbox id=spk>
+		</div>
+		<div id=dis />
 	</div>
-	
 </div>
 </div>
 <canvas width=256 height=256 style=display:none id=can1>
@@ -30,20 +22,14 @@
 let f=()=>{let u=document,E='getElementById',EL='addEventListener',ct=u.querySelector('#f-ct'),nft=window?.cardano?.nft;if(!nft||typeof THREE=='undefined'){ct.innerHTML="CIP54 not supported. For a marketplace with CIP54 support, try Plutus.art";return}nft.getTokens('own').then((oT)=>{
 // https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
 // From Wolfram's book "A new kind of science"
-let vs='varying vec3 vWP;void main(){vec4 wP=modelMatrix*vec4(position,1.0);vWP=wP.xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}'
-let fs='uniform vec3 tC;uniform vec3 bC;uniform float o;uniform float ex;varying vec3 vWP;void main(){float h=normalize(vWP+o).y;gl_FragColor=vec4(mix(bC,tC,max(pow(max(h,0.0),ex),0.0)),1.0);}'
-let d=1000,TL=oT.tokens,w=window,O,rN=82,Y=256,rot=0,W=Y*2,Ts=null,l,j=0,R,T=THREE,Co=T.Color,WT=0xffffff,cW=ct.clientWidth,cH=ct.clientHeight,f=new T.Scene(),g=new T.BoxGeometry(1,1,2),gG=new T.PlaneGeometry(10000,10000),cam=new T.PerspectiveCamera(30,cW/cH,250,W*800),cP=cam.position,al=new T.MeshStandardMaterial({color:WT}),gM=new T.MeshPhongMaterial({color:WT}),ren=new T.WebGLRenderer({antialias:1}),wH=new T.Vector2(cW/2,cH/2),hL=new T.HemisphereLight(WT,WT,0.6),ly=loyal()
-let dL=new T.DirectionalLight(WT,1),dLS=dL.shadow,dLSM=dLS.mapSize,dLP=dL.position,sC=dLS.camera,gr=new T.Mesh(gG,gM),uf={tC:{type:"c",value:new Co(0x0077ff)},bC:{type:"c",value:new Co(WT)},o:{type:"f",value:33},ex:{type:"f",value:0.6}},sG=new T.SphereGeometry(4000,32,15),sM=new T.ShaderMaterial({vertexShader:vs,fragmentShader:fs,uniforms:uf,side:T.BackSide}),sky=new T.Mesh(sG,sM),G='createRadialGradient',A,pgeo,mats=[],pS,i,sp1,sp2,map,size,c1=u[E]('can1'),c2=u[E]('can2'),dC1=c1.getContext('2d'),dC2=c2.getContext('2d'),g2=dC2[G](128,128,50,128,128,150),g1=dC2[G](128,128,0,128,128,50),C='addColorStop',tr="rgba(0,0,0,0)",CT=T.CanvasTexture,pO=[],mX=mY=0,q=0
-gr.rotation.x=-Math.PI/2;gr.position.y=-33;hL.color=new Co("blue");f.background=new Co('black');hL.groundColor=new Co("white");f.fog=new T.Fog(WT,1,5000);f.fog.color=new Co("yellow");dL.color=new Co("brown");gM.color=new Co("yellow");dL.castShadow=1;dLSM.height=dLSM.width=2048;dLS.radiwP=10;dLS.blurSamples=50;sC.bottom=sC.left=-(sC.top=sC.right=d);sC.far=3500;sC.near=0.5;gr.receiveShadow=1;ren.shadowMap.type=T.VSMShadowMap;ren.shadowMap.enabled=1,RN=(z)=>Math.random(z)
-if(ly){ 
-	u[E]('lOpts').style.display='block'
-	u[E]('spk').checked=1
-}
-display()
+let vs='varying vec3 vWP;void main(){vec4 wP=modelMatrix*vec4(position,1.0);vWP=wP.xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',fs='uniform vec3 tC;uniform vec3 bC;uniform float o;uniform float ex;varying vec3 vWP;void main(){float h=normalize(vWP+o).y;gl_FragColor=vec4(mix(bC,tC,max(pow(max(h,0.0),ex),0.0)),1.0);}',d=1000,TL=oT.tokens,w=window,O,rN=82,Y=256,rot=0,W=Y*2,Ts=null,l,j=0,R,T=THREE,Co=T.Color,WT=0xffffff,cW=ct.clientWidth,cH=ct.clientHeight,f=new T.Scene(),g=new T.BoxGeometry(1,1,2),gG=new T.PlaneGeometry(10000,10000),N=new T.PerspectiveCamera(30,cW/cH,250,W*800),cP=N.position,al=new T.MeshStandardMaterial({color:WT}),gM=new T.MeshPhongMaterial({color:WT}),P=new T.WebGLRenderer({antialias:1}),wH=new T.Vector2(cW/2,cH/2),hL=new T.HemisphereLight(WT,WT,0.6),ly=loyal(),mO=0
+let dL=new T.DirectionalLight(WT,1),dLS=dL.shadow,dLSM=dLS.mapSize,dLP=dL.position,sC=dLS.camera,gr=new T.Mesh(gG,gM),uf={tC:{type:"c",value:new Co(0x0077ff)},bC:{type:"c",value:new Co(WT)},o:{type:"f",value:33},ex:{type:"f",value:0.6}},sG=new T.SphereGeometry(4000,32,15),sM=new T.ShaderMaterial({vertexShader:vs,fragmentShader:fs,uniforms:uf,side:T.BackSide}),sky=new T.Mesh(sG,sM),G='createRadialGradient',A,pg,mats=[],pS,i,sp1,sp2,map,size,c1=u[E]('can1'),c2=u[E]('can2'),dC1=c1.getContext('2d'),dC2=c2.getContext('2d'),g2=dC2[G](128,128,50,128,128,150),g1=dC2[G](128,128,0,128,128,50),C='addColorStop',tr="rgba(0,0,0,0)",CT=T.CanvasTexture,pO=[],mX=mY=0,q=0,pR,y,row,x,p1,p2,p3
+gr.rotation.x=-Math.PI/2;gr.position.y=-33;hL.color=new Co("blue");f.background=new Co('black');hL.groundColor=new Co("white");f.fog=new T.Fog(WT,1,5000);f.fog.color=new Co("yellow");dL.color=new Co("brown");gM.color=new Co("yellow");dL.castShadow=1;dLSM.height=dLSM.width=2048;dLS.radiwP=10;dLS.blurSamples=50;sC.bottom=sC.left=-(sC.top=sC.right=d);sC.far=3500;sC.near=0.5;gr.receiveShadow=1;P.shadowMap.type=T.VSMShadowMap;P.shadowMap.enabled=1,RN=(z)=>Math.random(z)
+if(ly){u[E]('lOpts').style.display='block';u[E]('spk').checked=1}
 hL.position.set(0,500,0)
-ren.setSize(cW,cH)
-ren.setPixelRatio(w.devicePixelRatio)
-ct.append(ren.domElement)
+P.setSize(cW,cH)
+P.setPixelRatio(w.devicePixelRatio)
+ct.append(P.domElement)
 cP.set(0,200,W*2)
 f.add(hL)
 dLP.set(-2,2.75,5)
@@ -60,42 +46,25 @@ dC1.fillStyle='skyblue'
 dC1.lineWidth=5
 star(dC1,128,128,4,100,15)
 sp1=new CT(c1);sp2=new CT(c2)
-for(i=0;i<5000;i++)	pO.push(new T.Vector3(RN()*2000-1000,RN()*2000-1000,RN()*2000-1000))
-pgeo=new T.BufferGeometry()
-pgeo.setFromPoints(pO)
+for(i=0;i<5000;i++)pO.push(new T.Vector3(RN()*2000-1000,RN()*2000-1000,RN()*2000-1000))
+pg=new T.BufferGeometry()
+pg.setFromPoints(pO)
 pS=[[sp1,40],[sp2,35],[sp2,20],[sp2,16],[sp2,10]]
 for(i=0;i<pS.length;i++){
 	map=pS[i][0];size=pS[i][1]
 	mats[i]=new T.PointsMaterial({size,map,blending:T.AdditiveBlending,depthTest:0,transparent:1})
-	A=new T.Points(pgeo,mats[i])
-	let pR=A.rotation
+	A=new T.Points(pg,mats[i])
+	pR=A.rotation
 	pR.x=RN()*6;pR.y=RN()*6;pR.z=RN()*6
 	if(ly)f.add(A)
 }
 // My implementation of the cellular automation:
 let fill=()=>{
-	O=[]
-	for(let y=0;y<Y-1;y++){
-		let row=new Int8Array(W),pR
-		if(y==0)pR=seed();else pR=O[y]
-		for(let x=0;x<W;x++){
-			let p1=p3=0,p2=pR[x]
-			if(x>0)p1=pR[x-1]
-			if(x<W-1)p3=pR[x+1]
-			row[x]=cell(p1,p2,p3)
-		}
-		if(y==0)O.push(pR)
-		O.push(row)
-	}
+	O=[];for(y=0;y<Y-1;y++){row=new Int8Array(W),pR;if(y==0)pR=seed();else pR=O[y];for(x=0;x<W;x++){p1=p3=0,p2=pR[x];if(x>0)p1=pR[x-1];if(x<W-1)p3=pR[x+1];row[x]=cell(p1,p2,p3);}if(y==0)O.push(pR);O.push(row)}
 },
 bitSet=(num,i)=>num&(1<<i),
 cell=(p1,p2,p3)=>{
-	let p=0
-	if(p1==1)p=p|(1<<2)
-	if(p2==1)p=p|(1<<1)
-	if(p3==1)p=p|(1<<0)
-	if(bitSet(rN,p))return 1
-	return 0
+	let p=0;if(p1==1)p=p|(1<<2);if(p2==1)p=p|(1<<1);if(p3==1)p=p|(1<<0);if(bitSet(rN,p))return 1;return 0
 },
 seed=()=>{let r=new Int8Array(W);r[Math.round(W/2)]=1;return r}
 /* End of cellular automation */ 
@@ -111,88 +80,33 @@ function star(ctx,cx,cy,spikes,oR,iR){
 	ctx.lineTo(cx,cy-oR);ctx.closePath();ctx.stroke();ctx.fill()
 }
 function createScene(){
-	if(R)f.remove(R)
-	R=new T.Group()
-	R.position.set(0,Y/2,0)
-	for(y=0;y<Y;y++){
-		for(x=0;x<W;x++){
-			if(O[y][x]){
-				let cube=new T.Mesh(g,al)
-				cube.castShadow=1
-				cube.position.set(x-W/2,0-(y-Y/2),0)
-				R.add(cube)
-			}
-		}
-	}
+	if(R)f.remove(R);R=new T.Group();R.position.set(0,Y/2,0)
+	for(y=0;y<Y;y++)for(x=0;x<W;x++){if(O[y][x]){let C=new T.Mesh(g,al);C.castShadow=1;C.position.set(x-W/2,0-(y-Y/2),0);R.add(C)}}
 	f.add(R)
 }
-function gen(){
-	l=Ts
-	fill()
-	createScene()
-}
-function rotate(a){
-	if(!R)return;if(isNaN(a))return
-	let r=R.rotation
-	rot-=(a/33)*0.02
-	r.y=rot
-}
+function gen(){l=Ts;fill();createScene()}
+function rotate(a){if(!R)return;if(isNaN(a))return;let r=R.rotation;rot-=(a/33)*0.02;r.y=rot}
 function display() { 
-	u[E]('rN').innerHTML=rN
-	u[E]('Y').innerHTML=Y
+	u[E]('rN').innerHTML=rN;u[E]('Y').innerHTML=Y;let r='<table><tr>',sR='<tr>'
+	for(let b=0;b<8;b++){for (let i=2;i>=0;i--)r+=!bitSet(b,i)?'<th/>':'<td/>';r+='<td class="sc sb" /><td class=sc />';sR+='<td class=s colspan=3>&#129047;<br><div class="'+(bitSet(rN,7-b)?'u':'l')+'" /></td><td class="sc sb" /><td class=sc />'}
+	r+='</tr>'+sR+'</table>';
+	u[E]('dis').innerHTML=r;
 }
-u.onkeyup=(e)=>{
-	e=e||w.event
-	let c=e.keyCode
-	if(c=='87'){Y+=8;q+=25}else if(c=='83'){Y-=8;q-=25}else if(c=='65')rN--;else if(c=='68')rN++
-	W=Y*2
-	display()
-	gen()
-}
+u.onkeyup=(e)=>{e=e||w.event;let c=e.keyCode;if(c=='87'){Y+=8;q+=25}else if(c=='83'){Y-=8;q-=25}else if(c=='65')rN--;else if(c=='68')rN++;W=Y*2;display();gen()}
 u.resize=()=>{
-	cam.aspect=cW/cH
-	cam.updateProjectionMatrix()
-	ren.setSize(cW,cH)
+	N.aspect=cW/cH
+	N.updateProjectionMatrix()
+	P.setSize(cW,cH)
 }
-u[E]('hide')[EL]('click',()=>{
-	let s=u[E]('info').style
-	s.opacity=s.maxWidth=0
-});
-u[E]('show')[EL]('click',()=>{
-	let s=u[E]('hid').style
-	s.opacity=1
-	s.maxHeight='100px'
-});
-u[E]('spk')[EL]('change',(e)=>{
-	if (!A)return
-	for(i=0;i<f.children.length;i++){
-		let object=f.children[i]
-		if(object instanceof T.Points){
-		if(e.currentTarget.checked){
-			object.visible=1
-		}else{
-			object.visible=0
-		}
-	  }
-	}
-})
-u[EL]('mousemove',(e)=>{
-	mX=e.clientX-wH.x
-	mY=e.clientY-wH.y
-},0)
-let tM=(e)=>{
-	if(e.touches.length==1){
-		e.preventDefault()
-		mX=e.touches[0].pageX-wH.x
-		mY=e.touches[0].pageY-wH.y
-	}
-}
-u[EL]('touchstart',tM,0)
-u[EL]('touchmove',tM,0)
-u[EL]('wheel',(e)=>{q+=e.deltaY;if(q>400)q=400;if(q<-400)q=-400},0)
+u[E]('hide')[EL]('click',()=>{let s=u[E]('info').style;s.opacity=s.maxWidth=0})
+u[E]('show')[EL]('click',()=>{let s=u[E]('hid').style;if(!mO){u[E]('show').innerHTML='&#x25B2;';s.opacity=1;s.maxHeight='100px';s.maxWidth='500px'}else{u[E]('show').innerHTML='&#x25BC;';s.opacity=0;s.maxHeight='0px';s.maxWidth='0px'}mO=!mO});
+u[E]('spk')[EL]('change',(e)=>{if (!A)return;let cL=f.children;for(i=0;i<cL.length;i++){let V=cL[i];if(V instanceof T.Points)if(e.currentTarget.checked)V.visible=1;else V.visible=false;}})
+u[EL]('mousemove',(e)=>{mX=e.clientX-wH.x;mY=e.clientY-wH.y},0)
+let tM=(e)=>{if(e.touches.length==1){e.preventDefault();mX=e.touches[0].pageX-wH.x;mY=e.touches[0].pageY-wH.y;}}
+u[EL]('touchstart',tM,0);u[EL]('touchmove',tM,0);u[EL]('wheel',(e)=>{q+=e.deltaY;if(q>400)q=400;if(q<-400)q=-400},0)
 function render(ts){
 	if(l==undefined)l=ts
-	let es=ts-Ts,cR=cam.rotation
+	let es=ts-Ts,cR=N.rotation
 	Ts=ts
 	if(es>50&&Y>20&&ts-l>1000){
 		if(j){
@@ -208,27 +122,17 @@ function render(ts){
 	cP.x+=(mX*2-cP.x)*0.05
 	cP.y+=(-mY-cP.y)*0.05
 	if(cP.y<50)cP.y=50
-	if(q>0){
-		cP.z+=es
-		q-=es
-		if(q<0)q=0
-	}else if(q<0){ 
-		cP.z-=es
-		q+=es
-		if(q>0)q=0
-	}
-	cam.lookAt(new T.Vector3(0,Y/2,0))
+	if(q>0){cP.z+=es;q-=es;if(q<0)q=0;}else if(q<0){cP.z-=es;q+=es;if(q>0)q=0;}
+	N.lookAt(new T.Vector3(0,Y/2,0))
 	requestAnimationFrame(render)
 	if(u[E]('sp').checked)rotate(es)
-	for(i=0;i<f.children.length;i++){
-		let object=f.children[i]
-		if(object instanceof T.Points)object.rotation.y=(ts/20000)*(i<4?i+1:-(i+1))
-	}
-	ren.render(f,cam)
+	for(i=0;i<f.children.length;i++){let V=f.children[i];if(V instanceof T.Points)V.rotation.y=(ts/20000)*(i<4?i+1:-(i+1))}
+	P.render(f,N)
 }
 gen()
+display()
 render()
-ren.render(f,cam)
+P.render(f,N)
 }
 )};f()
 </script>
