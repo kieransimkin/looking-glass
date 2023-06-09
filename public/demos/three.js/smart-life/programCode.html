@@ -13,7 +13,7 @@ let f=()=>{let u=document,E='getElementById',ct=u.querySelector('#scene-ct'),nft
 // https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
 // From Wolfram's book "A new kind of science"
 let d=1000,TL=oT.tokens,w=window,vs=u[E]('vs').textContent,fs=u[E]('fs').textContent,output,ruleNum=82,gens=256,rot=0,width=gens*2,prevTs=null,start,lag=0,group,SPEED=0.02,T=THREE,Co=T.Color,WT=0xffffff,cW=ct.clientWidth,cH=ct.clientHeight,scene=new T.Scene(),g=new T.BoxGeometry(1,1,2),groundGeo=new T.PlaneGeometry(10000,10000),cam=new T.PerspectiveCamera(30,cW/cH,250,width*800),cP=cam.position,material=new T.MeshStandardMaterial({color:WT}),groundMat=new T.MeshPhongMaterial({color:WT}),ren=new T.WebGLRenderer({antialias:1}),wH=new T.Vector2(cW/2,cH/2),hL=new T.HemisphereLight(WT,WT,0.6)
-let dL=new T.DirectionalLight(WT,1),dLS=dL.shadow,dLSM=dLS.mapSize,dLP=dL.position,sC=dL.shadow.camera,ground=new T.Mesh(groundGeo,groundMat),uf={tC:{type:"c",value:new Co(0x0077ff)},bC:{type:"c",value:new Co(WT)},o:{type:"f",value:33},ex:{type:"f",value:0.6}},skyGeo=new T.SphereGeometry(4000,32,15),skyMat=new T.ShaderMaterial({vertexShader:vs,fragmentShader:fs,uniforms:uf,side:T.BackSide}),sky=new T.Mesh(skyGeo,skyMat),G='createRadialGradient',A,pgeo,mats=[],pS,i,sp1,sp2,map,size,c1=u[E]('can1'),c2=u[E]('can2'),dC1=c1.getContext('2d'),dC2=c2.getContext('2d'),g2=dC2[G](128,128,50,128,128,150),g1=dC2[G](128,128,0,128,128,50),C='addColorStop',tr="rgba(0,0,0,0)",CT=T.CanvasTexture,pO=[],mouseX=mouseY=0,zoom=0
+let dL=new T.DirectionalLight(WT,1),dLS=dL.shadow,dLSM=dLS.mapSize,dLP=dL.position,sC=dL.shadow.camera,ground=new T.Mesh(groundGeo,groundMat),uf={tC:{type:"c",value:new Co(0x0077ff)},bC:{type:"c",value:new Co(WT)},o:{type:"f",value:33},ex:{type:"f",value:0.6}},skyGeo=new T.SphereGeometry(4000,32,15),skyMat=new T.ShaderMaterial({vertexShader:vs,fragmentShader:fs,uniforms:uf,side:T.BackSide}),sky=new T.Mesh(skyGeo,skyMat),G='createRadialGradient',A,pgeo,mats=[],pS,i,sp1,sp2,map,size,c1=u[E]('can1'),c2=u[E]('can2'),dC1=c1.getContext('2d'),dC2=c2.getContext('2d'),g2=dC2[G](128,128,50,128,128,150),g1=dC2[G](128,128,0,128,128,50),C='addColorStop',tr="rgba(0,0,0,0)",CT=T.CanvasTexture,pO=[],mX=mY=0,zoom=0
 ground.rotation.x=-Math.PI/2;ground.position.y=-33;hL.color=new Co("blue");scene.background=new Co('black');hL.groundColor=new Co("white");scene.fog=new T.Fog(WT,1,5000);scene.fog.color=new Co("yellow");dL.color=new Co("brown");groundMat.color=new Co("yellow");dL.castShadow=1;dLSM.height=dLSM.width=2048;dLS.radiwP=10;dLS.blurSamples=50;sC.bottom=sC.left=-(sC.top=sC.right=d);sC.far=3500;sC.near=0.5;ground.receiveShadow=1;ren.shadowMap.type=T.VSMShadowMap;ren.shadowMap.enabled=1,RN=(z)=>Math.random(z)
 u[E]('hide').innerHTML=ruleNum
 hL.position.set(0,500,0)
@@ -133,14 +133,14 @@ u[E]('hide').addEventListener('click',()=>{
 	s.opacity=s.maxWidth=0;
 });
 u.addEventListener('mousemove',(e)=>{
-	mouseX=e.clientX-wH.x
-	mouseY=e.clientY-wH.y
+	mX=e.clientX-wH.x
+	mY=e.clientY-wH.y
 },0)
 let touchMove=(e)=>{
 	if(e.touches.length===1){
 		e.preventDefault()
-		mouseX=e.touches[0].pageX-wH.x
-		mouseY=e.touches[0].pageY-wH.y
+		mX=e.touches[0].pageX-wH.x
+		mY=e.touches[0].pageY-wH.y
 	}
 }
 u.addEventListener('touchstart',touchMove,0)
@@ -148,9 +148,9 @@ u.addEventListener('touchmove',touchMove,0)
 u.addEventListener('wheel',(e)=>{zoom+=e.deltaY;if(zoom>400)zoom=400;if(zoom<-400)zoom=-400},0)
 function render(ts){
 	if(start==undefined)start=ts
-	let elapsed=ts-prevTs,cR=cam.rotation
+	let es=ts-prevTs,cR=cam.rotation
 	prevTs=ts
-	if(elapsed>50&&gens>20&&ts-start>1000){
+	if(es>50&&gens>20&&ts-start>1000){
 		if(lag){
 			console.log('lagged');
 			zoom-=gens*2;
@@ -160,21 +160,21 @@ function render(ts){
 			lag=0
 		}else lag=1
 	}else lag=0
-	cP.x+=(mouseX*2-cP.x)*0.05
-	cP.y+=(-mouseY-cP.y)*0.05
+	cP.x+=(mX*2-cP.x)*0.05
+	cP.y+=(-mY-cP.y)*0.05
 	if (cP.y<50)cP.y=50
 	if(zoom>0){
-		cP.z+=elapsed
-		zoom-=elapsed
+		cP.z+=es
+		zoom-=es
 		if(zoom<0)zoom=0
 	}else if(zoom<0){ 
-		cP.z-=elapsed
-		zoom+=elapsed
+		cP.z-=es
+		zoom+=es
 		if(zoom>0)zoom=0
 	}
 	cam.lookAt(new T.Vector3(0,100,0))
 	requestAnimationFrame(render)
-	rotate(elapsed)
+	rotate(es)
 	for(i=0;i<scene.children.length;i++){
 		let object=scene.children[i]
 		if(object instanceof T.Points)object.rotation.y=(ts/20000)*(i<4?i+1:-(i+1))
