@@ -1,207 +1,173 @@
-<div id="scene-container" style="height:100%;overflow:hidden;font-family:sans-serif;"/>
-<script type="x-shader/x-vertex" id="vertexShader">
-    varying vec3 vWorldPosition;
-    void main() {
-        vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-        vWorldPosition = worldPosition.xyz;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-    }
-</script>
-<script type="x-shader/x-fragment" id="fragmentShader">
-    uniform vec3 topColor;
-    uniform vec3 bottomColor;
-    uniform float offset;
-    uniform float exponent;
-    varying vec3 vWorldPosition;
-    void main() {
-        float h = normalize( vWorldPosition + offset ).y;
-        gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
-    }
-</script>
+
+<div id="scene-ct" style="height:100%;overflow:hidden;font-family:sans-serif"><div id="info" style="transition:all 1s;opacity:1;max-width:300px;background-color:aliceblue;position:absolute;top:0;left:0;border-radius:20px;outline:1px solid rgba(0,0,0,0.5);box-shadow:2px 2px 10px 1px rgba(0,0,0,0.5);margin: 1em;padding:0.5em">
+<div id="hide" onMouseOver="this.style.outline='1px solid black';this.style.backgroundColor='white'" onMouseOut="this.style.outline='none';this.style.backgroundColor=''" style="cursor:pointer;position:absolute;right:0;top:0;margin:2px;padding:5px 10px 5px 10px;border-radius:20px">&#10006;</div>
+<h1 style="white-space:nowrap;margin:0 30px 10px 30px;font-size:13pt">Smart Life</h1>
+
+</div>
+</div>
+<script type="x-shader/x-vertex" id="vs">varying vec3 vWP;void main(){vec4 wP=modelMatrix*vec4(position,1.0);vWP=wP.xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}</script>
+<script type="x-shader/x-fragment" id="fs">uniform vec3 tC;uniform vec3 bC;uniform float o;uniform float ex;varying vec3 vWP;void main(){float h=normalize(vWP+o).y;gl_FragColor=vec4(mix(bC,tC,max(pow(max(h,0.0),ex),0.0)),1.0);}</script>
+<canvas width="256" height="256" style="display:none" id="can1"/>
+<canvas width="256" height="256" style="display:none" id="can2"/>
 <script>
-let f=()=>{
-    // https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
-    // From Wolfram's book "A new kind of science"
-    let container=document.querySelector('#scene-container');
-    if (!window?.cardano||!window?.cardano?.nft||typeof THREE=='undefined') { 
-        container.innerHTML="CIP54 not supported. For a marketplace with CIP54 support, try Plutus.art"
-        return;
-    }
-    let output;let ruleNum=82;let gens=512;let rot=0;let width=gens*2;let prevTs=null;let start;let lag=false;let group;let SPEED=0.02;let T=THREE;let mouse=new T.Vector2();let target=new T.Vector2();
-    let scene=new T.Scene();
-    let geometry=new T.BoxGeometry(1,1,2);
-    let camera=new T.PerspectiveCamera(30,container.clientWidth/container.clientHeight,0.1,width*8);
-    let material=new T.MeshStandardMaterial( { ambient: 0xffffff, color: 0xffffff, specular: 0x050505, perPixel: true } );
-    let renderer=new T.WebGLRenderer({ antialias: true, alpha: false, clearColor: 0xfafafa, clearAlpha: 1 });
-    let windowHalf=new T.Vector2(window.innerWidth/2,window.innerHeight/2);
-    let hemiLight=new T.HemisphereLight(0xffffff,0xffffff,0.6);
-    let dirLight=new T.DirectionalLight(0xffffff,1);
-    scene.background=new T.Color('black');
-    renderer.setSize(container.clientWidth,container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-	renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = T.VSMShadowMap
-    container.append(renderer.domElement);
-    camera.position.set(0,200,width*2);
-	hemiLight.color=new T.Color("blue");
-	hemiLight.groundColor=new T.Color("white");
-	hemiLight.position.set(0,500,0);
-	scene.add(hemiLight);
-    scene.fog=new T.Fog(0xffffff,1,5000);
-	scene.fog.color=new T.Color("yellow");
-	dirLight.color=new T.Color("brown");
-	dirLight.position.set(-2,2.75,5);
-	dirLight.position.multiplyScalar(50);
-	dirLight.castShadow=true;
-	dirLight.shadow.mapSize.width=2048;
-	dirLight.shadow.mapSize.height=2048;
-    dirLight.shadow.radius=10;
-    dirLight.shadow.blurSamples=50;
-	let d=1000;
-	dirLight.shadow.camera.left=-d;
-	dirLight.shadow.camera.right=d;
-	dirLight.shadow.camera.top=d;
-	dirLight.shadow.camera.bottom=-d;
-	dirLight.shadow.camera.far=3500;
-    dirLight.shadow.camera.near=0.5;
-	dirLight.shadowBias=-0.0001;
-	dirLight.shadowDarkness=0.35;
-	dirLight.shadowCameraVisible = true;
-    scene.add( dirLight );
-	let groundGeo = new T.PlaneGeometry( 10000, 10000 );
-	let groundMat = new T.MeshPhongMaterial( { ambient: 0xffffff, color: 0xffffff, specular: 0x050505, perPixel: true } );
-	groundMat.color = new T.Color("yellow");
-	let ground = new T.Mesh( groundGeo, groundMat );
-	ground.rotation.x = -Math.PI/2;
-	ground.position.y = -33;
-	scene.add( ground );
-    ground.receiveShadow = true;
-    ground.castShadow = true;
-	let vertexShader = document.getElementById( 'vertexShader' ).textContent;
-	let fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
-	let uniforms = {
-		topColor: 	 { type: "c", value: new T.Color( 0x0077ff ) },
-		bottomColor: { type: "c", value: new T.Color( 0xffffff ) },
-		offset:		 { type: "f", value: 33 },
-		exponent:	 { type: "f", value: 0.6 }
+let f=()=>{let u=document,E='getElementById',ct=u.querySelector('#scene-ct'),nft=window?.cardano?.nft;if(!nft||typeof THREE=='undefined'){ct.innerHTML="CIP54 not supported. For a marketplace with CIP54 support, try Plutus.art";return}nft.getTokens('own').then((oT)=>{
+// https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
+// From Wolfram's book "A new kind of science"
+let d=1000,TL=oT.tokens,w=window,vs=u[E]('vs').textContent,fs=u[E]('fs').textContent,output,ruleNum=82,gens=512,rot=0,width=gens*2,prevTs=null,start,lag=0,group,SPEED=0.02,T=THREE,Co=T.Color,WT=0xffffff,mowPe=new T.Vector2(),target=new T.Vector2(),cW=ct.clientWidth,cH=ct.clientHeight,scene=new T.Scene(),g=new T.BoxGeometry(1,1,2),groundGeo=new T.PlaneGeometry(10000,10000),cam=new T.PerspectiveCamera(30,cW/cH,250,width*8),material=new T.MeshStandardMaterial({color:WT}),groundMat=new T.MeshPhongMaterial({color:WT}),ren=new T.WebGLRenderer({antialias:1}),windowHalf=new T.Vector2(cW/2,cH/2),hL=new T.HemisphereLight(WT,WT,0.6)
+let dL=new T.DirectionalLight(WT,1),dLS=dL.shadow,dLSM=dLS.mapSize,dLP=dL.position,sC=dL.shadow.camera,ground=new T.Mesh(groundGeo,groundMat),uf={tC:{type:"c",value:new Co(0x0077ff)},bC:{type:"c",value:new Co(WT)},o:{type:"f",value:33},ex:{type:"f",value:0.6}},skyGeo=new T.SphereGeometry(4000,32,15),skyMat=new T.ShaderMaterial({vertexShader:vs,fragmentShader:fs,uniforms:uf,side:T.BackSide}),sky=new T.Mesh(skyGeo,skyMat)
+ground.rotation.x=-Math.PI/2;ground.position.y=-33;hL.color=new Co("blue");scene.background=new Co('black');hL.groundColor=new Co("white");scene.fog=new T.Fog(WT,1,5000);scene.fog.color=new Co("yellow");dL.color=new Co("brown");groundMat.color=new Co("yellow");dL.castShadow=1;dLSM.height=dLSM.width=2048;dLS.radiwP=10;dLS.blurSamples=50;sC.bottom=sC.left=-(sC.top=sC.right=d);sC.far=3500;sC.near=0.5;ground.receiveShadow=1;ren.shadowMap.type=T.VSMShadowMap;ren.shadowMap.enabled=1,RN=(z)=>Math.random(z)
+let G='createRadialGradient',A,pgeo,mats=[],pS,i,sp1,sp2,map,size,c1=u[E]('can1'),c2=u[E]('can2'),dC1=c1.getContext('2d'),dC2=c2.getContext('2d'),g2=dC2[G](128,128,50,128,128,150),g1=dC2[G](128,128,0,128,128,50),C='addColorStop',tr="rgba(0,0,0,0)",CT=T.CanvasTexture,pO=[]
+console.log(loyal())
+hL.position.set(0,500,0)
+ren.setSize(cW,cH)
+ren.setPixelRatio(w.devicePixelRatio)
+ct.append(ren.domElement)
+cam.position.set(0,200,width*2)
+scene.add(hL)
+dLP.set(-2,2.75,5)
+dLP.multiplyScalar(50)
+scene.add(dL)
+scene.add(ground)
+uf.tC.value.copy(hL.color)
+scene.add(sky)
+g2[C](0,"blue");g2[C](1,tr);g1[C](0,"cyan");g1[C](1,tr)
+dC1.fillStyle=g1;dC1.fillRect(0,0,255,255)
+dC2.fillStyle=g2;dC2.fillRect(0,0,255,255)
+dC1.strokeStyle='blue'
+dC1.fillStyle='skyblue'
+dC1.lineWidth=5
+star(dC1,128,128,4,100,15)
+sp1=new CT(c1);sp2=new CT(c2)
+for(i=0;i<5000;i++)	pO.push(new T.Vector3(RN()*2000-1000,RN()*2000-1000,RN()*2000-1000));
+
+pgeo=new T.BufferGeometry()
+pgeo.setFromPoints(pO)
+pS=[[sp1,40],[sp2,35],[sp2,20],[sp2,16],[sp2,10]]
+for(i=0;i<pS.length;i++){
+	map=pS[i][0];size=pS[i][1]
+	mats[i]=new T.PointsMaterial({size,map,blending:T.AdditiveBlending,depthTest:0,transparent:1})
+	A=new T.Points(pgeo,mats[i])
+	let pR=A.rotation
+	pR.x=RN()*6;pR.y=RN()*6;pR.z=RN()*6
+	scene.add(A)
+}
+//*/
+// My implementation of the cellular automation:
+function fillOutput(){ 
+	output=[]
+	for(let y=0;y<gens-1;y++){ 
+		let row=new Int8Array(width),prevRow
+		if(y==0)prevRow=getSeedRow();else prevRow=output[y]
+		for(let x=0;x<width;x++){ 
+			let p1=p3=0,p2=prevRow[x]
+			if(x>0)p1=prevRow[x-1]
+			if(x<width-1)p3=prevRow[x+1]
+			row[x]=getCell(p1,p2,p3)
+		}
+		if(y==0)output.push(prevRow)
+		output.push(row)
 	}
-	uniforms.topColor.value.copy( hemiLight.color );
-	let skyGeo = new T.SphereGeometry( 4000, 32, 15 );
-	let skyMat = new T.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: T.BackSide } );
-	let sky = new T.Mesh( skyGeo, skyMat );
-	scene.add( sky );
+}
+function getSeedRow(){
+	let r=new Int8Array(width);r[Math.round(width/2)]=1;return r
+}
+function isBitSet(num,i){
+	return num&(1<<i)
+}
+function getCell(p1,p2,p3){
+	let p=0
+	if(p1==1)p=p|(1<<2)
+	if(p2==1)p=p|(1<<1)
+	if(p3==1)p=p|(1<<0)
+	if(isBitSet(ruleNum,p))return 1;
+	return 0
+}
+/* End of cellular automation */ 
 
-    // My implementation of the cellular automation:
-    function fillOutput() { 
-        output = [];
-        for (let y=0;y<gens-1;y++) { 
-            let row=new Int8Array(width);
-            let prevRow;
-            if (y==0) prevRow=getSeedRow(); else prevRow=output[y];
-            for (let x=0;x<width;x++) { 
-                let p1=p3=0;
-                let p2=prevRow[x];
-                if (x>0) p1=prevRow[x-1];
-                if (x<width-1) p3=prevRow[x+1];
-                row[x]=getCell(p1,p2,p3);
-            }
-            if (y==0) output.push(prevRow);
-            output.push(row);
-        }
-    }
-    function getSeedRow() { 
-        let row=new Int8Array(width);
-        row[Math.round(width/2)]=1;
-        return row;
-    }
-    function isBitSet(num,i) {
-        return num&(1<<i)
-    }
-    function getCell(p1,p2,p3) { 
-        let p=0;
-        if (p1==1) p=p|(1<<2);
-        if (p2==1) p=p|(1<<1);
-        if (p3==1) p=p|(1<<0);
-        if (isBitSet(ruleNum,p)) return 1; 
-        return 0;
-    }
-    /* End of cellular automation */ 
-
-    function createScene() { 
-        camera.position.set(0,200,width*2);
-        camera.updateProjectionMatrix();
-        if (group) scene.remove(group);
-        group=new T.Group();
-        group.position.set(0,(-150)-(0-gens),0)
-        for (y=0;y<gens;y++) { 
-            for (x=0;x<width;x++) { 
-                if (output[y][x]) { 
-                    let cube=new T.Mesh(geometry,material);
-                    cube.castShadow=true;
-	                cube.receiveShadow=true;
-                    cube.position.set(x-width/2,0-(y-gens/2),0);
-                    group.add(cube);
-                }
-            }
-        }
-        scene.add(group);
-    }
-    function gen() { 
-        start=prevTs;
-        fillOutput();
-        createScene(); 
-    }
-    function rotate(amount) {
-        if (!group) return; if (isNaN(amount)) return;
-        let r=group.rotation;
-        rot-=(amount/33)*SPEED; 
-        r.y=rot;
-        //r.x=rot;
-        //r.z=rot; 
-    }
-    document.onkeyup=checkKey;
-    function checkKey(e) {
-        e=e||window.event;
-        let c=e.keyCode;
-        if (c=='87') gens+=10; else if (c=='83') gens-=10; else if (c=='65') ruleNum--; else if (c=='68') ruleNum++;
-        width=gens*2;
-        gen();
-    }
-    document.resize=resize;
-    function resize() {
-        camera.aspect = container.clientWidth/container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth,container.clientHeight);
-    }
-    document.addEventListener('mousemove',onMouseMove,false);
-    function onMouseMove(event) {
-        mouse.x=(event.clientX-windowHalf.x);
-        mouse.y=(event.clientY-windowHalf.x);
-    }
-    document.addEventListener('wheel',onMouseWheel,false);
-    function onMouseWheel(event) {camera.position.z+=event.deltaY*1 }
-    function render(ts) {
-        if (start===undefined) start=ts;
-        let elapsed=ts-prevTs;
-        prevTs=ts;
-        if (elapsed>50&&gens>20&&ts-start>1000) { 
-            if (lag) { 
-                gens=Math.round(gens/2);
-                width=gens*2;
-                gen();
-                lag=false;
-            } else lag=true;
-        } else lag=false;
-        target.x=(1-mouse.x)*0.0002;
-        target.y=(1-mouse.y)*0.0003;
-        camera.rotation.x+=0.05*(target.y-camera.rotation.x);
-        camera.rotation.y+=0.05*(target.x-camera.rotation.y);
-        requestAnimationFrame(render);
-        rotate(elapsed);
-        renderer.render(scene,camera);
-    }
-    gen();
-    render();
-    renderer.render(scene,camera);
-};f();
+function loyal(){let p=[];for(let t of TL){p.push(t.unit.substring(0,56))}if(p.includes('d3b65744dd067fd7103cc6a4019cc9cd5f8627b78174c05dc67a9ad6')||p.includes('efd8e8b305af8e6d8086d7744bdb84759de0b9c98309048c7485aa2e')||p.includes('781ab7667c5a53956faa09ca2614c4220350f361841a0424448f2f30'))return 1;return 0;}
+function star(ctx,cx,cy,spikes,oR,iR){
+	let rot=Math.PI/2*3,x=cx,y=cy,step=Math.PI/spikes
+	ctx.beginPath();ctx.moveTo(cx,cy-oR)
+	for(i=0;i<spikes;i++){
+		x=cx+Math.cos(rot)*oR;y=cy+Math.sin(rot)*oR;ctx.lineTo(x,y);rot+=step
+		x=cx+Math.cos(rot)*iR;y=cy+Math.sin(rot)*iR;ctx.lineTo(x,y);rot+=step
+	}
+	ctx.lineTo(cx,cy-oR);ctx.closePath();ctx.stroke();ctx.fill()
+}
+function createScene(){ 
+	cam.position.set(0,200,width*2)
+	cam.updateProjectionMatrix()
+	if(group)scene.remove(group)
+	group=new T.Group()
+	group.position.set(0,(-150)-(0-gens),0)
+	for(y=0;y<gens;y++){ 
+		for(x=0;x<width;x++){
+			if(output[y][x]){
+				let cube=new T.Mesh(g,material)
+				cube.castShadow=1
+				cube.position.set(x-width/2,0-(y-gens/2),0)
+				group.add(cube)
+			}
+		}
+	}
+	scene.add(group)
+}
+function gen(){
+	start=prevTs
+	fillOutput()
+	createScene()
+}
+function rotate(amount){
+	if(!group)return;if(isNaN(amount))return
+	let r=group.rotation
+	rot-=(amount/33)*SPEED
+	r.y=rot
+	//r.x=rot;
+	//r.z=rot; 
+}
+u.onkeyup=(e)=>{
+	e=e||w.event
+	let c=e.keyCode
+	if(c=='87')gens+=10;else if(c=='83')gens-=10;else if(c=='65')ruleNum--;else if(c=='68')ruleNum++
+	width=gens*2
+	gen()
+}
+u.resize=()=>{
+	cam.aspect=cW/cH
+	cam.updateProjectionMatrix()
+	ren.setSize(cW,cH)
+}
+u[E]('hide').addEventListener('click',()=>{
+	let s=u[E]('info').style
+	s.maxWidth=0;
+	s.opacity=0;
+});
+u.addEventListener('mousemove',(e)=>{mowPe.x=(e.clientX-windowHalf.x);mowPe.y=(e.clientY-windowHalf.x);},0)
+u.addEventListener('wheel',(e)=>{cam.position.z+=e.deltaY*1},0)
+function render(ts){
+	if(start==undefined)start=ts
+	let elapsed=ts-prevTs,cR=cam.rotation
+	prevTs=ts
+	if(elapsed>50&&gens>20&&ts-start>1000){
+		if(lag){
+			gens=Math.round(gens/2)
+			width=gens*2
+			gen()
+			lag=0
+		}else lag=1
+	}else lag=0
+	target.x=(1-mowPe.x)*0.0002;target.y=(1-mowPe.y)*0.0003;cR.x+=0.05*(target.y-cR.x);cR.y+=0.05*(target.x-cR.y)
+	requestAnimationFrame(render)
+	rotate(elapsed)
+	for(i=0;i<scene.children.length;i++){
+		var object=scene.children[i];
+		if(object instanceof T.Points)object.rotation.y=(ts/20000)*(i<4?i+1:-(i+1));
+	}
+	ren.render(scene,cam)
+}
+gen()
+render()
+ren.render(scene,cam)
+}
+)};f()
 </script>
