@@ -1,23 +1,23 @@
 <script>let mIn=(t,b=1)=>{if(b)t.style.outline='1px solid black';t.style.backgroundColor='rgba(255,255,255,0.7)';},mOu=(t)=>{t.style.outline='none';t.style.backgroundColor='';}</script>
-<style>h1{white-space:nowrap;margin:0 30px 10px 30px;font-size:13pt}#dis{margin-top:16}.in{margin:0;padding:0;text-align:center}td,th,.u,.l{border:1px solid black;width:1em;height:1em}.s{border:none;text-align:center}.sc{border:none;width:1em;}.sb{border-right: 1px dashed black}th{background:black;}.i{cursor:pointer;position:absolute;padding:5px 10px}.br{border-radius:20px}.tr{transition:opacity 1s, max-width 1s, max-height 1s;}.u,.l{margin:auto}.u{background-color:black}</style>
+<style>h1{white-space:nowrap;margin:0 30px 10px 30px;font-size:13pt}#dis{margin-top:16}.in{margin:0;padding:0;text-align:center}td,th,.u,.l{border:1px solid black;width:1em;height:1em}.s{border:none;text-align:center}.sc{border:none;width:1em;}.sb{border-right: 1px dashed black}th{background:black;}.i{cursor:pointer;position:absolute;padding:5px 10px}.br{border-radius:20px}.tr{transition:opacity 1s, max-width 1s, max-height 1s, top 1s, right 1s}.u,.l{margin:auto}.u{background-color:black}</style>
 <div id=f-ct style=height:100%;overflow:hidden;font-family:sans-serif><div id=info class="br tr" style="min-width:220;min-height:72;opacity:1;max-width:500;background-color:aliceblue;position:absolute;top:0;left:0;outline:1px solid rgba(0,0,0,0.5);box-shadow:2px 2px 10px 1px rgba(0,0,0,0.5);margin:1em;padding:0.5em 0.5em 2em 0.5em">
 	<div id=hide onMouseOver=mIn(this) onMouseOut=mOu(this) class="i br" style=right:0;top:0;margin:2>&#10006;</div>
 	
 	<h1 class=s>Smart Life</h1>
-    <div id=show onMouseOver=mIn(this,0) onMouseOut=mOu(this) class="i br s" style=z-index:2;left:0;right:0;bottom:0;margin:1px>&#x25BC;</div>
-	<div id="k" class=tr style=right:0;position:absolute;display:flex;flex-direction:column><p class=in>&#129145;w</p><p class=in>&#129144;a&#129147;s&#129142;d &nbsp;</p><p class=in>&#128220;&#128269;</p></div>
+	<div id=show onMouseOver=mIn(this,0) onMouseOut=mOu(this) class="i br s" style=z-index:2;left:0;right:0;bottom:0;margin:1px>&#x25BC;</div>
+	<div id="k" class=tr style=right:0;top:36;position:absolute;display:flex;flex-direction:column><p class=in>&#129145;w</p><p class=in>&#129144;a&#129147;s&#129142;d &nbsp;</p><p class=in>&#128220;&#128269;</p></div>
 	Rule: <b id=rN></b><br>
 	Generations: <b id=Y></b>
 	<div class=tr style="max-height:0;max-width:0;opacity:0;margin:30 2" id=hid>
-        <div style="width:8em;margin:-72 auto 0 auto;padding-bottom:20;text-align:center">
+		<div style="width:8em;margin:-72 auto 0 auto;padding-bottom:20;text-align:center">
 		Spin: <input type=checkbox checked id=sp>
 		<div id=lOpts style=display:none>
 			Sparkles: <input type=checkbox id=spk>
 		</div>
-        </div>
+		</div>
 		<div id=dis /><br />
 	</div>
-    
+	
 </div>
 </div>
 <canvas width=256 height=256 style=display:none id=can1>
@@ -92,7 +92,7 @@ function gen(){l=Ts;fill();createScene()}
 function rotate(a){if(!R)return;if(isNaN(a))return;let r=R.rotation;rot-=(a/33)*0.02;r.y=rot}
 function display() { 
 	u[E]('rN').innerHTML=rN;u[E]('Y').innerHTML=Y;let r='<table><tr>',sR='<tr>'
-	for(let b=0;b<8;b++){for (let i=2;i>=0;i--)r+=!bitSet(b,i)?'<th/>':'<td/>';r+='<td class="sc sb" /><td class=sc />';sR+='<td class=s colspan=3>&#129047;<br><div class="'+(bitSet(rN,7-b)?'u':'l')+'" /></td><td class="sc sb" /><td class=sc />'}
+	for(let b=0;b<8;b++){for (let i=2;i>=0;i--)r+=!bitSet(b,i)?'<th/>':'<td/>';r+=(b!=7?'<td class="sc sb" /><td class=sc />':'');sR+='<td class=s colspan=3>&#129047;<br><div class="'+(bitSet(rN,7-b)?'u':'l')+'" /></td>'+(b!=7?'<td class="sc sb" /><td class=sc />':'')}
 	r+='</tr>'+sR+'</table>';
 	u[E]('dis').innerHTML=r;
 }
@@ -103,7 +103,7 @@ u.resize=()=>{
 	P.setSize(cW,cH)
 }
 u[E]('hide')[EL]('click',()=>{let s=u[E]('info').style;s.opacity=s.maxWidth=0})
-u[E]('show')[EL]('click',()=>{let s=u[E]('hid').style;if(!mO){u[E]('show').innerHTML='&#x25B2;';s.opacity=1;s.maxHeight='100px';s.maxWidth='500px';u[E]('k').style.top='30';u[E]('k').style.right='32'}else{u[E]('show').innerHTML='&#x25BC;';s.opacity=0;s.maxHeight='0px';s.maxWidth='0px';u[E]('k').style.top='unset'}mO=!mO});
+u[E]('show')[EL]('click',()=>{let s=u[E]('hid').style;if(!mO){u[E]('show').innerHTML='&#x25B2;';s.opacity=1;s.maxHeight='100px';s.maxWidth='500px';u[E]('k').style.top='18';u[E]('k').style.right='32'}else{u[E]('show').innerHTML='&#x25BC;';s.opacity=0;s.maxHeight='0px';s.maxWidth='0px';u[E]('k').style.top='36';u[E]('k').style.right='0'}mO=!mO});
 u[E]('spk')[EL]('change',(e)=>{if (!A)return;let cL=f.children;for(i=0;i<cL.length;i++){let V=cL[i];if(V instanceof T.Points)if(e.currentTarget.checked)V.visible=1;else V.visible=false;}})
 u[EL]('mousemove',(e)=>{mX=e.clientX-wH.x;mY=e.clientY-wH.y},0)
 let tM=(e)=>{if(e.touches.length==1){e.preventDefault();mX=e.touches[0].pageX-wH.x;mY=e.touches[0].pageY-wH.y;}}
@@ -113,16 +113,7 @@ function render(ts){
 	let es=ts-Ts,cR=N.rotation
 	Ts=ts
 	if(es>50&&Y>20&&ts-l>1000){
-		if(j){
-			console.log('Stalled')
-			q-=Y*1.5
-			Y=Math.round(Y/2)
-			W=Y*2
-			gen()
-			display()
-			j=0
-		}else j=1
-	}else j=0
+		if(j){q-=Y*1.5;Y=Math.round(Y/2);W=Y*2;gen();display();j=0}else j=1}else j=0
 	cP.x+=(mX-cP.x)*0.05
 	cP.y+=(-mY-cP.y)*0.05
 	if(cP.y<50)cP.y=50
