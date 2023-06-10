@@ -96,7 +96,7 @@ function display() {
 	r+='</tr>'+sR+'</table>';
 	u[E]('dis').innerHTML=r;
 }
-u.onkeyup=(e)=>{e=e||w.event;let c=e.keyCode;if(c=='87'){Y+=8;q+=25}else if(c=='83'){Y-=8;q-=25}else if(c=='65')rN--;else if(c=='68')rN++;W=Y*2;display();gen()}
+u.onkeyup=(e)=>{e=e||w.event;let c=e.keyCode;if(c=='87'){Y+=8;q+=25}else if(c=='83'){Y-=8;q-=25}else if(c=='65')rN--;else if(c=='68')rN++;W=Y*2;if(Y<32)Y=32;if(rN<0)rN=255;if(rN>255)rN=0;display();gen()}
 u.resize=()=>{
 	N.aspect=cW/cH
 	N.updateProjectionMatrix()
