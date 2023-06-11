@@ -81,7 +81,7 @@ const MetadataEditor = (props) => {
   for (const [key,value] of Object.entries(metadata)) { 
     // Todo make this recurse into json objects and build a tree view from them
     metadataListHTML.push(
-    <TreeItem key={String(nodeId)} nodeId={String(nodeId++)} label={key+': '+((typeof value == "object") ? JSON.stringify(value, null, "\t") : value)} onIconClick={deleteMetadata(key)} icon={<Delete />} />
+    <TreeItem size="small" key={String(nodeId)} nodeId={String(nodeId++)} label={key+': '+((typeof value == "object") ? JSON.stringify(value, null, "\t") : String(value).slice(0,20))} onIconClick={deleteMetadata(key)} icon={<Delete />} />
     );
   }
   }

@@ -128,6 +128,13 @@ const Playground = function (props) {
       
     });
     const pc = programCode; // Todo - minify here
+    const splitToLineLength = (string) => { 
+      var l = string.length, lc = 0, chunks = [], c = 0, chunkSize = 64;
+      for (; lc < l; c++) {
+        chunks[c] = string.slice(lc, lc += chunkSize);
+      }
+      return chunks;
+    }
     const files = [];
     if (!m) m={};
     for (const [key,value] of Object.entries(m)) { 
@@ -140,7 +147,7 @@ const Playground = function (props) {
         
         files.push({
           'mediaType': "text/html",
-          'src': 'data:text/html,'+encodeURIComponent(pc)
+          'src': splitToLineLength('data:text/html;base64,'+btoa(pc))
         });
         if (typeof value == "string") { 
           continue;
@@ -152,7 +159,11 @@ const Playground = function (props) {
         }
         continue;
       }
-      json[key]=value;
+      if (typeof value == "string" && value.length>64) { 
+        json[key]=splitToLineLength(value);
+      } else { 
+        json[key]=value;
+      }
     }
     json.uses = ft;
     if (files.length<1) { 
@@ -160,7 +171,7 @@ const Playground = function (props) {
       
       files.push({
         'mediaType': "text/html",
-        'src': 'data:text/html,'+encodeURIComponent(pc)
+        'src': splitToLineLength('data:text/html;base64,'+btoa(pc))
       });
     }
     json.files = files;
@@ -250,7 +261,7 @@ const Playground = function (props) {
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', flexDirection:'column', justifyContent:'flex-start', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}}> 
             <div style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
             <Typography style={{}} variant='subtitle2'>NFT Metadata</Typography>
-            <Typography style={{}} variant='caption'>{JSON.stringify(metadataJSON,null,"\t").length} bytes</Typography>
+            <Typography style={{}} variant='caption'>{JSON.stringify(metadataJSON).length} bytes</Typography>
             </div>
             <div><LinearProgress variant='determinate' value={progressValue} /></div>
             <MetadataEditor defaultMetadata={defaultMetadata} onChange={metadataChange} loadStored={props.loadStored} />
