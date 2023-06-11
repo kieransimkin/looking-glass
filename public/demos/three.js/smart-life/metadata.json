@@ -1,3 +1,22 @@
 {
-    "colour": "#ff0000"
+    "rule":"82",
+    "fC":"#000",
+    "dC":"aliceblue",
+    "lC":"blue",
+    "gC":"brown",
+    "hC":"yellow",
+    "sC":"white",
+    "oC":"white",
+    "fR":"50",
+    "sR":"0",
+    "fO":"150",
+    "sO":"50",
+    "kO":"100",
+    "kR":"15",
+    "kP":"4",
+    "aC":"blue",
+    "bC":"cyan",
+    "cC":"blue",
+    "eC":"skyblue",
+    "k":[40,35,20,16,10]
 }
