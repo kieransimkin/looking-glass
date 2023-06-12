@@ -1,7 +1,10 @@
 {
   "name": "cip54-playground",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "homepage": "https://nft-playground.dev",
+  "repository": "https://github.com/kieransimkin/cip54-playground",
+  "author": "Kieran Simkin <382129+kieransimkin@users.noreply.github.com>",
+  "license": "BSD-3-Clause-Attribution",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
