@@ -72,6 +72,14 @@ const useStyles = makeStyles(theme => {
         borderBottomLeftRadius: '1em',
         boxShadow: '2px 2px 25px 1px rgba(0,0,0,0.5)'
     },
+    
+    drawerPaperOpen: { 
+        height: 'auto',
+        borderBottomRightRadius: '1em',
+        borderTopRightRadius: '1em',
+        borderTopLeftRadius: '1em',
+        boxShadow: '2px 2px 25px 1px rgba(0,0,0,0.5)'
+    },
     menuPaper: {
         translate: '-2.0em',
         borderTopRightRadius: '0px !important'
@@ -233,8 +241,8 @@ const Header = (props) => {
 
     return (
         
-            <Drawer  id="drawer"  classes={{
-                paper: classes.drawerPaper,
+            <Drawer id="drawer"  classes={{
+                paper: anchorEl?classes.drawerPaperOpen:classes.drawerPaper,
               }}
                     
              variant="persistent" anchor='right' open={!hide} className={className}>
@@ -257,7 +265,7 @@ const Header = (props) => {
                                 classes={{
                                     paper: classes.menuPaper
                                 }}
-                                anchorEl={document.getElementById('drawer')}
+                                anchorEl={anchorEl}
                                 keepMounted
                                 open={Boolean(anchorEl)}
                                 getContentAnchorEl={null} 

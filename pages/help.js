@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import BuildIcon from '@material-ui/icons/Build';
+import Image from 'next/image';
 import PublicIcon from '@material-ui/icons/Public';
 import RemoteIcon from '@material-ui/icons/SettingsRemote';
 import Divider from '@material-ui/core/Divider';
@@ -16,6 +17,8 @@ import { alpha } from '@material-ui/core/styles/colorManipulator';
 import VideoCard from '../components/VideoCard'
 import ContentCard from '../components/ContentCard'
 import Link from 'next/link';
+import TwitterFeed from '../components/TwitterFeed';
+import BuyButton from '../components/BuyButton';
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.primary.main, 0.8);
   const second = alpha(theme.palette.secondary.main, 0.4);
@@ -110,10 +113,12 @@ export default function Help() {
             <div className={classes.bigCol+' column'}>
               <ContentCard>
               <Typography variant="h2" color="textSecondary">
-                What is CIP54?
+                What is a Smart NFT?
               </Typography><br />
               <Typography variant="body1">
-                The CIP54 standard allows a HTML+Javascript NFT to receive information about the current state of the blockchain, as well as import files and libraries.
+                The CIP54 standard allows a HTML+Javascript NFT to receive information about the current state of the blockchain, as well as import files and libraries.<br />
+                &nbsp;<br />
+                This enables NFTs to respond to their environment in new and interesting ways, including reacting to oracle data, or being triggered by certain events. The standard also greatly increases the amount of data that can be made available to NFTs - image libraries, sounds, videos - an NFT can read files or metadata from any other token - this opens up the blockchain and will allow more expressiveness, art, and utility for many projects.
               </Typography><br />
              
               
@@ -140,7 +145,7 @@ export default function Help() {
                       <BuildIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary="Add CIP54 Features" secondary="" />
+                  <ListItemText primary="Write your code" secondary="Write code and test in realtime without having to mint NFTs" />
                 </ListItem>
                 <Divider variant="middle" component="li" />
                 <ListItem>
@@ -149,7 +154,7 @@ export default function Help() {
                       <RemoteIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary="Write NFT Code" secondary="" />
+                  <ListItemText primary="Optimise and test" secondary="Optimize your NFT code and test parameter changes in simulation" />
                 </ListItem>
                 <Divider variant="middle" component="li" />
                 <ListItem>
@@ -158,7 +163,7 @@ export default function Help() {
                       <PublicIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary="Mint NFT" secondary="" />
+                  <ListItemText primary="Mint NFT" secondary="When you are confident your NFT works, you can go ahead and mint one and test it on Plutus.art" />
                 </ListItem>
               </List>
  
@@ -179,14 +184,60 @@ export default function Help() {
               <Typography variant="h2" color="textSecondary">
                 Buy / Sell / Trade
               </Typography><br />
+              <div style={{display: 'flex', gap:'2em'}}>
+              
               <Typography variant="body1">
                 Buy, sell or trade your Smart NFTs at <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a>, with native support for CIP54 assets right in the marketplace.
+                <ul class="infolist">
+
+                <li><a href="https://plutus.art/collection/smartlife" target="_blank" rel="noreferrer">Smart Life</a> - The first CIP54 collection is now minting</li>
+                <li>There will be 100 tokens in total.</li>
+                <li>The price will be 450 ADA for most tokens.</li>
+                <li>The first token and any special tokens may be priced higher.</li>
+                <li>These are not a random mint - I am manually designing the colours and animation parameters for each NFT and minting them by hand.</li>
+                <li>The Policy ID is <span style={{fontFamily:'monospace', fontWeight:600}}>1eaf3b3ffb75ff27c43c512c23c6450b307f138281efb1d690b84652</span></li>
+                <li>The NFTs will be gradually minted and released for sale on Plutus.art over the next month</li>
+                </ul>
+                <BuyButton />
+              </Typography>
+                <a href="https://plutus.art/collection/smartlife" target="_blank" rel="noreferrer">
+                  <img src="/examples/smart-life-thumb.png" width="250" height="227" alt="Smart Life" style={{borderRadius:'20px',border:'1px solid rgba(0,0,0,0.6)'}}/>
+                </a>
+              </div>
+              
+             
+              </ContentCard>
+            </div> 
+          </div>
+          <br />&nbsp;<br />
+          <div className={classes.row+' row'}>
+            
+            <div className={classes.bigCol+' column'}>
+              <ContentCard>
+              <Typography variant="h2" color="textSecondary">
+                Further reading
+              </Typography><br />
+              <Typography variant="body1">
+                All of the parts of the Smart NFT API including this website itself are provided opensource on Github - SmartNFTPortal and Libcip54 are also available as npm packages<br />&nbsp;
+                <table style={{borderSpacing:'10px'}} border={1} frame="void" rules="rows" width="90%" className="linktable">
+                  
+                  <tr><td valign="top"><a href="https://github.com/kieransimkin/smartnftportal" target="_blank" rel="noreferrer"><Typography variant="body1">SmartNFTPortal</Typography></a></td><td>This is a react component which gives you everything you need to render a Smart NFT in the front end - this is the component used by the Playground, and by <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a></td></tr>
+                  <tr><td valign="top"><a href="https://github.com/kieransimkin/libcip54" target="_blank" rel="noreferrer"><Typography variant="body1">Libcip54</Typography></a></td><td>This library proves the backend queries needed to build the data for the SmartNFTPortal to render the NFT - the two work in tandem to render NFTs</td></tr>
+                  <tr><td valign="top"><a href="https://github.com/kieransimkin/cip54-playground" target="_blank" rel="noreferrer"><Typography variant="body1">Playground</Typography></a></td><td>This is the sourcecode for this site - if you have a feature you'd like to contribute, feel free to submit a pull request. This also contains a reference implementation of the backend API which generates the data for the frontend to render.</td></tr>                  
+                  <tr><td valign="top"><a href="https://cips.cardano.org/cips/cip54" target="_blank" rel="noreferrer"><Typography variant="body1">CIP54</Typography></a></td><td>The actual Cardano Improvement Proposal that I wrote a couple of years ago at the start of this project</td></tr>
+                </table>
+
+
               </Typography><br />
              
               
              
               </ContentCard>
             </div> 
+            <div className={classes.smallCol+' column'}> 
+              <TwitterFeed />
+              
+            </div>
           </div>
           <br />&nbsp;<br />
           </Container>

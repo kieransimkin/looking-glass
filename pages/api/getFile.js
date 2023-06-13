@@ -44,7 +44,9 @@ export default async function Browse(req, res) {
     } else { 
       lbuffer=decodeURIComponent(el[1]);
     }
+    // Something not quite right with this bit
     result.buffer=lbuffer;
+    
   } else if (file.src.substring(0,8)=='https://') { 
     result.buffer = (await axios.get(file.src.substring(8))).data;
   } else if (file.src.substring(0,7)=='http://') { 

@@ -1,0 +1,33 @@
+<center><h1>Under construction</h1></center>
+<img id="output" />
+<script>  
+    
+    const nft = window.cardano.nft;
+    // Get a list of the tokens owned by the owner of this NFT
+    const getFiles = async ()=> { 
+        const ret = {};
+        ret.happy = (await nft.getFile('happy')).toString();
+        ret.angry = await nft.getFile('angry');
+        ret.smirking = await nft.getFile('smirking');
+        return ret;
+    }
+    getFiles().then((files)=>{
+
+    
+    nft.getTokens().then((tokens) => {   
+        console.log(files);
+        let found=false;
+        let display=files.angry;
+        if (tokens.tokens.length>300) display=files.smirking;
+        for (var c=0; c<tokens.tokens.length; c++) { 
+            const token = tokens.tokens[c];            
+            if (token.unit.substring(0,56)=='781ab7667c5a53956faa09ca2614c4220350f361841a0424448f2f30') { 
+                display=files.happy;
+                break;
+            }
+        }
+        console.log(display);
+        document.getElementById('output').src=display;
+
+    })});
+</script>

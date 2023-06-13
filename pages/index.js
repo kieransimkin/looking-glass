@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => {
     if (theme.palette.type=='dark') { 
         bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 100%), url('/flowers.jpg') !important`;
     }
-    let bg2=`linear-gradient(-95deg, ${first} 0%, ${second} 100%),linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 100%),url('/circuit2.png') !important`;
+    let bg2=`linear-gradient(-95deg, ${first} 0%, ${second} 100%),linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.85) 100%),url('/circuit2.png') !important`;
     if (theme.palette.type=='dark') { 
         bg2 = `linear-gradient(-120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 100%), url('/circuit2.png') !important`;
     }
@@ -202,7 +202,7 @@ export default function Home() {
                 <div className="row" style={{display:'flex', alignItems: 'center', gap:'2em'}}>     
                     <div className="column">
                         <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart NFTs</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <Typography variant="h3" classes={{root: classes.subtleLittleHead}}><em>A flexible framework for Javascript NFTs on Cardano</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                        <Typography variant="h3" classes={{root: classes.subtleLittleHead}}><em>CIP54 - a flexible framework for Javascript NFTs on Cardano</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
                         
                     </div>
                     <div className="column" style={{minWidth:'40%', flexGrow: 1}}>
@@ -217,17 +217,35 @@ export default function Home() {
                 
             </div>
             <div className={classes.wideContent + ' slide-content'}>
-                <div className="row" style={{display:'flex', alignItems: 'center', gap:'2em'}}>     
+                <div className="row" style={{display:'flex', alignItems: 'center', gap:'4em', justifyContent:'space-around'}}>     
                     
-                    <div className="column" style={{minWidth:'40%',maxWidth: '50%',flexGrow: 1}}>
-                        <PictureCard src="/token-cubes-screenshot.png" alt="Token cubes screenshot" width={2111} height={1907} />
+                    <div className="column" style={{minWidth:'40%',maxWidth: '50%'}}>
+                        <PictureCard src="/examples/smart-life-thumb.png" alt="Smart Life" width={952} height={865} />
                         
                     </div>
                     <div className="column">
+                        <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart Life</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                        <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>The first CIP54 collection, minting now</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                       
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div key="content-3" className="my-slide content" onClick={toggleOnOff}>
+            <div className={classes.bg}>
+                
+            </div>
+            <div className={classes.wideContent + ' slide-content'}>
+                <div className="row" style={{display:'flex', alignItems: 'center', gap:'2em', justifyContent:'space-around' }}>     
+                    
+                    <div className="column" style={{flexGrow:''}}>
                         <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Get Started</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
                         <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>Press a button</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <ExamplesButton /> &nbsp; <PlaygroundButton />
-                        
+                        <ExamplesButton /> &nbsp; &nbsp; <PlaygroundButton />                     
+                    </div>                   
+                    <div className="column" style={{minWidth:'40%',maxWidth: '50%'}}>
+                        <PictureCard src="/token-cubes-screenshot.png" alt="Token cubes screenshot" width={2111} height={1907} />
                         
                     </div>
                 </div>

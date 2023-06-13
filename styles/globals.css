@@ -228,3 +228,9 @@ h2 {
 .rc-divider-vertical { 
   cursor:ns-resize;
 }
+table.linktable td { 
+  padding: 0.5em;
+}
+ul.infolist li { 
+  padding:0.5em;
+}

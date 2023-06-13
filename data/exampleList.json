@@ -14,6 +14,12 @@
         "slug":"token-list",
         "description":"Shows how to get the list of tokens held by the current owner of the NFT, also uses the files API to get images for each token and display them in a list.",
         "thumbnail":"basic-token-list.png"
+      },
+      {
+        "title":"Conditional Display",
+        "slug":"conditional",
+        "description":"This example is a work in progress",
+        "thumbnail":"conditional.png"
       }
     ]
   },
@@ -36,10 +42,9 @@
       {
         "title":"Smart Life",
         "slug":"smart-life",
-        "description":"This is the first collection to mint with CIP54 - demonstrates how to load a Three.js font from a font NFT",
-        "thumbnail":"three.js-token-cubes.png"
+        "description":"This is the first collection to mint with CIP54 - demonstrates detecting another token in the holder's wallet and responding with sparkles",
+        "thumbnail":"smart-life.png"
       }
     ]
   }
-
 ]
