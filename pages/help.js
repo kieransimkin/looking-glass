@@ -188,7 +188,7 @@ export default function Help() {
               
               <Typography variant="body1">
                 Buy, sell or trade your Smart NFTs at <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a>, with native support for CIP54 assets right in the marketplace.
-                <ul class="infolist">
+                <ul className="infolist">
 
                 <li><a href="https://plutus.art/collection/smartlife" target="_blank" rel="noreferrer">Smart Life</a> - The first CIP54 collection is now minting</li>
                 <li>There will be 100 tokens in total.</li>
@@ -219,11 +219,11 @@ export default function Help() {
               </Typography><br />
               <Typography variant="body1">
                 All of the parts of the Smart NFT API including this website itself are provided opensource on Github - SmartNFTPortal and Libcip54 are also available as npm packages<br />&nbsp;
-                <table style={{borderSpacing:'10px'}} border={1} frame="void" rules="rows" width="90%" className="linktable">
+                <table style={{borderSpacing:'10px'}} border={1} width="90%" className="linktable">
                   
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/smartnftportal" target="_blank" rel="noreferrer"><Typography variant="body1">SmartNFTPortal</Typography></a></td><td>This is a react component which gives you everything you need to render a Smart NFT in the front end - this is the component used by the Playground, and by <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a></td></tr>
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/libcip54" target="_blank" rel="noreferrer"><Typography variant="body1">Libcip54</Typography></a></td><td>This library proves the backend queries needed to build the data for the SmartNFTPortal to render the NFT - the two work in tandem to render NFTs</td></tr>
-                  <tr><td valign="top"><a href="https://github.com/kieransimkin/cip54-playground" target="_blank" rel="noreferrer"><Typography variant="body1">Playground</Typography></a></td><td>This is the sourcecode for this site - if you have a feature you'd like to contribute, feel free to submit a pull request. This also contains a reference implementation of the backend API which generates the data for the frontend to render.</td></tr>                  
+                  <tr><td valign="top"><a href="https://github.com/kieransimkin/cip54-playground" target="_blank" rel="noreferrer"><Typography variant="body1">Playground</Typography></a></td><td>This is the sourcecode for this site - if you have a feature you&apos;d like to contribute, feel free to submit a pull request. This also contains a reference implementation of the backend API which generates the data for the frontend to render.</td></tr>                  
                   <tr><td valign="top"><a href="https://cips.cardano.org/cips/cip54" target="_blank" rel="noreferrer"><Typography variant="body1">CIP54</Typography></a></td><td>The actual Cardano Improvement Proposal that I wrote a couple of years ago at the start of this project</td></tr>
                 </table>
 
