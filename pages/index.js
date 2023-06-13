@@ -12,6 +12,7 @@ import PictureCard from '../components/PictureCard'
 import Card from '@material-ui/core/Card'
 import ExamplesButton from '../components/ExamplesButton';
 import PlaygroundButton from '../components/PlaygroundButton'
+import BigBuyButton from '../components/BigBuyButton'
 
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.primary.main, 0.8);
@@ -199,13 +200,13 @@ export default function Home() {
                 
             </div>
             <div className={classes.wideContent + ' slide-content'}>
-                <div className="row" style={{display:'flex', alignItems: 'center', gap:'2em'}}>     
-                    <div className="column">
+                <div className="row" style={{display:'flex', alignItems: 'center', gap:'4em', justifyContent:'space-around'}}>     
+                    <div className="column" style={{marginLeft:'2em'}}>
                         <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart NFTs</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
                         <Typography variant="h3" classes={{root: classes.subtleLittleHead}}><em>CIP54 - a flexible framework for Javascript NFTs on Cardano</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
                         
                     </div>
-                    <div className="column" style={{minWidth:'40%', flexGrow: 1}}>
+                    <div className="column" style={{minWidth:'40%', flexGrow: 1, marginRight:'2em'}}>
                         <VideoCard src="/cubes.mp4" onLoad={onLoad} />
                         
                     </div>
@@ -219,14 +220,14 @@ export default function Home() {
             <div className={classes.wideContent + ' slide-content'}>
                 <div className="row" style={{display:'flex', alignItems: 'center', gap:'4em', justifyContent:'space-around'}}>     
                     
-                    <div className="column" style={{minWidth:'40%',maxWidth: '50%'}}>
+                    <div className="column" style={{minWidth:'40%',maxWidth: '50%', marginLeft:'2em'}}>
                         <PictureCard src="/examples/smart-life-thumb.png" alt="Smart Life" width={952} height={865} />
                         
                     </div>
                     <div className="column">
                         <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart Life</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
                         <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>The first CIP54 collection, minting now</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                       
+                        <BigBuyButton />
                         
                     </div>
                 </div>
@@ -242,7 +243,7 @@ export default function Home() {
                     <div className="column" style={{flexGrow:''}}>
                         <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Get Started</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
                         <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>Press a button</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <ExamplesButton /> &nbsp; &nbsp; <PlaygroundButton />                     
+                        <ExamplesButton />
                     </div>                   
                     <div className="column" style={{minWidth:'40%',maxWidth: '50%'}}>
                         <PictureCard src="/token-cubes-screenshot.png" alt="Token cubes screenshot" width={2111} height={1907} />

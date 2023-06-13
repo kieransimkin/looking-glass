@@ -219,7 +219,7 @@ export default function Help() {
               </Typography><br />
               <Typography variant="body1">
                 All of the parts of the Smart NFT API including this website itself are provided opensource on Github - SmartNFTPortal and Libcip54 are also available as npm packages<br />&nbsp;
-                <table style={{borderSpacing:'10px'}} border={1} width="90%" className="linktable">
+                <table style={{borderSpacing:'10px', marginLeft:'auto',marginRight:'auto'}} border={1} width="90%" className="linktable">
                   
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/smartnftportal" target="_blank" rel="noreferrer"><Typography variant="body1">SmartNFTPortal</Typography></a></td><td>This is a react component which gives you everything you need to render a Smart NFT in the front end - this is the component used by the Playground, and by <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a></td></tr>
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/libcip54" target="_blank" rel="noreferrer"><Typography variant="body1">Libcip54</Typography></a></td><td>This library proves the backend queries needed to build the data for the SmartNFTPortal to render the NFT - the two work in tandem to render NFTs</td></tr>
