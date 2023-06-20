@@ -1,0 +1,184 @@
+<style>h1{white-space:nowrap;margin:0 30 10 30;font-size:13pt}#dis{margin-top:16}.in{margin:0;padding:0;text-align:center}td,th,.u,.l{border:1px solid black;width:1em;height:1em}.s{border:none;text-align:center}.sc{border:none;width:1em;}.sb{border-right: 1px dashed black}th{background:black;}.i{cursor:pointer;position:absolute;padding:5 10}.br{border-radius:20px}.tr{transition:all 1s, max-width 1s, max-height 1s, top 1s, right 1s}.u,.l{margin:auto}.u{background-color:black}</style>
+<div style="display: flex;height: 100vh; overflow: hidden;background-color: black;" id="container">
+<canvas id=testCanvas></canvas>
+<input id="focusTarget" style="width:0px;" />
+<div id=f-ct style=color:white;height:100%;overflow:hidden;font-family:sans-serif>
+    <div id=i class="br tr" style="background-color:white;color:black;min-width:220;min-height:72;opacity:1;max-width:500;position:absolute;top:0;left:0;outline:1px solid rgba(0,0,0,0.5);box-shadow:2px 2px 10px 1px rgba(0,0,0,0.5);margin:1em;padding:0.5em 0.5em 2em 0.5em">
+        <div id=h class="i br" style=right:0;top:0;margin:2>&#10006;</div>
+        <h1 class=s>&#127793; Smart Avatars</h1>
+        
+        
+    </div>
+</div>
+</div>
+<script>  
+// Smart Avatars
+
+document.getElementById("testCanvas").setAttribute('width',document.getElementById("container").getBoundingClientRect().width);
+document.getElementById("testCanvas").setAttribute('height',document.getElementById("container").getBoundingClientRect().height);
+    const nft = window.cardano.nft;
+    const children = [];  
+    const sprites={S:[],N:[],W:[],E:[]};
+    const updateSprites = async (files) => { 
+        if (sprites.S) { 
+            for (const c of sprites.S) { 
+                stage.removeChild(c);
+            }
+            delete sprites.S;
+            sprites.S=[];
+        }
+        if (sprites.N) { 
+            for (const c of sprites.N) { 
+                stage.removeChild(c);    
+            }
+            
+            delete sprites.N;
+            sprites.N=[];
+        }
+        if (sprites.W) { 
+            for (const c of sprites.W) { 
+                stage.removeChild(c);
+            }
+            delete sprites.W
+            sprites.W=[];
+        }
+        if (sprites.E) { 
+            for (const c of sprites.E) { 
+                stage.removeChild(c);
+            }
+            delete sprites.E;
+            sprites.E=[];
+        }
+        for (const c of ['body','head','bangs','pants','shirt','jacket','trim','gloves','shoes']) { 
+        if (!files[c]) continue;
+        
+        var spriteSheet = new createjs.SpriteSheet({"animations":files[c].animations,"frames":files[c].frames,"images":[files[c].src]});
+
+        var animationN = new createjs.Sprite(spriteSheet, "walking-north");
+        var animationS = new createjs.Sprite(spriteSheet, "walking-south");
+        var animationW = new createjs.Sprite(spriteSheet, "walking-west");
+        var animationE = new createjs.Sprite(spriteSheet, "walking-east");
+        
+        
+        animationN.scale=animationS.scale=animationW.scale=animationE.scale=1.5;
+        animationN.x=animationS.x=animationW.x=animationE.x=((parseInt(document.getElementById("testCanvas").getAttribute('width'))-(files[c].frames.width*animationS.scale))/2);
+        animationN.y=animationS.y=animationW.y=animationE.y=((parseInt(document.getElementById("testCanvas").getAttribute('height'))-(files[c].frames.height*animationS.scale))/2);;
+        animationS.framerate=animationN.framerate=animationW.framerate=animationE.framerate=10;
+
+        animationN.alpha=0;
+        animationS.alpha=0;
+        animationW.alpha=0;
+        animationE.alpha=1
+
+        sprites.S.push(animationS);
+        sprites.N.push(animationN);
+        sprites.W.push(animationW);
+        sprites.E.push(animationE);
+
+        stage.addChild(animationS);
+        stage.addChild(animationN);
+        stage.addChild(animationW);
+        stage.addChild(animationE);
+        }
+    }
+    document.onkeyup=()=>{
+            console.log('key');
+            for (const c of sprites.E) { 
+            //createjs.Tween.get(c).to({alpha: 1},2000);
+            createjs.Tween.get(c).to({scale: 3},4000);
+            }
+        }
+        const toggle = () => { 
+
+            for (const c of sprites.E) { 
+                    createjs.Tween.get(c).to({scale: 3},500);
+                    createjs.Tween.get(c).to({x: ((parseInt(document.getElementById("testCanvas").getAttribute('width'))-(64*3))/2)},500);
+                    createjs.Tween.get(c).to({y: ((parseInt(document.getElementById("testCanvas").getAttribute('height'))-(64*3))/2)},500);
+                }
+
+                setTimeout(toggleOff,2000)
+        }
+        const toggleOff = () => { 
+            for (const c of sprites.E) { 
+                    createjs.Tween.get(c).to({scale: 1},500);
+                    createjs.Tween.get(c).to({x: ((parseInt(document.getElementById("testCanvas").getAttribute('width'))-(64*1))/2)},500);
+                    createjs.Tween.get(c).to({y: ((parseInt(document.getElementById("testCanvas").getAttribute('height'))-(64*1))/2)},500);
+
+                } 
+                setTimeout(toggle,2000)
+        }
+        setTimeout(toggle,100)
+        document.getElementById("testCanvas").onclick=()=>{
+            document.getElementById("focusTarget").focus();
+        }
+
+    var stage = new createjs.Stage(document.getElementById("testCanvas"));
+    // Get a list of the tokens owned by the owner of this NFT
+    
+        const ret = { files: {}, tokens: [] ,images:[]};
+        const getImagesAmdTokens = () => { 
+            const pid = '420acf8d7151fb73a556975cad1a60bf13e91d417be084fe87ef100d';
+            
+            nft.getFileObject('walking',pid+'f09fa78df09fa79f').then((i) =>{ 
+                ret.files.body = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09f9287e2808de29980efb88fe29982efb88f62616e67735f62756e').then((i)=>{
+                ret.files.bangs = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09fa4af616c69656e').then((i)=> { 
+                ret.files.head = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09fa6b5e29982efb88f70616e74732070696e6b').then((i)=>{
+                ret.files.pants = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09fa6b6e29982efb88f6768696c6c696573206f72616e').then((i)=>{
+                ret.files.shoes = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09fa7986a61636b6574207472696d3134').then((i)=>{
+                ret.files.trim = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09fa798e29982efb88f636c6f74686573206c6f6e3136').then((i)=>{ 
+                ret.files.shirt = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09fa798e29982efb88f6a61636b65742066726f6334').then((i)=>{
+                ret.files.jacket = i;
+                updateSprites(ret.files);
+            })
+            nft.getFileObject('walking',pid+'f09fa7a4e29982efb88f626c7565').then((i)=>{
+                ret.files.gloves = i;
+                updateSprites(ret.files);
+            })
+            /*
+            
+          
+            
+            
+            
+            
+            ret.files.jacket = await nft.getFileObject('walking',pid+'f09fa798e29982efb88f6a61636b65742066726f6334');
+            ret.files.gloves = await nft.getFileObject('walking',pid+'f09fa7a4e29982efb88f626c7565');
+            ret.tokens =           (await nft.getTokens()).tokens;
+            */
+           //return ret;
+        }
+        getImagesAmdTokens();
+        updateSprites(ret.files);
+
+        document.getElementById("container").focus();
+   
+   
+    
+    createjs.Ticker.timingMode = createjs.Ticker.RAF;
+    createjs.Ticker.addEventListener("tick", stage);
+                
+    
+    
+    
+</script>

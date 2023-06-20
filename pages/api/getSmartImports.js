@@ -6,7 +6,7 @@ export default async function Browse(req, res) {
     const featureTree = metadata?.uses;
     const mockTokenUnit = 'Un-minted'
 
-    const ret = await getSmartImports(featureTree, walletAddr, mockTokenUnit);
+    const ret = await getSmartImports(featureTree, metadata, walletAddr, mockTokenUnit);
 
     res.status(200).json(ret);
 }

@@ -1,33 +1,48 @@
-<center><h1>Under construction</h1></center>
-<img id="output" />
+<img id="output" width="100%" height="100%" />
 <script>  
-    
+    // This shows one of the most basic uses for CIP54 - showing a different 
+    // image depending on whether (and how many) tokens 
+
+    // This NFT will display a happy face if you own an NFT from oen of the
+    // policies listed below. If you own over 300 NFTs and still don't have 
+    // a token from the policies, then it will display a smirking face, otherwise
+    // it will display an angry face
+    // These images are SVGs written as data urls into the files array of the 
+    // token, so it is fully-onchain.
+
     const nft = window.cardano.nft;
+    const specialPolicies = [
+        'd3b65744dd067fd7103cc6a4019cc9cd5f8627b78174c05dc67a9ad6',
+        'efd8e8b305af8e6d8086d7744bdb84759de0b9c98309048c7485aa2e',
+        'e5a2bcc51466942a9db1da62471a1b682bde3abcebafee2c7fb1e378',
+        '781ab7667c5a53956faa09ca2614c4220350f361841a0424448f2f30'
+    ];
+
     // Get a list of the tokens owned by the owner of this NFT
-    const getFiles = async ()=> { 
-        const ret = {};
-        ret.happy = (await nft.getFile('happy')).toString();
-        ret.angry = await nft.getFile('angry');
-        ret.smirking = await nft.getFile('smirking');
+
+    const getFilesAndTokens = async () => { 
+
+        const ret = { files: {}, tokens: [] };
+        ret.files.happy =       await nft.getFileUrl('happy');
+        ret.files.angry =       await nft.getFileUrl('angry');
+        ret.files.smirking =    await nft.getFileUrl('smirking');
+        ret.tokens =           (await nft.getTokens()).tokens;
         return ret;
     }
-    getFiles().then((files)=>{
 
-    
-    nft.getTokens().then((tokens) => {   
-        console.log(files);
-        let found=false;
-        let display=files.angry;
-        if (tokens.tokens.length>300) display=files.smirking;
-        for (var c=0; c<tokens.tokens.length; c++) { 
-            const token = tokens.tokens[c];            
-            if (token.unit.substring(0,56)=='781ab7667c5a53956faa09ca2614c4220350f361841a0424448f2f30') { 
-                display=files.happy;
-                break;
-            }
+    getFilesAndTokens().then(( {files, tokens} ) => {
+
+        let display = files.angry;
+        if (tokens.length > 300) display = files.smirking;
+
+        if (tokens.filter((t)=>specialPolicies.includes(t.unit.substring(0,56)))) { 
+            display = files.happy;
         }
-        console.log(display);
-        document.getElementById('output').src=display;
+        let img = document.getElementById('output');
+        img.onload = () => {
+            URL.revokeObjectURL(display);
+        };
+        img.src=display;
 
-    })});
+    });
 </script>

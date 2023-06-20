@@ -18,7 +18,7 @@
       {
         "title":"Conditional Display",
         "slug":"conditional",
-        "description":"This example is a work in progress",
+        "description":"Shows how to display a different image depending on whether the owner is also a holder of any NFT from a specified list of policy IDs.",
         "thumbnail":"conditional.png"
       }
     ]
@@ -44,6 +44,18 @@
         "slug":"smart-life",
         "description":"This is the first collection to mint with CIP54 - demonstrates detecting another token in the holder's wallet and responding with sparkles",
         "thumbnail":"smart-life.png"
+      }
+    ]
+  },
+  {
+    "title":"EaselJS",
+    "slug":"easeljs",
+    "examples":[
+      {
+        "title":"Smart Avatars",
+        "slug":"smart-avatars",
+        "description":"",
+        "thumbnail":""
       }
     ]
   }

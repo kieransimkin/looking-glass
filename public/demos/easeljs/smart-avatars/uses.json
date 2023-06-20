@@ -1,0 +1,25 @@
+[
+{
+    "tokens": "own"
+},
+{
+    "files": [
+        {
+            "src":"cnft:420acf8d7151fb73a556975cad1a60bf13e91d417be084fe87ef100df09fa78df09fa79f/walking",
+            "mediaType":"image/png"
+        }
+    ]
+},
+{
+    "libraries": {
+        "name": "EaselJS",
+        "version": "1.0.2"
+    }
+},
+{
+    "libraries": { 
+        "name": "tweenjs",
+        "version": "1.0.2"
+    }
+}
+]
