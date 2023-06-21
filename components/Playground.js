@@ -147,7 +147,7 @@ const Playground = function (props) {
         
         files.push({
           'mediaType': "text/html",
-          'src': splitToLineLength('data:text/html;base64,'+unicodeToBase64(pc))
+          'src': splitToLineLength('data:text/html;charset=utf-8;base64,'+unicodeToBase64(pc))
         });
         if (typeof value == "string") { 
           continue;
@@ -171,7 +171,7 @@ const Playground = function (props) {
       
       files.push({
         'mediaType': "text/html",
-        'src': splitToLineLength('data:text/html;base64,'+unicodeToBase64(pc))
+        'src': splitToLineLength('data:text/html;charset=utf-8;base64,'+unicodeToBase64(pc))
       });
     }
     json.files = files;

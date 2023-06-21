@@ -3430,10 +3430,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libcip54@^1.0.39:
-  version "1.0.39"
-  resolved "https://registry.yarnpkg.com/libcip54/-/libcip54-1.0.39.tgz#557dedc2474077872fde51c20fb1fb5b9afe9908"
-  integrity sha512-lkXOmHHjqCMmJolhHBTyfaJEjYJ288iHkj/j6XvsQV2F2lshUqRp+5w//WWyJHsgW+p8F4zCmb4rP1RdpBYGgQ==
+libcip54@^1.0.41:
+  version "1.0.41"
+  resolved "https://registry.yarnpkg.com/libcip54/-/libcip54-1.0.41.tgz#46d2993dbf27493e196d45d36585f5f9afdfe968"
+  integrity sha512-nl5AHmHHJD59sZ+IpFAXxrYgXHX53ced/ccdL7wWQIDC4I83+fT6WcZ8RoRO07n+emuP9ocTmlZgW1uttZxkeg==
   dependencies:
     "@emurgo/cardano-serialization-lib-nodejs" "^11.4.0"
     "@types/pg" "^8.10.1"
@@ -5134,10 +5134,10 @@ smartnftportal@^1.0.46:
     react "^18.2.0"
     smartnftportal "^1.0.46"
 
-smartnftportal@^1.0.72:
-  version "1.0.72"
-  resolved "https://registry.yarnpkg.com/smartnftportal/-/smartnftportal-1.0.72.tgz#a8b6bba1b37dee955f4fa2966ea2e597be9fb47f"
-  integrity sha512-yaPURIpxtDkoknnTvBuwkSUQtJeFi3eoek+x7+kBA1y4h+WCwfdhtVzRtufzyxzZ9+qI4Et/P7LFPz8N4nVHUw==
+smartnftportal@^1.0.74:
+  version "1.0.74"
+  resolved "https://registry.yarnpkg.com/smartnftportal/-/smartnftportal-1.0.74.tgz#3bd8f1b2ab50f61afb327cae9f30f21f43d5202e"
+  integrity sha512-1tBd7MZEy7eA2a3ILR6Ex3e14d62bmdAyxAggtY/uOTN+kuGbGjPoj7Y8p67E6awS6syJz1D0vRREsUKblCchg==
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "@babel/preset-react" "^7.22.3"
