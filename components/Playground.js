@@ -20,7 +20,7 @@ import DividerBox from './DividerBox'
 import * as cheerio from 'cheerio';
 let programCodeTimer = null;
 import * as React from "react";
-import { getFeatureTree } from '../utils/Helpers';
+import { getFeatureTree, unicodeToBase64 } from '../utils/Helpers';
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 import { minify } from 'html-minifier-terser';
 
@@ -147,7 +147,7 @@ const Playground = function (props) {
         
         files.push({
           'mediaType': "text/html",
-          'src': splitToLineLength('data:text/html;base64,'+btoa(pc))
+          'src': splitToLineLength('data:text/html;base64,'+unicodeToBase64(pc))
         });
         if (typeof value == "string") { 
           continue;
@@ -171,7 +171,7 @@ const Playground = function (props) {
       
       files.push({
         'mediaType': "text/html",
-        'src': splitToLineLength('data:text/html;base64,'+btoa(pc))
+        'src': splitToLineLength('data:text/html;base64,'+unicodeToBase64(pc))
       });
     }
     json.files = files;

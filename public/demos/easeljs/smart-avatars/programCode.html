@@ -1,184 +1,267 @@
-<style>h1{white-space:nowrap;margin:0 30 10 30;font-size:13pt}#dis{margin-top:16}.in{margin:0;padding:0;text-align:center}td,th,.u,.l{border:1px solid black;width:1em;height:1em}.s{border:none;text-align:center}.sc{border:none;width:1em;}.sb{border-right: 1px dashed black}th{background:black;}.i{cursor:pointer;position:absolute;padding:5 10}.br{border-radius:20px}.tr{transition:all 1s, max-width 1s, max-height 1s, top 1s, right 1s}.u,.l{margin:auto}.u{background-color:black}</style>
-<div style="display: flex;height: 100vh; overflow: hidden;background-color: black;" id="container">
+<style>
+h1{white-space:nowrap;margin:0 30 10 30;font-size:13pt}
+.s{text-align:center}
+.i{cursor:pointer;position:absolute;padding:5 10}
+.br{border-radius:20px}
+</style>
+<div style="
+pointer-events:none;
+height:40vh;
+backdrop-filter:blur(20px) hue-rotate(580deg);
+position:fixed;
+z-index:100;
+top:60vh;
+left:0;
+mask-image:linear-gradient(transparent 0%, black 100%);
+-webkit-mask-image:linear-gradient(transparent 0%, black 100%);
+width:100vw;
+"></div>
+<div style=display:flex;height:100vh;overflow:hidden;background-color:black; id=container>
 <canvas id=testCanvas></canvas>
-<input id="focusTarget" style="width:0px;" />
+<input id=focusTarget style=width:0px/>
 <div id=f-ct style=color:white;height:100%;overflow:hidden;font-family:sans-serif>
     <div id=i class="br tr" style="background-color:white;color:black;min-width:220;min-height:72;opacity:1;max-width:500;position:absolute;top:0;left:0;outline:1px solid rgba(0,0,0,0.5);box-shadow:2px 2px 10px 1px rgba(0,0,0,0.5);margin:1em;padding:0.5em 0.5em 2em 0.5em">
         <div id=h class="i br" style=right:0;top:0;margin:2>&#10006;</div>
         <h1 class=s>Smart Avatars</h1>
-        
-        
+        <div id="k" class="tr" style="right:0;top:36;position:absolute;display:flex;flex-direction:column"><p class="in">🡹w</p><p class="in">🡸a🡻s🡺d&nbsp;</p><p class="in">📜🔍</p></div>
     </div>
 </div>
 </div>
+<canvas id=c style=display:none></canvas>
 <script>  
 // Smart Avatars
-
-document.getElementById("testCanvas").setAttribute('width',document.getElementById("container").getBoundingClientRect().width);
-document.getElementById("testCanvas").setAttribute('height',document.getElementById("container").getBoundingClientRect().height);
-    const nft = window.cardano.nft;
-    const children = [];  
-    const sprites={S:[],N:[],W:[],E:[]};
-    const updateSprites = async (files) => { 
-        if (sprites.S) { 
-            for (const c of sprites.S) { 
-                stage.removeChild(c);
-            }
-            delete sprites.S;
-            sprites.S=[];
+let gID = 'getElementById';
+let gA = 'getAttribute';
+let d=document;
+let tcan = d[gID]("testCanvas");
+let econt = d[gID]("container")
+let sat = 'setAttribute';
+let nft = window.cardano.nft;
+let go = nft.getFileObject;
+let tw = createjs.Tween.get;
+let gS = (s,i)=>new createjs.Sprite(s,i);
+let gP = (p)=>new createjs.SpriteSheet(p);
+tcan[sat]('width',econt.getBoundingClientRect().width);
+tcan[sat]('height',econt.getBoundingClientRect().height);
+let AEL = 'addEventListener';
+let children = [];
+var distanceStep = 1;
+var spriteScale=1+Math.pow(distanceStep,2)
+var dummy = {step:1};
+var spriteX=((parseInt(tcan[gA]('width'))-64*Math.pow(distanceStep,2))/2)
+var spriteY=((parseInt(tcan[gA]('height'))-64*Math.pow(distanceStep,2))/2)
+var eAlpha = 1, wAlpha = sAlpha = nAlpha = 0;
+var direction='E';
+var cont = new createjs.Container();
+let sprites={S:{},N:{},W:{},E:{}};
+let e = (s,a)=> {
+    for (let c in s[a]) { 
+            cont.removeChild(s[a][c]);
         }
-        if (sprites.N) { 
-            for (const c of sprites.N) { 
-                stage.removeChild(c);    
-            }
-            
-            delete sprites.N;
-            sprites.N=[];
-        }
-        if (sprites.W) { 
-            for (const c of sprites.W) { 
-                stage.removeChild(c);
-            }
-            delete sprites.W
-            sprites.W=[];
-        }
-        if (sprites.E) { 
-            for (const c of sprites.E) { 
-                stage.removeChild(c);
-            }
-            delete sprites.E;
-            sprites.E=[];
-        }
-        for (const c of ['body','head','bangs','pants','shirt','jacket','trim','gloves','shoes']) { 
-        if (!files[c]) continue;
-        
-        var spriteSheet = new createjs.SpriteSheet({"animations":files[c].animations,"frames":files[c].frames,"images":[files[c].src]});
-
-        var animationN = new createjs.Sprite(spriteSheet, "walking-north");
-        var animationS = new createjs.Sprite(spriteSheet, "walking-south");
-        var animationW = new createjs.Sprite(spriteSheet, "walking-west");
-        var animationE = new createjs.Sprite(spriteSheet, "walking-east");
-        
-        
-        animationN.scale=animationS.scale=animationW.scale=animationE.scale=1.5;
-        animationN.x=animationS.x=animationW.x=animationE.x=((parseInt(document.getElementById("testCanvas").getAttribute('width'))-(files[c].frames.width*animationS.scale))/2);
-        animationN.y=animationS.y=animationW.y=animationE.y=((parseInt(document.getElementById("testCanvas").getAttribute('height'))-(files[c].frames.height*animationS.scale))/2);;
-        animationS.framerate=animationN.framerate=animationW.framerate=animationE.framerate=10;
-
-        animationN.alpha=0;
-        animationS.alpha=0;
-        animationW.alpha=0;
-        animationE.alpha=1
-
-        sprites.S.push(animationS);
-        sprites.N.push(animationN);
-        sprites.W.push(animationW);
-        sprites.E.push(animationE);
-
-        stage.addChild(animationS);
-        stage.addChild(animationN);
-        stage.addChild(animationW);
-        stage.addChild(animationE);
-        }
+    s[a]={};
+}
+let uS = async (files) => { 
+    if (sprites.S) e(sprites,'S');
+    if (sprites.N) e(sprites,'N');
+    if (sprites.W) e(sprites,'W');
+    if (sprites.E) e(sprites,'E');
+    for (let c of ['body','head','bangs','pants','shirt','jacket','trim','gloves','shoes']) { 
+    if (!files[c]) continue;
+    var spriteSheet = gP({"animations":files[c].animations,"frames":files[c].frames,"images":[files[c].src]});
+    var aN = gS(spriteSheet, "walking-north");
+    var aS = gS(spriteSheet, "walking-south");
+    var aW = gS(spriteSheet, "walking-west");
+    var aE = gS(spriteSheet, "walking-east");
+    aS.framerate=aN.framerate=aW.framerate=aE.framerate=6;
+    aN.alpha=aS.alpha=aW.alpha=wAlpha;
+    aE.alpha=eAlpha
+    if (!sprites.S[c]) sprites.S[c]=aS
+    if (!sprites.N[c]) sprites.N[c]=aN;
+    if (!sprites.W[c]) sprites.W[c]=aW;
+    if (!sprites.E[c]) sprites.E[c]=aE;
+    cont.addChild(aS);
+    cont.addChild(aN);
+    cont.addChild(aW);
+    cont.addChild(aE);
     }
-    document.onkeyup=()=>{
-            console.log('key');
-            for (const c of sprites.E) { 
-            //createjs.Tween.get(c).to({alpha: 1},2000);
-            createjs.Tween.get(c).to({scale: 3},4000);
+}
+const Fo=(s,a) => { 
+    for (let c in s[a]) { 
+        tw(s[a][c]).to({alpha:0},100);
+    }            
+}
+d.onkeyup=(e)=>{
+    let tdir = direction;
+    let targetStep;
+    switch(e.key.toUpperCase()) { 
+        case 'A':
+            direction='W';
+            targetStep = dummy.step-2;
+            if (targetStep>=0) targetStep=-2;
+            tw(dummy).to({step:targetStep},250)[AEL]("change",(e) => { });
+            wAlpha=1;
+            for (let c in sprites.W) { 
+                tw(sprites.W[c]).to({alpha:1, framerate: Math.abs(targetStep)*3},100)
             }
-        }
-        const toggle = () => { 
-
-            for (const c of sprites.E) { 
-                    createjs.Tween.get(c).to({scale: 3},500);
-                    createjs.Tween.get(c).to({x: ((parseInt(document.getElementById("testCanvas").getAttribute('width'))-(64*3))/2)},500);
-                    createjs.Tween.get(c).to({y: ((parseInt(document.getElementById("testCanvas").getAttribute('height'))-(64*3))/2)},500);
-                }
-
-                setTimeout(toggleOff,2000)
-        }
-        const toggleOff = () => { 
-            for (const c of sprites.E) { 
-                    createjs.Tween.get(c).to({scale: 1},500);
-                    createjs.Tween.get(c).to({x: ((parseInt(document.getElementById("testCanvas").getAttribute('width'))-(64*1))/2)},500);
-                    createjs.Tween.get(c).to({y: ((parseInt(document.getElementById("testCanvas").getAttribute('height'))-(64*1))/2)},500);
-
-                } 
-                setTimeout(toggle,2000)
-        }
-        setTimeout(toggle,100)
-        document.getElementById("testCanvas").onclick=()=>{
-            document.getElementById("focusTarget").focus();
-        }
-
-    var stage = new createjs.Stage(document.getElementById("testCanvas"));
-    // Get a list of the tokens owned by the owner of this NFT
-    
-        const ret = { files: {}, tokens: [] ,images:[]};
-        const getImagesAmdTokens = () => { 
-            const pid = '420acf8d7151fb73a556975cad1a60bf13e91d417be084fe87ef100d';
-            
-            nft.getFileObject('walking',pid+'f09fa78df09fa79f').then((i) =>{ 
-                ret.files.body = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09f9287e2808de29980efb88fe29982efb88f62616e67735f62756e').then((i)=>{
-                ret.files.bangs = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09fa4af616c69656e').then((i)=> { 
-                ret.files.head = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09fa6b5e29982efb88f70616e74732070696e6b').then((i)=>{
-                ret.files.pants = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09fa6b6e29982efb88f6768696c6c696573206f72616e').then((i)=>{
-                ret.files.shoes = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09fa7986a61636b6574207472696d3134').then((i)=>{
-                ret.files.trim = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09fa798e29982efb88f636c6f74686573206c6f6e3136').then((i)=>{ 
-                ret.files.shirt = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09fa798e29982efb88f6a61636b65742066726f6334').then((i)=>{
-                ret.files.jacket = i;
-                updateSprites(ret.files);
-            })
-            nft.getFileObject('walking',pid+'f09fa7a4e29982efb88f626c7565').then((i)=>{
-                ret.files.gloves = i;
-                updateSprites(ret.files);
-            })
-            /*
-            
-          
-            
-            
-            
-            
-            ret.files.jacket = await nft.getFileObject('walking',pid+'f09fa798e29982efb88f6a61636b65742066726f6334');
-            ret.files.gloves = await nft.getFileObject('walking',pid+'f09fa7a4e29982efb88f626c7565');
-            ret.tokens =           (await nft.getTokens()).tokens;
-            */
-           //return ret;
-        }
-        getImagesAmdTokens();
-        updateSprites(ret.files);
-
-        document.getElementById("container").focus();
-   
-   
-    
-    createjs.Ticker.timingMode = createjs.Ticker.RAF;
-    createjs.Ticker.addEventListener("tick", stage);
-                
-    
-    
-    
+            break;
+        case 'S':
+            direction='S';
+            distanceStep+=0.25;
+            tw(dummy).to({step:0},1000)[AEL]("change",(e) => { });
+            tw(cont).to({scale: 1+Math.pow(distanceStep,2),x:((parseInt(tcan[gA]('width'))-64*Math.pow(distanceStep,2))/2)},700)[AEL]("change",(e)=> { 
+                spriteScale=e.target.target.scaleX;
+                spriteX=e.target.target.x;
+            });
+            sAlpha=1;
+            for (let c in sprites.S) { 
+                tw(sprites.S[c]).to({alpha:1},100)
+            }
+            break;
+        case 'D':
+            direction='E';
+            targetStep = dummy.step+2;
+            if (targetStep <= 0) targetStep=2
+            tw(dummy).to({step:targetStep},250)[AEL]
+            eAlpha=1;
+            for (let c in sprites.E) { 
+                tw(sprites.E[c]).to({alpha:1, framerate: Math.abs(targetStep)*3},100)
+            }
+            break;
+        case 'W':
+            direction='N';
+            distanceStep-=0.25;
+            if (distanceStep<0) distanceStep=0;
+            tw(dummy).to({step:0},1000)[AEL]("change",(e) => { });
+            tw(cont).to({scale: 1+Math.pow(distanceStep,2),x:((parseInt(tcan[gA]('width'))-64*Math.pow(distanceStep,2))/2)},700)[AEL]("change",(e)=> { 
+                spriteScale=e.target.target.scaleX;
+                spriteX=e.target.target.x;
+            });
+            nAlpha=1;
+            for (let c in sprites.N) { 
+                tw(sprites.N[c]).to({alpha:1},100);
+            }
+        break;
+        default:
+            return;
+    }
+    if (tdir==direction) return;
+    switch (tdir) { 
+        case 'E':
+            eAlpha=0;
+            Fo(sprites,'E');
+            break;
+        case 'W':
+            wAlpha=0;
+            Fo(sprites,'W');
+            break;
+        case 'N':
+            nAlpha=0;
+            Fo(sprites,'N');
+            break;
+        case 'S':
+            sAlpha=0;
+            Fo(sprites,'S');
+            break;
+        default:
+            return;
+    }
+}
+tcan.onclick=()=>{
+    d[gID]("focusTarget").focus();
+}
+var stage = new createjs.Stage(tcan);
+    let ret = { files: {}, tokens: [] ,images:[]};
+    let getImagesAmdTokens = () => { 
+        let pid = '420acf8d7151fb73a556975cad1a60bf13e91d417be084fe87ef100d';
+        go('walking',pid+'f09fa78df09fa79f').then((i) =>{ 
+            ret.files.body = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09f9287e2808de29980efb88fe29982efb88f62616e67735f62756e').then((i)=>{
+            ret.files.bangs = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09fa4af616c69656e').then((i)=> { 
+            ret.files.head = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09fa6b5e29982efb88f70616e74732070696e6b').then((i)=>{
+            ret.files.pants = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09fa6b6e29982efb88f6768696c6c696573206f72616e').then((i)=>{
+            ret.files.shoes = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09fa7986a61636b6574207472696d3134').then((i)=>{
+            ret.files.trim = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09fa798e29982efb88f636c6f74686573206c6f6e3136').then((i)=>{ 
+            ret.files.shirt = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09fa798e29982efb88f6a61636b65742066726f6334').then((i)=>{
+            ret.files.jacket = i;
+            uS(ret.files);
+        })
+        go('walking',pid+'f09fa7a4e29982efb88f626c7565').then((i)=>{
+            ret.files.gloves = i;
+            uS(ret.files);
+        })
+    }
+    getImagesAmdTokens();
+    uS(ret.files);
+    d[gID]("container").focus();
+let simplex = new SimplexNoise();
+let canvas = d[gID]('c');
+canvas[sat]('width',256);
+canvas[sat]('height',256);
+let ctx = canvas.getContext('2d');
+let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+let data = imageData.data;
+w = stage.canvas.width;
+h = stage.canvas.height;
+let t = 0;
+ground = new createjs.Shape();
+ground.graphics.beginBitmapFill(canvas).drawRect(0, 0, w + canvas.width*2, canvas.height);
+ground.tileW = canvas.width;
+ground.y = h/2;
+ground.x = 0-canvas.width*2;
+ground.scaleX =1;
+ground.scaleY = (stage.canvas.height/2)/canvas.height;
+ground.cache(0, 0, w + canvas.width*2, canvas.height);
+cont.x = spriteX;
+cont.y = spriteY;
+cont.scale = spriteScale;
+stage.addChild(ground);
+stage.addChild(cont);
+createjs.Ticker.timingMode = createjs.Ticker.RAF;
+createjs.Ticker[AEL]("tick", stage);
+createjs.Ticker[AEL]("tick", drawPlasma);
+function drawPlasma(){ 
+for (let x = 0; x < canvas.width; x++) {
+    for (let y = 0; y < canvas.height; y++) {
+    let multiplier = (y/(canvas.width*4));
+    let r = simplex.noise3D((x*multiplier) / 1, y / 1, t/128) * 0.5 + 0.5;
+        let g = simplex.noise3D((x*multiplier) / 8, y / 8, t/128) * 0.5 + 0.5;
+        let amount = y/64
+        let xPos = Math.round((x-amount*t))
+    xPos = canvas.width + xPos%canvas.width         
+    xPos=xPos%canvas.width;
+        data[(xPos + y * canvas.width) * 4 + 0] = r * 255;
+        data[(xPos + y * canvas.width) * 4 + 1] = g * 100;
+        data[(xPos + y * canvas.width) * 4 + 2] = g*200;
+        data[(xPos + y * canvas.width) * 4 + 3] = 255* (y/(canvas.height/2));
+    }
+}
+ground.x=(0-canvas.width )+ (ground.x-dummy.step)%(ground.tileW)
+t+=dummy.step;
+ctx.putImageData(imageData, 0, 0);
+ground.graphics.beginFill('rgba(0,0,0,0)').drawRect(0, 0, w + canvas.width*2, canvas.height);
+ground.graphics.clear();
+ground.graphics.beginBitmapFill(canvas).drawRect(0, 0, w + canvas.width*2, canvas.height);
+ground.updateCache();
+}
+drawPlasma();
 </script>

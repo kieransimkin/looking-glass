@@ -5134,10 +5134,10 @@ smartnftportal@^1.0.46:
     react "^18.2.0"
     smartnftportal "^1.0.46"
 
-smartnftportal@^1.0.69:
-  version "1.0.69"
-  resolved "https://registry.yarnpkg.com/smartnftportal/-/smartnftportal-1.0.69.tgz#7ae2ec0bc32fc441ff909b5e9906b4829afc1e87"
-  integrity sha512-UjX04p9ooAsIO2xZbhf784lhjTeHOgQ4wSQeAkEKnoByVyd2h5flug2QlnjHAcLmZKnqaBBss189o6U0EcWGYg==
+smartnftportal@^1.0.70:
+  version "1.0.70"
+  resolved "https://registry.yarnpkg.com/smartnftportal/-/smartnftportal-1.0.70.tgz#adf04a46e67347c7d8056afdf2dc4ef5b50ca7ec"
+  integrity sha512-g2VmOyn5dzKJ4mqoFvMfMIdfPIV2DMKVLchxko12Y/lU60M01fJdamxxgdxOy+NTLCbMbymcZaiz2stbqgOTnQ==
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "@babel/preset-react" "^7.22.3"
