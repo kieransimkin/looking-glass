@@ -1,0 +1,324 @@
+<style>
+h1{white-space:nowrap;margin:0 30 10 30;font-size:13pt}
+.s{text-align:center}
+.cc{caret-color:transparent;-webkit-user-select:none;-moz-user-select:none;user-select:none}
+.pt{cursor:pointer}
+.p{transition:background-color 1s,box-shadow 1s,opacity 1s}
+.i{cursor:pointer;position:absolute;padding:5 10}
+.br{border-radius:20px}
+.in{margin:3 3;padding:2 2;text-align:center}
+.z>p>span{position:absolute;left:22}
+.z span:hover,.z input:hover{cursor:pointer;text-shadow:-1px 1px rgba(255,200,250,0.4), 1px -1px rgba(25,25,0,0.9)}
+.y{left:-24;position:relative}
+.o{left:85;position:relative}
+input{position:relative;left:55}
+.z>span{position:absolute;left:166}
+.z>p{display:inline;left:94;position:relative;position:absolute;left:62;margin: 0 0}
+</style>
+<div style="caret-color:transparent;pointer-events:none;height:40vh;backdrop-filter:blur(20px) hue-rotate(580deg);position:fixed;z-index:100;top:60vh;left:0;mask-image:linear-gradient(transparent 0%, lack 100%);-webkit-mask-image:linear-gradient(transparent 0%, black 100%);width:100vw;"></div>
+<div class=cc style=display:flex;height:100vh;overflow:hidden;background-color:black; id=container><canvas id=testCanvas></canvas><input class=cc id=focusTarget style=display:none/>
+<div class=cc id=f-ct style=color:white;height:100%;overflow:hidden;font-family:sans-serif>
+    <div id=i class="br p" style="background-color:cadetblue;color:black;min-width:520;min-height:96;opacity:1;max-width:500;position:absolute;top:0;left:0;outline:1px solid rgba(0,0,0,0.5);box-shadow:2px 2px 10px 1px rgba(0,0,0,0.5);margin:1em;padding:0.5em 0.5em 2em 0.5em">
+        <div id=h onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d[gID]('i').style.opacity=0" class="i br tr p" style=right:0;top:0;margin:2>&#10006;</div>
+        <h1 class=s>Smart Avatars</h1>
+        <div id=k class=tr style=right:0;top:36;position:absolute;display:flex;flex-direction:column><div style="margin:auto auto"><p class="in p br pt" onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d.onkeyup({'key':'W'})">🡹</p></div><p class="in"><span class="in p br pt" onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d.onkeyup({'key':'A'})">🡸</span> <span onMouseOver=mIn(this,0) onMouseOut=mOu(this)  class="in p br pt" onclick="d.onkeyup({'key':'S'})">🡻</span> <span onMouseOver=mIn(this,0) onMouseOut=mOu(this) class="in p br pt" onclick="d.onkeyup({'key':'D'})">🡺</span></p><p class="in">📜🔍</p></div>
+        <div class="z">
+            <p id="body"></p>Body:<br />
+            <p id="head"></p>Head:<br />
+            <p id="bangs"></p>Hair:<br />
+            <p id="pants"></p>Pants:<br />
+            <p id="shirt"></p>Shirt:<br />
+            <p id="jacket"></p>Jacket:<br />
+            <p id="trim"></p>Trim:<br />
+            <p id="gloves"></p>Gloves:<br />
+            <p id="shoes"></p>Shoes:<br />
+        </div>
+    </div>
+</div>
+</div>
+<canvas id=c style=display:none></canvas>
+<script>
+// Smart Avatars
+let gID = 'getElementById'
+let gA = 'getAttribute'
+let cE ='createElement'
+let d=document
+let sA='setAttribute'
+let tcan=d[gID]("testCanvas")
+let econt=d[gID]("container")
+let tS
+let nft=window.cardano.nft
+let go=nft.getFileObject
+let JS=createjs
+let tw=JS.Tween.get
+let zoom=0;
+let zG=780;
+let zD=false;
+let gS=(s,i)=>new JS.Sprite(s,i)
+let gP=(p)=>new JS.SpriteSheet(p)
+tcan[sA]('width',econt.getBoundingClientRect().width)
+tcan[sA]('height',econt.getBoundingClientRect().height)
+let ret={files:{},tokens:[],images:[]}
+let AEL='addEventListener'
+let children=[]
+var dS = 1
+var spriteScale=1+Math.pow(dS,2)
+var dummy = {step:1}
+var spriteX=((parseInt(tcan[gA]('width'))-64*Math.pow(dS,2))/2)
+var spriteY=((parseInt(tcan[gA]('height'))-64*Math.pow(dS,2))/2)
+var eAlpha=1,wAlpha=sAlpha=nAlpha=0
+var direction='E'
+var cont=new JS.Container()
+var oC=new JS.Container()
+let S={S:{},N:{},W:{},E:{}}
+let e=(s,a)=> {for (let c in s[a]) {cont.removeChild(s[a][c]);}s[a]={};}
+let mIn=(t)=>{t.style.outline='1px solid black';t.style.backgroundColor='rgba(255,255,255,0.7)';t.style.boxShadow='2px 1px rgba(0,0,0,0.5)'},mOu=(t)=>{t.style.boxShadow='';t.style.outline='none';t.style.backgroundColor=''}
+let uS=async (L=null)=>{ 
+    let files=ret.files
+    if (S.S)e(S,'S')
+    if (S.N)e(S,'N')
+    if (S.W)e(S,'W')
+    if (S.E)e(S,'E')
+    for (let c of ['body','head','bangs','pants','shirt','jacket','trim','gloves','shoes']) { 
+        try { 
+            checked = d[gID]('hI'+c)?.getAttribute('checked')=="1";
+            } catch (e) {}
+        d[gID](c).innerHTML=''
+        let doc=d[cE]('input');let dod=d[cE]('input');let spa = d[cE]('span')
+        spa.innerHTML='Hidden'
+        doc[sA]('type','radio')
+        doc[sA]('id','hI'+c);
+        dod[sA]('type','radio')
+        dod[sA]('name',c)
+        doc[sA]('name',c)
+        dod[AEL]('change',sB(c))
+        spa[AEL]('click',()=>{dod.click()})
+        try { 
+            d[gID]('sP'+c)[AEL]('click',()=> {doc.click()})
+        } catch (e) { }
+        doc[AEL]('change',sB(c))
+        dod[sA]('class','y')
+        doc[sA]('class','o')
+        dod[sA]('id','dI'+c)
+        if (checked) { 
+            doc[sA]('checked',1)
+        } else {
+            dod[sA]('checked',1)
+        }
+        d[gID](c).appendChild(doc)
+        d[gID](c).appendChild(spa)
+        d[gID](c).appendChild(dod)
+    if (!files[c]) continue;
+    var spriteSheet=gP({"animations":files[c].animations,"frames":files[c].frames,"images":[files[c].src]})
+    var aN=gS(spriteSheet,"walking-north")
+    var aS=gS(spriteSheet,"walking-south")
+    var aW=gS(spriteSheet,"walking-west")
+    var aE=gS(spriteSheet,"walking-east")
+    aS.framerate=aN.framerate=aW.framerate=aE.framerate=6
+    aN.alpha=nAlpha
+    aS.alpha=sAlpha
+    aW.alpha=wAlpha
+    aE.alpha=eAlpha
+    if (!S.S[c])S.S[c]=aS
+    if (!S.N[c])S.N[c]=aN
+    if (!S.W[c])S.W[c]=aW
+    if (!S.E[c])S.E[c]=aE
+    cont.addChild(aS)
+    cont.addChild(aN)
+    cont.addChild(aW)
+    cont.addChild(aE)
+    }
+    if (L){S[direction][L].scale=2;S[direction][L].alpha=2;tw(S[direction][L]).to({scale:1, alpha:1},1000)}
+}
+const sB=(t)=>{
+    return function (e){ 
+        if ((e.target.checked&&e.target.id.substring(0,1)=='d')||(!e.target.checked && e.target.id.substring(0,1)=='h')){
+            for (const c in S){ 
+                S[c][t].scale=1
+                tw(S[c][t]).to({scale:3,alpha:0},1000)[AEL]("change",(e)=>{if (e.target.target.scale>=3)S[c][t].visible=false;})
+            }
+        }else{
+            for(const c in S){ 
+                S[c][t].scale=2
+                S[c][t].visible=true
+                let origY=S[c][t].y
+                let origX=S[c][t].x
+                S[c][t].y-=64*2
+                S[c][t].x-=32
+                tw(S[c][t]).to({scale:1,y:origY,x:origX,alpha:direction==c?1:0},1000)
+            }
+        }
+    } 
+}
+const Fo=(s,a)=>{for(let c in s[a])tw(s[a][c]).to({alpha:0},100)}
+d[AEL]('wheel',(e) => {
+    let zoomTg
+    if (zD) zoomTg=zoom+(e.deltaY/4);else zoomTg=zoom-(e.deltaY/4);
+    if(zoomTg<0){zD=!zD;zoomTg=0}
+    if(zoomTg>zG){zoomTg=zG-1;zD=!zD}
+    let zoomAmt=1+(((((zoomTg)%zG)/zG))*4)
+    stage.zoom=zoom;
+    tw(G).to({y: (h/2)+(zoomAmt*10), scaleY:((stage.canvas.height/2)/canvas.height)*(1/zoomAmt)},500)
+    tw(oC).to({y:-((16*(zoomAmt-1)+Math.pow((dS-1)*3,3)-Math.pow(zoomAmt-1,3)))},500)
+    tw(stage).to({zoom:zoomTg,x: -(((stage.canvas.width+64)*(zoomAmt-1))/2), y:-(((stage.canvas.height+64)*(zoomAmt-1))/2),scale:zoomAmt},200)[AEL]("change",(t)=>{
+        zoom=t.target.target.zoom;
+     })
+})
+d.onkeyup=(e)=>{
+    let tdir = direction
+    let tS
+    switch(e.key.toUpperCase()) { 
+        case 'A':
+            direction='W'
+            tS = dummy.step-2
+            if (tS>=0) tS=-2
+            tw(dummy).to({step:tS},250)[AEL]("change",(e)=>{ })
+            wAlpha=1
+            for (let c in S.W) tw(S.W[c]).to({alpha:1, framerate: Math.abs(tS)*3},100)
+            break
+        case 'S':
+            direction='S'
+            dS+=0.25
+            tw(dummy).to({step:0},1000)[AEL]("change",(e) >{ })
+            let tE=tw(cont).to({scale: 1+Math.pow(dS,2),x:((parseInt(tcan[gA]('width'))-64*Math.pow(dS,2))/2)},700).call(()=>{ 
+                for (let c in S.S)S.S[c].paused=true;
+            })
+            tE[AEL]("change",(e)=> { 
+                spriteScale=e.target.target.scaleX;
+                spriteX=e.target.target.x;
+            })
+            sAlpha=1;
+            for(let c in S.S){tw(S.S[c]).to({alpha:1},100);S.S[c].paused=false}
+            break
+        case 'D':
+            direction='E'
+            tS = dummy.step+2
+            if (tS <= 0) tS=2
+            tw(dummy).to({step:tS},250)[AEL]
+            eAlpha=1
+            for (let c in S.E) { 
+                tw(S.E[c]).to({alpha:1, framerate: Math.abs(tS)*3},100)
+            }
+            break
+        case 'W':
+            direction='N'
+            dS-=0.25
+            if (dS<0) dS=0
+            tw(dummy).to({step:0},1000)[AEL]("change",(e)=>{ })
+            let wE=tw(cont).to({scale: 1+Math.pow(dS,2),x:((parseInt(tcan[gA]('width'))-64*Math.pow(dS,2))/2)},700).call(()=>{
+                for (let c in S.S)S.N[c].paused=true;
+            })
+            wE[AEL]("change",(e)=> { 
+                spriteScale=e.target.target.scaleX
+                spriteX=e.target.target.x
+            })
+            nAlpha=1
+            for(let c in S.N){tw(S.N[c]).to({alpha:1},100);S.N[c].paused=false}
+        break
+        default:
+            return
+    }
+    if (tdir==direction) return
+    switch (tdir) { 
+        case 'E':
+            eAlpha=0;Fo(S,'E');break
+        case 'W':
+            wAlpha=0;Fo(S,'W');break
+        case 'N':
+            nAlpha=0;Fo(S,'N');break
+        case 'S':
+            sAlpha=0;Fo(S,'S');break
+        default:
+            return
+    }
+}
+tcan.onclick=()=>{d[gID]("focusTarget").focus();d[gID]("focusTarget").blur()}
+var stage=new JS.Stage(tcan)
+    const decodeName=(unit)=>{return decodeURIComponent(unit.substring(56).replace(/[0-9a-f]{2}/g,'%$&'))}
+    let getImagesAmdTokens=()=>{ 
+        let pid='420acf8d7151fb73a556975cad1a60bf13e91d417be084fe87ef100d'
+        const HL = (t) => { 
+            return function (i) { 
+                ret.files[t] = i
+                uS(t)
+                let spb = d[cE]('span')
+                try { 
+                spb.id='sP'+t
+                spb.innerHTML=decodeName(i.unit)
+                spb[sA]('title','Policy ID: '+i.unit.substring(0,56)+"\nToken Name Hex:"+i.unit.substring(56))
+                } catch (e){}
+                d[gID]('hI'+t)[sA]('checked',1)
+                d[gID]('dI'+t)?.removeAttribute('checked')
+                d[gID](t).after(spb);
+            }
+        }
+        go('walking',pid+'f09fa78df09fa79f').then(HL('body'))
+        go('walking',pid+'f09f9287e2808de29980efb88fe29982efb88f62616e67735f62756e').then(HL('bangs'))
+        go('walking',pid+'f09fa4af616c69656e').then(HL('head'))
+        go('walking',pid+'f09fa6b5e29982efb88f70616e74732070696e6b').then(HL('pants'))
+        go('walking',pid+'f09fa6b6e29982efb88f6768696c6c696573206f72616e').then(HL('shoes'))
+        go('walking',pid+'f09fa7986a61636b6574207472696d3134').then(HL('trim'))
+        go('walking',pid+'f09fa798e29982efb88f636c6f74686573206c6f6e3136').then(HL('shirt'))
+        go('walking',pid+'f09fa798e29982efb88f6a61636b65742066726f6334').then(HL('jacket'))
+        go('walking',pid+'f09fa7a4e29982efb88f626c7565').then(HL('gloves'))
+    }
+    getImagesAmdTokens();
+    uS()
+    d[gID]("container").focus()
+let simplex = new SimplexNoise()
+let canvas = d[gID]('c')
+canvas[sA]('width',256)
+canvas[sA]('height',256)
+let ctx = canvas.getContext('2d')
+let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+let data = imageData.data
+w = stage.canvas.width
+h = stage.canvas.height
+let t =tI =0
+G = new JS.Shape()
+G.graphics.beginBitmapFill(canvas).drawRect(0, 0, w + canvas.width*2, canvas.height)
+G.tileW = canvas.width
+G.y = h/2
+G.x = 0-canvas.width*2
+G.scaleX =1
+G.scaleY = (stage.canvas.height/2)/canvas.height
+G.cache(0, 0, w + canvas.width*2, canvas.height)
+cont.x = spriteX
+cont.y = spriteY
+cont.scale = spriteScale
+oC.x=0;
+oC.y=0;
+oC.addChild(cont);
+stage.addChild(G)
+stage.addChild(oC)
+JS.Ticker.timingMode = JS.Ticker.RAF
+JS.Ticker[AEL]("tick", stage)
+JS.Ticker[AEL]("tick", drawPlasma)
+function drawPlasma(){
+for (let x = 0; x < canvas.width; x++) {
+    for (let y = 0; y < canvas.height; y++) {
+    let multiplier = (y/(canvas.width*4));
+    let r = simplex.noise3D((x*multiplier) / 1, y / 1, tI*0.03) * 0.5 + 0.5
+        let g = simplex.noise3D((x*multiplier) / 8, y / 8, tI*0.015) * 0.5 + 0.5
+        let amount = y/64
+        let xPos = Math.round((x-amount*t))
+    xPos = canvas.width + xPos%canvas.width
+    xPos=xPos%canvas.width
+        data[(xPos + y * canvas.width) * 4 + 0] = r * 255
+        data[(xPos + y * canvas.width) * 4 + 1] = g * 100
+        data[(xPos + y * canvas.width) * 4 + 2] = g*200
+        data[(xPos + y * canvas.width) * 4 + 3] = 255* (y/(canvas.height/2))
+    }
+}
+G.x=(0-canvas.width )+ (G.x-dummy.step)%(G.tileW)
+t+=dummy.step
+tI++;
+ctx.putImageData(imageData, 0, 0)
+G.graphics.beginFill('rgba(0,0,0,0)').drawRect(0, 0, w + canvas.width*2, canvas.height)
+G.graphics.clear()
+G.graphics.beginBitmapFill(canvas).drawRect(0, 0, w + canvas.width*2, canvas.height)
+G.updateCache()
+}
+
+drawPlasma()
+</script>
