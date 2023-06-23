@@ -1,31 +1,32 @@
 <style>
 h1{white-space:nowrap;margin:0 30 10 30;font-size:13pt}
 .s{text-align:center}
-.cc{caret-color:transparent;-webkit-user-select:none;user-select:none}
+.cc{caret-color:#00000000;-webkit-user-select:none;user-select:none;overflow:hidden}
 .pt,#z span,#z input,#h{cursor:pointer}
-.p{transition:background-color 1s,box-shadow 1s,opacity 1s}
+.p{transition:all 1s, outline 0s}
 .i{padding:5 10}
 .a,#z span,#z>p{position:absolute}
 .br{border-radius:20px}
+#fT{position:absolute;opacity:0}
 .in{margin:3 3;padding:2 2;text-align:center}
 #z>p>span{left:22}
 #z span:hover,#z input:hover{text-shadow:-1px 1px #ffc8fa66, 1px -1px #191900e6}
 .y{left:-24}
 .o{left:85}
 input{position:relative;left:55}
-#o{display:none}
+#o{display:block}
 #z>span{left:166}
 .np{pointer-events:none}
 #z{text-transform:capitalize}
 #z>p{display:inline;left:62;margin:0 0}
 </style>
-<div class="np cc" style="height:40vh;backdrop-filter:blur(20px) hue-rotate(580deg);position:fixed;z-index:100;top:60vh;left:0;mask-image:linear-gradient(transparent 0%,black 100%);-webkit-mask-image:linear-gradient(transparent 0%, black 100%);width:100vw"></div>
-<div class=cc style=display:flex;height:100vh;overflow:hidden;background-color:black; id=l><canvas id=t></canvas><input class=cc id=focusTarget style=display:none/>
-<div class=cc id=f-ct style=color:white;height:100%;overflow:hidden;font-family:sans-serif>
-<div id=i class="br p a" style="background-color:#5f9ea0cc;color:black;min-width:520;opacity:1;max-width:500;left:0;outline:1px solid #00000080;box-shadow:2px 2px 10px 1px #00000080;margin:1em;padding:0.5em 0.5em 2em 0.5em">
+<div class="np cc" style="height:40vh;backdrop-filter:blur(20px) hue-rotate(580deg);position:fixed;z-index:100;top:60vh;left:0;mask-image:linear-gradient(#00000000 0%,black 100%);-webkit-mask-image:linear-gradient(#00000000 0%, black 100%);width:100vw"></div>
+<div class=cc style=display:flex;height:100vh;background:black; id=l><canvas id=t></canvas><input class="cc np" id=fT />
+<div class=cc id=f-ct style=color:white;height:100%;font-family:sans-serif>
+<div id=i class="br p a" style="background:#5f9ea0cc;color:black;min-width:520;opacity:1;max-width:500;left:0;box-shadow:2px 2px 10px 1px #00000080;margin:1em;padding:0.5em 0.5em 2em 0.5em">
 <div id=h onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d[B]('i').style.opacity=0" class="i a br tr p" style=right:0;margin:2;top:0>&#10006;</div>
 <h1 class=s>Smart Avatars</h1>
-<div id=k class="tr a" style=right:0;top:36;display:flex;flex-direction:column><div style="margin:auto auto"><p class="in p br pt" onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d.onkeyup({'key':'W'})">🡹</p></div><p class=in><span class="in p br pt" onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d.onkeyup({key:'A'})">🡸</span> <span onMouseOver=mIn(this,0) onMouseOut=mOu(this)  class="in p br pt" onclick="d.onkeyup({key:'S'})">🡻</span> <span onMouseOver=mIn(this,0) onMouseOut=mOu(this) class="in p br pt" onclick="d.onkeyup({key:'D'})">🡺</span></p><p class=in>📜🔍</p></div>
+<div id=k class="tr a" style=right:0;top:36;display:flex;flex-direction:column><div style="margin:auto auto"><p class="in p br pt" onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d.onkeyup({key:'W'})">🡹</p></div><p class=in><span class="in p br pt" onMouseOver=mIn(this,0) onMouseOut=mOu(this) onclick="d.onkeyup({key:'A'})">🡸</span> <span onMouseOver=mIn(this,0) onMouseOut=mOu(this)  class="in p br pt" onclick="d.onkeyup({key:'S'})">🡻</span> <span onMouseOver=mIn(this,0) onMouseOut=mOu(this) class="in p br pt" onclick="d.onkeyup({key:'D'})">🡺</span></p><p class=in>📜🔍</p></div>
 <div id=z>
 </div>
 </div>
@@ -33,13 +34,12 @@ input{position:relative;left:55}
 </div>
 <div id=o />
 <script>
-// Smart Avatars
-let nft=window.cardano.nft
-let go=nft.getFileObject,children=[],B='getElementById',gA='getAttribute',cE='createElement',d=document,sA='setAttribute',AC='append',PC='addChild',I=(ii)=>{let CC=d[cE]('canvas');d[B]('o')[AC](CC);CC[sA]('id',ii)},tcan=d[B]("t"),eT=d[B]("l"),tS,JS=createjs,tw=JS.Tween.get;V=0,zG=780,zD=false,gS=(s,i)=>new JS.Sprite(s,i),gP=(p)=>new JS.SpriteSheet(p),tcan[sA]('width',eT.getBoundingClientRect().width),tcan[sA]('height',eT.getBoundingClientRect().height),ret={files:{},tokens:[],images:[]},AEL='addEventListener',dS=1,SS=1+Math.pow(dS,2),D={step:1},zX=((parseInt(tcan[gA]('width'))-64*Math.pow(dS,2))/2),zY=((parseInt(tcan[gA]('height'))-64*Math.pow(dS,2))/2),eA=1,wA=dA=nA=0,R='E',O=new JS.Container(),oC=new JS.Container(),S={S:{},N:{},W:{},E:{}},e=(s,a)=>{for(let c in s[a]){O.removeChild(s[a][c]);}s[a]={};},mIn=(t)=>{t.style.outline='1px solid black';t.style.backgroundColor='#ffffffb3';t.style.boxShadow='2px 1px #00000080'},mOu=(t)=>{t.style.boxShadow='';t.style.outline='none';t.style.backgroundColor=''},SN=new SimplexNoise(),BT=['body','head','bangs','pants','shirt','jacket','trim','gloves','shoes']
+let nft=window.cardano?.nft
+let go=nft.getFileObject,children=[],H='height',Y='width',B='getElementById',gA='getAttribute',cE='createElement',d=document,sA='setAttribute',AC='append',PC='addChild',IP=parseInt,I=(ii)=>{let CC=d[cE]('canvas');d[B]('o')[AC](CC);CC[sA]('id',ii)},tcan=d[B]("t"),eT=d[B]("l"),tS,JS=createjs,tw=JS.Tween.get;V=0,zG=780,zD=false,gS=(s,i)=>new JS.Sprite(s,i),gP=(p)=>new JS.SpriteSheet(p),tcan[sA](Y,eT.getBoundingClientRect()[Y]),tcan[sA](H,eT.getBoundingClientRect()[H]),ret={files:{},tokens:[],images:[]},AEL='addEventListener',dS=1,SS=1+Math.pow(dS,2),D={step:1},zX=((IP(tcan[gA](Y))-64*Math.pow(dS,2))/2),zY=((IP(tcan[gA](H))-64*Math.pow(dS,2))/2),eA=1,wA=dA=nA=0,R='E',O=new JS.Container(),oC=new JS.Container(),S={S:{},N:{},W:{},E:{}},e=(s,a)=>{for(let c in s[a]){O.removeChild(s[a][c]);}s[a]={};},mIn=(t)=>{t.style.outline='1px solid black';t.style.backgroundColor='#ffffffb3';t.style.boxShadow='2px 1px #00000080'},mOu=(t)=>{t.style.boxShadow='';t.style.outline='none';t.style.backgroundColor=''},SN=new SimplexNoise(),BT=['body','head','bangs','pants','shirt','jacket','trim','gloves','shoes'],Su='substring',iH='innerHTML',U='drawRect',T='beginBitmapFill',q='checked',o='graphics'
 let P=(b)=>{let CC=d[cE]('p');d[B]('z')[AC](CC,d.createTextNode(b+': '),d[cE]('br'));CC[sA]('id',b)}
 for(let c of BT)P(c)
-I('c');I('s');I('d');J=d[B]('c'),Sc=d[B]('s'),Dc=d[B]('d'),MM=Math.max,pi=Math.PI,RA=Math.random
-function star(ctx,cx,cy,sK,oR,iR){let rT=pi/2*3,x=cx,y=cy,sP=pi/sK;ctx.beginPath();ctx.moveTo(cx,cy-oR);for(i=0;i<sK;i++){x=cx+Math.cos(rT)*oR;y=cy+Math.sin(rT)*oR;ctx.lineTo(x,y);rT+=sP;x=cx+Math.cos(rT)*iR;y=cy+Math.sin(rT)*iR;ctx.lineTo(x,y);rT+=sP}ctx.lineTo(cx,cy-oR);ctx.closePath();ctx.stroke();ctx.fill()}
+I('c');I('s');I('d');I('e');I('w');J=d[B]('c'),Sc=d[B]('s'),Dc=d[B]('d'),Ec=d[B]('e'),Wc=d[B]('w'),MM=Math.max,pi=Math.PI,RA=Math.random
+function star(w,cx,cy,sK,oR,iR,FC,SC){let rT=pi/2*3,x=cx,y=cy,sP=pi/sK;w.fillStyle=FC;w.strokeStyle=SC;w.beginPath();w.moveTo(cx,cy-oR);for(i=0;i<sK;i++){x=cx+Math.cos(rT)*oR;y=cy+Math.sin(rT)*oR;w.lineTo(x,y);rT+=sP;x=cx+Math.cos(rT)*iR;y=cy+Math.sin(rT)*iR;w.lineTo(x,y);rT+=sP}w.lineTo(cx,cy-oR);w.closePath();w.stroke();w.fill()}
 let uS=async (L=null)=>{ 
 let F=ret.files
 if (S.S)e(S,'S')
@@ -49,10 +49,10 @@ if (S.E)e(S,'E')
 for(let c of BT){ 
 let u=d[cE]('input'),y=d[cE]('input'),spa=d[cE]('span'),checked
 try{ 
-checked=d[B]('hI'+c)[gA]('checked')=="1"
+checked=d[B]('hI'+c)[gA](q)=="1"
 }catch(e){}
-d[B](c).innerHTML=''
-spa.innerHTML='None'
+d[B](c)[iH]=''
+spa[iH]='None'
 u[sA]('id','hI'+c)
 y[sA]('name',c)
 u[sA]('name',c)
@@ -65,7 +65,7 @@ spa[AEL]('click',()=>{y.click()})
 try{d[B]('sP'+c)[AEL]('click',()=>{u.click()})}catch(e){}
 u[AEL]('change',sB(c))
 y[sA]('id','dI'+c)
-if(checked)u[sA]('checked',1);else y[sA]('checked',1)
+if(checked)u[sA](q,1);else y[sA](q,1)
 d[B](c)[AC](u,spa,y)
 if(!F[c])continue
 let t=gP({animations:F[c].animations,frames:F[c].frames,images:[F[c].src]}),W='walking-',aN=gS(t,W+"north"),aS=gS(t,W+"south"),aW=gS(t,W+"west"),aE=gS(t,W+"east")
@@ -83,8 +83,8 @@ O[PC](aS,aN,aW,aE)
 if(L){S[R][L].scale=2;S[R][L].alpha=2;tw(S[R][L]).to({scale:1,alpha:1},1000)}
 }
 let sB=(t)=>{
-return function (e){ 
-if((e.target.checked&&e.target.id.substring(0,1)=='d')||(!e.target.checked&&e.target.id.substring(0,1)=='h')){
+return function(e){ 
+if((e.target.checked&&e.target.id[Su](0,1)=='d')||(!e.target.checked&&e.target.id[Su](0,1)=='h')){
 for(let c in S){ 
 S[c][t].scale=1
 tw(S[c][t]).to({scale:3,alpha:0},1000)[AEL]("change",(e)=>{if (e.target.target.scale>=3)S[c][t].visible=false;})
@@ -111,13 +111,17 @@ if(Tg<0){zD=!zD;Tg=0}
 if(Tg>zG){Tg=zG-1;zD=!zD}
 let Z=1+(((((Tg)%zG)/zG))*4)
 E.V=V
-tw(G).to({y:(h/2)+(Z*10),scaleY:((S.height/2)/J.height)*(1/Z)},400)
+tw(G).to({y:(h/2)+(Z*10),scaleY:((S[H]/2)/J[H])*(1/Z)},400)
 tw(oC).to({y:-((16*(Z-1)+Math.pow((dS-1)*3,3)-Math.pow(Z-1,3)))},400)
-tw(E).to({V:Tg,x:-(((S.width+64)*(Z-1))/2),y:-(((S.height+64)*(Z-1))/2),scale:Z},400)[AEL]("change",(t)=>{V=t.target.target.V})
+tw(E).to({V:Tg,x:-(((S[Y]+64)*(Z-1))/2),y:-(((S[H]+64)*(Z-1))/2),scale:Z},400)[AEL]("change",(t)=>{V=t.target.target.V})
 })
 d.onkeyup=(e)=>{
 let tdir=R,tS
-switch(e.key.toUpperCase()) { 
+switch(e.key.toUpperCase()) {
+case 'E':
+    F.alpha=1;
+    tw(F).to({alpha:0},200);
+break
 case 'A':
 R='W'
 tS=D.step-2
@@ -130,7 +134,7 @@ case 'S':
 R='S'
 dS+=0.25
 tw(D).to({step:0},1000)
-let tE=tw(O).to({scale:1+Math.pow(dS,2),x:((parseInt(tcan[gA]('width'))-64*Math.pow(dS,2))/2)},700).call(()=>{
+let tE=tw(O).to({scale:1+Math.pow(dS,2),x:((IP(tcan[gA](Y))-64*Math.pow(dS,2))/2)},700).call(()=>{
 for(let c in S.S)S.S[c].paused=true
 })
 tE[AEL]("change",(e)=>{SS=e.target.target.scaleX;zX=e.target.target.x})
@@ -150,7 +154,7 @@ R='N'
 dS-=0.25
 if(dS<0)dS=0
 tw(D).to({step:0},1000)
-let wE=tw(O).to({scale:1+Math.pow(dS,2),x:((parseInt(tcan[gA]('width'))-64*Math.pow(dS,2))/2)},700).call(()=>{
+let wE=tw(O).to({scale:1+Math.pow(dS,2),x:((IP(tcan[gA](Y))-64*Math.pow(dS,2))/2)},700).call(()=>{
 for(let c in S.S)S.N[c].paused=true
 })
 wE[AEL]("change",(e)=>{SS=e.target.target.scaleX;zX=e.target.target.x})
@@ -165,23 +169,23 @@ switch(tdir){
 case 'E':eA=0;Fo(S,'E');break;case 'W':wA=0;Fo(S,'W');break;case 'N':nA=0;Fo(S,'N');break;case 'S':dA=0;Fo(S,'S');break;default:return
 }
 }
-tcan.onclick=()=>{d[B]("focusTarget").focus();d[B]("focusTarget").blur()}
+tcan.onclick=()=>{d[B]("fT").focus();d[B]("fT").blur()}
 let E=new JS.Stage(tcan)
-let dN=(unit)=>{return decodeURIComponent(unit.substring(56).replace(/[0-9a-f]{2}/g,'%$&'))}
+let dN=(unit)=>{return decodeURIComponent(unit[Su](56).replace(/[0-9a-f]{2}/g,'%$&'))}
 (()=>{ 
 let p='420acf8d7151fb73a556975cad1a60bf13e91d417be084fe87ef100df09f'
 let HL=(t)=>{ 
-return function (i) { 
+return function(i){ 
 ret.files[t]=i
 uS(t)
 let spb=d[cE]('span')
 try{ 
 spb.id='sP'+t
-spb.innerHTML=dN(i.unit)
-spb[sA]('title','Policy:'+i.unit.substring(0,56)+"\nToken:"+i.unit.substring(56))
+spb[iH]=dN(i.unit)
+spb[sA]('title','Policy:'+i.unit[Su](0,56)+"\nToken:"+i.unit[Su](56))
 } catch (e){}
-d[B]('hI'+t)[sA]('checked',1)
-d[B]('dI'+t)?.removeAttribute('checked')
+d[B]('hI'+t)[sA](q,1)
+d[B]('dI'+t)?.removeAttribute(q)
 d[B](t).after(spb)
 }
 }
@@ -199,46 +203,93 @@ go(w,p+'a7a4e29982efb88f626c7565').then(HL('gloves'))
 uS()
 d[B]("l").focus()
 let wS,hS
-J[sA]('width',256)
-J[sA]('height',256)
-Sc[sA]('width',wS=tcan[gA]('width'))
-Sc[sA]('height',hS=tcan[gA]('height')/2)
-Dc[sA]('width',wS)
-Dc[sA]('height',hS)
+J[sA](Y,256)
+J[sA](H,256)
+Sc[sA](Y,wS=tcan[gA](Y))
+Sc[sA](H,hS=tcan[gA](H)/2)
+Dc[sA](Y,wS)
+Dc[sA](H,hS)
+Wc[sA](Y,wS)
+Wc[sA](H,hS)
+Ec[sA](Y,wS)
+Ec[sA](H,hS)
 let gX='getContext',K='2d'
-let ctx=J[gX](K),stx=Sc[gX](K),dtx=Dc[gX](K),CW=J.width,CH=J.height,imageData=ctx.getImageData(0,0,CW,CH),data=imageData.data,t=tI=0
-stx.fillStyle="blue"
-stx.strokeStyle='red'
+let ctx=J[gX](K),stx=Sc[gX](K),dtx=Dc[gX](K),etx=Ec[gX](K),wtx=Wc[gX](K),CW=J[Y],CH=J[H],imageData=ctx.getImageData(0,0,CW,CH),data=imageData.data,t=tI=0
 dtx.lineJoin=stx.lineJoin="round"
-stx.lineWidth=dtx.lineWidth=10
-let blob=(x,y,gR,gB)=>{
-let Ra=MM(gR,gB),g=dtx.createRadialGradient(x,y,gR,x,y,gB)
-g.addColorStop(0,'transparent')
-g.addColorStop(1,'red')
-dtx.fillStyle=g
-dtx.beginPath()
-dtx.arc(x,y,Ra,0,2*pi)
-dtx.fill()
+stx.lineWidth=dtx.lineWidth=2
+let blob=(d,x,y,gR,gB,cR,cB)=>{
+    let Ra=MM(gR,gB),g=d.createRadialGradient(x,y,gR,x,y,gB)
+    g.addColorStop(0,cR)
+    g.addColorStop(1,cB)
+    d.fillStyle=g
+    d.filter="hue-rotate("+(Math.round(RA()*90)-45)+"deg)";
+    d.beginPath()
+    d.arc(x,y,Ra,0,2*pi)
+    d.fill()
+}
+let starBlob=(d,x,y,gR,gB,cR,cB,p,lR,bR,FC,SC) => { 
+    star(d,x,y,p,lR,bR,FC,SC);
+    blob(d,x,y,gR,gB,cR,cB);
+    let m=1
+    if(lR>30){
+        m=2
+    star(wtx,x,y,p,lR*m,bR*m,FC,SC);
+    blob(wtx,x,y,gR*0.8,gB*0.8,cR,cB);
+    }
+
+}
+let wL=(Ra)=>(wS-2*Ra),mH=(Ra)=>(hS-2*Ra)
+for(let j=0;j<200;j++){
+    let bR=44-((1-Math.pow(1-RA(),9))*40),lR=bR*(RA()*0.3),Ra=MM(bR*2,lR)
+    starBlob(stx,
+    RA()*wL(Ra)+Ra,RA()*mH(Ra)+Ra,
+    bR*0.7, bR*0.2*RA(),
+    '#00000000',
+    '#ccffffaa',
+    4,bR,lR,'#00ffff99','#6655ff55')
 }
 for(let j=0;j<200;j++){
-let bR=100,lR=30,Ra=MM(bR,lR)
-star(stx,RA()*(wS-2*Ra)+Ra,RA()*(hS-2*Ra)+Ra,5,lR,bR)
+    let bR=(RA())*4+1,lR=bR*0.1,Ra=MM(bR,lR)
+    blob(dtx,RA()*wL(Ra)+Ra,RA()*mH(Ra)+Ra,bR,lR,"#00000000",'#00aaaa')
 }
-for(let j=0;j<20;j++){
-let bR=100,lR=50,Ra=MM(bR,lR)
-blob(RA()*(wS-2*Ra)+Ra,RA()*(hS-2*Ra)+Ra,bR,lR)
+for(let j=0;j<200;j++){
+    let bR=(RA())*4,lR=bR*0.1,Ra=MM(bR,lR)
+    blob(etx,RA()*wL(Ra)+Ra,RA()*mH(Ra)+Ra,bR,lR,"#00000000",'#00aaaa')
+    bA=bR*20;
+    lA=lR*20;
+    Ra=MM(bA,lA)
+    blob(etx,RA()*wL(Ra)+Ra,RA()*mH(Ra)+Ra,bR*20,lR*20,"#00000000",'#ff000044')
 }
-w=E.canvas.width
-h=E.canvas.height
-let nS=()=>{return new JS.Shape()},nH=(k,a)=>{SH=nS();SH.graphics.beginBitmapFill(k).drawRect(0,0,wS*2,hS);SH.alpha=a;SH.tileW=wS;return SH}
-Q=nH(Dc,0.2)
-N=nH(Sc,0.9)
-N.x=wS/2
+w=E.canvas[Y]
+h=E.canvas[H]
+let nS=()=>{return new JS.Shape()},nH=(k,a)=>{SH=nS();SH[o][T](k)[U](0,0,wS*2,hS);SH.alpha=a;SH.tileW=wS;return SH},Q=nH(Dc,1),N=nH(Sc,0.7),M=nH(Ec,1),F=nH(Wc,0)
+let box=nS();
+
+
+box.width=wS;
+box.height=hS;
+box.graphics.beginLinearGradientFill(["#ffffffff", "#00000000"], [1, 0], 0, 0, wS/2, 0)
+
+  box.graphics.drawRect(0, 0, wS/2, hS);
+  box.graphics.beginLinearGradientFill(["#ffffffff", "#00000000"], [1, 0], wS, 0, wS/2, 0)
+  box.graphics.drawRect(wS/2, 0, wS, hS);
+  box.cache(0, 0, wS, hS);
+F.x=N.x=wS/2
+//F.compositeOperation="lighter"
+if (!F.filters) { 
+    F.filters=[];
+}
+F.filters.push(new JS.AlphaMapFilter(box.cacheCanvas));
+F.cache(0,0,wS*2,hS);
+//N.compositeOperation="lighter"
+N.cache(0,0,wS*2,hS);
+M.cache(0,0,wS*2,hS);
+//F.cache(0,0,wS+2+hS);
 sky=nS()
-sky.graphics.beginLinearGradientFill(["#002424","#000"],[0,1],0,0,0,h/2).drawRect(0,0,w,h/2)
+sky[o].beginLinearGradientFill(["#002727","#000"],[0,1],0,0,0,h/2)[U](0,0,w,h/2)
 sky.cache(0,0,w,h)
 G=nS()
-G.graphics.beginBitmapFill(J).drawRect(0,0,w+CW*2,CH)
+G[o][T](J)[U](0,0,w+CW*2,CH)
 G.tileW=CW
 G.y=h/2
 G.x=0-CW*2
@@ -248,7 +299,7 @@ O.x=zX
 O.y=zY
 O.scale=SS
 oC[PC](O)
-E[PC](sky,Q,G,oC,N)
+E[PC](sky,Q,M,N,F,G,oC)
 JS.Ticker.timingMode=JS.Ticker.RAF
 JS.Ticker[AEL]("tick",E)
 JS.Ticker[AEL]("tick",drawPlasma)
@@ -265,14 +316,16 @@ data[s+3]=255*(y/(CH/2))
 }
 }
 G.x=(0-CW)+(G.x-D.step)%(G.tileW)
-Q.x=((0-Q.tileW)+Q.x-D.step/2)%wS
-N.x=((0-N.tileW)+N.x-D.step)%wS
+Q.x=((0-Q.tileW)+Q.x-D.step)%wS
+N.x=((0-N.tileW)+N.x-D.step/2)%(wS)
+F.x=((0-F.tileW)+F.x-D.step/2)%(wS)
+M.x=((0-M.tileW)+M.x-D.step/3)%(wS)
 t+=D.step
 tI++
 ctx.putImageData(imageData,0,0)
-G.graphics.beginFill('black').drawRect(0,0,w+CW*2,CH)
-G.graphics.clear()
-G.graphics.beginBitmapFill(J).drawRect(0,0,w+CW*2,CH)
+G[o].beginFill('black')[U](0,0,w+CW*2,CH)
+G[o].clear()
+G[o][T](J)[U](0,0,w+CW*2,CH)
 G.updateCache()
 }
 </script>
