@@ -14,7 +14,7 @@ h1{white-space:nowrap;margin:0 30 10 30;font-size:13pt}
 .y{left:-24}
 .o{left:85}
 input{position:relative;left:55}
-#o{display:block}
+#o{display:none}
 #z>span{left:166}
 .np{pointer-events:none}
 #z{text-transform:capitalize}
@@ -109,7 +109,8 @@ let Tg,S=E.canvas
 if(zD)Tg=V+(e.deltaY/4);else Tg=V-(e.deltaY/4)
 if(Tg<0){zD=!zD;Tg=0}
 if(Tg>zG){Tg=zG-1;zD=!zD}
-let Z=1+(((((Tg)%zG)/zG))*4)
+let Z=1+(((((Tg)%zG)/zG))*4),toHandler=()=>{F.alpha=1;tw(F).to({alpha:0},RA()*1000);setTimeout(toHandler,RA()*30000)}
+setTimeout(toHandler,RA()*10000)
 E.V=V
 tw(G).to({y:(h/2)+(Z*10),scaleY:((S[H]/2)/J[H])*(1/Z)},400)
 tw(oC).to({y:-((16*(Z-1)+Math.pow((dS-1)*3,3)-Math.pow(Z-1,3)))},400)
@@ -119,8 +120,8 @@ d.onkeyup=(e)=>{
 let tdir=R,tS
 switch(e.key.toUpperCase()) {
 case 'E':
-    F.alpha=1;
-    tw(F).to({alpha:0},200);
+    F.alpha=1
+    tw(F).to({alpha:0},1000)
 break
 case 'A':
 R='W'
@@ -227,16 +228,15 @@ let blob=(d,x,y,gR,gB,cR,cB)=>{
     d.arc(x,y,Ra,0,2*pi)
     d.fill()
 }
-let starBlob=(d,x,y,gR,gB,cR,cB,p,lR,bR,FC,SC) => { 
-    star(d,x,y,p,lR,bR,FC,SC);
-    blob(d,x,y,gR,gB,cR,cB);
+let starBlob=(d,x,y,gR,gB,cR,cB,p,lR,bR,FC,SC)=>{ 
+    star(d,x,y,p,lR,bR,FC,SC)
+    blob(d,x,y,gR,gB,cR,cB)
     let m=1
-    if(lR>30){
+    if(lR>35){
         m=2
-    star(wtx,x,y,p,lR*m,bR*m,FC,SC);
-    blob(wtx,x,y,gR*0.8,gB*0.8,cR,cB);
+    star(wtx,x,y,p,lR*m,bR*m,FC,SC)
+    blob(wtx,x,y,gR*0.8,gB*0.8,cR,cB)
     }
-
 }
 let wL=(Ra)=>(wS-2*Ra),mH=(Ra)=>(hS-2*Ra)
 for(let j=0;j<200;j++){
@@ -263,28 +263,11 @@ for(let j=0;j<200;j++){
 w=E.canvas[Y]
 h=E.canvas[H]
 let nS=()=>{return new JS.Shape()},nH=(k,a)=>{SH=nS();SH[o][T](k)[U](0,0,wS*2,hS);SH.alpha=a;SH.tileW=wS;return SH},Q=nH(Dc,1),N=nH(Sc,0.7),M=nH(Ec,1),F=nH(Wc,0)
-let box=nS();
-
-
-box.width=wS;
-box.height=hS;
-box.graphics.beginLinearGradientFill(["#ffffffff", "#00000000"], [1, 0], 0, 0, wS/2, 0)
-
-  box.graphics.drawRect(0, 0, wS/2, hS);
-  box.graphics.beginLinearGradientFill(["#ffffffff", "#00000000"], [1, 0], wS, 0, wS/2, 0)
-  box.graphics.drawRect(wS/2, 0, wS, hS);
-  box.cache(0, 0, wS, hS);
-F.x=N.x=wS/2
-//F.compositeOperation="lighter"
-if (!F.filters) { 
-    F.filters=[];
-}
-F.filters.push(new JS.AlphaMapFilter(box.cacheCanvas));
+F.compositeOperation="lighter"
 F.cache(0,0,wS*2,hS);
-//N.compositeOperation="lighter"
+Q.cache(0,0,wS*2,hS);
 N.cache(0,0,wS*2,hS);
 M.cache(0,0,wS*2,hS);
-//F.cache(0,0,wS+2+hS);
 sky=nS()
 sky[o].beginLinearGradientFill(["#002727","#000"],[0,1],0,0,0,h/2)[U](0,0,w,h/2)
 sky.cache(0,0,w,h)
