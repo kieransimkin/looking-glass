@@ -111,7 +111,10 @@ const Header = (props) => {
 
     const buttonsize='medium';
     const buttonclass='nomwbtn';
-        
+    const doOnWalletChange=(props)=>{
+        localStorage.setItem('cip54-wallet',JSON.stringify(props))
+        return onWalletChange(props);
+    }
     const connectWallet = useCallback((callback, failCallback) => { 
         if (!walletCtx || !walletCtx.api) { 
             setCallbackFn({fn: callback, fail: failCallback});
@@ -123,15 +126,45 @@ const Header = (props) => {
     });
     useEffect( () => { 
         if (!walletCtx) {  
-            onWalletChange({
-                'api': null, 
-                'wallet': null, 
-                'stakeAddrRaw':null,
-                'returnAddrRaw':null,
-                'connectWallet': connectWallet
-            });
+            let wallet = null
+            try { 
+                wallet=JSON.parse(localStorage.getItem('cip54-wallet'));
+            } catch (e) {} 
+            if (wallet && wallet?.wallet) { 
+                window.cardano[wallet.wallet].isEnabled().then((enabled)=> { 
+                    if (enabled){
+                        window.cardano[wallet.wallet].enable().catch((error) => { 
+                            alert('Wallet connect error: '+error);
+                            return false;
+                        }).then((api) => { 
+                        doOnWalletChange({
+                            api:api,
+                            wallet:wallet.wallet,
+                            stakeAddrRaw:wallet.stakeAddrRaw,
+                            returnAddrRaw:wallet.returnAddrRaw,
+                            connectContent: connectWallet
+                        })
+                        setWalletAPI(api);
+                        setWallet(wallet.wallet);
+                        })
+                    } else { 
+                        doOnWalletChange({
+                            'api': null, 
+                            'wallet': null, 
+                            'stakeAddrRaw':null,
+                            'returnAddrRaw':null,
+                            'connectWallet': connectWallet
+                        });
+                    }
+                });
+            }
         }
-    });
+        let dark = localStorage.getItem('cip54-darkmode');
+            if (dark && dark=='light'||dark=='dark') { 
+                setDarkMode(dark);
+                onThemeChange(dark);
+            }
+    },[]);
 
     const className = (hide) ? classes.hidden : classes.root;
     
@@ -197,7 +230,7 @@ const Header = (props) => {
                     if (!api) return;
                     api.getRewardAddresses().then((addresses) => {
                         api.getChangeAddress().then((change) => {
-                            onWalletChange({
+                            doOnWalletChange({
                                 'api': api, 
                                 'wallet': value, 
                                 'stakeAddrRaw':addresses[0],
@@ -228,15 +261,19 @@ const Header = (props) => {
 
     const toggleDarkMode = (e) => { 
         const newMode = darkMode==='light'?'dark':'light';
+        localStorage.setItem('cip54-darkmode',newMode)
         setDarkMode(newMode);
         onThemeChange(newMode);
     }
 
     const handleLogout = () => { 
-        onWalletChange(null);
+        doOnWalletChange(null);
         setWalletAPI(null);
         setWallet(null);
         setAnchorEl(null);
+    }
+    const openNewDialog = () => { 
+
     }
 
     return (
@@ -248,7 +285,7 @@ const Header = (props) => {
              variant="persistent" anchor='right' open={!hide} className={className}>
                 {!walletApi &&
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <Button size={buttonsize} className={buttonclass} sx={{margin: 0, padding: 0}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
+                            <Button title="Connect Wallet" size={buttonsize} className={buttonclass} sx={{margin: 0, padding: 0}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
                             {connectContent}
                             </Button>
                         </div>
@@ -261,7 +298,6 @@ const Header = (props) => {
                             </IconButton>
                             <Menu
                                 id="simple-menu"
-                                
                                 classes={{
                                     paper: classes.menuPaper
                                 }}
@@ -280,16 +316,34 @@ const Header = (props) => {
                                 }}
                             >
                             <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
-                            <Link href="/help"><MenuItem>Help</MenuItem></Link>
+                            <NestedMenuItem direction="left" label="File..." parentMenuOpen={Boolean(anchorEl)}>
+                                <MenuItem onClick={openNewDialog}>New...</MenuItem>
+                                {(router.route.substring(0,5)=='/play') &&
+                                    <>
+                                    <MenuItem onClick={openNewDialog}>Save</MenuItem>
+                                    <MenuItem onClick={openNewDialog}>Save As...</MenuItem>
+                                    </>
+                                }
+                                <NestedMenuItem direction="left" label="Import..." parentMenuOpen={Boolean(anchorEl)}>
+                                    <MenuItem onClick={openNewDialog}>From blockchain...</MenuItem>
+                                    <MenuItem onClick={openNewDialog}>From ZIP...</MenuItem>
+                                </NestedMenuItem>
+                                {(router.route.substring(0,5)=='/play') &&
+                                    <NestedMenuItem direction="left" label="Export..." parentMenuOpen={Boolean(anchorEl)}>
+                                        <MenuItem onClick={openNewDialog}>To ZIP...</MenuItem>
+                                        <MenuItem onClick={openNewDialog}>To HTML...</MenuItem>
+                                    </NestedMenuItem>
+                                }
+                            </NestedMenuItem>                          
                             <Link href="/play"><MenuItem>Play</MenuItem></Link>
-                            <NestedMenuItem direction="left" label="Examples" parentMenuOpen={Boolean(anchorEl)}>
+                            <NestedMenuItem direction="left" label="Examples..." parentMenuOpen={Boolean(anchorEl)}>
                                 <Link href="/examples"><MenuItem>Contents</MenuItem></Link>
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
-                            </NestedMenuItem>                              
+                            </NestedMenuItem>                   
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'70px'}}>
                                 <ToggleButtonGroup
-                                    value={darkMode}
+                                    value='light'
                                     size="small"
                                     exclusive
                                     onChange={toggleDarkMode}
@@ -305,7 +359,7 @@ const Header = (props) => {
                                     </ToggleButtonGroup>
                                 </div>
                                 </MenuItem>
-                                
+                                <Link href="/help"><MenuItem>Help</MenuItem></Link>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
                         </div>

@@ -1,80 +1,4 @@
 <style>
-  h1 {
-    white-space: nowrap;
-    margin: 0 30 10 30;
-    font-size: 13pt;
-  }
-  .s {
-    text-align: center;
-  }
-  .cc {
-    caret-color: #00000000;
-    -webkit-user-select: none;
-    user-select: none;
-    overflow: hidden;
-  }
-  .pt,
-  #z span,
-  #z input {
-    cursor: pointer;
-  }
-  .p {
-    transition: all 1s, outline 0s;
-  }
-  .i {
-    padding: 5 10;
-  }
-  .a,
-  #z span,
-  #z > p {
-    position: absolute;
-  }
-  .br {
-    border-radius: 20px;
-  }
-  #fT {
-    position: absolute;
-    opacity: 0;
-  }
-  .in {
-    margin: 3 3;
-    padding: 2 2;
-    text-align: center;
-  }
-  #z > p > span {
-    left: 22;
-  }
-  #z span:hover,
-  #z input:hover {
-    text-shadow: -1px 1px #ffc8fa66, 1px -1px #191900e6;
-  }
-  .y {
-    left: -24;
-  }
-  .o {
-    left: 85;
-  }
-  input {
-    position: relative;
-    left: 55;
-  }
-  #o {
-    display: none;
-  }
-  #z > span {
-    left: 166;
-  }
-  .np {
-    pointer-events: none;
-  }
-  #z {
-    text-transform: capitalize;
-  }
-  #z > p {
-    display: inline;
-    left: 62;
-    margin: 0 0;
-  }
   i {
     display: block;
     font-style: normal;
@@ -207,16 +131,7 @@
     d[B]('z')[AC](CC, d.createTextNode(b + ': '), d[cE]('br'));
     CC[sA]('id', b);
   };
-  for (let c of d.getElementsByClassName('pt')) {
-    c[AEL]('mouseover', () => {
-      mIn(c);
-    });
-    c[AEL]('mouseout', () => mOu(c));
-  }
-  for (const l of d.querySelectorAll('[data-keyup]')) { 
-    
-    l[AEL]('click',()=>{console.log('got here');console.log(l.attributes['data-keyup'].value);console.log(l.attributes);KU({key:l.attributes['data-keyup'].value})})
-  }
+  
   for (let c of BT) P(c);
   I('c');
   I('s');
@@ -231,30 +146,7 @@
     (MM = Math.max),
     (pi = Math.PI),
     (RA = Math.random);
-  function star(w, cx, cy, sK, oR, iR, FC, SC) {
-    let rT = (pi / 2) * 3,
-      x = cx,
-      y = cy,
-      sP = pi / sK;
-    w.fillStyle = FC;
-    w.strokeStyle = SC;
-    w.beginPath();
-    w.moveTo(cx, cy - oR);
-    for (i = 0; i < sK; i++) {
-      x = cx + Math.cos(rT) * oR;
-      y = cy + Math.sin(rT) * oR;
-      w.lineTo(x, y);
-      rT += sP;
-      x = cx + Math.cos(rT) * iR;
-      y = cy + Math.sin(rT) * iR;
-      w.lineTo(x, y);
-      rT += sP;
-    }
-    w.lineTo(cx, cy - oR);
-    w.closePath();
-    w.stroke();
-    w.fill();
-  }
+
   let uS = async (L = null) => {
     let F = ret.files;
     if (S.S) e(S, 'S');
@@ -266,29 +158,7 @@
         y = d[cE]('input'),
         spa = d[cE]('span'),
         checked;
-      try {
-        checked = d[B]('hI' + c)[gA](q) == '1';
-      } catch (e) {}
-      d[B](c)[iH] = '';
-      spa[iH] = 'None';
-      u[sA]('id', 'hI' + c);
-      y[sA]('name', c);
-      u[sA]('name', c);
-      y[sA]('class', 'y');
-      u[sA]('class', 'o');
-      y[sA]('type', 'radio');
-      u[sA]('type', 'radio');
-      y[AEL]('change', sB(c));
-      spa[AEL]('click', () => {
-        y.click();
-      });
-      try {
-        d[B]('sP' + c)[AEL]('click', () => {
-          u.click();
-        });
-      } catch (e) {}
-      u[AEL]('change', sB(c));
-      y[sA]('id', 'dI' + c);
+     
       if (checked) u[sA](q, 1);
       else y[sA](q, 1);
       d[B](c)[AC](u, spa, y);
@@ -316,170 +186,7 @@
       tw(S[R][L]).to({ scale: 1, alpha: 1 }, C);
     }
   };
-  let sB = (t) => {
-    return function (e) {
-      if ((e.target.checked && e.target.id[Su](0, 1) == 'd') || (!e.target.checked && e.target.id[Su](0, 1) == 'h')) {
-        for (let c in S) {
-          S[c][t].scale = 1;
-          tw(S[c][t])
-            .to({ scale: 3, alpha: 0 }, C)
-            [AEL]('change', (e) => {
-              if (e.target.target.scale >= 3) S[c][t].visible = false;
-            });
-        }
-      } else {
-        for (let c in S) {
-          let X = S[c][t];
-          X.scale = 2;
-          X.visible = true;
-          let origY = X.y;
-          let origX = X.x;
-          X.y -= 64 * 2;
-          X.x -= 32;
-          tw(S[c][t]).to({ scale: 1, y: origY, x: origX, alpha: R == c ? 1 : 0 }, C);
-        }
-      }
-    };
-  };
-  let Fo = (s, a) => {
-    for (let c in s[a]) tw(s[a][c]).to({ alpha: 0 }, 100);
-  };
-  d[AEL]('wheel', (e) => {
-    let Tg,
-      S = E.canvas;
-    if (zD>0) Tg = V + e.deltaY / 4;
-    else if (zD<0) Tg = V - e.deltaY / 4;
-    else Tg=V;
-    console.log({zD,Tg,delta:e.deltaY,zU,zG})
-    if (parseInt(zD)===0 && ((e.deltaY > 0 && zU<0) || (e.deltaY < 0 && zU>0))) {
-        console.log('restarting');
-        zD=-zU;
-    }
-    console.log({zD,Tg,delta:e.deltaY,zU,zG})
-    if ((Tg < 0 && zD<0) || (Tg > zG && zD<0 && e.deltaY>0) || (Tg<0 && zD>0 && e.deltaY<0)) {
-        console.log('triggered stop')
-        zU=-zD;
-        if(Tg<0) Tg=0;
-        if (Tg>0) Tg=zG
-        zD = 0;
-        //Tg = 0;
-        return;
-    }
-    
-    if ((Tg > zG && zD<0 && e.deltaY<0) || (Tg<0 && zD<0 && e.deltaY<0) || (Tg>zG && zD>0 && e.deltaY>0)) {
-      console.log('triggered loop');
-    
-      zD = -zD;
-      return;
-    }
-    
-    let Z = 1 + ((Tg % zG) / zG)*4;
-    E.V = V;
-    tw(G).to({ y: h / 2 + Z * 10, scaleY: (S[H] / 2 / J[H]) * (1 / Z) }, 100);
-    tw(oC).to({ y: -(16 * (Z - 1) + Math.pow((dS - 1) * 3, 3) - Math.pow(Z - 1, 3)) }, 100);
-    tw(E)
-      .to({ V: Tg, x: -(((S[Y] + 64) * (Z - 1)) / 2), y: -(((S[H] + 64) * (Z - 1)) / 2), scale: Z }, 100)
-      [AEL]('change', (t) => {
-        V = t.target.target.V;
-      });
-  });
-  let tH = () => {
-    F.alpha = 0.7;
-    tw(F).to({ alpha: 0 }, RA() * C + 300);
-    setTimeout(tH, RA() * C * 40);
-  };
-  setTimeout(tH, RA() * C * 30);
-  const KU = d.onkeyup = (e) => {
-    let tE = (d) => {
-      let tER = tw(O)
-        .to({ scale: 1 + Math.pow(dS, 2), x: (IP(tcan[gA](Y)) - 64 * Math.pow(dS, 2)) / 2 }, 700)
-        .call(() => {
-          for (let c in S[d]) S[d][c].paused = true;
-        });
-      tER[AEL]('change', (e) => {
-        SS = e.target.target.scaleX;
-        zX = e.target.target.x;
-      });
-    };
-    let sF = (d) => {
-      for (let c in S[d]) tw(S[d][c]).to({ alpha: 1, framerate: Math.abs(tS) * 3 }, 100);
-    };
-    let sV = (d) => {
-      for (let c in S[d]) {
-        tw(S[d][c]).to({ alpha: 1 }, 100);
-        S[d][c].paused = false;
-      }
-    };
-    let sS = (s, t) => tw(D).to({ step: s }, t);
-    let tdir = R,
-      tS;
-    switch (e.key.toUpperCase()) {
-      case 'A':
-      case 'ARROWLEFT':
-        R = 'W';
-        tS = D.step - 2;
-        if (tS >= 0) tS = -2;
-        sS(tS, 250);
-        wA = 1;
-        sF(R);
-        break;
-      case 'S':
-      case 'ARROWDOWN':
-        R = 'S';
-        dS += 0.25;
-        sS(0, C);
-        tE(R);
-        dA = 1;
-        sV(R);
-        break;
-      case 'D':
-      case 'ARROWRIGHT':
-        R = 'E';
-        tS = D.step + 2;
-        if (tS <= 0) tS = 2;
-        sS(tS, 250);
-        eA = 1;
-        sF(R);
-        break;
-      case 'W':
-      case 'ARROWUP':
-        R = 'N';
-        dS -= 0.25;
-        if (dS < 0) dS = 0;
-        sS(0, C);
-        tE('N');
-        nA = 1;
-        sV(R);
-        break;
-      default:
-        return;
-    }
-    if (tdir == R) return;
-    switch (tdir) {
-      case 'E':
-        eA = 0;
-        Fo(S, 'E');
-        break;
-      case 'W':
-        wA = 0;
-        Fo(S, 'W');
-        break;
-      case 'N':
-        nA = 0;
-        Fo(S, 'N');
-        break;
-      case 'S':
-        dA = 0;
-        Fo(S, 'S');
-        break;
-      default:
-        return;
-    }
-  };
-  tcan.onclick = () => {
-    d[B]('fT').focus();
-    d[B]('fT').blur();
-  };
+
   let E = new JS.Stage(tcan);
   let dN = (unit) => {
     return decodeURIComponent(unit[Su](56).replace(/[0-9a-f]{2}/g, '%$&'));

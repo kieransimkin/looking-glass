@@ -6,7 +6,6 @@ export default function Play() {
   if (typeof localStorage != 'undefined' && localStorage.getItem('cip54-metadata')) { 
     playgroundTag = <Playground 
                       loadStored
-                      uses={JSON.parse(localStorage.getItem('cip54-features'))} 
                       metadata={JSON.parse(localStorage.getItem('cip54-metadata'))} 
                       programCode={localStorage.getItem('cip54-programCode')} 
                     />

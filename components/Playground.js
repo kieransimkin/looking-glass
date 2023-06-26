@@ -14,15 +14,14 @@ import 'rc-dock/dist/rc-dock-dark.css';
 import FeatureSelector from './FeatureSelector';
 import SimulationSelector from './SimulationSelector';
 import { postData, getData } from '../utils/Api'
-import { SmartNFTPortal } from 'smartnftportal';
+import { SmartNFTPortal, version as smartPortalVersion} from 'smartnftportal';
 import MetadataEditor from './MetadataEditor';
 import DividerBox from './DividerBox'
-import * as cheerio from 'cheerio';
 let programCodeTimer = null;
 import * as React from "react";
 import { getFeatureTree, unicodeToBase64 } from '../utils/Helpers';
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
-import { minify } from 'html-minifier-terser';
+import { minify as htmlMinify } from 'html-minifier-terser'
 
 
 const useStyles = makeStyles(theme => { 
@@ -116,18 +115,55 @@ const Playground = function (props) {
   const [metadataJSON, setMetadataJSON] = useState({});
   const [portalLoading, setPortalLoading] = useState(false);
   const [random, setRandom] = useState(Math.random());
-
-  const updateMetadataJSON = (m, ft, s, programCode) => { 
-    const json = { };
-    const $ = cheerio.load(programCode);
-    
-
-    //console.log(min);
-    console.log('XXXXXX');
-    $('script').each(function(i, elm) {
-      
+  const mini=async (programCode) => { 
+    const retHTML = await htmlMinify(programCode,{
+      removeAttributeQuotes:true,
+      collapseBooleanAttributes:true,
+       collapseInlineTagWhitespace:true,
+       collapseWhitespace:true,
+       minifyCSS:{level: {2: {all:true}}},
+       minifyJS:{
+        compress:{
+          passes: 2, 
+          toplevel:true, 
+          booleans_as_integers:false, 
+          hoist_funs: true, 
+          hoist_vars:true,
+          hoist_props: true,
+          keep_fargs: false,
+          unsafe_methods:true,
+          unsafe_arrows:true,
+          unsafe_comps:true,
+          unsafe_Function:true,
+          unsafe_proto:true,
+          unsafe:true,
+          dead_code:true
+        },
+        mangle:{
+          toplevel:true
+        }},
+       noNewlinesBeforeTagClose:true,
+       removeComments:true,
+       removeScriptTypeAttributes:true,
+       removeStyleLinkTypeAttributes:true,
+       removeEmptyAttributes:false,
+       removeEmptyElements:false,
+       removeOptionalTags:false,
+       removeTagWhitespace:false,
+       sortAttributes:true,
+       sortClassName:true,
+       useShortDoctype:true,
+       continueOnParseError:true,
+       decodeEntities:true
     });
-    const pc = programCode; // Todo - minify here
+    const pct = +(Math.round((retHTML.length/programCode.length)*100).toFixed(2));
+    console.log("Program Code minified: "+programCode.length+" -> "+retHTML.length+" bytes ("+pct+"%)");
+    return retHTML;
+  }
+  const updateMetadataJSON = async (m, ft, s, programCode) => { 
+    const json = { };
+    
+    const pc = await mini(programCode);
     const splitToLineLength = (string) => { 
       var l = string.length, lc = 0, chunks = [], c = 0, chunkSize = 64;
       for (; lc < l; c++) {
@@ -166,6 +202,9 @@ const Playground = function (props) {
       }
     }
     json.uses = ft;
+    json.uses.portal=smartPortalVersion;
+    json.uses.libcip54=undefined
+    //json.uses.libcip54=getVersion();
     if (files.length<1) { 
          // If we didn't add any files, we still need to add our program code:
       
@@ -206,14 +245,17 @@ const Playground = function (props) {
       ft.tokens = ft.tokens[0];
     }
     setFeatureTree(ft);
-    const mdJSON = updateMetadataJSON(metadata, ft, simulation, programCode);
-    updateSmartImports(mdJSON, simulation);
+    updateMetadataJSON(metadata, ft, simulation, programCode).then((mdJSON)=>{
+      updateSmartImports(mdJSON, simulation);
+    })
+    
   }
   const simulationChange = (s) => { 
     if (!s) return;
     setSimulation(s);
-    const mdJSON = updateMetadataJSON(metadata, featureTree, s, programCode);
-    updateSmartImports(mdJSON, s);
+    updateMetadataJSON(metadata, featureTree, s, programCode).then((mdJSON)=>{
+      updateSmartImports(mdJSON, s);
+    })
   }
   
   const programCodeChange = (e) => { 
@@ -228,8 +270,9 @@ const Playground = function (props) {
   }
   const metadataChange = (e) => {    
     setMetadata(e);
-    const mdJSON = updateMetadataJSON(e, featureTree, simulation, programCode);
-    updateSmartImports(mdJSON, simulation);
+    updateMetadataJSON(e, featureTree, simulation, programCode).then((mdJSON)=>{
+      updateSmartImports(mdJSON, simulation);
+    })
   }
   const refreshProgram = (e) => { 
     setRandom(Math.random())
@@ -243,7 +286,6 @@ const Playground = function (props) {
   },[]);
 
   const progressValue = ((JSON.stringify(metadataJSON, null, "\t").length)/16000)*100;
-  
   return (
     <div>
       <Head>
@@ -256,21 +298,25 @@ const Playground = function (props) {
         <DividerBox mode='vertical' style={{width: '20%', minWidth: 350}}>
         
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}} >
-            <FeatureSelector defaultUses={defaultUses} onChange={featureChange} loadStored={props.loadStored} />
+            <div style={{display: 'flex', flexDirection:'column'}}>
+              <Typography variant='h3'>NFT Title</Typography>
+              <FeatureSelector defaultUses={defaultUses} onChange={featureChange} loadStored={props.loadStored} />
+            </div>
           </div>
-          <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', flexDirection:'column', justifyContent:'flex-start', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}}> 
+          <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', flexDirection:'column', alignItems:'stretch', justifyContent:'flex-start', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}}> 
             <div style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
             <Typography style={{}} variant='subtitle2'>NFT Metadata</Typography>
             <Typography style={{}} variant='caption'>{JSON.stringify(metadataJSON).length} bytes</Typography>
             </div>
-            <div><LinearProgress variant='determinate' value={progressValue} /></div>
+            <div><LinearProgress variant='determinate' value={progressValue} color={progressValue>90?'secondary':'primary'} /></div>
             <MetadataEditor defaultMetadata={defaultMetadata} onChange={metadataChange} loadStored={props.loadStored} />
             <CodeMirror
+              style={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}
               editable={false}
               value={JSON.stringify(metadataJSON, null, "\t")}
               height="inherit"
               theme={theme.palette.type}
-              extensions={[EditorView.lineWrapping, javascript({ json: true})]}          
+              extensions={[javascript({ json: true})]}          
             />
           </div>
         </DividerBox>
@@ -281,11 +327,12 @@ const Playground = function (props) {
               value={programCode}
               onChange={programCodeChange}
               height="inherit"
+            
               theme={theme.palette.type}
-              extensions={[javascript({ jsx: true }),html(), css()]}
+              extensions={[EditorView.lineWrapping,html(),javascript({ jsx: true }),css()]}
             />
           </div>
-          <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '350px', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'stretch', padding: 5, borderRadius: '5px', backgroundColor: theme.palette.background.default}}>
+          <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '550px', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'stretch', padding: 5, borderRadius: '5px', backgroundColor: theme.palette.background.default}}>
             <SimulationSelector defaultAddr={defaultAddr} onChange={simulationChange} />
             <SmartNFTPortal loadingContent=<CircularProgress style={{marginTop: '2em', marginLeft: 'auto', marginRight: 'auto'}} /> random={random} loading={portalLoading} style={{flexGrow: 1, overflowY: 'hidden', overflowX: 'hidden', border:'1px solid black'}} smartImports={smartImports} metadata={metadataJSON} />
           </div>

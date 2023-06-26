@@ -52,10 +52,16 @@
     "slug":"easeljs",
     "examples":[
       {
+        "title":"Zombie Alien",
+        "slug":"zombie-alien",
+        "description":"",
+        "thumbnail":""
+      },
+      {
         "title":"Smart Avatars",
         "slug":"smart-avatars",
         "description":"Work in progress",
-        "thumbnail":""
+        "thumbnail":"smart-avatars.png"
       }
     ]
   }
