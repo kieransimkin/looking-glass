@@ -35,7 +35,7 @@ const TIMEOUT = 400;
 function CIP54Playground({ Component, pageProps }) {
   
   const router = useRouter();
-  console.log("%c Ignore cardano serialization lib errors, it likes to throw them. ","background: lightgreen; color: black;")
+  //console.log("%c Ignore cardano serialization lib errors, it likes to throw them. ","background: lightgreen; color: black;")
   return (
     <>
       <GoogleAnalytics trackPageViews />
