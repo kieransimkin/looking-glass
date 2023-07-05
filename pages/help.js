@@ -116,7 +116,7 @@ export default function Help() {
                 What is a Smart NFT?
               </Typography><br />
               <Typography variant="body1">
-                The CIP54 standard allows a HTML+Javascript NFT to receive information about the current state of the blockchain, as well as import files and libraries.<br />
+                The CIP54 standard allows a HTML+Javascript NFT to receive information about the current state of the blockchain, as well as import files and libraries from the blockchain.<br />
                 &nbsp;<br />
                 This enables NFTs to respond to their environment in new and interesting ways, including reacting to oracle data, or being triggered by certain events. The standard also greatly increases the amount of data that can be made available to NFTs - image libraries, sounds, videos - an NFT can read files or metadata from any other token - this opens up the blockchain and will allow more expressiveness, art, and utility for many projects.
               </Typography><br />
@@ -212,7 +212,7 @@ export default function Help() {
           <br />&nbsp;<br />
           <div className={classes.row+' row'}>
             
-            <div className={classes.bigCol+' column'}>
+            <div>
               <ContentCard>
               <Typography variant="h2" color="textSecondary">
                 Further reading
@@ -223,6 +223,8 @@ export default function Help() {
                   
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/smartnftportal" target="_blank" rel="noreferrer"><Typography variant="body1">SmartNFTPortal</Typography></a></td><td>This is a react component which gives you everything you need to render a Smart NFT in the front end - this is the component used by the Playground, and by <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a></td></tr>
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/libcip54" target="_blank" rel="noreferrer"><Typography variant="body1">Libcip54</Typography></a></td><td>This library proves the backend queries needed to build the data for the SmartNFTPortal to render the NFT - the two work in tandem to render NFTs</td></tr>
+                  <tr><td valign="top"><a href="https://github.com/kieransimkin/SimpleCip54Viewer" target="_blank" rel="noreferrer"><Typography variant="body1">SimpleCip54Viewer</Typography></a></td><td>This is a very simple React site which does nothing but render a specific NFT inside a SmartNFTPortal instance.</td></tr>
+                  <tr><td valign="top"><a href="https://github.com/kieransimkin/SmartNFTThumbnailer" target="_blank" rel="noreferrer"><Typography variant="body1">SmartNFTThumbnailer</Typography></a></td><td>This is a library used for generating thumbnails of Smart NFTs, it can also generate short video clips of the NFT running.</td></tr>
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/cip54-playground" target="_blank" rel="noreferrer"><Typography variant="body1">Playground</Typography></a></td><td>This is the sourcecode for this site - if you have a feature you&apos;d like to contribute, feel free to submit a pull request. This also contains a reference implementation of the backend API which generates the data for the frontend to render.</td></tr>                  
                   <tr><td valign="top"><a href="https://cips.cardano.org/cips/cip54" target="_blank" rel="noreferrer"><Typography variant="body1">CIP54</Typography></a></td><td>The actual Cardano Improvement Proposal that I wrote a couple of years ago at the start of this project</td></tr>
                 </table>
@@ -234,10 +236,7 @@ export default function Help() {
              
               </ContentCard>
             </div> 
-            <div className={classes.smallCol+' column'}> 
-              <TwitterFeed />
-              
-            </div>
+   
           </div>
           <br />&nbsp;<br />
           </Container>

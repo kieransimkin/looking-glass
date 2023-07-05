@@ -300,9 +300,7 @@ const Playground = function (props) {
   const saveHtml = (data) => { 
     getData("/getHtmlTemplate").then((file)=>{
       if (file.status == 200) {
-        
         file.json().then(text => {
-          console.log(text.file);
           const newFile = text.file.
               replace('\'{"%%METADATA_TEMPLATE%%":""}\'',JSON.stringify(localStorage.getItem('cip54-wmetadataJSON'))).
               replace('\'{"%%SMARTIMPORT_TEMPLATE%%":""}\'',JSON.stringify(localStorage.getItem('cip54-wsmartImports')));
@@ -312,7 +310,6 @@ const Playground = function (props) {
       } else { 
         console.log('error');
       }
-      console.log(file);
     })
 
   }
@@ -328,9 +325,6 @@ const Playground = function (props) {
   },[]);
 
   const progressValue = ((JSON.stringify(metadataJSON, null, "\t").length)/16000)*100;
-  console.log(smartImports);
-  console.log(metadataJSON);
-
   return (
     <div>
       <Head>
@@ -344,7 +338,7 @@ const Playground = function (props) {
         
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}} >
             <div style={{display: 'flex', flexDirection:'column'}}>
-              <Typography variant='h3'>CIP54 features</Typography>
+              <Typography variant='h5'>CIP54 features</Typography>
               <FeatureSelector defaultUses={defaultUses} onChange={featureChange} loadStored={props.loadStored} />
             </div>
           </div>
