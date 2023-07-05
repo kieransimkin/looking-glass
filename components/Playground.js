@@ -227,9 +227,12 @@ const Playground = function (props) {
         setProgramCode(defaultProgramCode);
         localStorage.setItem('cip54-wprogramCode', defaultProgramCode);
         updateMetadataJSON(defaultMetadata, getFeatureTree(defaultUses), simulation, defaultProgramCode);  
-      })
+      })  
     }
   }); 
+  useEffect(()=>{
+    updateSmartImports(metadataJSON,simulation)
+  },[])
 
   const updateSmartImports = (metadata, simulation) => { 
     setPortalLoading(true);
