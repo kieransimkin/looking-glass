@@ -139,32 +139,36 @@ const Header = (props) => {
                 wallet=JSON.parse(localStorage.getItem('cip54-wallet'));
             } catch (e) {} 
             if (wallet && wallet?.wallet) { 
-                window.cardano[wallet.wallet].isEnabled().then((enabled)=> { 
-                    if (enabled){
-                        window.cardano[wallet.wallet].enable().catch((error) => { 
-                            alert('Wallet connect error: '+error);
-                            return false;
-                        }).then((api) => { 
-                        doOnWalletChange({
-                            api:api,
-                            wallet:wallet.wallet,
-                            stakeAddrRaw:wallet.stakeAddrRaw,
-                            returnAddrRaw:wallet.returnAddrRaw,
-                            connectContent: connectWallet
-                        })
-                        setWalletAPI(api);
-                        setWallet(wallet.wallet);
-                        })
-                    } else { 
-                        doOnWalletChange({
-                            'api': null, 
-                            'wallet': null, 
-                            'stakeAddrRaw':null,
-                            'returnAddrRaw':null,
-                            'connectWallet': connectWallet
-                        });
-                    }
-                });
+                try { 
+                    window.cardano[wallet.wallet].isEnabled().then((enabled)=> { 
+                        if (enabled){
+                            window.cardano[wallet.wallet].enable().catch((error) => { 
+                                alert('Wallet connect error: '+error);
+                                return false;
+                            }).then((api) => { 
+                            doOnWalletChange({
+                                api:api,
+                                wallet:wallet.wallet,
+                                stakeAddrRaw:wallet.stakeAddrRaw,
+                                returnAddrRaw:wallet.returnAddrRaw,
+                                connectContent: connectWallet
+                            })
+                            setWalletAPI(api);
+                            setWallet(wallet.wallet);
+                            })
+                        } else { 
+                            doOnWalletChange({
+                                'api': null, 
+                                'wallet': null, 
+                                'stakeAddrRaw':null,
+                                'returnAddrRaw':null,
+                                'connectWallet': connectWallet
+                            });
+                        }
+                    });
+                } catch (e) { 
+                    console.log(e);
+                }
             }
         }
         let dark = localStorage.getItem('cip54-darkmode');
