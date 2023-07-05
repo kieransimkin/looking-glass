@@ -7,6 +7,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta charset="utf-8" />
           <link href="https://fonts.googleapis.com/css2?family=MuseoModerno&family=Baloo+Thambi+2&display=swap" rel="stylesheet" />
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
           <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
