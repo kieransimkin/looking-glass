@@ -13,6 +13,7 @@ import Card from '@material-ui/core/Card'
 import ExamplesButton from '../components/ExamplesButton';
 import PlaygroundButton from '../components/PlaygroundButton'
 import BigBuyButton from '../components/BigBuyButton'
+import AvatarExampleButton from '../components/AvatarExampleButton';
 
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.primary.main, 0.8);
@@ -235,6 +236,26 @@ export default function Home() {
         </div>
         <div key="content-3" className="my-slide content" onClick={toggleOnOff}>
             <div className={classes.bg}>
+                
+            </div>
+            <div className={classes.wideContent + ' slide-content'}>
+                <div style={{display:'flex', flexDirection:'column',alignItems: 'center', gap:'4em', justifyContent:'space-around'}}>     
+                    
+                    <div className="column" style={{minWidth:'60%',maxWidth: '60%', marginLeft:'2em'}}>
+                        <VideoCard src="/smart-avatar.mp4" onLoad={onLoad} />
+                        
+                    </div>
+                    <div className="column" style={{display:'flex', alignItems:'flex-start'}}>
+                        <div><Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart Avatars</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
+                        <Typography variant="h4" classes={{root: classes.subtleLittleHead}}><em>Coming soon, a demonstration of the power of CIP54</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div></div>
+
+                        <AvatarExampleButton />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div key="content-4" className="my-slide content" onClick={toggleOnOff}>
+            <div className={classes.bg2}>
                 
             </div>
             <div className={classes.wideContent + ' slide-content'}>

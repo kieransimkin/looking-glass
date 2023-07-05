@@ -54,13 +54,13 @@
       {
         "title":"Zombie Alien",
         "slug":"zombie-alien",
-        "description":"",
+        "description":"Work in progress",
         "thumbnail":""
       },
       {
         "title":"Smart Avatars",
         "slug":"smart-avatars",
-        "description":"Work in progress",
+        "description":"Shows how to load sprites from multiple different locations and render them all into a composite character.",
         "thumbnail":"smart-avatars.png"
       }
     ]
