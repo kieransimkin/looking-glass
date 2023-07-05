@@ -46,6 +46,7 @@ const FeatureSelector = (props) => {
     if (defaultUses && !features) { 
       process.nextTick(() => { 
         setFeatures(defaultUses);
+        localStorage.setItem('cip54-wfeatures',JSON.stringify(defaultUses))
         onChange(getFeatureTree(defaultUses));
       })
     }
@@ -86,6 +87,7 @@ const FeatureSelector = (props) => {
         return true;
       })
       setFeatures(newFeatures);
+      localStorage.setItem('cip54-wfeatures',JSON.stringify(newFeatures))
       if (!defaultUses && props.loadStored) { 
         localStorage.setItem('cip54-features',JSON.stringify(newFeatures));
       }
@@ -121,6 +123,7 @@ const FeatureSelector = (props) => {
       })
     }
     setFeatures([...newFeatures, change])
+    localStorage.setItem('cip54-wfeatures',JSON.stringify([...newFeatures, change]))
     if (!defaultUses && props.loadStored) { 
       localStorage.setItem('cip54-features',JSON.stringify([...newFeatures, change]))
     }

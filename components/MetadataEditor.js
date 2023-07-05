@@ -42,6 +42,7 @@ const MetadataEditor = (props) => {
       const newMetadata = {...metadata};  
       delete newMetadata[key];
       setMetadata(newMetadata);
+      localStorage.setItem('cip54-wmetadata', JSON.stringify(newMetadata));
       if (!defaultMetadata && props.loadStored) { 
         localStorage.setItem('cip54-metadata', JSON.stringify(newMetadata));
       }
@@ -56,6 +57,7 @@ const MetadataEditor = (props) => {
       newMetadata[newItem.fieldName]=JSON.parse(newItem.json);
     }
     setMetadata(newMetadata);
+    localStorage.setItem('cip54-wmetadata', JSON.stringify(newMetadata));
     if (!defaultMetadata && props.loadStored) { 
       localStorage.setItem('cip54-metadata',JSON.stringify(newMetadata))
     }
@@ -65,6 +67,7 @@ const MetadataEditor = (props) => {
   useEffect(() => { 
     if (defaultMetadata && !metadata) { 
       setMetadata(defaultMetadata);
+      localStorage.setItem('cip54-wmetadata', JSON.stringify(defaultMetadata));
       onChange(defaultMetadata);
      }
   })

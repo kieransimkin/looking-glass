@@ -22,7 +22,9 @@ import * as React from "react";
 import { getFeatureTree, unicodeToBase64 } from '../utils/Helpers';
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 import { minify as htmlMinify } from 'html-minifier-terser'
-
+import eventBus from '../utils/EventBus';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.primary.main, 0.8);
@@ -113,7 +115,7 @@ const Playground = function (props) {
   const [smartImports, setSmartImports] = useState({});
   const [simulation, setSimulation] = useState(defaultAddr);
   const [metadataJSON, setMetadataJSON] = useState({});
-  const [portalLoading, setPortalLoading] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(true);
   const [random, setRandom] = useState(Math.random());
   const mini=async (programCode) => { 
     const retHTML = await htmlMinify(programCode,{
@@ -215,6 +217,7 @@ const Playground = function (props) {
     }
     json.files = files;
     setMetadataJSON(json);
+    localStorage.setItem('cip54-wmetadataJSON', JSON.stringify(json));
     return json;  
   }
   const defaultProgramCode = props.programCode;
@@ -222,6 +225,7 @@ const Playground = function (props) {
     if (defaultProgramCode && (!programCode || programCode=='')) { 
       process.nextTick(() => { 
         setProgramCode(defaultProgramCode);
+        localStorage.setItem('cip54-wprogramCode', defaultProgramCode);
         updateMetadataJSON(defaultMetadata, getFeatureTree(defaultUses), simulation, defaultProgramCode);  
       })
     }
@@ -232,6 +236,7 @@ const Playground = function (props) {
     postData('/getSmartImports',{metadata, walletAddr: simulation}).then((data)=> { 
       data.json().then((json) => { 
         setSmartImports(json);        
+        localStorage.setItem('cip54-wsmartImports', JSON.stringify(json));
         setPortalLoading(false);
       });
     });
@@ -262,6 +267,7 @@ const Playground = function (props) {
     if (programCodeTimer) clearTimeout(programCodeTimer);
     programCodeTimer = setTimeout(()=> { 
       setProgramCode(e)
+      localStorage.setItem('cip54-wprogramCode', e); 
       if (!defaultProgramCode && props.loadStored) {
         localStorage.setItem('cip54-programCode', e); 
       }
@@ -277,15 +283,54 @@ const Playground = function (props) {
   const refreshProgram = (e) => { 
     setRandom(Math.random())
   }
+  const saveZip = (data) => { 
+    const zip = new JSZip();
+    zip.file('metadata.json',localStorage.getItem('cip54-wmetadata'));
+    zip.file('programCode.html',localStorage.getItem('cip54-wprogramCode'));
+    zip.file('nft.json',localStorage.getItem('cip54-wmetadataJSON'))
+    zip.file('smartImports.json',localStorage('cip54-wsmartImports'))
+    zip.file('uses.json',localStorage.getItem('cip54-wfeatures'));
+    zip.generateAsync({type:'blob'}).then((blob)=>{
+      saveAs(blob,"file.zip")
+    }).catch((e)=>{
+      console.log('ZIP ERROR');
+      console.log(e);
+    })
+  }
+  const saveHtml = (data) => { 
+    getData("/getHtmlTemplate").then((file)=>{
+      if (file.status == 200) {
+        
+        file.json().then(text => {
+          console.log(text.file);
+          const newFile = text.file.
+              replace('\'{"%%METADATA_TEMPLATE%%":""}\'',JSON.stringify(localStorage.getItem('cip54-wmetadataJSON'))).
+              replace('\'{"%%SMARTIMPORT_TEMPLATE%%":""}\'',JSON.stringify(localStorage.getItem('cip54-wsmartImports')));
+          const blob = new Blob([newFile], { type : 'text/html' });
+          saveAs(blob,"project.html")
+        })
+      } else { 
+        console.log('error');
+      }
+      console.log(file);
+    })
 
+  }
   useEffect(() => { 
     window.addEventListener('resize', refreshProgram);
+    eventBus.on("saveZip",saveZip);
+    eventBus.on('saveHtml',saveHtml);
     return () => { 
       window.removeEventListener('resize', refreshProgram);
+      eventBus.remove("saveZip");
+      eventBus.remove('saveHtml',saveHtml);
     };
   },[]);
 
   const progressValue = ((JSON.stringify(metadataJSON, null, "\t").length)/16000)*100;
+  console.log(smartImports);
+  console.log(metadataJSON);
+
   return (
     <div>
       <Head>
@@ -299,7 +344,7 @@ const Playground = function (props) {
         
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '250px', border: '1px solid #ccc', padding: 5, display: 'flex', borderRadius: '5px', backgroundColor: theme.palette.background.default, overflowY: 'auto'}} >
             <div style={{display: 'flex', flexDirection:'column'}}>
-              <Typography variant='h3'>NFT Title</Typography>
+              <Typography variant='h3'>CIP54 features</Typography>
               <FeatureSelector defaultUses={defaultUses} onChange={featureChange} loadStored={props.loadStored} />
             </div>
           </div>
@@ -334,7 +379,7 @@ const Playground = function (props) {
           </div>
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '550px', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'stretch', padding: 5, borderRadius: '5px', backgroundColor: theme.palette.background.default}}>
             <SimulationSelector defaultAddr={defaultAddr} onChange={simulationChange} />
-            <SmartNFTPortal loadingContent=<CircularProgress style={{marginTop: '2em', marginLeft: 'auto', marginRight: 'auto'}} /> random={random} loading={portalLoading} style={{flexGrow: 1, overflowY: 'hidden', overflowX: 'hidden', border:'1px solid black'}} smartImports={smartImports} metadata={metadataJSON} />
+            <SmartNFTPortal loadingContent=<CircularProgress style={{marginTop: '2em', marginLeft: 'auto', marginRight: 'auto'}} /> random={random} loading={portalLoading} style={{flexGrow: 1, overflowY: 'hidden', overflowX: 'hidden', border:'none', outline: '1px solid black'}} smartImports={smartImports} metadata={metadataJSON} />
           </div>
         </DividerBox>
       </DividerBox>

@@ -1,0 +1,9 @@
+[submodule "submodules/SmartNFTPortal"]
+	path = submodules/SmartNFTPortal
+	url = https://github.com/kieransimkin/SmartNFTPortal
+[submodule "submodules/libcip54"]
+	path = submodules/libcip54
+	url = https://github.com/kieransimkin/libcip54
+[submodule "submodules/SimpleCip54Viewer"]
+	path = submodules/SimpleCip54Viewer
+	url = https://github.com/kieransimkin/SimpleCip54Viewer

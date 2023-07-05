@@ -24,7 +24,11 @@ import { Drawer } from '@material-ui/core';
 import { HelpOutline, HelpTwoTone, Home, KingBed, SportsKabaddi } from '@material-ui/icons';
 import NestedMenuItem from './NestedMenuItem';
 import ExamplesMenuItems from './ExamplesMenuItems';
-
+import eventBus from '../utils/EventBus';
+import ImportZipDialog from './dialogs/ImportZipDialog';
+import ImportBlockchainDialog from './dialogs/ImportBlockchainDialog';
+import NewDialog from './dialogs/NewDialog';
+import SaveAsDialog from './dialogs/SaveAsDialog';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -94,6 +98,10 @@ const Header = (props) => {
 
     // State: 
     const [walletOpen, setWalletOpen] = React.useState(false);
+    const [saveAsOpen, setSaveAsOpen] = React.useState(false);
+    const [newOpen, setNewOpen] = React.useState(false);
+    const [importBlockchainOpen, setImportBlockchainOpen] = React.useState(false);
+    const [importZipOpen, setImportZipOpen] = React.useState(false);
     const [wallet, setWallet] = React.useState(null);
     const [darkMode, setDarkMode] = React.useState('light');
     const [walletApi, setWalletAPI] = React.useState(null);
@@ -210,7 +218,30 @@ const Header = (props) => {
       setCallbackFn({fn: () => { return; }, fail: () => { return; } });
       setWalletOpen(true);
     };
-
+    const handleNewClick = () => { 
+        setNewOpen(true);
+    }
+    const handleSaveAsClick = () => { 
+        setSaveAsOpen(true);
+    }
+    const handleImportBlockchainClick = () => { 
+        setImportBlockchainOpen(true);
+    }
+    const handleImportZipClick = () => { 
+        setImportZipOpen(true);
+    }
+    const handleNewClose = (value) => { 
+        setNewOpen(false)
+    }
+    const handleSaveAsClose = (value) => { 
+        setSaveAsOpen(false);
+    }
+    const handleImportBlockchainClose = (value) => { 
+        setImportBlockchainOpen(false);
+    }
+    const handleImportZipClose = (value) => { 
+        setImportZipOpen(false);
+    }
     const handleWalletClose = (value) => {
         setWalletOpen(false);
         callbackFn.fn(value);
@@ -275,7 +306,12 @@ const Header = (props) => {
     const openNewDialog = () => { 
 
     }
-
+    const exportZip = () => { 
+        eventBus.dispatch("saveZip", { message: "saving zip" });
+    }
+    const exportHtml = () => { 
+        eventBus.dispatch("saveHtml", {message: 'saving html'});
+    }
     return (
         
             <Drawer id="drawer"  classes={{
@@ -317,21 +353,21 @@ const Header = (props) => {
                             >
                             <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
                             <NestedMenuItem direction="left" label="File..." parentMenuOpen={Boolean(anchorEl)}>
-                                <MenuItem onClick={openNewDialog}>New...</MenuItem>
+                                <MenuItem onClick={handleNewClick}>New...</MenuItem>
                                 {(router.route.substring(0,5)=='/play') &&
                                     <>
                                     <MenuItem onClick={openNewDialog}>Save</MenuItem>
-                                    <MenuItem onClick={openNewDialog}>Save As...</MenuItem>
+                                    <MenuItem onClick={handleSaveAsClick}>Save As...</MenuItem>
                                     </>
                                 }
                                 <NestedMenuItem direction="left" label="Import..." parentMenuOpen={Boolean(anchorEl)}>
-                                    <MenuItem onClick={openNewDialog}>From blockchain...</MenuItem>
-                                    <MenuItem onClick={openNewDialog}>From ZIP...</MenuItem>
+                                    <MenuItem onClick={handleImportBlockchainClick}>From blockchain...</MenuItem>
+                                    <MenuItem onClick={handleImportZipClick}>From ZIP...</MenuItem>
                                 </NestedMenuItem>
                                 {(router.route.substring(0,5)=='/play') &&
                                     <NestedMenuItem direction="left" label="Export..." parentMenuOpen={Boolean(anchorEl)}>
-                                        <MenuItem onClick={openNewDialog}>To ZIP...</MenuItem>
-                                        <MenuItem onClick={openNewDialog}>To HTML...</MenuItem>
+                                        <MenuItem onClick={exportZip}>To ZIP...</MenuItem>
+                                        <MenuItem onClick={exportHtml}>To HTML...</MenuItem>
                                     </NestedMenuItem>
                                 }
                             </NestedMenuItem>                          
@@ -390,6 +426,10 @@ const Header = (props) => {
                         </>
                     }
                 <WalletSelector selectedValue={wallet} open={walletOpen} onClose={handleWalletClose} />
+                <ImportZipDialog open={importZipOpen} onClose={handleImportZipClose} />
+                <ImportBlockchainDialog open={importBlockchainOpen} onClose={handleImportBlockchainClose} />
+                <NewDialog open={newOpen} onClose={handleNewClose} />
+                <SaveAsDialog open={saveAsOpen} onClose={handleSaveAsClose} />
             </Drawer>
     )
 }
