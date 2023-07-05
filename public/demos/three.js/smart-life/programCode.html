@@ -72,9 +72,9 @@
     "
   >
     <div id="h" onMouseOver="mIn(this)" onMouseOut="mOu(this)" class="i br" style="right: 0; top: 0; margin: 2">
-      &#10006;
+      ✖
     </div>
-    <h1 class="s">&#127793; Smart Life</h1>
+    <h1 class="s">🌱 Smart Life</h1>
     <div
       id="s"
       onMouseOver="mIn(this,0)"
@@ -82,12 +82,12 @@
       class="i br s"
       style="z-index: 2; left: 0; right: 0; bottom: 0; margin: 1px"
     >
-      &#x25BC;
+      ▼
     </div>
     <div id="k" class="tr" style="right: 0; top: 36; position: absolute; display: flex; flex-direction: column">
-      <p class="in">&#129145;w</p>
-      <p class="in">&#129144;a&#129147;s&#129146;d&nbsp;</p>
-      <p class="in">&#128220;&#128269;</p>
+      <p class="in">🡹w</p>
+      <p class="in">🡸a🡻s🡺d&nbsp;</p>
+      <p class="in">📜🔍</p>
     </div>
     Rule: <b id="rN"></b><br />Gens: <b id="Y"></b>
     <div class="tr" style="max-height: 0; max-width: 0; opacity: 0; margin: 30 2" id="hid">
@@ -372,7 +372,7 @@
                 for (let i = 2; i >= 0; i--) r += !bitSet(b, i) ? '<th/>' : '<td/>';
                 r += b != 7 ? '<td class="sc sb" /><td class=sc />' : '';
                 sR +=
-                  '<td class=s colspan=3>&#129047;<br><div class="' +
+                  '<td class=s colspan=3>🠗<br><div class="' +
                   (bitSet(rN, 7 - b) ? 'u' : 'l') +
                   '" /></td>' +
                   (b != 7 ? '<td class="sc sb" /><td class=sc />' : '');
@@ -410,14 +410,14 @@
             u[E]('s')[EL]('click', () => {
               let s = u[E]('hid').style;
               if (!mO) {
-                u[E]('s').innerHTML = '&#x25B2;';
+                u[E]('s').innerHTML = '▲';
                 s.opacity = 1;
                 s.maxHeight = 100;
                 s.maxWidth = 500;
                 u[E]('k').style.top = 18;
                 u[E]('k').style.right = 32;
               } else {
-                u[E]('s').innerHTML = '&#x25BC;';
+                u[E]('s').innerHTML = '▼';
                 s.opacity = 0;
                 s.maxHeight = 0;
                 s.maxWidth = 0;
