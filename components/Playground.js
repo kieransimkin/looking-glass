@@ -291,7 +291,7 @@ const Playground = function (props) {
     zip.file('metadata.json',localStorage.getItem('cip54-wmetadata'));
     zip.file('programCode.html',localStorage.getItem('cip54-wprogramCode'));
     zip.file('nft.json',localStorage.getItem('cip54-wmetadataJSON'))
-    zip.file('smartImports.json',localStorage('cip54-wsmartImports'))
+    zip.file('smartImports.json',localStorage.getItem('cip54-wsmartImports'))
     zip.file('uses.json',localStorage.getItem('cip54-wfeatures'));
     zip.generateAsync({type:'blob'}).then((blob)=>{
       saveAs(blob,"file.zip")

@@ -213,7 +213,7 @@
             f.fog = new T.Fog(WT, 1, 5000);
             f.fog.color = new Co(m.hC);
             dL.color = new Co(m.gC);
-            gM.color = new Co('yellow');
+            gM.color = new Co(m.pC);
             dL.castShadow = 1;
             dLSM.height = dLSM.width = 2048;
             dLS.radiwP = 10;
@@ -254,7 +254,7 @@
             star(dC1, 128, 128, m.kP, m.kO, m.kR);
             sp1 = new CT(c1);
             sp2 = new CT(c2);
-            for (i = 0; i < 5000; i++)
+            for (i = 0; i < m.d; i++)
               pO.push(new T.Vector3(RN() * 2000 - 1000, RN() * 2000 - 1000, RN() * 2000 - 1000));
             pg = new T.BufferGeometry();
             pg.setFromPoints(pO);

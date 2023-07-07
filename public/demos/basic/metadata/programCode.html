@@ -1,0 +1,34 @@
+<div style="font-family: sans-serif; padding:0em; height: 100vh; overflow: hidden" id="main">
+    <div style="margin: 1em">
+        <h2>Smart NFT API</h2>
+        <p>These values are read from the NFT's metadata:</p>
+        <table class="versiontable" id="maintable">
+            <tr><td><b>Background colour</b></td><td><span id="backgroundColour"></span></td></tr>
+            <tr><td><b>Foreground colour:</b></td><td><span id="foregroundColour"></span></td></tr>
+        </table>
+        &nbsp;<br/>
+    </div>
+    
+</div>
+<script>
+    // Request the version info from the API:
+    const getMetadataFields = async () => { 
+        ret={};
+        ret.backgroundColour=window.cardano.nft.metadata.backgroundColour;
+        ret.foregroundColour=window.cardano.nft.metadata.foregroundColour;
+        return ret;
+    }
+
+    getMetadataFields().then(({backgroundColour, foregroundColour})=>{
+        document.getElementById('backgroundColour').innerHTML=backgroundColour;
+        document.getElementById('foregroundColour').innerHTML=foregroundColour;
+        document.getElementById('maintable').style.color=foregroundColour;
+        document.getElementById('main').style.backgroundColor=backgroundColour;
+        document.getElementById('main').style.color=foregroundColour;
+    })
+</script>
+<style>
+    .versiontable td { 
+        padding: 1em;
+    }
+</style>

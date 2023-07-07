@@ -20,6 +20,12 @@
         "slug":"conditional",
         "description":"Shows how to display a different image depending on whether the owner is also a holder of any NFT from a specified list of policy IDs.",
         "thumbnail":"conditional.png"
+      },
+      {
+        "title":"Get Metadata",
+        "slug":"metadata",
+        "description":"Shows how to get values from the NFT's metadata - this avoids having to duplicate things like traits - you can read them directly from the metadata rather than having to repeat them in your Javascript",
+        "thumbnail":"metadata.png"
       }
     ]
   },
@@ -52,16 +58,16 @@
     "slug":"easeljs",
     "examples":[
       {
-        "title":"Zombie Alien",
-        "slug":"zombie-alien",
-        "description":"Work in progress",
-        "thumbnail":""
-      },
-      {
         "title":"Smart Avatars",
         "slug":"smart-avatars",
         "description":"Shows how to load sprites from multiple different locations and render them all into a composite character.",
         "thumbnail":"smart-avatars.png"
+      },
+      {
+        "title":"Zombie Alien",
+        "slug":"zombie-alien",
+        "description":"Work in progress",
+        "thumbnail":""
       }
     ]
   }
