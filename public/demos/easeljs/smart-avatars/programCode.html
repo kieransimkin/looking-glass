@@ -94,7 +94,7 @@
     width: 100vw;
   "
 ></i>
-<i class="cc" style="display: flex; height: 100vh; background: black" id="l"
+<i class="cc" style="display: flex; height: 100vh; background: black; color:white;" id="l"
   ><canvas id="t"></canvas><input class="cc np" id="fT" />
   <i class="cc" id="f-ct" style="color: white; height: 100%; font-family: sans-serif">
     <i
@@ -112,16 +112,18 @@
         padding: 0.5em 0.5em 2em 0.5em;
       "
     >
-      <i id="h" onclick="d[B]('i').style.opacity=0" class="i a br tr p pt" style="right: 0; margin: 2; top: 0"
+      <i id="h" class="i a br tr p pt" style="right: 0; margin: 2; top: 0"
         >✖</i
       >
-      <h1 class="s">Smart Avatars</h1>
+      <h1 class="s" title="Zombie Alien Karen
+      0th Smart Avatar - Genesis
+      ">🧟👽👱🏼‍♀️</h1>
       <i id="k" class="tr a" style="right: 0; top: 36; display: flex; flex-direction: column"
-        ><i style="margin: auto auto"><p class="in p br pt" data-keyup="W">🡹</p></i>
+        ><i style="margin: auto auto"><p class="in p br pt" data-ku="W">🡹</p></i>
         <p class="in">
-          <span class="in p br pt" data-keyup="A">🡸</span>
-          <span class="in p br pt" data-keyup="S">🡻</span>
-          <span class="in p br pt" data-keyup="D">🡺</span>
+          <span class="in p br pt" data-ku="A">🡸</span>
+          <span class="in p br pt" data-ku="S">🡻</span>
+          <span class="in p br pt" data-ku="D">🡺</span>
         </p>
         <p class="in">📜🔍</p></i
       >
@@ -131,8 +133,13 @@
 </i>
 <i id="o" />
 <script>
-  let nft = window.cardano?.nft;
-
+let f = () => {
+  let nft = window.cardano?.nft, d = document, ct = d.querySelector('#l');
+  if (!nft || typeof createjs == 'undefined') {
+    ct.innerHTML = 'CIP54 missing - Try Plutus.art';
+    ct.style.font='6em sans-serif'
+    return;
+  }
   let go = nft.getFileObject,
     children = [],
     H = 'height',
@@ -140,10 +147,10 @@
     B = 'getElementById',
     gA = 'getAttribute',
     cE = 'createElement',
-    d = document,
     sA = 'setAttribute',
     AC = 'append',
     PC = 'addChild',
+    PW = Math.pow,
     IP = parseInt,
     I = (ii) => {
       let CC = d[cE]('canvas');
@@ -155,6 +162,9 @@
     tS,
     JS = createjs,
     tw = JS.Tween.get;
+    if (document.body.clientWidth<800) { 
+      d[B]('i').style.display='none';
+    }
   (V = 0),
     (zD = -1),
     (zU = -1),
@@ -165,10 +175,10 @@
     (ret = { files: {}, tokens: [], images: [] }),
     (AEL = 'addEventListener'),
     (dS = 1),
-    (SS = 1 + Math.pow(dS, 2)),
+    (SS = 1 + PW(dS, 2)),
     (D = { step: 1 }),
-    (zX = (IP(tcan[gA](Y)) - 64 * Math.pow(dS, 2)) / 2),
-    (zY = (IP(tcan[gA](H)) - 64 * Math.pow(dS, 2)) / 2),
+    (zX = (IP(tcan[gA](Y)) - 64 * PW(dS, 2)) / 2),
+    (zY = (IP(tcan[gA](H)) - 64 * PW(dS, 2)) / 2),
     (eA = 1),
     (wA = dA = nA = 0),
     (R = 'E'),
@@ -213,9 +223,8 @@
     });
     c[AEL]('mouseout', () => mOu(c));
   }
-  for (const l of d.querySelectorAll('[data-keyup]')) { 
-    
-    l[AEL]('click',()=>{console.log('got here');console.log(l.attributes['data-keyup'].value);console.log(l.attributes);KU({key:l.attributes['data-keyup'].value})})
+  for (const l of d.querySelectorAll('[data-ku]')) { 
+    l[AEL]('click',()=>{KU({key:l.attributes['data-ku'].value})})
   }
   for (let c of BT) P(c);
   I('c');
@@ -350,14 +359,10 @@
     if (zD>0) Tg = V + e.deltaY / 4;
     else if (zD<0) Tg = V - e.deltaY / 4;
     else Tg=V;
-    console.log({zD,Tg,delta:e.deltaY,zU,zG})
     if (parseInt(zD)===0 && ((e.deltaY > 0 && zU<0) || (e.deltaY < 0 && zU>0))) {
-        console.log('restarting');
         zD=-zU;
     }
-    console.log({zD,Tg,delta:e.deltaY,zU,zG})
     if ((Tg < 0 && zD<0) || (Tg > zG && zD<0 && e.deltaY>0) || (Tg<0 && zD>0 && e.deltaY<0)) {
-        console.log('triggered stop')
         zU=-zD;
         if(Tg<0) Tg=0;
         if (Tg>0) Tg=zG
@@ -367,8 +372,6 @@
     }
     
     if ((Tg > zG && zD<0 && e.deltaY<0) || (Tg<0 && zD<0 && e.deltaY<0) || (Tg>zG && zD>0 && e.deltaY>0)) {
-      console.log('triggered loop');
-    
       zD = -zD;
       return;
     }
@@ -376,7 +379,7 @@
     let Z = 1 + ((Tg % zG) / zG)*4;
     E.V = V;
     tw(G).to({ y: h / 2 + Z * 10, scaleY: (S[H] / 2 / J[H]) * (1 / Z) }, 100);
-    tw(oC).to({ y: -(16 * (Z - 1) + Math.pow((dS - 1) * 3, 3) - Math.pow(Z - 1, 3)) }, 100);
+    tw(oC).to({ y: -(16 * (Z - 1) + PW((dS - 1) * 3, 3) - PW(Z - 1, 3)) }, 100);
     tw(E)
       .to({ V: Tg, x: -(((S[Y] + 64) * (Z - 1)) / 2), y: -(((S[H] + 64) * (Z - 1)) / 2), scale: Z }, 100)
       [AEL]('change', (t) => {
@@ -392,7 +395,7 @@
   const KU = d.onkeyup = (e) => {
     let tE = (d) => {
       let tER = tw(O)
-        .to({ scale: 1 + Math.pow(dS, 2), x: (IP(tcan[gA](Y)) - 64 * Math.pow(dS, 2)) / 2 }, 700)
+        .to({ scale: 1 + PW(dS, 2), x: (IP(tcan[gA](Y)) - 64 * PW(dS, 2)) / 2 }, 700)
         .call(() => {
           for (let c in S[d]) S[d][c].paused = true;
         });
@@ -480,6 +483,9 @@
     d[B]('fT').focus();
     d[B]('fT').blur();
   };
+  d[B]('h').onclick = () => { 
+    d[B]('i').style.opacity=0;
+  }
   let E = new JS.Stage(tcan);
   let dN = (unit) => {
     return decodeURIComponent(unit[Su](56).replace(/[0-9a-f]{2}/g, '%$&'));
@@ -495,7 +501,6 @@
           spb.id = 'sP' + t;
           if (i.unit) spb[iH] = dN(i.unit);
           else {
-            console.log(i);
             spb[iH] = i.src[Su](5).split('/', 2)[0];
           }
           spb[sA]('title', 'Policy:' + i.unit[Su](0, 56) + '\nToken:' + i.unit[Su](56));
@@ -568,7 +573,7 @@
   let wL = (Ra) => wS - 2 * Ra,
     mH = (Ra) => hS - 2 * Ra;
   for (let j = 0; j < 200; j++) {
-    let bR = 44 - (1 - Math.pow(1 - RA(), 9)) * 40,
+    let bR = 44 - (1 - PW(1 - RA(), 9)) * 40,
       lR = bR * (RA() * 0.3),
       Ra = MM(bR * 2, lR);
     SB(
@@ -678,4 +683,6 @@
     G[o][T](J)[U](0, 0, w + CW * 2, CH);
     G.updateCache();
   }
+};
+f();
 </script>

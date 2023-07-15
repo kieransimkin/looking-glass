@@ -1,3 +1,8 @@
 {
-    "test": "tes2"
+"name":"🧟👽👱🏼‍♀️",
+"description":"Smart Avatar NFT v0 - This is a 1/1 - the first Smart Avatar.",
+"website":"https://nft-playground.dev/",
+"image":"data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg version='1.1' viewBox='0 0 426 230' xmlns='http://www.w3.org/2000/svg'%3E%3Cg %3E%3Crect x='0' y='0' width='426' height='230' fill='%23000000'/%3E%3C/g%3E%3Ctext transform='translate(8 92)' x='213' y='57' fill='%2379db75' font-size='90' text-anchor='middle' xml:space='preserve'%3E🧟👽👱🏼‍♀️ %3C/text%3E%3C/svg%3E%0A",
+"mediaType":"image/svg+xml",
+"credits": "https://nft-playground.dev/LPC-credits.csv"
 }
