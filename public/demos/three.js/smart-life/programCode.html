@@ -69,6 +69,7 @@
       box-shadow: 2px 2px 10px 1px rgba(0, 0, 0, 0.5);
       margin: 1em;
       padding: 0.5em 0.5em 2em 0.5em;
+      opacity: 0.85;
     "
   >
     <div id="h" onMouseOver="mIn(this)" onMouseOut="mOu(this)" class="i br" style="right: 0; top: 0; margin: 2">
@@ -85,8 +86,8 @@
       ▼
     </div>
     <div id="k" class="tr" style="right: 0; top: 36; position: absolute; display: flex; flex-direction: column">
-      <p class="in">🡹w</p>
-      <p class="in">🡸a🡻s🡺d&nbsp;</p>
+      <p class="in">🡹&nbsp;</p>
+      <p class="in">🡸🡻🡺&nbsp;</p>
       <p class="in">📜🔍</p>
     </div>
     Rule: <b id="rN"></b><br />Gens: <b id="Y"></b>
@@ -150,7 +151,7 @@
               f = new T.Scene(),
               g = new T.BoxGeometry(1, 1, 2),
               gG = new T.PlaneGeometry(10000, 10000),
-              N = new T.PerspectiveCamera(30, cW / cH, 250, W * 800),
+              N = new T.PerspectiveCamera(30, cW / cH, 25, W * 800),
               cP = N.position,
               al = new T.MeshStandardMaterial({ color: m.oC }),
               gM = new T.MeshPhongMaterial({ color: WT }),
@@ -382,15 +383,26 @@
             }
             u.onkeyup = (e) => {
               e = e || w.event;
-              let c = e.keyCode;
-              if (c == '87') {
-                Y += 8;
-                q += 25;
-              } else if (c == '83') {
-                Y -= 8;
-                q -= 25;
-              } else if (c == '65') rN--;
-              else if (c == '68') rN++;
+              switch (e.key.toUpperCase()) {
+                case 'A':
+                case 'ARROWLEFT':
+                  rN--;
+                break;
+                case 'S':
+                case 'ARROWDOWN':
+                  Y -= 8;
+                  q -= 25;
+                break;
+                case 'D':
+                case 'ARROWRIGHT':
+                  rN++;
+                break;
+                case 'W':
+                case 'ARROWUP':
+                  Y += 8;
+                  q += 25;
+                break;
+              }
               W = Y * 2;
               if (Y < 32) Y = 32;
               if (rN < 0) rN = 255;
