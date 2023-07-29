@@ -138,7 +138,7 @@
               rN = m.rule,
               Y = 256,
               rot = 0,
-              W = Y * 2,
+              W = Y*2 + 1,
               Ts = null,
               l,
               j = 0,
@@ -304,7 +304,7 @@
               },
               seed = () => {
                 let r = new Int8Array(W);
-                r[Math.round(W / 2)] = 1;
+                r[Math.round(W / 2) - 1] = 1;
                 return r;
               };
             function loyal() {
@@ -403,7 +403,7 @@
                   q += 25;
                 break;
               }
-              W = Y * 2;
+              W = Y * 2 + 1;
               if (Y < 32) Y = 32;
               if (rN < 0) rN = 255;
               if (rN > 255) rN = 0;
@@ -483,7 +483,7 @@
                 if (j) {
                   q -= Y * 1.5;
                   Y = Math.round(Y / 2);
-                  W = Y * 2;
+                  W = Y * 2 + 1;
                   gen();
                   D();
                   j = 0;
