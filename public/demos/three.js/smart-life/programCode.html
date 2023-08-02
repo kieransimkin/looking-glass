@@ -4,63 +4,61 @@
     margin: 0 30 10 30;
     font-size: 13pt;
   }
-  #dis {
-    margin-top: 16;
-  }
   .in {
     margin: 0;
-    padding: 0;
-    text-align: center;
+    margin-left: 2;
+    margin-right: 2;
+    padding: 2;
+    text-align: center; 
   }
-  td,
-  th,
-  .u,
-  .l {
-    border: 1px solid black;
+  .cc {
+    caret-color: #00000000;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  #c1,#c2 { 
+    display: none;
+  }
+  td,th,.l {
+    border: 1px solid;
     width: 1em;
     height: 1em;
   }
-  .s {
+  .s,#t {
     border: none;
     text-align: center;
+  }
+  .pt,#sp,#kp,#lo,#p { 
+    cursor: pointer;
   }
   .sc {
     border: none;
     width: 1em;
   }
   .sb {
-    border-right: 1px dashed black;
-  }
-  th {
-    background: black;
+    border-right: 1px dashed;
   }
   .i {
-    cursor: pointer;
     position: absolute;
     padding: 5 10;
   }
   .br {
     border-radius: 20px;
   }
-  .tr {
-    transition: all 1s, max-width 1s, max-height 1s, top 1s, right 1s;
+  .tr,#k {
+    transition: all 0.7s,outline 0s;
   }
-  .u,
   .l {
     margin: auto;
   }
-  .u {
-    background-color: black;
-  }
 </style>
-<div id="f-ct" style="color: white; background-color: black; height: 100%; overflow: hidden; font-family: sans-serif">
+<div id="f-ct" style="height: 100%; overflow: hidden; font-family: sans-serif">
   <div
     id="i"
-    class="br tr"
+    class="br tr cc"
     style="
       min-width: 220;
       min-height: 72;
-      opacity: 1;
       max-width: 500;
       position: absolute;
       top: 0;
@@ -72,60 +70,69 @@
       opacity: 0.85;
     "
   >
-    <div id="h" onMouseOver="mIn(this)" onMouseOut="mOu(this)" class="i br" style="right: 0; top: 0; margin: 2">
+    <p id="h" class="i pt br tr" style="right: 0; top: 0; margin: 2">
       ✖
-    </div>
-    <h1 class="s">🌱 Smart Life</h1>
-    <div
+    </p>
+    <h1 id="t"></h1>
+    <i
       id="s"
-      onMouseOver="mIn(this,0)"
-      onMouseOut="mOu(this)"
-      class="i br s"
-      style="z-index: 2; left: 0; right: 0; bottom: 0; margin: 1px"
+      class="i br pt s tr"
+      style="z-index: 2; left: 0; right: 0; bottom: 0; margin: 1"
     >
       ▼
-    </div>
-    <div id="k" class="tr" style="right: 0; top: 36; position: absolute; display: flex; flex-direction: column">
-      <p class="in">🡹&nbsp;</p>
-      <p class="in">🡸🡻🡺&nbsp;</p>
+    </i>
+    <i id="k" style="right: 0; top: 24; position: absolute; display: flex; flex-direction: column">
+      <i style="margin: auto auto"><p class="in pt tr br" data-ku="W">🡹</p></i>
+      <i class="in" style="display:flex">
+        <p class="in pt tr br" data-ku="A">🡸</p>
+        <p class="in pt tr br" data-ku="S">🡻</p>
+        <p class="in pt tr br" data-ku="D">🡺</p>
+      </i>
       <p class="in">📜🔍</p>
-    </div>
+    </i>
     Rule: <b id="rN"></b><br />Gens: <b id="Y"></b>
     <div class="tr" style="max-height: 0; max-width: 0; opacity: 0; margin: 30 2" id="hid">
       <div style="width: 8em; margin: -72 auto 0 auto; padding-bottom: 20; text-align: center">
-        Spin: <input type="checkbox" checked id="sp" />
-        <div id="l" style="display: none">Sparkles: <input type="checkbox" id="p" /></div>
+        Spin: <input type="checkbox" checked id="sp"/><br />
+        Lock: <input type="checkbox" checked id="lo"/>
+        <div id="l" style="display:none">Sparkles: <input type="checkbox" id="p"/>&nbsp;Spin: <input type="checkbox" checked id="kp"/></div>
       </div>
-      <div id="dis" />
+      <i id="dis" />
       <br />
     </div>
   </div>
 </div>
-<canvas width="256" height="256" style="display: none" id="c1"
-  ><canvas width="256" height="256" style="display: none" id="c2"
+<canvas width="256" height="256" id="c1"
+  ><canvas width="256" height="256" id="c2"
     ><script>
-    let mIn = (t, b = 1) => {
-      if (b) t.style.outline = '1px solid black';
-      t.style.backgroundColor = 'rgba(255,255,255,0.7)';
+    let w = window,bgC='backgroundColor',mIn = (t) => {
+      t.style.outline = '1px solid black';
+      t.style[bgC] = '#ffffffb3';
+      t.style.boxShadow = '2px 1px #00000080';
     },
     mOu = (t) => {
+      t.style.boxShadow = '';
       t.style.outline = 'none';
-      t.style.backgroundColor = '';
+      t.style[bgC] = '';
     };
-    window.mOu=mOu;
-    window.mIn=mIn;
+    w.mOu=mOu;
+    w.mIn=mIn;
       let f = () => {
         let u = document,
           E = 'getElementById',
+          IH = 'innerHTML',
           EL = 'addEventListener',
+          CE = 'checked',
+          RO = 'rotation',
           ct = u.querySelector('#f-ct'),
-          nft = window?.cardano?.nft;
+          nft = w?.cardano?.nft;
         if (!nft || typeof THREE == 'undefined') {
-          ct.innerHTML = 'CIP54 missing - Try Plutus.art';
+          ct[IH] = 'CIP54 missing - Try Plutus.art';
           return;
-        }
+        }        
         nft.getTokens().then((oT) => {
           nft.getMetadata().then((m) => {
+            u[E]('t')[IH]=m.name;
             let iS = u[E]('i').style,
               vs =
                 'varying vec3 vWP;void main(){vec4 wP=modelMatrix*vec4(position,1.0);vWP=wP.xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
@@ -133,25 +140,26 @@
                 'uniform vec3 tC;uniform vec3 bC;uniform float o;uniform float ex;varying vec3 vWP;void main(){float h=normalize(vWP+o).y;gl_FragColor=vec4(mix(bC,tC,max(pow(max(h,0.0),ex),0.0)),1.0);}',
               d = 1000,
               TL = oT.tokens,
-              w = window,
               O,
               rN = m.rule,
               Y = 256,
               rot = 0,
               W = Y*2 + 1,
-              Ts = null,
+              Ts = 0,
+              TS = 0,
               l,
               j = 0,
               R,
               T = THREE,
               Co = T.Color,
-              WT = 0xffffff,
+              WT = m.wC,
               cW = ct.clientWidth,
               cH = ct.clientHeight,
               f = new T.Scene(),
               g = new T.BoxGeometry(1, 1, 2),
               gG = new T.PlaneGeometry(10000, 10000),
-              N = new T.PerspectiveCamera(30, cW / cH, 25, W * 800),
+              N = new T.PerspectiveCamera(30, cW / cH, 100, W * 800),
+              B = new T.Group(),
               cP = N.position,
               al = new T.MeshStandardMaterial({ color: m.oC }),
               gM = new T.MeshPhongMaterial({ color: WT }),
@@ -167,10 +175,10 @@
               sC = dLS.camera,
               gr = new T.Mesh(gG, gM),
               uf = {
-                tC: { type: 'c', value: new Co(0x0077ff) },
+                tC: { type: 'c', value: new Co(m.tC) },
                 bC: { type: 'c', value: new Co(m.sC) },
-                o: { type: 'f', value: 33 },
-                ex: { type: 'f', value: 0.6 },
+                o: { type: 'f', value: m.o },
+                ex: { type: 'f', value: m.e },
               },
               sG = new T.SphereGeometry(4000, 32, 15),
               sM = new T.ShaderMaterial({ vertexShader: vs, fragmentShader: fs, uniforms: uf, side: T.BackSide }),
@@ -203,10 +211,13 @@
               x,
               p1,
               p2,
-              p3;
-            iS.backgroundColor = m.dC;
+              p3,Pi=Math.PI,
+              RNB=()=>RN()*2000-1000,fS=(DC,gn)=>{DC.fillStyle=gn;DC.fillRect(0,0,255,255)};
+            B.add(N);
+            f.add(B);
+            iS[bgC] = m.dC;
             iS.color = m.fC;
-            gr.rotation.x = -Math.PI / 2;
+            gr[RO].x = -Pi / 2;
             gr.position.y = -33;
             hL.color = new Co(m.lC);
             f.background = new Co('black');
@@ -226,8 +237,8 @@
             P.shadowMap.type = T.VSMShadowMap;
             (P.shadowMap.enabled = 1), (RN = (z) => Math.random(z));
             if (ly) {
-              u[E]('l').style.display = 'block';
-              u[E]('p').checked = 1;
+              u[E]('l').style.display = 'flex';
+              u[E]('p')[CE] = 1;
             }
             hL.position.set(0, 500, 0);
             P.setSize(cW, cH);
@@ -245,10 +256,8 @@
             g2[C](1, tr);
             g1[C](0, m.bC);
             g1[C](1, tr);
-            dC1.fillStyle = g1;
-            dC1.fillRect(0, 0, 255, 255);
-            dC2.fillStyle = g2;
-            dC2.fillRect(0, 0, 255, 255);
+            fS(dC1,g1);
+            fS(dC2,g2);
             dC1.strokeStyle = m.cC;
             dC1.fillStyle = m.eC;
             dC1.lineWidth = 5;
@@ -256,7 +265,7 @@
             sp1 = new CT(c1);
             sp2 = new CT(c2);
             for (i = 0; i < m.d; i++)
-              pO.push(new T.Vector3(RN() * 2000 - 1000, RN() * 2000 - 1000, RN() * 2000 - 1000));
+              pO.push(new T.Vector3(RNB(), RNB(), RNB()));
             pg = new T.BufferGeometry();
             pg.setFromPoints(pO);
             pS = [
@@ -271,7 +280,7 @@
               size = pS[i][1];
               mats[i] = new T.PointsMaterial({ size, map, blending: T.AdditiveBlending, depthTest: 0, transparent: 1 });
               A = new T.Points(pg, mats[i]);
-              pR = A.rotation;
+              pR = A[RO];
               pR.x = RN() * 6;
               pR.y = RN() * 6;
               pR.z = RN() * 6;
@@ -316,10 +325,10 @@
               return 0;
             }
             function star(ctx, cx, cy, sK, oR, iR) {
-              let rT = (Math.PI / 2) * 3,
+              let rT = (Pi / 2) * 3,
                 x = cx,
                 y = cy,
-                sP = Math.PI / sK;
+                sP = Pi / sK;
               ctx.beginPath();
               ctx.moveTo(cx, cy - oR);
               for (i = 0; i < sK; i++) {
@@ -358,51 +367,42 @@
               cS();
             }
             function rotate(a) {
-              if (!R) return;
-              if (isNaN(a)) return;
-              let r = R.rotation;
-              rot -= (a / 33) * 0.02;
-              r.y = rot;
+              if (!R || isNaN(a)) return;
+              if (u[E]('kp')[CE]) {
+                TS+=a;
+                for (i = 0; i < f.children.length; i++) {
+                  let V = f.children[i];
+                  if (V instanceof T.Points) V[RO].y = (TS / m.sS) * (i < 4 ? i + 1 : -(i + 1));
+                }
+              }
+              if (u[E]('sp')[CE]) {
+                let r = R[RO],tA=(a / 33) * m.oS;
+                rot -= tA * m.m;
+                r.y = rot;
+                if (u[E]('lo')[CE]) { 
+                  B[RO].y-=tA;
+                }
+              }
             }
             function D() {
-              u[E]('rN').innerHTML = rN;
-              u[E]('Y').innerHTML = Y;
+              u[E]('rN')[IH] = rN;
+              u[E]('Y')[IH] = Y;
               let r = '<table><tr>',
-                sR = '<tr>';
+                sR = '<tr>',bCo='border-color:'+m.fC,bCol='style="'+bCo+'"',bCL='background-color:';
               for (let b = 0; b < 8; b++) {
-                for (let i = 2; i >= 0; i--) r += !bitSet(b, i) ? '<th/>' : '<td/>';
-                r += b != 7 ? '<td class="sc sb" /><td class=sc />' : '';
+                for (let i = 2; i >= 0; i--) r += !bitSet(b, i) ? '<th style="'+bCL+m.fC+';'+bCo+'"/>' : '<td '+bCol+'/>';
+                r += b != 7 ? '<td class="sc sb" '+bCol+'/><td class=sc />' : '';
                 sR +=
-                  '<td class=s colspan=3>🠗<br><div class="' +
-                  (bitSet(rN, 7 - b) ? 'u' : 'l') +
-                  '" /></td>' +
-                  (b != 7 ? '<td class="sc sb" /><td class=sc />' : '');
+                  '<td class=s colspan=3 style="color:'+m.fC+'">🠗<br><div style="'+bCL+(bitSet(rN, 7 - b) ? m.fC : '')+';'+bCo+'"/ class="l" /></td>' +
+                  (b != 7 ? '<td class="sc sb" '+bCol+'/><td class=sc />' : '');
               }
               r += '</tr>' + sR + '</table>';
-              u[E]('dis').innerHTML = r;
+              u[E]('dis')[IH] = r;
             }
             u.onkeyup = (e) => {
               e = e || w.event;
-              switch (e.key.toUpperCase()) {
-                case 'A':
-                case 'ARROWLEFT':
-                  rN--;
-                break;
-                case 'S':
-                case 'ARROWDOWN':
-                  Y -= 8;
-                  q -= 25;
-                break;
-                case 'D':
-                case 'ARROWRIGHT':
-                  rN++;
-                break;
-                case 'W':
-                case 'ARROWUP':
-                  Y += 8;
-                  q += 25;
-                break;
-              }
+              let k=e.key.toUpperCase();
+              if (k=='A'||k=='ARROWLEFT') rN--; else if (k=='D'||k=='ARROWRIGHT') rN++; else if (k=='S'||k=='ARROWDOWN') {Y -= 8;q -= 25} else if (k=='W'||k=='ARROWUP') {Y += 8;q += 25}
               W = Y * 2 + 1;
               if (Y < 32) Y = 32;
               if (rN < 0) rN = 255;
@@ -410,31 +410,33 @@
               D();
               gen();
             };
-            u.resize = () => {
-              N.aspect = cW / cH;
-              N.updateProjectionMatrix();
-              P.setSize(cW, cH);
-            };
+            for (const l of u.querySelectorAll('[data-ku]')) { 
+              l[EL]('click',()=>{u.onkeyup({key:l.attributes['data-ku'].value})})
+            }
+            for (let c of u.getElementsByClassName('pt')) {
+              c[EL]('mouseover', () => mIn(c));
+              c[EL]('mouseout', () => mOu(c));
+            }
             u[E]('h')[EL]('click', () => {
               let s = u[E]('i').style;
               s.opacity = s.maxWidth = 0;
             });
             u[E]('s')[EL]('click', () => {
-              let s = u[E]('hid').style;
+              let s = u[E]('hid').style,sk=u[E]('k').style;
               if (!mO) {
-                u[E]('s').innerHTML = '▲';
+                u[E]('s')[IH] = '▲';
                 s.opacity = 1;
                 s.maxHeight = 100;
                 s.maxWidth = 500;
-                u[E]('k').style.top = 18;
-                u[E]('k').style.right = 32;
+                sk.top = 18;
+                sk.right = 32;
               } else {
-                u[E]('s').innerHTML = '▼';
+                u[E]('s')[IH] = '▼';
                 s.opacity = 0;
                 s.maxHeight = 0;
                 s.maxWidth = 0;
-                u[E]('k').style.top = 36;
-                u[E]('k').style.right = 0;
+                sk.top = 24;
+                sk.right = 0;
               }
               mO = !mO;
             });
@@ -444,7 +446,7 @@
               for (i = 0; i < cL.length; i++) {
                 let V = cL[i];
                 if (V instanceof T.Points)
-                  if (e.currentTarget.checked) V.visible = 1;
+                  if (e.currentTarget[CE]) V.visible = 1;
                   else V.visible = false;
               }
             });
@@ -457,7 +459,7 @@
               0,
             );
             let tM = (e) => {
-              if (e.touches.length == 1) {
+              if (e.touches.length) {
                 e.preventDefault();
                 mX = e.touches[0].pageX - wH.x;
                 mY = e.touches[0].pageY - wH.y;
@@ -475,9 +477,9 @@
               0,
             );
             function RR(ts) {
-              if (l == undefined) l = ts;
+              if (!l) l = ts;
               let es = ts - Ts,
-                cR = N.rotation;
+                cR = N[RO];
               Ts = ts;
               if (es > 50 && Y > 20 && ts - l > 1000) {
                 if (j) {
@@ -503,11 +505,7 @@
               }
               N.lookAt(new T.Vector3(0, Y / 2, 0));
               requestAnimationFrame(RR);
-              if (u[E]('sp').checked) rotate(es);
-              for (i = 0; i < f.children.length; i++) {
-                let V = f.children[i];
-                if (V instanceof T.Points) V.rotation.y = (ts / 20000) * (i < 4 ? i + 1 : -(i + 1));
-              }
+              rotate(es);
               P.render(f, N);
             }
             gen();
