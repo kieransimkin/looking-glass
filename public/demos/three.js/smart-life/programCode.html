@@ -156,9 +156,9 @@
               cW = ct.clientWidth,
               cH = ct.clientHeight,
               f = new T.Scene(),
-              g = new T.BoxGeometry(1, 1, 2),
+              g = new T.BoxGeometry(1, 1, m.bd),
               gG = new T.PlaneGeometry(10000, 10000),
-              N = new T.PerspectiveCamera(30, cW / cH, 100, W * 800),
+              N = new T.PerspectiveCamera(30, cW / cH, m.nc, W * 800),
               B = new T.Group(),
               cP = N.position,
               al = new T.MeshStandardMaterial({ color: m.oC }),
@@ -185,6 +185,7 @@
               sky = new T.Mesh(sG, sM),
               G = 'createRadialGradient',
               A,
+              BL,
               pg,
               mats = [],
               pS,
@@ -222,7 +223,7 @@
             hL.color = new Co(m.lC);
             f.background = new Co('black');
             hL.groundColor = new Co(WT);
-            f.fog = new T.Fog(WT, 1, 5000);
+            f.fog = new T.Fog(WT, 1, m.f);
             f.fog.color = new Co(m.hC);
             dL.color = new Co(m.gC);
             gM.color = new Co(m.pC);
@@ -234,6 +235,17 @@
             sC.far = 3500;
             sC.near = 0.5;
             gr.receiveShadow = 1;
+            switch(m.b) {
+              case 0:
+                BL=T.AdditiveBlending;
+                break;
+              case 1:
+                BL=T.SubtractiveBlending;
+                break;
+              case 2:
+                BL=T.NormalBlending;
+                break;
+            }
             P.shadowMap.type = T.VSMShadowMap;
             (P.shadowMap.enabled = 1), (RN = (z) => Math.random(z));
             if (ly) {
@@ -278,7 +290,7 @@
             for (i = 0; i < pS.length; i++) {
               map = pS[i][0];
               size = pS[i][1];
-              mats[i] = new T.PointsMaterial({ size, map, blending: T.AdditiveBlending, depthTest: 0, transparent: 1 });
+              mats[i] = new T.PointsMaterial({ size, map, blending: BL, depthTest: 0, transparent: 1 });
               A = new T.Points(pg, mats[i]);
               pR = A[RO];
               pR.x = RN() * 6;
@@ -351,8 +363,9 @@
               R = new T.Group();
               R.position.set(0, Y / 2, 0);
               for (y = 0; y < Y; y++)
+                
                 for (x = 0; x < W; x++) {
-                  if (O[y][x]) {
+                  if (((m.i==0 && O[y][x])||(m.i==1 && !O[y][x])) && (m.s!=1 || y!=0)) {
                     let C = new T.Mesh(g, al);
                     C.castShadow = 1;
                     C.position.set(x - W / 2, 0 - (y - Y / 2), 0);
