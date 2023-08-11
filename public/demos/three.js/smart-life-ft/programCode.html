@@ -16,14 +16,13 @@
     caret-color: #00000000;
     user-select: none;
   }
-  #c1,#c2,#c3,#c4 { 
+canvas { 
     display: none;
   }
   td,th,.l,#sp,#lo,#kp,#p {
     width: 1em;
     height: 1em;
     border: 1px solid;
-    box-shadow: #000 1px 1px, #000 2px 2px 2px, #000 0px 0px 2px;
   }
   .in,.s,#t,#nr { 
     text-align: center;
@@ -63,7 +62,7 @@
     margin: 3 auto;
   }
 </style>
-<div id="f-ct" style="height: 100%; overflow: hidden; font-family: sans-serif;text-shadow: #000 1px 1px, #000 2px 2px 2px, #000000aa 0px 0px 2px">
+<div id="f-ct" style="height: 100%; overflow: hidden; font-family: sans-serif; color: white">
   <div
     id="i"
     class="br tr cc"
@@ -97,7 +96,7 @@
       <div id="nr" style="width:fit-content;margin:-72 auto 0 auto;padding-bottom:20">
         Spin: <input type="checkbox" id="sp"/><br />
         Lock: <input type="checkbox" checked id="lo"/>
-        <div id="l" style="display:none">Sparkles: <input type="checkbox" id="p"/>&nbsp;Spin: <input type="checkbox" checked id="kp"/></div>
+        <div id="l" style="display:none">Sparkles: <input type="checkbox" id="p" />&nbsp;Spin: <input type="checkbox" checked id="kp"/></div>
       </div>
       <i id="dis" />
       <br />
@@ -139,7 +138,7 @@
           G = 'createRadialGradient',
           ct = u.querySelector('#f-ct'),
           nft = w?.cardano?.nft;
-        if (!nft || !THREE) {
+        if (!nft || typeof THREE == 'undefined') {
           ct[IH] = 'CIP54 missing - Try Plutus.art';
           return;
         }        
@@ -225,7 +224,7 @@
               x,
               p1,
               p2,
-              FT=(dc,te)=>dc.fillText("🌱", 128, 168),
+              FT=(dc,te)=>dc.fillText(te, 128, 168),
               p3,Pi=Math.PI,
               pPS=(sp,NN)=>pS.push([sp, m.k[NN], m.n[NN]])
               RNB=()=>RN()*2000-999,fS=(DC,gn)=>{DC.fillStyle=gn;DC.fillRect(0,0,255,255)};
@@ -280,8 +279,8 @@
             fS(dC2,g2);
             dC3.font=dC4.font=160+'px sans-serif';
             dC3.textAlign=dC4.textAlign = "center";
-            FT(dC3,"🌱")
-            FT(dC4,"🧠")
+            FT(dC3,m.j1);
+            FT(dC4,m.j2);
             dC1.strokeStyle = m.cC;
             dC1.fillStyle = m.eC;
             dC1.lineWidth = 5;
@@ -468,7 +467,7 @@
                 let V = cL[i];
                 if (V instanceof T.Points)
                   if (e.currentTarget[CE]) V.visible = 1;
-                  else V.visible = 0;
+                  else V.visible = false;
               }
             });
             u[EL](
