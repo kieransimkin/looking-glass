@@ -50,6 +50,12 @@
         "slug":"smart-life",
         "description":"This is the first collection to mint with CIP54 - demonstrates detecting another token in the holder's wallet and responding with sparkles",
         "thumbnail":"smart-life.png"
+      },
+      {
+        "title":"Smart Life Fungible Token",
+        "slug":"smart-life-ft",
+        "description":"This is a slight modification of the Smart Life NFT just for the $smart fungible token and 10 special NFTs minted in addition to the original collection",
+        "thumbnail":"smart-life.png"
       }
     ]
   },
