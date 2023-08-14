@@ -23,6 +23,10 @@ canvas {
     width: 1em;
     height: 1em;
     border: 1px solid;
+    box-shadow: #000 2px 2px 3px;
+  }
+  div.l { 
+    box-shadow: #000 2px 2px 3px,#000 0px 0px 1px;
   }
   .in,.s,#t,#nr { 
     text-align: center;
@@ -62,7 +66,7 @@ canvas {
     margin: 3 auto;
   }
 </style>
-<div id="f-ct" style="height: 100%; overflow: hidden; font-family: sans-serif; color: white">
+<div id="f-ct" style="height: 100%; overflow: hidden; font-family: sans-serif;text-shadow: #000 1px 1px, #000 2px 2px 2px, #000000aa 0px 0px 2px">
   <div
     id="i"
     class="br tr cc"
@@ -94,7 +98,7 @@ canvas {
     </div>
     <div class="tr" style="max-height: 0; max-width: 0; opacity: 0; margin: 30 2" id="hid">
       <div id="nr" style="width:fit-content;margin:-72 auto 0 auto;padding-bottom:20">
-        Spin: <input type="checkbox" id="sp"/><br />
+        Spin: <input type="checkbox" checked id="sp"/><br />
         Lock: <input type="checkbox" checked id="lo"/>
         <div id="l" style="display:none">Sparkles: <input type="checkbox" id="p" />&nbsp;Spin: <input type="checkbox" checked id="kp"/></div>
       </div>
