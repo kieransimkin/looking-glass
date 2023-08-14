@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => {
     }
     let bg2=`linear-gradient(-95deg, ${first} 0%, ${second} 100%),linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.85) 100%),url('/circuit2.png') !important`;
     if (theme.palette.type=='dark') { 
-        bg2 = `linear-gradient(-120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 100%), url('/circuit2.png') !important`;
+        bg2 = `linear-gradient(-120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), url('/circuit2.png') !important`;
     }
     return {
     bigHead: { 

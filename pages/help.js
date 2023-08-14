@@ -190,13 +190,9 @@ export default function Help() {
                 Buy, sell or trade your Smart NFTs at <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a>, with native support for CIP54 assets right in the marketplace.
                 <ul className="infolist">
 
-                <li><a href="https://plutus.art/collection/smartlife" target="_blank" rel="noreferrer">Smart Life</a> - The first CIP54 collection is now minting</li>
-                <li>There will be 100 tokens in total.</li>
-                <li>The price will be 450 ADA for most tokens.</li>
-                <li>The first token and any special tokens may be priced higher.</li>
-                <li>These are not a random mint - I am manually designing the colours and animation parameters for each NFT and minting them by hand.</li>
-                <li>The Policy ID is <span style={{fontFamily:'monospace', fontWeight:600}}>1eaf3b3ffb75ff27c43c512c23c6450b307f138281efb1d690b84652</span></li>
-                <li>The NFTs will be gradually minted and released for sale on Plutus.art over the next month</li>
+                <li><Link href="/launchpad/smart-life/about">Smart Life</Link> - The first CIP54 collection is now minting</li>
+                <li><Link href="/launchpad/smart-avatars/about">Smart Avatars</Link> - The first in a new series of true on-chain avatars</li>
+                
                 </ul>
                 <BuyButton />
               </Typography>

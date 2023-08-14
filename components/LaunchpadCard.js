@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => {
   }
   return {
     root: {
-      flexBasis: '30em',
+      flexBasis: '50em',
       borderRadius: '2em !important',
       transition: 'all 0.8s ease',
       filter: 'drop-shadow(9px 5px 8px rgba(0,0,0,0.25))',
@@ -60,36 +60,36 @@ const useStyles = makeStyles(theme => {
       gap: '10px'
     },
     media: {
-      height: 140,
+      height: 490,
     },
   };
 });
-const ExampleCard = (props) => {
-  const {example, categorySlug} = props;
+const LaunchpadCard = (props) => {
+  const {page, categorySlug, categoryTitle} = props;
   const theme = useTheme();
   const classes = useStyles(props);
 
   return (
     <Card className={classes.root} raised={true} variant="elevation">
-    <Link href={'/play/'+categorySlug+'/'+example.slug}>
+    <Link href={'/launchpad/'+categorySlug+'/'+page.slug}>
       <CardActionArea className={classes.actionArea}>
       <CardContent className={classes.cardContent}>
-      <div style={{position:'relative', width: '100%', height: '150px', border:'1px solid rgba(0,0,0,0.5)', borderRadius: '7px', boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.3)'}}>
+      <div style={{position:'relative', width: '100%', height: '700px', border:'1px solid rgba(0,0,0,0.5)', borderRadius: '7px', boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.3)'}}>
       <Image
           className={classes.media}
-          src={'/examples/'+example.thumbnail}
+          src={'/launchpad/'+page.thumbnail}
           layout="fill"
-          title={example.title}
+          title={categoryTitle}
           objectFit="cover"
           style={{borderRadius: '7px', border: '1px solid rgba(0,0,0,0.5)'}}
         />
       </div>
         <Typography variant="h5">
-        {example.title}
+        {categoryTitle}
         </Typography>
         
         <Typography style={{flexGrow: 1}}>
-          {example.description}
+          {page.description}
         </Typography>
         
       </CardContent>
@@ -100,8 +100,9 @@ const ExampleCard = (props) => {
   </Card>
   );
 }
-ExampleCard.propTypes = {
-  example: PropTypes.object.isRequired,
-  categorySlug: PropTypes.string.isRequired
+LaunchpadCard.propTypes = {
+  page: PropTypes.object.isRequired,
+  categorySlug: PropTypes.string.isRequired,
+  categoryTitle: PropTypes.string.isRequired
 };
-export default ExampleCard;
+export default LaunchpadCard;

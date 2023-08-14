@@ -246,3 +246,10 @@ table.linktable > *:not(:last-child) td {
 ul.infolist li { 
   padding:0.5em;
 }
+.MuiMenuItem-root { 
+  padding-top: 10px !important;
+  padding-bottom: 12px !important;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+  min-width: 200px;
+}

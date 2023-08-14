@@ -7,3 +7,6 @@
 [submodule "submodules/SimpleCip54Viewer"]
 	path = submodules/SimpleCip54Viewer
 	url = https://github.com/kieransimkin/SimpleCip54Viewer
+[submodule "submodules/LPC-spritesheet-collection"]
+	path = submodules/LPC-spritesheet-collection
+	url = https://github.com/kieransimkin/LPC-spritesheet-collection

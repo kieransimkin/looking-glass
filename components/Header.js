@@ -15,6 +15,7 @@ import React, { useEffect, useState,useCallback, useContext } from 'react'
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
+import WhatshotIcon from '@material-ui/icons/Whatshot';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import { useWindowDimensions } from '../utils/Hooks'
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
@@ -29,6 +30,7 @@ import ImportZipDialog from './dialogs/ImportZipDialog';
 import ImportBlockchainDialog from './dialogs/ImportBlockchainDialog';
 import NewDialog from './dialogs/NewDialog';
 import SaveAsDialog from './dialogs/SaveAsDialog';
+import LaunchpadMenuItems from './LaunchpadMenuItems';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -376,12 +378,14 @@ const Header = (props) => {
                                 }
                             </NestedMenuItem>                          
                             <Link href="/play"><MenuItem>Play</MenuItem></Link>
-                            <NestedMenuItem direction="left" label="Examples..." parentMenuOpen={Boolean(anchorEl)}>
-                                <Link href="/examples"><MenuItem>Contents</MenuItem></Link>
+                            <Link href="/examples"><NestedMenuItem direction="left" label="Examples..." parentMenuOpen={Boolean(anchorEl)}>
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
-                            </NestedMenuItem>                   
+                            </NestedMenuItem></Link>
+                            <Link href="/launchpad"><NestedMenuItem direction="left" label="Launchpad..." parentMenuOpen={Boolean(anchorEl)}>
+                                <LaunchpadMenuItems parentMenuOpen={Boolean(anchorEl)} />
+                            </NestedMenuItem></Link>
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
-                                <div style={{position: 'relative', top:'0px', width:'70px'}}>
+                                <div style={{position: 'relative', top:'0px', width:'75px'}}>
                                 <ToggleButtonGroup
                                     value='light'
                                     size="small"
@@ -405,7 +409,6 @@ const Header = (props) => {
                         </div>
                     }
                     {!walletApi &&
-                        
                         <>
                         <Link href="/">
                             <Button size='large' startIcon=<Home /> color={(router.route=='/') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
@@ -420,6 +423,11 @@ const Header = (props) => {
                         <Link href="/examples">
                             <Button size='large' startIcon=<CastForEducationIcon /> color={router.route=='/examples' ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
                                 Examples
+                            </Button>
+                        </Link>
+                        <Link href="/launchpad">
+                            <Button size='large' startIcon=<WhatshotIcon /> color={(router.route.substring(0,10)=='/launchpad') ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
+                                Launchpad
                             </Button>
                         </Link>
                         <Link href="/help">

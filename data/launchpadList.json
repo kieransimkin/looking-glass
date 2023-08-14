@@ -1,0 +1,33 @@
+[
+  {
+    "title":"Smart Life",
+    "slug":"smart-life",
+    "pages":[
+      {
+        "title":"About Smart Life",
+        "slug":"about",
+        "description":"About the Smart Life project",
+        "thumbnail":"smart-life-alien.png"
+      }
+    ]
+  },
+  {
+    "title":"Smart Avatars",
+    "slug":"smart-avatars",
+    "pages":[
+      {
+        "title":"About Smart Avatars",
+        "slug":"about",
+        "description":"About the Smart Avatars project",
+        "thumbnail":"smart-avatars.png"
+      },
+      {
+        "title":"Mint Now!",
+        "slug":"mint",
+        "notInContents":true,
+        "description":"Work in progress",
+        "thumbnail":""
+      }
+    ]
+  }
+]

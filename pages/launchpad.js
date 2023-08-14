@@ -3,16 +3,17 @@ import WalletContext from '../components/WalletContext'
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 import { Typography, Container } from '@material-ui/core';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
-import exampleList from '../data/exampleList.json';
+import launchpadList from '../data/launchpadList.json';
 import ExampleCard from '../components/ExampleCard';
+import LaunchpadCard from '../components/LaunchpadCard';
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.primary.main, 0.8);
   const second = alpha(theme.palette.secondary.main, 0.4);
   const darkfirst = alpha(theme.palette.primary.main, 0.2);
   const darksecond = alpha(theme.palette.secondary.main, 0.2);
-  let bg=`linear-gradient(125deg, ${first} 0%, ${second} 100%),linear-gradient(0deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.8) 100%),url('/fibres-texture3.jpg') !important`;
+  let bg=`linear-gradient(125deg, ${first} 0%, ${second} 100%),linear-gradient(0deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.5) 100%),url('/fractal-colorwaves-background.jpg') !important`;
   if (theme.palette.type=='dark') { 
-    bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.9) 100%), url('/fibres-texture3.jpg') !important`;
+    bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.8) 100%), url('/fractal-colorwaves-background.jpg') !important`;
    
   }
   return {
@@ -79,26 +80,27 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-export default function Examples() {
+export default function Launchpad() {
   const classes=useStyles();
-  const examples = [];
-  for (const category of exampleList) { 
-    for (const example of category.examples) { 
-      examples.push( 
-        <ExampleCard categorySlug={category.slug} example={example} />
+  const pages = [];
+  for (const category of launchpadList) { 
+    for (const page of category.pages) { 
+      if (page.notInContents) continue;
+      pages.push( 
+        <LaunchpadCard categoryTitle={category.title} categorySlug={category.slug} page={page} />
       )
     }
   }
   return (
     <div>
       <Head>
-        <title>Smart NFT Examples</title>
+        <title>Launchpad</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={classes.bg} />
       <Typography color="textPrimary" variant='h1' align="center" className={classes.heading}>
-          Examples
+          Launchpad
         </Typography><br />
       <main className={classes.main}>
       
@@ -106,7 +108,7 @@ export default function Examples() {
         <Container maxWidth="xl" className={classes.container}>
         
         <div className={classes.root}>
-        {examples}
+        {pages}
         </div>
         </Container>    
       </main>

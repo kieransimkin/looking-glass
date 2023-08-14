@@ -54,8 +54,8 @@
       {
         "title":"Smart Life Fungible Token",
         "slug":"smart-life-ft",
-        "description":"This is a slight modification of the Smart Life NFT just for the $smart fungible token and 10 special NFTs minted in addition to the original collection",
-        "thumbnail":"smart-life.png"
+        "description":"This is a slight modification of the Smart Life NFT just for the '🧠🌱💷' fungible token and 10 special NFTs minted in addition to the original collection",
+        "thumbnail":"smart-life-ft.png"
       }
     ]
   },
@@ -73,7 +73,7 @@
         "title":"Zombie Alien",
         "slug":"zombie-alien",
         "description":"Work in progress",
-        "thumbnail":""
+        "thumbnail":"smart-avatars.png"
       }
     ]
   }
