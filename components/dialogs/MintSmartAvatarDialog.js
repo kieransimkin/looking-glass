@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {useTheme, Button, CircularProgress} from '@material-ui/core';
+import {useTheme, Button, CircularProgress, FormControl, FormLabel, FormControlLabel} from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,6 +17,8 @@ import {TextField} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomDialog from '../CustomDialog';
 import { validBech32Address } from '../../utils/CSLBrowser'
+import AvatarPreview from '../AvatarPreview';
+import ColourPicker from '../ColourPicker';
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
@@ -29,6 +31,20 @@ const useStyles = makeStyles(theme => {
     paddingTop: 0,
     paddingLeft: 0,
     paddingRight: '0em'
+  },
+  actionSelect: { 
+    marginTop:'0.5em',
+    paddingLeft:'1em',
+    paddingTop:'1em',
+    paddingBottom:'1em',
+    paddingRight:'3em',
+    borderRadius:'15px',
+    appearance: 'none',
+    cursor:'pointer',
+    backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 0.9rem top 50%',
+    backgroundSize: '0.65rem auto'
   },
   row: { 
     display: 'flex'
@@ -78,20 +94,44 @@ const useStyles = makeStyles(theme => {
 
 const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClose}) => { 
   const wallet = useContext(WalletContext);
-  const [featureType, setFeatureType] = useState(null);
+  
   const [enableNext, setEnableNext] = useState(false);
+  const [bodyColour, setBodyColour] = useState({hex:'#ff0000',rgb:{r:255,g:0,b:0,a:1}})
+  const [avatarSpec, setAvatarSpec] = useState({body:'pregnant',head:'pig', bodyColour:bodyColour})
+  const [bodyType, setBodyType] = useState(avatarSpec.body);
+  
+  const [headType, setHeadType] = useState(avatarSpec.head);
 
   const handleChange = (e, name) => { 
     setEnableNext(false);
-    setFeatureType(name);
+    setBodyType(name);
     onFeatureTypeChange(e,name);
+    const newSpec={...avatarSpec}
+    newSpec.body = name;
+    setAvatarSpec(newSpec)
+    console.log(newSpec);
     setEnableNext(true);
   }
-
+  const colourChange=(col) => { 
+    setBodyColour(col);
+    const newSpec={...avatarSpec}
+    newSpec.bodyColour = col;
+    setAvatarSpec(newSpec)
+    console.log(col);
+  }
+  const headChange = (e,head) => { 
+    setHeadType(e.target.value);
+    const newSpec={...avatarSpec}
+    newSpec.head=e.target.value;
+    setAvatarSpec(newSpec);
+    console.log(e.target.value);
+  }
+  const heads = ['alien','boarman','frankenstein','goblin','human_female','human_female_elderly','human_male','human_male_elderly','human_male_gaunt','jack','lizard_female','lizard_male','minotaur','minotaur_female','mouse','orc_female','orc_male','pig','rabbit','rat','sheep','skeleton','troll','vampire','wartotaur','wolf_female','wolf_male','zombie'];
   const classes = useStyles();
   const policies = Object.keys(wallet.assets.tokens);
   const theme = useTheme();
-  
+  const headOpts = heads.map((h)=><option value={h}>{h}</option>);
+
   return <>
     <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
@@ -100,7 +140,43 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
     
       <Typography variant="body1">Choose your avatar's body characteristics</Typography>
       <br />&nbsp;<br />
-      
+      <div style={{display:'flex', gap:'2em'}}> 
+      <AvatarPreview spec={avatarSpec} />
+      <div>
+      <FormControl>
+      <FormLabel id="demo-radio-buttons-group-label">Build Type</FormLabel>
+      &nbsp;
+      <RadioGroup value={bodyType} aria-label="type" name="type" onChange={handleChange}>
+      <div className={classes.row}>
+        <FormControlLabel value="male" label="Male" control={<Radio/>} >Male</FormControlLabel>
+        </div>
+        <div className={classes.row}>
+          <FormControlLabel value="female" label="Female" control={<Radio/>} >Female</FormControlLabel>
+        </div>
+        <div className={classes.row}>
+            <FormControlLabel value="teen" label="Teen" control={<Radio/>} >Teen</FormControlLabel>
+        </div>
+        
+        <div className={classes.row}>
+        <FormControlLabel value="pregnant" label="Pregnant" control={<Radio/>} >Pregnant</FormControlLabel>
+        </div>
+        
+        <div className={classes.row}>
+        <FormControlLabel value="muscular" label="Muscular" control={<Radio/>} >Muscular</FormControlLabel>
+        
+        </div>
+      </RadioGroup>
+      </FormControl><br />
+      <ColourPicker colour={bodyColour} onChange={colourChange}/>
+      <FormControl>
+      <FormLabel id="demo-radio-buttons-group-label">Head</FormLabel>
+      <select className={classes.actionSelect} value={headType} onChange={headChange}>
+  {headOpts}
+      </select>
+      </FormControl>
+      </div>
+      </div>
+      <br />
      </DialogContent>
      <DialogButtons previousStep={null} nextStep={nextStep} enableNext={enableNext} />
   </>;

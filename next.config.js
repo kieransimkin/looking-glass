@@ -12,6 +12,7 @@ const nextConfig = {
     
 		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
     config.resolve.fallback = { fs: false, path: false };
+    config.resolve.symlinks = true;
 
     patchWasmModuleImport(config, options.isServer);
     // Trying to hide annoying warnings from serialization lib, none of this works, but leaving it here so I know what I've tried:
