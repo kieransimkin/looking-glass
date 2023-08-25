@@ -6,7 +6,6 @@ const {access, symlink} = require('fs/promises')
 
 const nextConfig = {
   reactStrictMode: false,
-  distDir: 'build',
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     /*
@@ -25,7 +24,7 @@ const nextConfig = {
   }
   //const paths = config.paths;
   config.output.path = path.resolve('build');
-  config.entry= path.resolve('build/pages/index.js');
+  //config.entry= './build/pages/index.js'
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         test: /\.wasm$/,
@@ -34,6 +33,7 @@ const nextConfig = {
             type: 'webassembly/async',
         }
     }))
+    /*
     config.plugins.push( 
       new webpack.LoaderOptionsPlugin({
           options: {
@@ -49,6 +49,7 @@ const nextConfig = {
           }
       
       }));
+      */
     config.resolve.fallback = { fs: false, path: false };
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
 		return config;

@@ -13,7 +13,7 @@
       "ESNext",
       "dom"
     ],
-    "module": "NodeNext",
+    "module": "esnext",
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitUseStrict": false,
@@ -30,7 +30,7 @@
     "noUnusedParameters": true, /* Report errors on unused parameters. */
     "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
     "skipLibCheck": true,
-    "moduleResolution": "NodeNext",/* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    "moduleResolution": "NodeNext", /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "target": "esnext",
     "allowUmdGlobalAccess": true,
     "types": [
