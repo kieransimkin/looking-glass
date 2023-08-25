@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const path = require('path')
 const {access, symlink} = require('fs/promises');
 const configOverrides = require('./config-overrides');
+const { TransactionMetadatum } = require('@emurgo/cardano-serialization-lib-browser');
 
 const nextConfig = {
   reactStrictMode: false,
@@ -29,6 +30,10 @@ const nextConfig = {
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         options: {
+          'resolve': { 
+            'fallback':{fs: false, path: false},
+            'symlinks':true
+          },
             experiments: { 
             asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true }}}));
 
