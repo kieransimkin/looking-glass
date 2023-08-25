@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "declaration": true,
     "resolveJsonModule": true,
-    "outDir": "dist",
+    "outDir": "build",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "forceConsistentCasingInFileNames": true,
