@@ -19,7 +19,7 @@ const nextConfig = {
   //config.output.path = path.resolve('build');
   
         config.output={
-            path: path.resolve(__dirname, ''),
+            path: path.resolve(__dirname, 'build'),
             filename: '[name].[hash:8].js',
             sourceMapFilename: '[name].[hash:8].map',
             chunkFilename: '[id].[hash:8].js'
