@@ -7,7 +7,7 @@ const configOverrides = require('./config-overrides');
 
 const nextConfig = {
   reactStrictMode: false,
-  
+  distDir:path.resolve(__dirname, 'build'),
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
