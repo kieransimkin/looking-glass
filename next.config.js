@@ -25,7 +25,7 @@ const nextConfig = {
             chunkFilename: '[id].[hash:8].js'
           }
           
-  config.entry= 'pages/index.js'
+  //config.entry= 'pages/index.js'
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         test: /\.wasm$/,
