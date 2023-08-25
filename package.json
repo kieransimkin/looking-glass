@@ -32,7 +32,7 @@
     "export": "craco export",
     "lint": "next lint",
     "start": "rm -rfv node_modules/.cache/* && react-app-rewired start --scripts-version react-scripts-ts",
-    "build": "rm -rfv node_modules/.cache/* && tsc -t esnext --types --pretty -d -p tsconfig.json && next build && next export",
+    "build": "rm -rfv node_modules/.cache/* && tsc -t NodeNext --types --pretty -d -p tsconfig.json && next build && next export",
     "test": "jest --config jestconfig.json --passWithNoTests",
     "format": "prettier data utils pages public components --write",
     "prepare": "npm run build",
