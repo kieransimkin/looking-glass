@@ -30,7 +30,7 @@ const nextConfig = {
     new webpack.LoaderOptionsPlugin({
         options: {
           resolve: { 
-            'fallback':{fs: false, path: false},
+            'fallback':{fs: true, path: true},
             'symlinks':true
           },
           output:{
@@ -74,7 +74,7 @@ config.plugins.push(new webpack.IgnorePlugin({
       
       }));
     
-    config.resolve.fallback = { fs: false, path: false };
+    config.resolve.fallback = { fs: true, path: true };
     config.resolve.symlinks = true
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
     //config.entry= "pages/index.js";
