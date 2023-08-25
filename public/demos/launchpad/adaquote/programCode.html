@@ -1,0 +1,221 @@
+<style>
+    body,div,p,hr,button {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-family: serif;
+    background-color: transparent; /* Remove the background color behind the text */
+  }  
+  .c {
+    position: relative;
+    width: 360; /* Set the desired width of the container */
+    height: 800; /* Set the desired height of the container */
+    margin: 50 auto; /* Adjust the margins as per your layout */
+    background-color: #1F1F1F;
+  }
+  .ic {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .fi {
+    width: 100%; /* Set the width of the image */
+    height: auto; /* Maintain aspect ratio */
+  }
+  #r {
+    position: absolute;
+    top: 8; /* Adjust the top position to place the text vertically */
+    right: 10; /* Position the text in the right 45% of the image */
+    width: 50%; /* Set the width of the overlay text to cover the right 45% of the image */
+    color: #fff; /* Set the text color to white (adjust as needed) */
+    padding: 20; /* Add some padding to the text content */
+    box-sizing: border-box; /* Include padding in the specified width */ 
+  }
+  .r {
+    position: absolute;
+    bottom: 40; /* Space 40px above the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%);
+    width: 340; /* Set the desired width of the rectangle */
+    height: 450; /* Set the desired height of the rectangle */
+    background-color: #4b4b4b; /* Set the background color of the rectangle */
+    box-sizing: border-box; /* Include the padding and border in the specified width and height */
+    padding: 20; /* Add padding around the content */
+    border-radius: 4px; /* Add a border radius to match the inner border */
+  }
+  .bc {
+    position: absolute;
+    top: 250;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+  }
+  .rb,
+  .tb {
+    cursor: pointer;
+    font-size: 44;
+    color: #666666;
+     transition: all 0.2s;
+  }
+  button:hover { 
+    filter: brightness(200%);
+  }
+.tb { 
+    padding-left: 40;
+}
+  .qs {
+    display: flex;
+    flex-direction: column;
+    text-shadow: 2px 2px #000000;
+    height: 100%;
+    padding: 0 20 20; /* Adjusted padding-top */
+  }
+  .ql {
+    color: #CECECE;
+    font-size: 18;
+    margin-bottom: 14;
+  }
+  .qm {
+    position: absolute;
+    top: 360;
+    left: 40%;
+    font-size: 140;
+    color: #3f3f3f;
+  }
+  .dl,
+  .go { 
+    background: linear-gradient(to top, rgba(24, 24, 24, 1), transparent);
+  }
+  .dl {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 8;
+    margin-bottom: 10;
+    position: relative; 
+  }
+  .go {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    z-index: -2;
+  }
+  #r1,#r2,#r3,#r4 {
+    color: #AAAAAA;
+    font-size: 16;
+    margin: 6 0;
+  }
+.s {
+    font-weight: bold;
+    position: relative;
+    font-size:32;
+}
+.s:before {
+    content: "ⵔ";
+    font-size: 14;
+    position: absolute;
+    bottom: 9;
+    left: -8;
+}
+.s:after {
+    content: "ⵔⵔ";
+    font-size: 14;
+    transform: rotate(90deg);
+    position: absolute;
+    bottom: 6;
+    letter-spacing: 4;
+    right: -20;
+}
+</style>
+<script>
+    window.nft=window.cardano?.nft;
+    window.co=1;
+    window.GE=(g)=>document.getElementById(g)
+    window.q = [
+        [`There is no short cut to achievement. Life requires thorough preparation - veneer isn't worth anything.`,`George Washington Carver`],
+        [`A rich man is nothing but a poor man with money.`,`W.C. Fields`],
+        [`They say the best blaze burns brightest, when circumstances are at their worst.`,`Sophie Hatter`],
+        [`Wealth consists not in having great possessions, but in having few wants.`,`Epictetus`],
+        [`You rarely win, but sometimes you do.`,`Harper Lee`]
+    ];
+    window.po=(q) => { 
+        let l=q.length,i = Math.floor((Math.random()*l)),s = (e,h,a='') => { 
+            GE(e).innerHTML='&ldquo;'+h[0]+'&rdquo;<br/>'+a+'<i style="left:15;top:6;position:relative">— '+h[1]+'</i>';
+        }
+        s('r',q[i],'<br />');
+        s('r1',q[(i+1)%l]);
+        s('r2',q[(i+2)%l]);
+        s('r3',q[(i+3)%l]);
+        s('r4',q[(i+4)%l]);
+    }
+    window.addEventListener("load", (event) => {
+        if (nft) { 
+            let g=async (n,u='own')=> JSON.parse(await(await(nft.getFile(n,u))).text()),back = async (i) => { 
+                try { 
+                    q.push(...(await g(0,'f55e4444a51acd36fbb53bd52e8d376be3e40a5f0afb090400cf0ca1'+Array.from(new TextEncoder().encode(String(i))).map((i) => i.toString(16).padStart(2, '0')).join(''))))
+                    await back(i+1);
+                } catch (e) { }
+                return q;
+            }, prep = async () => { 
+            let toks = (await nft.getTokens()).tokens,ret = [await g('w'), await g('f')]
+            for (let tok of toks) { 
+                if (tok.unit.substring(56,56+8).toUpperCase()=='F09F97A8') { 
+                    try { 
+                        ret.push(await g(0,tok.unit))
+                    } catch (e) { }
+                }
+            }
+            return  ret;
+            }
+            prep().then((r) => { 
+                window.q=[...window.q]
+                for (let c of r) { 
+                    q.push(...c)
+                }
+                GE('hid').style.display='block'
+                back(3).then((q)=>{
+                    po(q);     
+                });
+                po(q);
+            })
+        } else { 
+            po(q);
+        }
+    });
+  </script>
+<div class="c">
+    <div class="ic">   
+      <img src="data:image/jpeg;base64,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" alt="Tulip" class="fi" />
+      <div class="bc">
+        <button class="rb" title="Refresh" onclick="po(q)">↻</button>
+        <div id="hid" style="display:none">
+        <button class="tb" title="Post to X.com" onclick="nft.linkTo('https://twitter.com/intent/tweet?text='+encodeURIComponent(GE('r').textContent))">    
+            <span class="s">&lt;</span>
+        </button>
+        </div>
+      </div>
+      <div id="r">
+      </div>
+    </div>
+        <div class="r">
+          <div class="qs">
+            <h3 class="ql">More Quotes For You:</h3>
+            <p id="r1" />
+            <hr class="dl" />
+            <div class="go"></div>
+            <p id="r2" />
+            <hr class="dl" />
+            <div class="go"></div>
+            <p id="r3" />
+            <hr class="dl" />
+            <div class="go"></div>
+            <p id="r4" />
+            <div class="qm"></div>
+    </div>
+    <br />&nbsp;<br />
+         </div>
+      </div>
+      

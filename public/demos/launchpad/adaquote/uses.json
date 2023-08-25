@@ -1,0 +1,17 @@
+[
+{
+    "tokens": "own"
+},
+{
+    "files": [
+        {
+            "src":["cnft:f55e4444a51acd36fbb53bd52","e8d376be3e40a5f0afb090400cf0ca131/0"],
+            "id":"w"
+        },
+        {
+            "src":["cnft:f55e4444a51acd36fbb53bd52","e8d376be3e40a5f0afb090400cf0ca132/0"],
+            "id":"f"
+        }
+    ]
+}
+]
