@@ -25,7 +25,7 @@ const nextConfig = {
   }
   //const paths = config.paths;
   config.output.path = path.resolve('build');
-  config.entry= path.resolve('build')+'/pages/index.js";
+  config.entry= path.resolve('build/pages/index.js');
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         test: /\.wasm$/,
