@@ -7,6 +7,7 @@ const configOverrides = require('./config-overrides');
 
 const nextConfig = {
   reactStrictMode: false,
+  
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
@@ -25,7 +26,14 @@ const nextConfig = {
   //const paths = config.paths;
   //config.output.path = path.resolve('build');
   
-          
+  config.plugins.push( 
+    new webpack.LoaderOptionsPlugin({
+        options: {
+            experiments: { 
+            asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true }}}));
+
+config.entry= "pages/index.js";
+
   //config.entry= 'pages/index.js'
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
