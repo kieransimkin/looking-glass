@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const webpack = require('webpack');
-const {join} = require('path');
+const path = require('path')
 const {access, symlink} = require('fs/promises')
 
 const nextConfig = {
@@ -24,6 +24,7 @@ const nextConfig = {
   } else {
       config.output.webassemblyModuleFilename = './static/wasm/[modulehash].wasm';
   }
+  config.output.path=path.resolve('build')
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         test: /\.wasm$/,
@@ -37,7 +38,7 @@ const nextConfig = {
 		return config;
 	},
   experimental: {
-    forceSwcTransforms: true,
+    forceSwcTransforms: false,
   }
 }
 module.exports = nextConfig
