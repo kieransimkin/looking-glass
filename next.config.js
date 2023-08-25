@@ -35,7 +35,7 @@ const nextConfig = {
           },
           output:{
             webassemblyModuleFilename: config.output.webassemblyModuleFilename,
-            path: path.resolve(__dirname, 'build'),
+            path:'build',
             filename: '[name].[hash:8].js',
             sourceMapFilename: '[name].[hash:8].map',
             chunkFilename: '[id].[hash:8].js'
