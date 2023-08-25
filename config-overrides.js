@@ -12,13 +12,13 @@ function patchWasmModuleImport(config,isServer) {
 
 
   // TODO: cleanup -> track https://github.com/vercel/next.js/issues/25852
-  
+  /*
   if (isServer) {
     config.output.webassemblyModuleFilename =
       './../static/wasm/[modulehash].wasm';
   } else {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
-  }
+  }*/
 
 }
 module.exports = function override(webpackConfig, env) {
