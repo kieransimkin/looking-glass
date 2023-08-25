@@ -53,7 +53,7 @@ const nextConfig = {
     
     config.resolve.fallback = { fs: false, path: false };
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
-    config.entry= "pages/index.js";
+    //config.entry= "pages/index.js";
 		return config;
 	},
   experimental: {
