@@ -7,6 +7,7 @@ const {access, symlink} = require('fs/promises')
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  future: {webpack5: true},
   distDir: 'build',
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
