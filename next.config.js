@@ -23,7 +23,7 @@ const nextConfig = {
       config.output.webassemblyModuleFilename = './static/wasm/[modulehash].wasm';
   }
   //const paths = config.paths;
-  config.output.path = path.resolve('build');
+  //config.output.path = path.resolve('build');
   //config.entry= './build/pages/index.js'
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
