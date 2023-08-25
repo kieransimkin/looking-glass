@@ -2,13 +2,14 @@
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const webpack = require('webpack');
 const path = require('path')
-const {access, symlink} = require('fs/promises')
+const {access, symlink} = require('fs/promises');
+const configOverrides = require('./config-overrides');
 
 const nextConfig = {
   reactStrictMode: false,
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
-    
+    config.optimization.moduleIds = 'named';  
     if (isServer) {
       config.output.webassemblyModuleFilename = './../../static/wasm/[modulehash].wasm';
   } else {
@@ -16,7 +17,15 @@ const nextConfig = {
   }
   //const paths = config.paths;
   //config.output.path = path.resolve('build');
-  //config.entry= './build/pages/index.js'
+  
+        config.output={
+            path: path.resolve(__dirname, ''),
+            filename: '[name].[hash:8].js',
+            sourceMapFilename: '[name].[hash:8].map',
+            chunkFilename: '[id].[hash:8].js'
+          }
+          
+  config.entry= 'pages/index.js'
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         test: /\.wasm$/,
