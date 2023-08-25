@@ -34,6 +34,12 @@ const nextConfig = {
             'fallback':{fs: false, path: false},
             'symlinks':true
           },
+          output:{
+            path: path.resolve(__dirname, 'build'),
+            filename: '[name].[hash:8].js',
+            sourceMapFilename: '[name].[hash:8].map',
+            chunkFilename: '[id].[hash:8].js'
+          },
             experiments: { 
             asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true }}}));
 
