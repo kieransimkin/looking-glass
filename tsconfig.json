@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "rootDir": "./build",
-    "baseUrl": "./",
+    "rootDir": "./",
+    "baseUrl": "./build",
     "declaration": true,
     "resolveJsonModule": true,
     "outDir": "build",
