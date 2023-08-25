@@ -33,15 +33,15 @@ const nextConfig = {
             type: 'webassembly/async',
         }
     }))
-    /*
+    
     config.plugins.push( 
       new webpack.LoaderOptionsPlugin({
           options: {
               rules: [
       // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)sx?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)s?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
-      { test: /\.json?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
+      { test: /\.(t|j)sx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
+      { test: /\.(t|j)s?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
+      { test: /\.json?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
 
       // addition - add source-map support
       { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" }
@@ -49,7 +49,7 @@ const nextConfig = {
           }
       
       }));
-      */
+    
     config.resolve.fallback = { fs: false, path: false };
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
 		return config;
