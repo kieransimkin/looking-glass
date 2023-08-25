@@ -11,6 +11,7 @@ const isTemplate = argv?.template ? true:false
 function patchWasmModuleImport(config, isServer) {
   config.experiments = Object.assign(config.experiments || {}, {
       asyncWebAssembly: true,
+      syncWebAssembly: true
   });
 
   config.optimization.moduleIds = 'named';
@@ -21,7 +22,7 @@ function patchWasmModuleImport(config, isServer) {
   });
   */
   config.resolve.fallback = { fs: false, path: false };
-  config.experiments = { asyncWebAssembly: true, layers: true };
+  config.experiments = { asyncWebAssembly: true, layers: false };
   // TODO: improve this function -> track https://github.com/vercel/next.js/issues/25852
   if (isServer) {
       config.output.webassemblyModuleFilename = './../static/wasm/[modulehash].wasm';
@@ -31,6 +32,7 @@ function patchWasmModuleImport(config, isServer) {
 }
 module.exports = {
   reactStrictMode: false,
+  
   swcMinify: true,
     webpack: {
       entry: "build/pages/index.js",
@@ -43,7 +45,7 @@ module.exports = {
           
         plugins: [],
       configure: (webpackConfig, { env, paths, isServer }) => {
-        paths.appBuild = webpackConfig.output.path = path.resolve(isTemplate?'template':'build');
+        //paths.appBuild = webpackConfig.output.path = path.resolve(isTemplate?'template':'build');
         webpackConfig.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
         webpackConfig.resolve.fallback = { fs: false, path: false };
         webpackConfig.resolve.symlinks = true;

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
-
+const webpack = require('webpack');
 const {join} = require('path');
 const {access, symlink} = require('fs/promises')
 
@@ -9,7 +9,7 @@ const nextConfig = {
   swcMinify: true,
   distDir: 'build',
   //output:'standalone',
-  webpack: function (config, options) {
+  webpack: function (config,  { env, paths, isServer }) {
     /*
     config.rules= [
       // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
@@ -19,8 +19,21 @@ const nextConfig = {
       { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" }
     ]
     */
+    if (isServer) {
+      config.output.webassemblyModuleFilename = './../../static/wasm/[modulehash].wasm';
+  } else {
+      config.output.webassemblyModuleFilename = './static/wasm/[modulehash].wasm';
+  }
+  config.plugins.push( 
+    new webpack.LoaderOptionsPlugin({
+        test: /\.wasm$/,
+        options: { 
+            
+            type: 'webassembly/async',
+        }
+    }))
     config.resolve.fallback = { fs: false, path: false };
-    config.experiments = { asyncWebAssembly: true, layers: true };
+    config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
 		return config;
 	},
   experimental: {

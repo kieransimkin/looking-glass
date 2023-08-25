@@ -29,10 +29,10 @@
   "main": "dist/pages/_app.js",
   "scripts": {
     "dev": "rm -rfv .next/.cache/* && rm -rfv node_modules/.cache/* && next dev",
-    "export": "next export",
+    "export": "craco export",
     "lint": "next lint",
     "start": "rm -rfv node_modules/.cache/* && react-app-rewired start --scripts-version react-scripts-ts",
-    "build": "rm -rfv node_modules/.cache/* && tsc -t esnext --types --pretty -d -p tsconfig.json &&  craco build",
+    "build": "rm -rfv node_modules/.cache/* && tsc -t esnext --types --pretty -d -p tsconfig.json && next build && next export",
     "test": "jest --config jestconfig.json --passWithNoTests",
     "format": "prettier data utils pages public components --write",
     "prepare": "npm run build",
