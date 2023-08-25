@@ -10,6 +10,13 @@ const nextConfig = {
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
+    
+    config.output={
+      path: path.resolve(__dirname, 'build'),
+      filename: '[name].[hash:8].js',
+      sourceMapFilename: '[name].[hash:8].map',
+      chunkFilename: '[id].[hash:8].js'
+    }
     if (isServer) {
       config.output.webassemblyModuleFilename = './../../static/wasm/[modulehash].wasm';
   } else {
@@ -18,12 +25,6 @@ const nextConfig = {
   //const paths = config.paths;
   //config.output.path = path.resolve('build');
   
-        config.output={
-            path: path.resolve(__dirname, 'build'),
-            filename: '[name].[hash:8].js',
-            sourceMapFilename: '[name].[hash:8].map',
-            chunkFilename: '[id].[hash:8].js'
-          }
           
   //config.entry= 'pages/index.js'
   config.plugins.push( 
@@ -40,9 +41,9 @@ const nextConfig = {
           options: {
               rules: [
       // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)sx?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)s?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
-      { test: /\.json?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
+      { test: /\.(t|j)sx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
+      { test: /\.(t|j)s?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
+      { test: /\.json?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
 
       // addition - add source-map support
       { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" }
