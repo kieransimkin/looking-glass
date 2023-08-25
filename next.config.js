@@ -34,6 +34,9 @@ const nextConfig = {
 
 //config.entry= "pages/index.js";
 
+config.plugins.push(new webpack.IgnorePlugin({
+  resourceRegExp: /^pg$|^cloudflare:sockets$/,
+}))
   //config.entry= 'pages/index.js'
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
