@@ -197,6 +197,7 @@ const Playground = function (props) {
         }
         continue;
       }
+    
       if (typeof value == "string" && value.length>64) { 
         json[key]=splitToLineLength(value);
       } else { 
@@ -315,6 +316,9 @@ const Playground = function (props) {
       }
     })
 
+  }
+  const onLink = (link,event) => { 
+    window.open(link)
   }
   useEffect(() => { 
     window.addEventListener('resize', refreshProgram);

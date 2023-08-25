@@ -9,7 +9,7 @@ function getWindowDimensions() {
   };
 }
 
-const useWindowDimensions = () => {
+export const useWindowDimensions = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
   useEffect(() => {
@@ -47,7 +47,7 @@ function getHeaders(selector) {
 
   return headers;
 }
-const useHeadingsData = (tags) => {
+export const useHeadingsData = (tags) => {
   const [headingElements, setHeadingElements] = useState([]);
   if (!tags) { 
     tags = hTags;
@@ -60,8 +60,3 @@ const useHeadingsData = (tags) => {
 
   return { headingElements };
 };
-
-module.exports = {
-  useHeadingsData,
-  useWindowDimensions
-}

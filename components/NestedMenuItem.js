@@ -31,6 +31,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     rightIcon = <ArrowRight />,
     leftIcon = <ArrowLeft />,
     children,
+    onClick,
     className,
     tabIndex: tabIndexProp,
     MenuProps = {},
@@ -141,6 +142,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       <MenuItem
         {...MenuItemProps}
         className={clsx(menuItemClasses.root, className)}
+        onClick={onClick}
         ref={menuItemRef}
       >
         {label}

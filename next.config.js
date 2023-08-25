@@ -9,78 +9,21 @@ const nextConfig = {
   swcMinify: true,
   //output:'standalone',
   webpack: function (config, options) {
-    
-		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
-    config.resolve.fallback = { fs: false, path: false };
-    config.resolve.symlinks = true;
-
-    patchWasmModuleImport(config, options.isServer);
-    // Trying to hide annoying warnings from serialization lib, none of this works, but leaving it here so I know what I've tried:
-    config.stats={};
-    config.stats.warningsFilter =[/emurgo/i]
-    config.plugins.push(
-      new FilterWarningsPlugin({
-        exclude: /emurgo/
-      })
-    );
-
-    // There is some weird bug with dynamic wasm imports (again, triggered by serialization lib), this workaround is from github:
-    // https://github.com/vercel/next.js/issues/25852
     /*
-    config.plugins.push(
-      new (class {
-        apply(compiler) {
-          compiler.hooks.afterEmit.tapPromise(
-            'SymlinkWebpackPlugin',
-            async (compiler) => {
-              if (isServer) {
-                const from = join(compiler.options.output.path, '../static');
-                const to = join(compiler.options.output.path, 'static');
-                
-                try {
-                  await access(from);
-                  console.log(`${from} already exists`);
-                  return;
-                } catch (error) {
-                  if (error.code === 'ENOENT') {
-                    // No link exists
-                  } else {
-                    throw error;
-                  }
-                }
-    
-                
-                await symlink(to, from, 'junction');
-                console.log(`created symlink ${from} -> ${to}`);
-              }
-            },
-          );
-        }
-      })(),
-    );
+    config.rules= [
+      // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
+      { test: /\.(t|j)sx?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
+
+      // addition - add source-map support
+      { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" }
+    ]
     */
-  // Important: return the modified config
-    //return newconfig
+    config.resolve.fallback = { fs: false, path: false };
+    config.experiments = { asyncWebAssembly: true, layers: true };
 		return config;
 	},
-}
-function patchWasmModuleImport(config, isServer) {
-  config.experiments = Object.assign(config.experiments || {}, {
-      asyncWebAssembly: true,
-  });
-
-  config.optimization.moduleIds = 'named';
-
-  config.module.rules.push({
-      test: /\.wasm$/,
-      type: 'webassembly/async',
-  });
-
-  // TODO: improve this function -> track https://github.com/vercel/next.js/issues/25852
-  if (isServer) {
-      config.output.webassemblyModuleFilename = './../static/wasm/[modulehash].wasm';
-  } else {
-      config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
+  experimental: {
+    forceSwcTransforms: true,
   }
 }
 module.exports = nextConfig

@@ -378,10 +378,10 @@ const Header = (props) => {
                                 }
                             </NestedMenuItem>                          
                             <Link href="/play"><MenuItem>Play</MenuItem></Link>
-                            <Link href="/examples"><NestedMenuItem direction="left" label="Examples..." parentMenuOpen={Boolean(anchorEl)}>
+                            <Link href="/examples"><NestedMenuItem onClick={()=>router.push('/examples')} direction="left" label="Examples..." parentMenuOpen={Boolean(anchorEl)}>
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem></Link>
-                            <Link href="/launchpad"><NestedMenuItem direction="left" label="Launchpad..." parentMenuOpen={Boolean(anchorEl)}>
+                            <Link href="/launchpad"><NestedMenuItem onClick={()=>router.push('/launchpad')} direction="left" label="Launchpad..." parentMenuOpen={Boolean(anchorEl)}>
                                 <LaunchpadMenuItems parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem></Link>
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}

@@ -98,13 +98,12 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   const [enableNext, setEnableNext] = useState(false);
   const [bodyColour, setBodyColour] = useState({hex:'#ff0000',rgb:{r:255,g:0,b:0,a:1}})
   const [avatarSpec, setAvatarSpec] = useState({body:'pregnant',head:'pig', bodyColour:bodyColour})
-  const [bodyType, setBodyType] = useState(avatarSpec.body);
   
-  const [headType, setHeadType] = useState(avatarSpec.head);
 
   const handleChange = (e, name) => { 
     setEnableNext(false);
-    setBodyType(name);
+    
+    
     onFeatureTypeChange(e,name);
     const newSpec={...avatarSpec}
     newSpec.body = name;
@@ -120,7 +119,6 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
     console.log(col);
   }
   const headChange = (e,head) => { 
-    setHeadType(e.target.value);
     const newSpec={...avatarSpec}
     newSpec.head=e.target.value;
     setAvatarSpec(newSpec);
@@ -130,7 +128,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   const classes = useStyles();
   const policies = Object.keys(wallet.assets.tokens);
   const theme = useTheme();
-  const headOpts = heads.map((h)=><option value={h}>{h}</option>);
+  const headOpts = heads.map((h)=><option key={h} value={h}>{h}</option>);
 
   return <>
     <DialogContent className={classes.dialog}>
@@ -138,7 +136,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
         Mint New Avatar
       </DialogTitle>
     
-      <Typography variant="body1">Choose your avatar's body characteristics</Typography>
+      <Typography variant="body1">Choose your avatar&apos;s body characteristics</Typography>
       <br />&nbsp;<br />
       <div style={{display:'flex', gap:'2em'}}> 
       <AvatarPreview spec={avatarSpec} />
@@ -146,7 +144,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">Build Type</FormLabel>
       &nbsp;
-      <RadioGroup value={bodyType} aria-label="type" name="type" onChange={handleChange}>
+      <RadioGroup value={avatarSpec.body} aria-label="type" name="type" onChange={handleChange}>
       <div className={classes.row}>
         <FormControlLabel value="male" label="Male" control={<Radio/>} >Male</FormControlLabel>
         </div>
@@ -170,7 +168,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       <ColourPicker colour={bodyColour} onChange={colourChange}/>
       <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">Head</FormLabel>
-      <select className={classes.actionSelect} value={headType} onChange={headChange}>
+      <select className={classes.actionSelect} value={avatarSpec.head} onChange={headChange}>
   {headOpts}
       </select>
       </FormControl>

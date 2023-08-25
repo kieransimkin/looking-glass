@@ -104,8 +104,8 @@ const AvatarPreview = (props) => {
   const [direction,setDirection]=useState('down');
   const [action, setAction]=useState('walk');
   const [continueAction, setContinueAction]=useState('walk');
-  const [backgroundX, setX]=useState(null);
-  const [backgroundY, setY]=useState(null);
+  const backgroundX=useRef(null);
+  const backgroundY=useRef(null);
   const [colour, setColour] = useState({rgb:{r:93,g:32,b:224,a:0.3},hex:'#5D20E0'})
   const [zoom, setZoom] =useState(2);
   const getAnimations = () => { 
@@ -151,14 +151,15 @@ const AvatarPreview = (props) => {
   const layers =[];
   layers.push({...getAnimations(), images:["/api/spritesheets/shadow/adult/shadow.png"] })
   if (spec.body) { 
+    console.log('loading body');
     const bmp = new createjs.Bitmap("/api/spritesheets/body/bodies/"+spec.body+"/universal.png");
     bmp.filters = [
       new createjs.ColorFilter(1,1,0.5,1, 0,100,0,0)
     ];
     const bounds = bmp.getBounds();
-    console.log(bmp.getBounds())
-    bmp.cache(0, 0,bounds?.width, bounds?.height,1, {gl: "new"});       // use our StageGL to cache
-    console.log(bmp);
+    
+    bmp.cache(0, 0,bounds?.width, bounds?.height);       // use our StageGL to cache
+    
     layers.push({...getAnimations(), images:[bmp.cacheCanvas]})
   }
   if (spec.head) { 
@@ -172,11 +173,14 @@ const AvatarPreview = (props) => {
     const animations=[];
     
 	  var queue = new createjs.LoadQueue(false);
-    console.log(queue);
-    queue.resultFormatter=(loader)=>{
-    console.log(loader)
-    return 'foo'
-    }
+    
+    var manifest = [
+      {src:"/fractal-colorwaves-background.jpg", id:"fractal"}    
+      ];
+     
+  
+  
+    queue.loadManifest(manifest,true);
     function onScroll(e) { 
       
       console.log(e.deltaY)
@@ -218,19 +222,18 @@ const AvatarPreview = (props) => {
 
       if (direction=='right') { 
         ground.x = (ground.x - event.delta * 0.030 * zoom) % ground.tileW;
-        setX(ground.x);
-        
+        backgroundX.current=ground.x;
       } else if (direction=='left') { 
         ground.x = (ground.x + event.delta * 0.030 * zoom) % ground.tileW;
         if (ground.x>0) ground.x-=ground.tileW
-        setX(ground.x);
+        backgroundX.current=ground.x;
       } else if (direction=='up') { 
         ground.y = (ground.y + event.delta * 0.012 * zoom) % ground.tileH;
         if (ground.y>0) ground.y-=ground.tileH;
-        setY(ground.y);
+        backgroundY.current=ground.y;
       } else if (direction=='down') { 
         ground.y = (ground.y - event.delta * 0.012 * zoom) % ground.tileH;
-        setY(ground.y);
+        backgroundY.current=ground.y;
       }
       
       }
@@ -239,16 +242,6 @@ const AvatarPreview = (props) => {
       }
   
     }
-    const getManifest = function()
-{
- var manifest = [
- {src:"/fractal-colorwaves-background.jpg", id:"fractal"}    
- ];
-
- return manifest;
-}
-//queue.addEventListener("fileload",onFileLoaded.bind(this));
-var manifest = getManifest();
 window.addEventListener('wheel',onScroll);
 queue.addEventListener("complete",()=>{ 
 
@@ -270,17 +263,17 @@ queue.addEventListener("complete",()=>{
   
   circle.cache(0,0,256,256)
   var groundImg = queue.getResult('fractal')
-  if (backgroundX) { 
-    ground.x=backgroundX; 
+  if (backgroundX.current) { 
+    ground.x=backgroundX.current; 
   } else { 
     ground.x=-groundImg.width;
-    setX(ground.x);
+    backgroundX.current=ground.x;
   }
-  if (backgroundY) { 
-    ground.y=backgroundY;
+  if (backgroundY.current) { 
+    ground.y=backgroundY.current;
   } else { 
     ground.y=-groundImg.height;
-    setY(ground.y)
+    backgroundY.current=ground.y;
   }
   
   ground.graphics.beginBitmapFill(groundImg).drawRect(0, 0, groundImg.width*2, groundImg.height*2);
@@ -318,11 +311,19 @@ queue.addEventListener("complete",()=>{
     stage.update();
   }
 })
-queue.loadManifest(manifest,true);
+
   return () => { 
     setAnimations([]);
     createjs.Ticker.removeAllEventListeners("tick")
     window.removeEventListener("wheel",onScroll)
+    if (stage) { 
+      stage.enableMouseOver(-1);
+      stage.enableDOMEvents(false);
+      stage.removeAllEventListeners();
+      stage.removeAllChildren();
+      //stage.canvas = null;
+      //stage = null;
+    }
   }
   },[direction,zoom,action,colour,spec])
   const goUp=() => { 

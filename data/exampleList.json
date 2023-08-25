@@ -30,6 +30,18 @@
     ]
   },
   {
+    "title":"Launchpad",
+    "slug":"launchpad",
+    "examples":[
+      {
+        "title":"Ada Quote",
+        "slug":"adaquote",
+        "description":"Ada Quote NFT",
+        "thumbnail":"adaquote.jpg"
+      }
+    ]
+  },
+  {
     "title":"Three.js",
     "slug":"three.js",
     "examples":[
@@ -67,7 +79,7 @@
         "title":"Smart Avatars",
         "slug":"smart-avatars",
         "description":"Shows how to load sprites from multiple different locations and render them all into a composite character.",
-        "thumbnail":"smart-avatars.png"
+        "thumbnail":"smart-avatars.jpg"
       },
       {
         "title":"Zombie Alien",
