@@ -6,8 +6,6 @@ const {access, symlink} = require('fs/promises')
 
 const nextConfig = {
   reactStrictMode: false,
-  swcMinify: true,
-  future: {webpack5: true},
   distDir: 'build',
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
@@ -27,7 +25,7 @@ const nextConfig = {
   }
   //const paths = config.paths;
   config.output.path = path.resolve('build');
-  config.entry= "build/pages/index.js";
+  config.entry= path.resolve('build')+'/pages/index.js";
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         test: /\.wasm$/,
