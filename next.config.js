@@ -8,7 +8,7 @@ const nextConfig = {
   reactStrictMode: false,
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
-    /*
+    
     config.rules= [
       // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
       { test: /\.(t|j)sx?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
@@ -16,7 +16,7 @@ const nextConfig = {
       // addition - add source-map support
       { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" }
     ]
-    */
+    
     if (isServer) {
       config.output.webassemblyModuleFilename = './../../static/wasm/[modulehash].wasm';
   } else {
