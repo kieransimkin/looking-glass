@@ -32,7 +32,7 @@ const nextConfig = {
             experiments: { 
             asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true }}}));
 
-config.entry= "pages/index.js";
+//config.entry= "pages/index.js";
 
   //config.entry= 'pages/index.js'
   config.plugins.push( 
