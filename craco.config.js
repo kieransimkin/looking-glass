@@ -33,37 +33,15 @@ module.exports = {
   reactStrictMode: false,
   swcMinify: true,
     webpack: {
-      entry: "dist/pages/index.js",
+      entry: "build/pages/index.js",
         output: {
-            path: path.resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, 'build'),
             filename: '[name].[hash:8].js',
             sourceMapFilename: '[name].[hash:8].map',
             chunkFilename: '[id].[hash:8].js'
           },
           
-        plugins: [
-        new webpack.NormalModuleReplacementPlugin(
-          /(.*)smartImport.json$/,
-          function (resource) {
-            resource.request = resource.request.replace(
-              /smartImport.json/,
-              isTemplate?`smartImportTemplate.json`:'smartImport.json'
-            );
-          }
-        ),
-        new webpack.NormalModuleReplacementPlugin(
-          /(.*)metadata.json$/,
-          function (resource) {
-            resource.request = resource.request.replace(
-              /metadata.json/,
-              isTemplate?`metadataTemplate.json`:'metadata.json'
-            );
-          }
-        ),
-        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/\.js$/]),
-        
-            // ...
-          ],
+        plugins: [],
       configure: (webpackConfig, { env, paths, isServer }) => {
         paths.appBuild = webpackConfig.output.path = path.resolve(isTemplate?'template':'build');
         webpackConfig.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
