@@ -7,13 +7,13 @@ const configOverrides = require('./config-overrides');
 
 const nextConfig = {
   reactStrictMode: false,
-  distDir:path.resolve(__dirname, 'build'),
+  distDir:path.resolve(__dirname, './build'),
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
     
     config.output={
-      path: path.resolve(__dirname, 'build'),
+      path: path.resolve(__dirname, './build'),
       filename: '[name].[hash:8].js',
       sourceMapFilename: '[name].[hash:8].map',
       chunkFilename: '[id].[hash:8].js'
@@ -35,7 +35,7 @@ const nextConfig = {
           },
           output:{
             webassemblyModuleFilename: config.output.webassemblyModuleFilename,
-            path:path.resolve(__dirname, 'build'),
+            path:path.resolve(__dirname, './build'),
             filename: '[name].[hash:8].js',
             sourceMapFilename: '[name].[hash:8].map',
             chunkFilename: '[id].[hash:8].js'
