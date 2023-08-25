@@ -331,7 +331,7 @@ const Playground = function (props) {
     };
   },[]);
 
-  const progressValue = ((JSON.stringify(metadataJSON, null, "\t").length)/16000)*100;
+  const progressValue = ((JSON.stringify(metadataJSON).length)/16000)*100;
   return (
     <div>
       <Head>
@@ -373,14 +373,13 @@ const Playground = function (props) {
               value={programCode}
               onChange={programCodeChange}
               height="inherit"
-            
               theme={theme.palette.type}
               extensions={[EditorView.lineWrapping,html(),javascript({ jsx: true }),css()]}
             />
           </div>
           <div style={{outline:'1px solid rgba(0,0,0,0.5)', minHeight: '550px', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'stretch', padding: 5, borderRadius: '5px', backgroundColor: theme.palette.background.default}}>
             <SimulationSelector defaultAddr={defaultAddr} onChange={simulationChange} />
-            <SmartNFTPortal loadingContent=<CircularProgress style={{marginTop: '2em', marginLeft: 'auto', marginRight: 'auto'}} /> random={random} loading={portalLoading} style={{flexGrow: 1, overflowY: 'hidden', overflowX: 'hidden', border:'none', outline: '1px solid black'}} smartImports={smartImports} metadata={metadataJSON} />
+            <SmartNFTPortal onLink={onLink} loadingContent=<CircularProgress style={{marginTop: '2em', marginLeft: 'auto', marginRight: 'auto'}} /> random={random} loading={portalLoading} style={{flexGrow: 1, overflowY: 'hidden', overflowX: 'hidden', border:'none', outline: '1px solid black'}} smartImports={smartImports} metadata={metadataJSON} />
           </div>
         </DividerBox>
       </DividerBox>
