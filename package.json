@@ -25,8 +25,8 @@
     ]
   },
   "private": true,
-  "types": "pages/index.d.ts",
-  "main": "pages/_app.js",
+  "types": "build/pages/index.d.ts",
+  "main": "build/pages/_app.js",
   "scripts": {
     "dev": "rm -rfv .next/.cache/* && rm -rfv node_modules/.cache/* && next dev",
     "export": "craco export",
