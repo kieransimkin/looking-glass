@@ -109,6 +109,7 @@
     "recompose": "^0.30.0",
     "remark-gfm": "^3.0.1",
     "sass": "^1.55.0",
+    "set-value": "^4.1.0",
     "smartnftportal": "file:submodules/SmartNFTPortal",
     "source-map-loader": "^4.0.1",
     "styled-components": "^5.3.5",
