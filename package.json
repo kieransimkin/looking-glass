@@ -60,6 +60,7 @@
     "@uiw/react-codemirror": "^4.19.16",
     "ajv": "^7.2.4",
     "axios": "^1.4.0",
+    "babel-preset-next": "^1.4.0",
     "bech32": "^2.0.0",
     "blake2b": "^2.1.4",
     "buffer": "^6.0.3",

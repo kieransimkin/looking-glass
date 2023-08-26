@@ -8,10 +8,15 @@ const configOverrides = require('./config-overrides');
 const nextConfig = {
   reactStrictMode: false,
   distDir:'./build/',
-  
+
+  generateBuildId: async () => {
+    // Return custom build ID, like the latest git commit hash
+    return 'my-build-id'
+  },
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
+    config.name="foo"
     config.context=path.resolve(__dirname, './build/');
     config.output={
       path: path.resolve(__dirname, './build/'),
@@ -36,6 +41,7 @@ const nextConfig = {
             "alias":{'node_modules': path.resolve(__dirname, './node_modules'),'./node_modules': path.resolve(__dirname, './node_modules')}
           },
           context: path.resolve(__dirname, './build/'), 
+          name:"foo",
           output:{
             webassemblyModuleFilename: config.output.webassemblyModuleFilename,
             path:path.resolve(__dirname, './build/'),
