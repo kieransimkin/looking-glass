@@ -59,25 +59,25 @@ config.plugins.push(new webpack.IgnorePlugin({
             type: 'webassembly/async',
         }
     }))
-    
+    /*
     config.plugins.push( 
       new webpack.LoaderOptionsPlugin({
           options: {
               rules: [
       // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)sx?$/, use: { loader: 'next-app-loader',  options: {
+      { test: /\.(t|j)sx?$/, use: { loader: 'next-swc-loader',  options: {
         configFile: "tsconfig.json"
     } }, exclude: /node_modules/ },
-      { test: /\.(t|j)s?$/, use: { loader: 'next-app-loader',  options: {
+      { test: /\.(t|j)s?$/, use: { loader: 'next-swc-loader',  options: {
         configFile: "tsconfig.json"
     } }, exclude: /node_modules/ },
-      { test: /\.json?$/, use: { loader: 'next-app-loader',  options: {
+      { test: /\.json?$/, use: { loader: 'next-swc-loader',  options: {
         configFile: "tsconfig.json"
     } }, exclude: /node_modules/ },
 
       // addition - add source-map support
-      { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" },
-      {use: {loader: 'next-app-loader'}}
+      
+      
               ]
           }
       
