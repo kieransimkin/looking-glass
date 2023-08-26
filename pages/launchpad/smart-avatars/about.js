@@ -113,7 +113,7 @@ export default function Launchpad() {
                 What are smart avatars?
               </Typography><br />
               <Typography variant="body1">
-                I haven&apos;'t written this yet.
+                I haven&apos;t written this yet.
                 <br />
                 &nbsp;<br />
                 Frequency psychology consciousness, wavelength intelligence experience modern intelligence spatial time. Jupiter century galactic, technology brain experience time modern modern objects flow. New flow earth, space wellbeing spirituality materialist meaning relations spirituality spacetime light psychology.
