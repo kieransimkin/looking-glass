@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 
 export default  function Spritesheets(req,res) {
     return true;
+}
+/*
     const filename = req.url.substring(18);    
     const filePath = path.join(process.cwd(), 'submodules/LPC-spritesheet-collection/input/'+filename);
     
@@ -18,4 +20,4 @@ export default  function Spritesheets(req,res) {
         'Content-Length': stat.size
     });
     contents.pipe(res);
-}
+}*/
