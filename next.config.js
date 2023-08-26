@@ -7,13 +7,13 @@ const configOverrides = require('./config-overrides');
 
 const nextConfig = {
   reactStrictMode: false,
-  distDir:path.resolve(__dirname, './build'),
+  distDir:'./build/',
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
     
     config.output={
-      path: path.resolve(__dirname, './build'),
+      path: path.resolve(__dirname, './build/'),
       filename: '[name].[hash:8].js',
       sourceMapFilename: '[name].[hash:8].map',
       chunkFilename: '[id].[hash:8].js'
@@ -35,7 +35,7 @@ const nextConfig = {
           },
           output:{
             webassemblyModuleFilename: config.output.webassemblyModuleFilename,
-            path:path.resolve(__dirname, './build'),
+            path:path.resolve(__dirname, './build/'),
             filename: '[name].[hash:8].js',
             sourceMapFilename: '[name].[hash:8].map',
             chunkFilename: '[id].[hash:8].js'
@@ -63,17 +63,24 @@ config.plugins.push(new webpack.IgnorePlugin({
           options: {
               rules: [
       // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)sx?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)s?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
-      { test: /\.json?$/, use: { loader: 'ts-loader' }, exclude: /node_modules/ },
+      { test: /\.(t|j)sx?$/, use: { loader: 'ts-loader',  options: {
+        configFile: "tsconfig.json"
+    } }, exclude: /node_modules/ },
+      { test: /\.(t|j)s?$/, use: { loader: 'ts-loader',  options: {
+        configFile: "tsconfig.json"
+    } }, exclude: /node_modules/ },
+      { test: /\.json?$/, use: { loader: 'ts-loader',  options: {
+        configFile: "tsconfig.json"
+    } }, exclude: /node_modules/ },
 
       // addition - add source-map support
-      { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" }
+      { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" },
+      {use: {loader: 'ts-loader'}}
               ]
           }
       
       }));
-    
+    //*/
     config.resolve.fallback = { fs: false, path: false };
     config.resolve.symlinks = true
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
@@ -84,4 +91,5 @@ config.plugins.push(new webpack.IgnorePlugin({
     forceSwcTransforms: false,
   }
 }
+console.log(nextConfig);
 module.exports = nextConfig

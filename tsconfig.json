@@ -54,6 +54,7 @@
     "submodules",
     "node_modules",
     "dist",
+    "build",
     "**/__tests__/*"
   ]
 }
