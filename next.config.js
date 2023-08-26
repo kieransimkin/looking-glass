@@ -33,7 +33,7 @@ const nextConfig = {
           resolve: { 
             'fallback':{fs: false, path: false},
             'symlinks':true,
-            "alias":{'node_modules': path.resolve(__dirname, './node_modules')}
+            "alias":{'node_modules': path.resolve(__dirname, './node_modules'),'./node_modules': path.resolve(__dirname, './node_modules')}
           },
           context: path.resolve(__dirname, './build/'), 
           output:{
@@ -86,7 +86,7 @@ config.plugins.push(new webpack.IgnorePlugin({
     //*/
     config.resolve.fallback = { fs: false, path: false };
     config.resolve.symlinks = true
-    config.resolve.alias={...config.resolve.alias, 'node_modules': path.resolve(__dirname, './node_modules')}
+    config.resolve.alias={...config.resolve.alias, 'node_modules': path.resolve(__dirname, './node_modules'),'./node_modules': path.resolve(__dirname, './node_modules')}
     config.context = path.resolve(__dirname, './build/')
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
     //config.entry= "pages/index.js";
