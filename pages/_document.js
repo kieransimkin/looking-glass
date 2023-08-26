@@ -20,7 +20,7 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <div class="tandem">...cl1ck</div>
+          <div className="tandem">...cl1ck</div>
         </body>
       </Html>
     );
