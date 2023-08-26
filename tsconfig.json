@@ -14,7 +14,9 @@
       "dom"
     ],
     "paths": {
-      "node_modules/*": ["node_modules/*"]
+      "node_modules/*": [
+        "node_modules/*"
+      ]
     },
     "module": "NodeNext",
     "esModuleInterop": true,
@@ -41,7 +43,13 @@
     ],
     "incremental": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
   },
   "modules": {
     "verbatimModuleSyntax": true,
@@ -51,7 +59,8 @@
     "data",
     "utils",
     "pages",
-    "components"
+    "components",
+    "./build//types/**/*.ts"
   ],
   "exclude": [
     "submodules",
