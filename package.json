@@ -52,6 +52,7 @@
     "rc-dock": "^3.2.17",
     "react": "18.2.0",
     "react-codemirror": "^1.0.0",
+    "react-color": "^2.19.3",
     "react-country-flag": "^3.0.2",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.0.19",
