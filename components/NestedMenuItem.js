@@ -124,7 +124,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     tabIndex = tabIndexProp !== undefined ? tabIndexProp : -1
   }
   let iconStyle ={};
-  const icon = rightIcon;
+  let icon = rightIcon;
   if (direction=="left") { 
     iconStyle={position:'absolute', left:'0px', top:'10px'}
     icon = leftIcon;
