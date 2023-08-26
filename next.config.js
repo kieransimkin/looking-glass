@@ -4,10 +4,12 @@ const webpack = require('webpack');
 const path = require('path')
 const {access, symlink} = require('fs/promises');
 const configOverrides = require('./config-overrides');
-
+var {WebpackManifestPlugin }= require('webpack-manifest-plugin');
 const nextConfig = {
   reactStrictMode: false,
   distDir:'./build/',
+  basePath:'/foo',
+  swcMinify: true,
   generateBuildId: async () => {
     // Return custom build ID, like the latest git commit hash
     return 'my-build-id'
@@ -16,7 +18,7 @@ const nextConfig = {
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
     config.name="foo"
-    config.context=path.resolve(__dirname, './build/');
+    config.context=path.resolve(__dirname, './build');
     config.output={
       path: path.resolve(__dirname, './build/'),
       filename: '[name].[hash:8].js',
@@ -32,6 +34,12 @@ const nextConfig = {
   //config.output.path = path.resolve('build');
   const aliases = {'node_modules': path.resolve(__dirname, './node_modules'),'./node_modules': path.resolve(__dirname, './node_modules')};
   aliases[path.resolve(__dirname,'./build/server')]=path.resolve(__dirname, './build');
+  
+  config.plugins.push(
+  new WebpackManifestPlugin ({
+    basePath: path.resolve(__dirname, './build'),
+    publicPath: '/assets/',appDirEnabled: false
+  }));
   config.plugins.push( 
   
     new webpack.LoaderOptionsPlugin({
@@ -41,7 +49,8 @@ const nextConfig = {
             'symlinks':true,
             "alias":aliases
           },
-          context: path.resolve(__dirname, './build/'), 
+          basePath:'/foo',
+          //context: path.resolve(__dirname, './build/'), 
           name:"foo",
           output:{
             webassemblyModuleFilename: config.output.webassemblyModuleFilename,
@@ -91,6 +100,7 @@ config.plugins.push(new webpack.IgnorePlugin({
       
       }));
     //*/
+    
     config.resolve.fallback = { fs: false, path: false };
     config.resolve.symlinks = true
     const old = path.resolve(__dirname, './build/server')
@@ -98,15 +108,13 @@ config.plugins.push(new webpack.IgnorePlugin({
       'node_modules': path.resolve(__dirname, './node_modules'),
       './node_modules': path.resolve(__dirname, './node_modules')}
       config.resolve.alias[old]=path.resolve(__dirname,'./build');
-    config.context = path.resolve(__dirname, './build/')
-    config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
+    config.context = path.resolve(__dirname, './build')
+    config.experiments = { asyncWebAssembly: true,  layers: true,topLevelAwait: true,syncWebAssembly: true };
     //config.entry= "pages/index.js";
     console.log(config);
 		return config;
 	},
   experimental: { 
-    
-      appDir: true,
       typedRoutes: false,
       // scrollRestoration: true,
     
