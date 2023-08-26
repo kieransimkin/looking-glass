@@ -3,7 +3,6 @@ const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const webpack = require('webpack');
 const path = require('path')
 const {access, symlink} = require('fs/promises');
-const configOverrides = require('./config-overrides');
 var {WebpackManifestPlugin }= require('webpack-manifest-plugin');
 const nextConfig = {
   reactStrictMode: false,
