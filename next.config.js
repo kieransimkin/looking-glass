@@ -41,7 +41,6 @@ const nextConfig = {
             'fallback':{fs: false, path: false},
             'symlinks':true,
             "alias":aliases
-          }
           },
           context: path.resolve(__dirname, './build/'), 
           name:"foo",
