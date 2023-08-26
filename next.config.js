@@ -31,14 +31,17 @@ const nextConfig = {
   }
   //const paths = config.paths;
   //config.output.path = path.resolve('build');
-   
+  const aliases = {'node_modules': path.resolve(__dirname, './node_modules'),'./node_modules': path.resolve(__dirname, './node_modules')};
+  aliases[path.resolve(__dirname,'./build/server')]=path.resolve(__dirname, './build');
   config.plugins.push( 
+  
     new webpack.LoaderOptionsPlugin({
         options: {
           resolve: { 
             'fallback':{fs: false, path: false},
             'symlinks':true,
-            "alias":{'node_modules': path.resolve(__dirname, './node_modules'),'./node_modules': path.resolve(__dirname, './node_modules')}
+            "alias":aliases
+          }
           },
           context: path.resolve(__dirname, './build/'), 
           name:"foo",
@@ -92,7 +95,11 @@ config.plugins.push(new webpack.IgnorePlugin({
     //*/
     config.resolve.fallback = { fs: false, path: false };
     config.resolve.symlinks = true
-    config.resolve.alias={...config.resolve.alias, 'node_modules': path.resolve(__dirname, './node_modules'),'./node_modules': path.resolve(__dirname, './node_modules')}
+    const old = path.resolve(__dirname, './build/server')
+    config.resolve.alias={...config.resolve.alias, 
+      'node_modules': path.resolve(__dirname, './node_modules'),
+      './node_modules': path.resolve(__dirname, './node_modules')}
+      config.resolve.alias[old]=path.resolve(__dirname,'./build');
     config.context = path.resolve(__dirname, './build/')
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
     //config.entry= "pages/index.js";
