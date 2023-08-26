@@ -29,5 +29,17 @@
         "thumbnail":""
       }
     ]
-  }
+  },
+  {
+    "title":"ADAquotes",
+    "slug":"adaquotes",
+    "pages":[
+      {
+        "title":"About ADA Quotes",
+        "slug":"about",
+        "description":"About the ADAquotes project",
+        "thumbnail":"adaquotes.jpg"
+      }
+    ]
+  },
 ]
