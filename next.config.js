@@ -11,7 +11,7 @@ const nextConfig = {
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
-    
+    config.context=path.resolve(__dirname, './build/');
     config.output={
       path: path.resolve(__dirname, './build/'),
       filename: '[name].[hash:8].js',
@@ -33,6 +33,7 @@ const nextConfig = {
             'fallback':{fs: false, path: false},
             'symlinks':true
           },
+          context: path.resolve(__dirname, './build/'), 
           output:{
             webassemblyModuleFilename: config.output.webassemblyModuleFilename,
             path:path.resolve(__dirname, './build/'),
@@ -63,19 +64,19 @@ config.plugins.push(new webpack.IgnorePlugin({
           options: {
               rules: [
       // changed from { test: /\.jsx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
-      { test: /\.(t|j)sx?$/, use: { loader: 'ts-loader',  options: {
+      { test: /\.(t|j)sx?$/, use: { loader: 'next-app-loader',  options: {
         configFile: "tsconfig.json"
     } }, exclude: /node_modules/ },
-      { test: /\.(t|j)s?$/, use: { loader: 'ts-loader',  options: {
+      { test: /\.(t|j)s?$/, use: { loader: 'next-app-loader',  options: {
         configFile: "tsconfig.json"
     } }, exclude: /node_modules/ },
-      { test: /\.json?$/, use: { loader: 'ts-loader',  options: {
+      { test: /\.json?$/, use: { loader: 'next-app-loader',  options: {
         configFile: "tsconfig.json"
     } }, exclude: /node_modules/ },
 
       // addition - add source-map support
       { enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: "source-map-loader" },
-      {use: {loader: 'ts-loader'}}
+      {use: {loader: 'next-app-loader'}}
               ]
           }
       
@@ -83,13 +84,15 @@ config.plugins.push(new webpack.IgnorePlugin({
     //*/
     config.resolve.fallback = { fs: false, path: false };
     config.resolve.symlinks = true
+    config.context = path.resolve(__dirname, './build/')
     config.experiments = { asyncWebAssembly: true, layers: true, syncWebAssembly: true };
     //config.entry= "pages/index.js";
+    console.log(config);
 		return config;
 	},
   experimental: {
     forceSwcTransforms: false,
   }
 }
-console.log(nextConfig);
+
 module.exports = nextConfig
