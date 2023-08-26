@@ -8,7 +8,6 @@ const configOverrides = require('./config-overrides');
 const nextConfig = {
   reactStrictMode: false,
   distDir:'./build/',
-
   generateBuildId: async () => {
     // Return custom build ID, like the latest git commit hash
     return 'my-build-id'
@@ -108,7 +107,7 @@ config.plugins.push(new webpack.IgnorePlugin({
   experimental: { 
     
       appDir: true,
-      typedRoutes: true,
+      typedRoutes: false,
       // scrollRestoration: true,
     
     forceSwcTransforms: false,
