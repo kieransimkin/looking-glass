@@ -26,7 +26,7 @@ const nextConfig = {
   }
   //const paths = config.paths;
   //config.output.path = path.resolve('build');
-  
+   
   config.plugins.push( 
     new webpack.LoaderOptionsPlugin({
         options: {
