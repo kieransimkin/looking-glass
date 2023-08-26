@@ -149,10 +149,10 @@ const AvatarPreview = (props) => {
     setContinueAction(actionRef.current.value);
   }
   const layers =[];
-  layers.push({...getAnimations(), images:["/api/spritesheets/shadow/adult/shadow.png"] })
+  layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/shadow/adult/shadow.png"] })
   if (spec.body) { 
     console.log('loading body');
-    const bmp = new createjs.Bitmap("/api/spritesheets/body/bodies/"+spec.body+"/universal.png");
+    const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png");
     bmp.filters = [
       new createjs.ColorFilter(1,1,0.5,1, 0,100,0,0)
     ];
@@ -163,7 +163,7 @@ const AvatarPreview = (props) => {
     layers.push({...getAnimations(), images:[bmp.cacheCanvas]})
   }
   if (spec.head) { 
-    layers.push({...getAnimations(), images:["/api/spritesheets/head/heads/"+spec.head+"/universal.png"]})
+    layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png"]})
   }
   
   useEffect(()=> { 
