@@ -93,7 +93,7 @@ config.plugins.push(new webpack.IgnorePlugin({
     console.log(config);
 		return config;
 	},
-  experimental: {
+  experimental: { 
     
       appDir: true,
       typedRoutes: true,
