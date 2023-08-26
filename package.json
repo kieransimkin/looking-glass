@@ -10,7 +10,7 @@
     "build": "rm -rfv node_modules/.cache/* && next build",
     "export": "next export",
     "start": "next build && next start",
-    "lint": "next lint"
+    "lint": "next lint "
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.2.0",
