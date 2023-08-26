@@ -93,6 +93,9 @@ config.plugins.push(new webpack.IgnorePlugin({
     console.log(config);
 		return config;
 	},
+  resolve:{
+    alias:{'private-next-pages': path.resolve(__dirname, './build/pages')}
+  },
   experimental: {
     
       appDir: true,
