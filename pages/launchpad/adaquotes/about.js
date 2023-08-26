@@ -14,16 +14,15 @@ import PictureCard from '../../../components/PictureCard';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import ContentCard from '../../../components/ContentCard'
 import BuyButton from '../../../components/BuyButton';
-import BigMintButton from '../../../components/BigMintButton';
 
 const useStyles = makeStyles(theme => { 
   const first = alpha(theme.palette.primary.main, 0.8);
   const second = alpha(theme.palette.secondary.main, 0.4);
   const darkfirst = alpha(theme.palette.primary.main, 0.2);
   const darksecond = alpha(theme.palette.secondary.main, 0.2);
-  let bg=`linear-gradient(125deg, ${first} 0%, ${second} 100%),linear-gradient(0deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.65) 100%),url('/fractal-necklace-background-repeating.jpg') !important`;
+  let bg=`linear-gradient(125deg, ${first} 0%, ${second} 100%),linear-gradient(0deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%),url('/web.jpg') !important`;
   if (theme.palette.type=='dark') { 
-    bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%), url('/fractal-necklace-background-repeating.jpg') !important`;
+    bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 100%), url('/web.jpg') !important`;
    
   }
   return {
@@ -38,10 +37,10 @@ const useStyles = makeStyles(theme => {
       gap: '3em'
     },
     smallCol: { 
-      flexBasis: '35%'
+      flexBasis: '50%'
     },
     bigCol: {
-      flexBasis: '65%'
+      flexBasis: '50%'
     },
     fullWidth: { 
       flexBasis: '100%'
@@ -90,14 +89,14 @@ export default function Launchpad() {
   return (
     <div>
       <Head>
-        <title>About Smart Avatars</title>
+        <title>About Smart Life</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
       <div className={classes.bg} />
       <Typography color="textPrimary" variant='h1' align="center" className={classes.heading}>
-          Smart Avatars
+          ADAquotes
         </Typography><br />
       <main className={classes.main}>
       
@@ -105,29 +104,34 @@ export default function Launchpad() {
         <Container maxWidth="xl" className={classes.container}>
           <div className={classes.row+' row'}>
             <div className={classes.smallCol+' column'}> 
-              <PictureCard height={920} width={1307} alt="Zombie Alien" src="/launchpad/zombie-alien.png" />
+              <PictureCard target="_blank" height={1810} width={3000} alt="Smart Life 90" src="/launchpad/smart-life-90-cropped.png" />
             </div>
             <div className={classes.bigCol+' column'}>
               <ContentCard>
               <Typography variant="h2" color="textSecondary">
-                What are smart avatars?
+                The First Smart NFT
               </Typography><br />
               <Typography variant="body1">
-                I haven't written this yet.
-                <br />
-                &nbsp;<br />
-                Frequency psychology consciousness, wavelength intelligence experience modern intelligence spatial time. Jupiter century galactic, technology brain experience time modern modern objects flow. New flow earth, space wellbeing spirituality materialist meaning relations spirituality spacetime light psychology.
+                Smart Life is the first Smart NFT collection ever minted on Cardano mainnet.
+              </Typography>
+              <ul className="infolist">
 
-Solar electromagnetic physics good electromagnetic solar solar existence wavelength. Human consciousness orbit wave star light goddess mass. Positive wavelength jupiter mystical vibration gaia light wellbeing, constellation philosophical relativity university gaia.
-
-Stellar wavelength spiritual positive materialism wavelength gaia spatial positive. Hubble planets spirit star solar, planets emotional brain time electromagnetic intelligence materialist university pleiades. Light psychology galaxies spirit spiritual mercury philosophical.
-                              </Typography><br />
+<li><a href="https://plutus.art/collection/smartlife" target="_blank" rel="noreferrer">Smart Life</a> - The first CIP54 collection is now minting</li>
+<li>There will be 100 tokens in total.</li>
+<li>The price will be 450 ADA for most tokens.</li>
+<li>The first token and any special tokens may be priced higher.</li>
+<li>These are not a random mint - I am manually designing the colours and animation parameters for each NFT and minting them by hand.</li>
+<li>The Policy ID is <span style={{fontFamily:'monospace', fontWeight:600}}>1eaf3b3ffb75ff27c43c512c23c6450b307f138281efb1d690b84652</span></li>
+<li>The NFTs will be gradually minted and released for sale on Plutus.art over the next month</li>
+</ul>
+<BuyButton />
              
-              <BigMintButton />
+              
              
               </ContentCard>
             </div> 
           </div>
+          <br />&nbsp;<br />
           <br />&nbsp;<br />
           </Container>
     

@@ -40,6 +40,18 @@ a, a:link, a:visited, a:focus, a:active {
   position: relative;
   left: -5px;
 }
+.tandem { 
+  display: inline-block;
+  position: absolute;
+  font-family: monospace;
+  letter-spacing: 0;
+  font-size: 8px;
+  font-weight: 900;
+  cursor: pointer;
+  margin-right:1em;
+  bottom:0;
+  right: 0;
+}
 .nomwbtn { 
   
   min-width: 10px !important;
