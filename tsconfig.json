@@ -13,6 +13,9 @@
       "ESNext",
       "dom"
     ],
+    "paths": {
+      "node_modules/*": ["node_modules/*"]
+    },
     "module": "NodeNext",
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
