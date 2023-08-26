@@ -8,6 +8,7 @@ const configOverrides = require('./config-overrides');
 const nextConfig = {
   reactStrictMode: false,
   distDir:'./build/',
+  
   //output:'standalone',
   webpack: function (config,  { env, paths, isServer }) {
     config.optimization.moduleIds = 'named';  
@@ -91,6 +92,11 @@ config.plugins.push(new webpack.IgnorePlugin({
 		return config;
 	},
   experimental: {
+    
+      appDir: true,
+      typedRoutes: true,
+      // scrollRestoration: true,
+    
     forceSwcTransforms: false,
   }
 }
