@@ -1,4 +1,4 @@
-## Smart NFT Playground
+## Smart NFT Playground 
 
 This is the source code for the [Smart NFT Playground](https://nft-playground.dev/) (a standard Next.js app) - for more information on Smart NFTs, CIP54 and this repository, please see the website, or [read the Cardano Improvement Proposal](https://cips.cardano.org/cips/cip54/).
 
