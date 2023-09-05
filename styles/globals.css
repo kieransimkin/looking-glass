@@ -40,10 +40,10 @@ a, a:link, a:visited, a:focus, a:active {
   position: relative;
   left: -5px;
 }
-.tandem { 
+.tandem > a, .tandem > a:active, .tandem > a:focus, .tandem > a:link, .tandem > a:visited { 
   display: inline-block;
   position: fixed;
-  font-family: monospace;
+  font-family: monospace !important;
   letter-spacing: 0;
   font-size: 8px;
   font-weight: 900;
