@@ -89,14 +89,14 @@ export default function Launchpad() {
   return (
     <div>
       <Head>
-        <title>About Smart Life</title>
+        <title>About ADAquote</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
       <div className={classes.bg} />
       <Typography color="textPrimary" variant='h1' align="center" className={classes.heading}>
-          ADAquotes
+          ADAquote
         </Typography><br />
       <main className={classes.main}>
       
@@ -109,7 +109,7 @@ export default function Launchpad() {
             <div className={classes.bigCol+' column'}>
               <ContentCard>
               <Typography variant="h2" color="textSecondary">
-                The First Smart NFT
+                ADAquote
               </Typography><br />
               <Typography variant="body1">
                 Smart Life is the first Smart NFT collection ever minted on Cardano mainnet.

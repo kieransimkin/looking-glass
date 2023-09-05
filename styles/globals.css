@@ -42,7 +42,7 @@ a, a:link, a:visited, a:focus, a:active {
 }
 .tandem { 
   display: inline-block;
-  position: absolute;
+  position: fixed;
   font-family: monospace;
   letter-spacing: 0;
   font-size: 8px;

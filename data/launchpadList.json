@@ -31,13 +31,13 @@
     ]
   },
   {
-    "title":"ADAquotes",
-    "slug":"adaquotes",
+    "title":"ADAquote",
+    "slug":"adaquote",
     "pages":[
       {
-        "title":"About ADA Quotes",
+        "title":"About ADA Quote",
         "slug":"about",
-        "description":"About the ADAquotes project",
+        "description":"About the ADAquote project",
         "thumbnail":"adaquote.jpg" 
       }
     ]
