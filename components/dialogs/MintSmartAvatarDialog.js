@@ -96,8 +96,8 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   const wallet = useContext(WalletContext);
   
   const [enableNext, setEnableNext] = useState(false);
-  const [bodyColour, setBodyColour] = useState({hex:'#ff0000',rgb:{r:255,g:0,b:0,a:1}})
-  const [headColour, setHeadColour] = useState({hex:'#ffff00',rgb:{r:255,g:255,b:0,a:1}})
+  const [bodyColour, setBodyColour] = useState({hex:'#7B746D',rgb:{r:123,g:116,b:109,a:1}})
+  const [headColour, setHeadColour] = useState({hex:'#7D6658',rgb:{r:125,g:102,b:88,a:1}})
   const [avatarSpec, setAvatarSpec] = useState({body:'pregnant',head:'pig', bodyColour, headColour})
   
 
