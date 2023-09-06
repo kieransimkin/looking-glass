@@ -171,6 +171,14 @@ const Header = (props) => {
                 } catch (e) { 
                     console.log(e);
                 }
+            } else { 
+                onWalletChange({
+                    'api': null, 
+                    'wallet': null, 
+                    'stakeAddrRaw':null,
+                    'returnAddrRaw':null,
+                    'connectWallet': connectWallet
+                });
             }
         }
         let dark = localStorage.getItem('cip54-darkmode');
