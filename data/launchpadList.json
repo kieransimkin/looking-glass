@@ -20,13 +20,6 @@
         "slug":"about",
         "description":"About the Smart Avatars project",
         "thumbnail":"smart-avatars.png"
-      },
-      {
-        "title":"Mint Now!",
-        "slug":"mint",
-        "notInContents":true,
-        "description":"Work in progress",
-        "thumbnail":""
       }
     ]
   },
