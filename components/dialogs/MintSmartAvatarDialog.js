@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import CloseIcon from '@material-ui/icons/Close';
+import { mkBase, postData, buildWitnessed, getData, refreshWallet } from '../../utils/Api';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import axios from 'axios';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -243,6 +244,72 @@ const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextSt
 }
 
 
+const Step3 = ({spec, previousStep, goToStep, nextStep, currentStep, isActive, handleClose, deviceName,address, country, device}) => { 
+  const theme = useTheme();
+  const wallet = useContext(WalletContext);
+  const classes= useStyles();  
+  
+  
+  const [transaction, setTransaction] = useState(false);
+
+  useEffect(() => {
+    
+
+    if (isActive && !transaction) {
+        console.log('generating transaction');
+        mkBase(wallet).then(base => { 
+          const dat = {
+            spec,
+            ...base
+          };
+          console.log(dat);
+          
+          postData('/buy', dat).then(res => {
+            if (res.status == 200) {
+              res.json().then(body => {
+                console.log(body);
+                wallet.api.signTx(body.tx, true).then(witness => {
+                  const pl = { tx: body.tx, ref: body.ref, wit: witness };
+                  buildWitnessed(pl,wallet.api, (txid) => { 
+                    dat.txHash = txid;
+                    postData('/complete', dat).then(res => { 
+
+                    });
+                  });
+                }).catch(e => { 
+                  if (typeof e == "object" && e.hasOwnProperty('message')) { 
+                    alert(e.message);
+                  } else {
+                    alert('Signature cancelled');
+                  }
+                  
+                  console.error(e);
+                });
+              })
+            } else {
+              console.error('Bad request');
+            }
+          })
+        });
+        setTransaction(true);
+    } else if (!isActive && transaction) { 
+      setTransaction(false);
+    }
+});
+  return <>
+    <DialogContent className={classes.dialog}>
+      <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
+        Generating Transaction
+      </DialogTitle>
+      <div style={{width:'100%', textAlign: 'center'}}>
+      <Typography variant="body1">Please wait...</Typography><br />
+      <CircularProgress color="primary" />
+      </div>
+     </DialogContent>
+
+     <DialogButtons previousStep={previousStep} nextStep={nextStep} />
+  </>;
+};
 const DialogButtons = ({previousStep, nextStep, enableNext, nextStepLabel}) => { 
   const theme = useTheme();
   const classes=useStyles();
@@ -271,6 +338,7 @@ const DialogTitle = (props) => {
         <div style={{position: 'relative',top:'-0.4em'}}>
           <Radio onChange={(e) => { if (e.target.checked) { goToStep(1); } }} checked={currentStep==1} disabled={!(currentStep>=1)} />
           <Radio onChange={(e) => { if (e.target.checked) { goToStep(2); } }} checked={currentStep==2} disabled={!(currentStep>=2)} />
+          <Radio onChange={(e) => { if (e.target.checked) { goToStep(3); } }} checked={currentStep==3} disabled={!(currentStep>=3)} />
         </div>
         <div style={{position: 'relative', 'top':'-0.5em', 'right':'-0.5em'}}>
           {onClose ? (
@@ -315,6 +383,7 @@ const MintSmartAvatarDialog = (props) => {
             <StepWizard>
               <Step1 onFeatureTypeChange={onFeatureTypeChange} onSpecChange={onSpecChange} handleClose={handleClose} />
               <Step2 spec={spec} featureType={featureType} onSpecChange={onSpecChange} onImportChange={importChange} handleClose={handleClose} />
+              <Step3 spec={spec} handleClose={handleClose} />  
             </StepWizard>
           
         </CustomDialog>
