@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => {
     
   };
 });
-const BigMintButton = (props) => {
+const MintButton = (props) => {
   const [icon, setIcon] = useState(<CheckoutIcon />);
   const [on, setOn] = useState(false);
   const [mintDialogOpen, setMintDialogOpen] = useState(false);
@@ -56,15 +56,14 @@ const BigMintButton = (props) => {
   return (
     <>
     <MintSmartAvatarDialog open={mintDialogOpen} onClose={mintDialogClose} />
-    
-    <Button onClick={onClick} variant="contained" className={classes.root} size="large" color="secondary" aria-controls="simple-menu" aria-haspopup="true">
-      <div style={{marginRight: '0.3em'}}>{icon}</div> Mint One
+    <Button variant="contained" className={classes.root} size="large" endIcon={<CheckoutIcon />} color="secondary" aria-controls="simple-menu" aria-haspopup="true" onClick={onClick}>
+      Mint One
     </Button>
     </>
     
   );
 }
-BigMintButton.propTypes = {
+MintButton.propTypes = {
   
 };
-export default BigMintButton;
+export default MintButton;
