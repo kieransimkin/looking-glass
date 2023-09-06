@@ -406,6 +406,9 @@ queue.addEventListener("complete",()=>{
       <Typography variant="caption" style={{textShadow:'1px 1px 2px #000000ff, 1px 1px 2px #000000ff'}}>
         Zoom: <b><span ref={zoomLabelRef}>×2</span></b>
         </Typography>
+        <div style={{position:'absolute',top:'0',left:'0'}}>
+          Name
+        </div>
       </div>
       <canvas ref={stageRef} className={classes.canvas} width="256" height="256" />
       <input ref={zoomRef} step="0.1" onChange={zoomChange} type="range" min="1" max="4" defaultValue={zoom} className={classes.slider} id="myRange"></input>
