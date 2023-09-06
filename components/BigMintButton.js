@@ -2,7 +2,7 @@ import { useState , useEffect, useRef, useContext } from "react";
 import PropTypes from 'prop-types';
 import {useTheme, Button} from '@material-ui/core';
 import Link from 'next/link'
-import WalletContext from '../components/WalletContext';
+import WalletContext from './WalletContext';
 import { makeStyles, StylesContext } from "@material-ui/core/styles";
 
 import { alpha } from '@material-ui/core/styles/colorManipulator';
