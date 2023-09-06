@@ -101,7 +101,7 @@ export default function Help() {
       
       <div className={classes.bg} />
       <Typography color="textPrimary" variant='h1' align="center" className={classes.heading}>
-          About CIP54
+          About Arden <sup>(CIP54)</sup>
         </Typography><br />
       <main className={classes.main}>
       
