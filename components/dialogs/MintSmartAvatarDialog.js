@@ -213,7 +213,7 @@ const DialogButtons = ({previousStep, nextStep, enableNext, nextStepLabel}) => {
   const theme = useTheme();
   const classes=useStyles();
   return (
-    <DialogActions sx={{backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary}}>
+    <DialogActions sx={{padding: '0px 8px 8px 8px', backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary}}>
       {previousStep &&
         <Button size="large" className={classes.button}  onClick={previousStep}>Previous</Button>  
       }
