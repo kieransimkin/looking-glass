@@ -49,7 +49,7 @@ export default async function Browse(req, res) {
     txBuilder.add_output(
         CardanoWasm.TransactionOutput.new(
             shelleyOutputAddress,
-            CardanoWasm.Value.new(CardanoWasm.BigNum.from_str('100000000'))    
+            CardanoWasm.Value.new(CardanoWasm.BigNum.from_str('10000000'))    
         ),
     );
     
