@@ -43,6 +43,9 @@ a, a:link, a:visited, a:focus, a:active {
 #customized-dialog-title {
   padding: 0;
 }
+.MuiDialogContent-root:first-child { 
+  padding-bottom: 0px;
+}
 .tandem > a, .tandem > a:active, .tandem > a:focus, .tandem > a:link, .tandem > a:visited { 
   display: inline-block;
   position: fixed;
