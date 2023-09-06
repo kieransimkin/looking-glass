@@ -44,7 +44,7 @@ const Layout = ({children}) => {
               main: '#1C5829'
             },
             secondary: { 
-              main: '#703F00'
+              main: '#ddccff'
             }
           }
           
@@ -62,7 +62,7 @@ const Layout = ({children}) => {
         palette: {
             type: 'dark',
             primary: {
-              main: '#7B3F00',
+              main: '#ddccff',
             },
             secondary: {
               main: '#1C5829',
