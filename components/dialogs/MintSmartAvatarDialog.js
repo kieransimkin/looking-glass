@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {useTheme, Button, CircularProgress, FormControl, FormLabel, FormControlLabel} from '@material-ui/core';
+import {useTheme, Button, CircularProgress, TextField, FormControl, FormLabel, FormControlLabel} from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -212,6 +212,7 @@ const Step1 = ({nextStep, onSpecChange, onFeatureTypeChange, goToStep, currentSt
 const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
   const classes = useStyles();
   const [enableNext, setEnableNext] = useState(false);
+  const [name, setName] = useState('');
   return <>
   <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
@@ -220,7 +221,7 @@ const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextSt
       <div style={{display:'flex', gap:'2em', alignItems:'center'}}>
       <div>
       <FormLabel id="demo-name-label">Name your Avatar</FormLabel>
-
+      <TextField variant="outlined" onChange={nameChange} value={name} placeholder="Choose Name" label="Name" />
       <Typography variant="caption">Clothes, weapons, accessories and batteries sold separately.</Typography>
       </div> 
       <AvatarPreview spec={spec} />
