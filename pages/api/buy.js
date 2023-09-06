@@ -96,6 +96,7 @@ export default async function Browse(req, res) {
     txBuilder.add_change_if_needed(returnAddress);
 
     // Build transaction
+    try { 
     const txBody = txBuilder.build();
     const txHash = CardanoWasm.hash_transaction(txBody);
 
@@ -109,6 +110,9 @@ export default async function Browse(req, res) {
       witnesses,
       unsignedTx.auxiliary_data()
     );
+    } catch (e) { 
+        return res.status(400).json({message:e});
+    }
     res.status(200).json({tx: tx.to_hex(), body: body});
   //res.status(200).json(Object.keys(req.query));
 }
