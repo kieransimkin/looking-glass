@@ -191,7 +191,7 @@ const Step1 = ({nextStep, onSpecChange, onFeatureTypeChange, goToStep, currentSt
       
       <FormControl>
       <div style={{display:'flex', alignItems:'center',gap:'0.8em'}}>
-      <FormLabel id="demo-radio-buttons-group-label">Head</FormLabel>
+      <FormLabel id="demo-head-label">Head</FormLabel>
       <select className={classes.actionSelect} value={avatarSpec.head} onChange={headChange}>
   {headOpts}
       </select>
@@ -217,11 +217,14 @@ const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextSt
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
         Choose Avatar Name
       </DialogTitle>
-      <div style={{display:'flex', gap:'2em', alignItems:'center'}}> 
-      <AvatarPreview spec={spec} />
+      <div style={{display:'flex', gap:'2em', alignItems:'center'}}>
       <div>
+      <FormLabel id="demo-name-label">Name your Avatar</FormLabel>
 
-      </div>
+      <Typography variant="caption">Clothes, weapons, accessories and batteries sold separately.</Typography>
+      </div> 
+      <AvatarPreview spec={spec} />
+      
       </div>
       </DialogContent>
       <DialogButtons previousStep={previousStep} nextStep={nextStep} enableNext={enableNext} />
