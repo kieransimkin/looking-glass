@@ -214,7 +214,7 @@ export default function Help() {
                 Further reading
               </Typography><br />
               <Typography variant="body1">
-                All of the parts of the Smart NFT API including this website itself are provided opensource on Github - SmartNFTPortal and Libcip54 are also available as npm packages<br />&nbsp;
+                All of the parts of the Arden API including this website itself are provided opensource on Github - SmartNFTPortal and Libcip54 are also available as npm packages<br />&nbsp;
                 <table style={{borderSpacing:'10px', marginLeft:'auto',marginRight:'auto'}} border={1} width="90%" className="linktable">
                   
                   <tr><td valign="top"><a href="https://github.com/kieransimkin/smartnftportal" target="_blank" rel="noreferrer"><Typography variant="body1">SmartNFTPortal</Typography></a></td><td>This is a react component which gives you everything you need to render a Smart NFT in the front end - this is the component used by the Playground, and by <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a></td></tr>
