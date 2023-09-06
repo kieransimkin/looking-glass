@@ -13,7 +13,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import axios from 'axios';
-import {TextField} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomDialog from '../CustomDialog';
 import { validBech32Address } from '../../utils/CSLBrowser'
