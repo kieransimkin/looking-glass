@@ -101,6 +101,7 @@ const Header = (props) => {
     // State: 
     const [walletOpen, setWalletOpen] = React.useState(false);
     const [saveAsOpen, setSaveAsOpen] = React.useState(false);
+    const [launchpadDialogIsOpen, setLaunchpadDialogIsOpen] = React.useState(false);
     const [newOpen, setNewOpen] = React.useState(false);
     const [importBlockchainOpen, setImportBlockchainOpen] = React.useState(false);
     const [importZipOpen, setImportZipOpen] = React.useState(false);
@@ -202,7 +203,7 @@ const Header = (props) => {
         }
     
         timer = setTimeout(() => {
-          if (!hover) {
+          if (!hover && !launchpadDialogIsOpen) {
             toggleVisibility(true, 'none');
             setAnchorEl(null);
           }
@@ -317,6 +318,12 @@ const Header = (props) => {
         setWallet(null);
         setAnchorEl(null);
     }
+    const launchpadDialogOpen = () => { 
+        setLaunchpadDialogIsOpen(true);
+    } 
+    const launchpadDialogClose = () => { 
+        setLaunchpadDialogIsOpen(false);
+    }
     const openNewDialog = () => { 
 
     }
@@ -390,7 +397,7 @@ const Header = (props) => {
                                 <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem></Link>
                             <Link href="/launchpad"><NestedMenuItem onClick={()=>router.push('/launchpad')} direction="left" label="Launchpad..." parentMenuOpen={Boolean(anchorEl)}>
-                                <LaunchpadMenuItems parentMenuOpen={Boolean(anchorEl)} />
+                                <LaunchpadMenuItems onDialogOpen={launchpadDialogOpen} onDialogClose={launchpadDialogClose} parentMenuOpen={Boolean(anchorEl)} />
                             </NestedMenuItem></Link>
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'75px'}}>
