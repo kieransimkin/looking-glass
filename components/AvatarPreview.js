@@ -148,22 +148,16 @@ const AvatarPreview = (props) => {
     setAction(actionRef.current.value);
     setContinueAction(actionRef.current.value);
   }
-  const layers =[];
-  layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/shadow/adult/shadow.png"] })
-  if (spec.body) { 
-    console.log('loading body');
-    const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png");
-    bmp.filters = [
-      new createjs.ColorFilter(1,1,0.5,1, 0,100,0,0)
+  
+  var manifest = [
+    {src:"/fractal-colorwaves-background.jpg", id:"fractal"}    
     ];
-    const bounds = bmp.getBounds();
-    
-    bmp.cache(0, 0,bounds?.width, bounds?.height);       // use our StageGL to cache
-    
-    layers.push({...getAnimations(), images:[bmp.cacheCanvas]})
+  
+  if (spec.body) { 
+    manifest.push({src:"/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png",id:"body"});
   }
   if (spec.head) { 
-    layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png"]})
+    manifest.push({src:"/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png",id:'head'})
   }
   
   useEffect(()=> { 
@@ -173,13 +167,6 @@ const AvatarPreview = (props) => {
     const animations=[];
     
 	  var queue = new createjs.LoadQueue(false);
-    
-    var manifest = [
-      {src:"/fractal-colorwaves-background.jpg", id:"fractal"}    
-      ];
-     
-  
-  
     queue.loadManifest(manifest,true);
     function onScroll(e) { 
       
@@ -285,15 +272,32 @@ queue.addEventListener("complete",()=>{
   ground.cache(0, 0, groundImg.width*2, groundImg.height*2);
   stage.addChild(ground)
   stage.addChild(circle);
+  const layers =[];
+
+  layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/shadow/adult/shadow.png"] })
+  if (spec.body) { 
+    console.log('loading body');
+    const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png");
+   
+    bmp.filters = [
+      new createjs.ColorFilter(1,1,0.5,1, 0,100,0,0)
+    ];
+    const bounds = bmp.getBounds();
+    
+    bmp.cache(0, 0,bounds?.width, bounds?.height);       // use our StageGL to cache
+    
+    layers.push({...getAnimations(), images:[bmp.cacheCanvas]})
+  }
+  if (spec.head) { 
+    layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png"]})
+   
+  }
   for (const layer of layers) { 
     
     const sheet = new createjs.SpriteSheet(layer);
     
     const animation = new createjs.Sprite(sheet,action+direction);
-    
- 
-
-//animation.cache(0,0,animation.width,animation.height)
+    //animation.cache(0,0,animation.width,animation.height)
     animation.setTransform((256-64*zoom)/2,(256-64*zoom)/2-(8*zoom),zoom,zoom);
     animation.addEventListener('animationend',(e) => { 
       if (e.next=='walkup'||e.next=='walkdown'||e.next=='walkleft'||e.next=='walkright') { 

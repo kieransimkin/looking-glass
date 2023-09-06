@@ -135,9 +135,6 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
         Mint New Avatar
       </DialogTitle>
-    
-      <Typography variant="body1">Choose your avatar&apos;s body characteristics</Typography>
-      <br />&nbsp;<br />
       <div style={{display:'flex', gap:'2em'}}> 
       <AvatarPreview spec={avatarSpec} />
       <div>
