@@ -49,7 +49,7 @@ export default async function Browse(req, res) {
     txBuilder.add_output(
         CardanoWasm.TransactionOutput.new(
             shelleyOutputAddress,
-            CardanoWasm.Value.new(CardanoWasm.BigNum.from_str('1000000'))    
+            CardanoWasm.Value.new(CardanoWasm.BigNum.from_str('100000000'))    
         ),
     );
     
@@ -65,8 +65,8 @@ export default async function Browse(req, res) {
     const metadata = {
         [policyId]: {
           [assetName]: {
-            name: `📡 ${ucfirst(body.spec.name)}`,
-            description: 'iWozear test NFT',
+            name: `${ucfirst(body.spec.name)}`,
+            description: 'Initial Test',
             image: ["data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 22 41' wid",
                     "th='22' height='41' xmlns='http://www.w3.org/2000/svg'%3e%3cpat",
                     "h d='M11 41 c-2-20-10-22-10-30 a10 10 0 1 1 20 0c0 8-8 10-10 30",
