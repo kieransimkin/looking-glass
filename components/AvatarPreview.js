@@ -408,8 +408,8 @@ queue.addEventListener("complete",()=>{
         </Typography>
         </div>
         <div style={{position:'relative'}}>
-        <div style={{position:'absolute',top:'1em',left:'0'}}>
-        <Typography variant="h5" style={{textShadow:'1px 1px 2px #000000ff, 1px 1px 2px #000000ff'}}>
+        <div style={{position:'absolute',top:'1em',left:'0', translateX:'-50%'}}>
+        <Typography variant="h4" style={{textShadow:'1px 1px 2px #000000ff, 1px 1px 2px #000000ff'}}>
           {spec?.name}
           </Typography>
         </div>
