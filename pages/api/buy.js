@@ -96,16 +96,17 @@ export default async function Browse(req, res) {
     txBuilder.add_change_if_needed(returnAddress);
 
     // Build transaction
+    let txBody, txHash, witnesses, unsignedTx, tx;
     try { 
-    const txBody = txBuilder.build();
-    const txHash = CardanoWasm.hash_transaction(txBody);
+    txBody = txBuilder.build();
+    txHash = CardanoWasm.hash_transaction(txBody);
 
     // Empty witness set
-    const witnesses = CardanoWasm.TransactionWitnessSet.new();
+     witnesses = CardanoWasm.TransactionWitnessSet.new();
 
 
-    const unsignedTx = txBuilder.build_tx();
-    const tx = CardanoWasm.Transaction.new(
+    unsignedTx = txBuilder.build_tx();
+    tx = CardanoWasm.Transaction.new(
       unsignedTx.body(),
       witnesses,
       unsignedTx.auxiliary_data()
