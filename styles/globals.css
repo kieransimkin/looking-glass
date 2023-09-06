@@ -45,6 +45,7 @@ a, a:link, a:visited, a:focus, a:active {
 }
 .MuiDialogContent-root:first-child { 
   padding-bottom: 0px;
+  overflow: visible;
 }
 .tandem > a, .tandem > a:active, .tandem > a:focus, .tandem > a:link, .tandem > a:visited { 
   display: inline-block;
