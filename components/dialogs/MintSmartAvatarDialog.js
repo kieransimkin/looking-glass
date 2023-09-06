@@ -38,7 +38,8 @@ const useStyles = makeStyles(theme => {
       fontFamily: "'Baloo Thambi 2', cursive",
       fontSize: '0.9em',
       fontWeight: 600,
-      letterSpacing: '0.02em'
+      letterSpacing: '0.02em',
+      cursor: 'pointer'
     },
     marginTop:'0.5em',
     paddingLeft:'1em',
@@ -103,7 +104,7 @@ const useStyles = makeStyles(theme => {
 }});
 
 
-const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClose}) => { 
+const Step1 = ({nextStep, onSpecChange, onFeatureTypeChange, goToStep, currentStep, handleClose}) => { 
   const wallet = useContext(WalletContext);
   
   const [enableNext, setEnableNext] = useState(false);
@@ -114,34 +115,39 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
 
   const handleChange = (e, name) => { 
     setEnableNext(false);
-    
-    
     onFeatureTypeChange(e,name);
     const newSpec={...avatarSpec}
     newSpec.body = name;
     setAvatarSpec(newSpec)
+    onSpecChange(e, newSpec);
     console.log(newSpec);
     setEnableNext(true);
   }
-  const bodyColourChange=(col) => { 
+  const bodyColourChange=(col) => {
+    setEnableNext(true); 
     setBodyColour(col);
     const newSpec={...avatarSpec}
     newSpec.bodyColour = col;
+    onSpecChange(null, newSpec);
     setAvatarSpec(newSpec)
     console.log(col);
   }
 
-  const headColourChange=(col) => { 
+  const headColourChange=(col) => {
+    setEnableNext(true); 
     setHeadColour(col);
     const newSpec={...avatarSpec}
     newSpec.headColour = col;
     setAvatarSpec(newSpec)
+    onSpecChange(null, newSpec);
     console.log(col);
   }
   const headChange = (e,head) => { 
+    setEnableNext(true);
     const newSpec={...avatarSpec}
     newSpec.head=e.target.value;
     setAvatarSpec(newSpec);
+    onSpecChange(e, newSpec);
     console.log(e.target.value);
   }
   const heads = ['alien','boarman','frankenstein','goblin','human_female','human_female_elderly','human_male','human_male_elderly','human_male_gaunt','jack','lizard_female','lizard_male','minotaur','minotaur_female','mouse','orc_female','orc_male','pig','rabbit','rat','sheep','skeleton','troll','vampire','wartotaur','wolf_female','wolf_male','zombie'];
@@ -155,7 +161,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
         Mint New Avatar
       </DialogTitle>
-      <div style={{display:'flex', gap:'2em'}}> 
+      <div style={{display:'flex', gap:'2em', alignItems:'center'}}> 
       <AvatarPreview spec={avatarSpec} />
       <div>
       <FormControl>
@@ -203,8 +209,21 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
      <DialogButtons previousStep={null} nextStep={nextStep} enableNext={enableNext} />
   </>;
 };
-const Step2 = ({ featureType, previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
-  return <></>
+const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  return <>
+  <DialogContent className={classes.dialog}>
+      <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
+        Choose Avatar Name
+      </DialogTitle>
+      <div style={{display:'flex', gap:'2em', alignItems:'center'}}> 
+      <AvatarPreview spec={spec} />
+      <div>
+
+      </div>
+      </div>
+      </DialogContent>
+      <DialogButtons previousStep={previousStep} nextStep={nextStep} enableNext={enableNext} />
+  </>
 }
 
 
@@ -253,6 +272,7 @@ const DialogTitle = (props) => {
 const MintSmartAvatarDialog = (props) => {
   const { onClose, open, onImportChange } = props;  
   const [featureType, setFeatureType] = useState(null);
+  const [spec, setSpec] = useState(null);
 
   const theme = useTheme();
   const classes=useStyles();
@@ -261,6 +281,9 @@ const MintSmartAvatarDialog = (props) => {
         onClose(null); 
       }
     };
+    const onSpecChange = (e, val) => { 
+      setSpec(val);
+    }
     const onFeatureTypeChange = (e,val) => { 
       setFeatureType(val);
     }
@@ -274,8 +297,8 @@ const MintSmartAvatarDialog = (props) => {
         <CustomDialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
           
             <StepWizard>
-              <Step1 onFeatureTypeChange={onFeatureTypeChange} handleClose={handleClose} />
-              <Step2 featureType={featureType} onImportChange={importChange} handleClose={handleClose} />
+              <Step1 onFeatureTypeChange={onFeatureTypeChange} onSpecChange={onSpecChange} handleClose={handleClose} />
+              <Step2 spec={spec} featureType={featureType} onSpecChange={onSpecChange} onImportChange={importChange} handleClose={handleClose} />
             </StepWizard>
           
         </CustomDialog>

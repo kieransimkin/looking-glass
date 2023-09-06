@@ -74,8 +74,10 @@ const useStyles = makeStyles(theme => {
         fontSize:'0.9em',    
         fontWeight: 600,
         letterSpacing: '0.02em',
+        cursor: 'pointer'
       }, 
       marginTop:'0.5em',
+      cursor: 'pointer',
       paddingLeft:'1em',
       paddingTop:'1em',
       paddingBottom:'1em',
