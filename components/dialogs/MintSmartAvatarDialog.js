@@ -148,7 +148,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   const classes = useStyles();
   const policies = Object.keys(wallet.assets.tokens);
   const theme = useTheme();
-  const headOpts = heads.map((h)=><option key={h} value={h}>{ucfirst(h.replace('_',' '))}</option>);
+  const headOpts = heads.map((h)=><option key={h} value={h}>{ucfirst(h.replaceAll('_',' '))}</option>);
 
   return <>
     <DialogContent className={classes.dialog}>
