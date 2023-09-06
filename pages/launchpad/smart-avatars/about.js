@@ -117,7 +117,7 @@ export default function Launchpad() {
                 Your smart avatar is a fully interactive playable character which can be used in future blockchain games.<br />
                 <br />
                 &nbsp;<br />
-                <ul>
+                <ul className="infolist">
                   <li>Mint price of 20 ADA</li>
                   <li>Unlimited mint - policy never locks.</li>
                   <li>The NFT will be improved over time, early mints will identifiable and unique.</li>
