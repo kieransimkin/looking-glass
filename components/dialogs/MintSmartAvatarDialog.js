@@ -97,7 +97,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   
   const [enableNext, setEnableNext] = useState(false);
   const [bodyColour, setBodyColour] = useState({hex:'#ff0000',rgb:{r:255,g:0,b:0,a:1}})
-  const [headColour, setHeadColour] = useState({hex:'#ffff00',rgb:{r:255,g:0,b:0,a:1}})
+  const [headColour, setHeadColour] = useState({hex:'#ffff00',rgb:{r:255,g:255,b:0,a:1}})
   const [avatarSpec, setAvatarSpec] = useState({body:'pregnant',head:'pig', bodyColour, headColour})
   
 
