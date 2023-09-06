@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import StepWizard from "react-step-wizard";
+import { Alert, AlertTitle } from '@material-ui/lab';
 import WalletContext from '../WalletContext';
 import { Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -304,6 +305,10 @@ const Step3 = ({spec, previousStep, goToStep, nextStep, currentStep, isActive, h
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Generating Transaction
       </DialogTitle>
+      <Alert width="" severity="warning" style={{position:'relative',top:'0em'}}>
+      <AlertTitle>Technology demonstration alpha preview</AlertTitle>
+      This project goes into beta on the 7th - until then, use at your own risk, no refunds will be issued if you receive a non-working NFT.
+      </Alert>
       <div style={{width:'100%', textAlign: 'center'}}>
       <Typography variant="body1">Please wait...</Typography><br />
       <CircularProgress color="primary" />
