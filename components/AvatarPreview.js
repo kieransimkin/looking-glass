@@ -166,10 +166,10 @@ const AvatarPreview = (props) => {
     {src:"/fractal-colorwaves-background.jpg", id:"fractal"}    
     ];
   
-  if (spec.body) { 
+  if (spec?.body) { 
     manifest.push({src:"/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png",id:"body"});
   }
-  if (spec.head) { 
+  if (spec?.head) { 
     manifest.push({src:"/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png",id:'head'})
   }
   
@@ -288,7 +288,7 @@ queue.addEventListener("complete",()=>{
   const layers =[];
 
   layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/shadow/adult/shadow.png"] })
-  if (spec.body) { 
+  if (spec?.body) { 
     console.log('loading body');
     const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png");
     console.log(spec.bodyColour)
@@ -301,7 +301,7 @@ queue.addEventListener("complete",()=>{
     
     layers.push({...getAnimations(), images:[bmp.cacheCanvas]})
   }
-  if (spec.head) { 
+  if (spec?.head) { 
     const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png");
     console.log(spec.headColour)
     bmp.filters = [
