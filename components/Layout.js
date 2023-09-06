@@ -40,12 +40,7 @@ const Layout = ({children}) => {
             }
           },
           palette: { 
-            primary: { 
-              main: '#1C5829'
-            },
-            secondary: { 
-              main: '#ddccff'
-            }
+            
           }
           
     });
@@ -62,10 +57,10 @@ const Layout = ({children}) => {
         palette: {
             type: 'dark',
             primary: {
-              main: '#ddccff',
+              main: '#ffaadd',
             },
             secondary: {
-              main: '#1C5829',
+              main: '#ddccff',
             },
           },
     });
