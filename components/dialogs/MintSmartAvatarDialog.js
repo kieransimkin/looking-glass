@@ -199,7 +199,6 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       </div>
       </div>
       </div>
-      <br />
      </DialogContent>
      <DialogButtons previousStep={null} nextStep={nextStep} enableNext={enableNext} />
   </>;
