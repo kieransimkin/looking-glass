@@ -40,7 +40,12 @@ const Layout = ({children}) => {
             }
           },
           palette: { 
-
+            primary: { 
+              main: '#1C5829'
+            },
+            secondary: { 
+              main: '#7B3F00'
+            }
           }
           
     });
