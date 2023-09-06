@@ -406,6 +406,8 @@ queue.addEventListener("complete",()=>{
       <Typography variant="caption" style={{textShadow:'1px 1px 2px #000000ff, 1px 1px 2px #000000ff'}}>
         Zoom: <b><span ref={zoomLabelRef}>×2</span></b>
         </Typography>
+        </div>
+        <div style={{position:'relative'}}>
         <div style={{position:'absolute',top:'1em',left:'0'}}>
         <Typography variant="caption" style={{textShadow:'1px 1px 2px #000000ff, 1px 1px 2px #000000ff'}}>
           {spec?.name}
