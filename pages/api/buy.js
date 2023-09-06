@@ -114,6 +114,6 @@ export default async function Browse(req, res) {
     } catch (e) { 
         return res.status(400).json({message:e});
     }
-    res.status(200).json({tx: tx.to_hex(), body: body});
+    res.status(200).json({tx: tx.to_hex(), body: body, txBody: tx.body().to_hex(), aux: tx.auxiliary_data().to_hex()});
   //res.status(200).json(Object.keys(req.query));
 }

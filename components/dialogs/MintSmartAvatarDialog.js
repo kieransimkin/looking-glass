@@ -270,7 +270,7 @@ const Step3 = ({spec, previousStep, goToStep, nextStep, currentStep, isActive, h
               res.json().then(body => {
                 console.log(body);
                 wallet.api.signTx(body.tx, true).then(witness => {
-                  const pl = { tx: body.tx, ref: body.ref, wit: witness };
+                  const pl = { tx: body.tx, ref: body.ref, wit: witness, txBody: body.txBody, aux: body.aux };
                   buildWitnessed(pl,wallet.api, (txid) => { 
                     dat.txHash = txid;
                     postData('/complete', dat).then(res => { 
