@@ -281,6 +281,7 @@ const Step3 = ({spec, previousStep, goToStep, nextStep, currentStep, isActive, h
                     alert(e.message);
                   } else {
                     alert('Signature cancelled');
+                    console.log(e);
                   }
                   
                   console.error(e);
