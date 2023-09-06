@@ -36,7 +36,9 @@ const useStyles = makeStyles(theme => {
   actionSelect: { 
     '& *': { 
       fontFamily: "'Baloo Thambi 2', cursive",
-      fontSize: '0.9em'
+      fontSize: '0.9em',
+      fontWeight: 600,
+      letterSpacing: '0.02em'
     },
     marginTop:'0.5em',
     paddingLeft:'1em',
@@ -44,7 +46,9 @@ const useStyles = makeStyles(theme => {
     paddingBottom:'1em',
     paddingRight:'3em',
     fontFamily: "'Baloo Thambi 2', cursive",
-    fontSize:'0.9em',
+    fontSize:'0.9em',    
+    fontWeight: 600,
+    letterSpacing: '0.02em',
     borderRadius:'15px',
     appearance: 'none',
     cursor:'pointer',
@@ -186,7 +190,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   {headOpts}
       </select>
       </div>
-      </FormControl><br />
+      </FormControl><br />&nbsp;<br />
       <div style={{display:'flex', alignItems:'center', gap:'0.8em'}}>
       <FormLabel id="demo-body-tone-label">Body Tone</FormLabel>
       <ColourPicker disableAlpha={true} colour={bodyColour} onChange={bodyColourChange}/>
