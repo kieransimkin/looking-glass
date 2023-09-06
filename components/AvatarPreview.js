@@ -278,7 +278,7 @@ queue.addEventListener("complete",()=>{
   if (spec.body) { 
     console.log('loading body');
     const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png");
-   
+    console.log(spec.bodyColour)
     bmp.filters = [
       new createjs.ColorFilter(1,1,0.5,1, 0,100,0,0)
     ];
