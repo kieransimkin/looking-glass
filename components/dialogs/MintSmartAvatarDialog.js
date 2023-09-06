@@ -171,8 +171,8 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
         </div>
       </RadioGroup>
       </FormControl><br />
-      <ColourPicker colour={bodyColour} onChange={bodyColourChange}/>
-      <ColourPicker colour={headColour} onChange={headColourChange}/>
+      <ColourPicker disableAlpha={true} colour={bodyColour} onChange={bodyColourChange}/>
+      <ColourPicker disableAlpha={true} colour={headColour} onChange={headColourChange}/>
       <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">Head</FormLabel>
       <select className={classes.actionSelect} value={avatarSpec.head} onChange={headChange}>

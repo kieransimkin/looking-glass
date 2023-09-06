@@ -280,7 +280,7 @@ queue.addEventListener("complete",()=>{
     const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/body/bodies/"+spec.body+"/universal.png");
     console.log(spec.bodyColour)
     bmp.filters = [
-      new createjs.ColorFilter(spec.bodyColour.rgb.r/512,spec.bodyColour.rgb.g/512,spec.bodyColour.rgb.b/512,1, spec.bodyColour.rgb.r-128,spec.bodyColour.rgb.g-128,spec.bodyColour.rgb.b-128,0)
+      new createjs.ColorFilter(1,1,1,1, spec.bodyColour.rgb.r-128,spec.bodyColour.rgb.g-128,spec.bodyColour.rgb.b-128,0)
     ];
     const bounds = bmp.getBounds();
     
@@ -292,7 +292,7 @@ queue.addEventListener("complete",()=>{
     const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png");
     console.log(spec.headColour)
     bmp.filters = [
-      new createjs.ColorFilter(spec.headColour.rgb.r/512,spec.headColour.rgb.g/512,spec.headColour.rgb.b/512,1, spec.headColour.rgb.r-128,spec.headColour.rgb.g-128,spec.headColour.rgb.b-128,0)
+      new createjs.ColorFilter(1,1,1,1, spec.headColour.rgb.r-128,spec.headColour.rgb.g-128,spec.headColour.rgb.b-128,0)
     ];
     const bounds = bmp.getBounds();
     
@@ -401,7 +401,7 @@ queue.addEventListener("complete",()=>{
       
       <Button className={classes.button} color="primary" onClick={goLeft}><ArrowLeftIcon/></Button>
       <IconButton className={classes.button} color="primary" onClick={goUp}><ArrowUpIcon/></IconButton>
-      <ColourPicker colour={colour} onChange={colourChange} />
+      <ColourPicker disableAlpha={false} colour={colour} onChange={colourChange} />
       <IconButton className={classes.button} color="primary" onClick={goDown}><ArrowDownIcon/></IconButton>
       <IconButton className={classes.button} color="primary" onClick={goRight}><ArrowRightIcon/></IconButton>
       
