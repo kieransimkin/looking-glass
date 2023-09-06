@@ -112,7 +112,7 @@ export default function Launchpad() {
                 ADAquote
               </Typography><br />
               <Typography variant="body1">
-                Awaiting content from Ibis
+                ADAquote v2 is a work in progress - launch date TBA. 
               </Typography>
             
               
