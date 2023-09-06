@@ -175,7 +175,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
         </div>
       </RadioGroup>
       </FormControl><br />
-      <div style={{display:'flex'}}>
+      <div style={{display:'flex', alignItems:'center'}}>
       <FormLabel id="demo-body-tone-label">Body Tone</FormLabel>
       <ColourPicker disableAlpha={true} colour={bodyColour} onChange={bodyColourChange}/>
       <FormLabel id="demo-head-tone-label">Head Tone</FormLabel>
