@@ -235,6 +235,12 @@ const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextSt
       <FormLabel id="demo-name-label">Name your Avatar</FormLabel><br />&nbsp;<br />
       <TextField variant="outlined" onChange={nameChange} value={name} placeholder="Choose Name" label="Name" /><br />&nbsp;<br />
       <Typography variant="caption">Clothes, weapons, accessories and batteries sold separately.</Typography>
+      <br />&nbsp;<br />
+      
+      <Alert width="" severity="error" style={{position:'relative',top:'0em'}}>
+      <AlertTitle>Technology demonstration alpha preview</AlertTitle>
+      This project goes into beta on the 7th - until then, use at your own risk, no refunds will be issued if you receive a non-working NFT.
+      </Alert>
       </div> 
       <AvatarPreview spec={spec} />
       
@@ -305,10 +311,10 @@ const Step3 = ({spec, previousStep, goToStep, nextStep, currentStep, isActive, h
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" goToStep={goToStep} onClose={handleClose}>
         Generating Transaction
       </DialogTitle>
-      <Alert width="" severity="warning" style={{position:'relative',top:'0em'}}>
+      <Alert width="" severity="error" style={{position:'relative',top:'0em'}}>
       <AlertTitle>Technology demonstration alpha preview</AlertTitle>
       This project goes into beta on the 7th - until then, use at your own risk, no refunds will be issued if you receive a non-working NFT.
-      </Alert>
+      </Alert><br />&nbsp;<br />
       <div style={{width:'100%', textAlign: 'center'}}>
       <Typography variant="body1">Please wait...</Typography><br />
       <CircularProgress color="primary" />
