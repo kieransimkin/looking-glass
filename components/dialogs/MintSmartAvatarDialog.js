@@ -33,11 +33,15 @@ const useStyles = makeStyles(theme => {
     paddingRight: '0em'
   },
   actionSelect: { 
+    '& *': { 
+      fontFamily: "'Baloo Thambi 2', cursive",
+    },
     marginTop:'0.5em',
     paddingLeft:'1em',
     paddingTop:'1em',
     paddingBottom:'1em',
     paddingRight:'3em',
+    fontFamily: "'Baloo Thambi 2', cursive",
     borderRadius:'15px',
     appearance: 'none',
     cursor:'pointer',
@@ -177,12 +181,13 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
       <FormLabel id="demo-head-tone-label">Head Tone</FormLabel>
       <ColourPicker disableAlpha={true} colour={headColour} onChange={headColourChange}/>
       </div>
-      <FormControl style={{display: 'flex'}}>
-        
+      <FormControl>
+      <div style={{display:'flex'}}>
       <FormLabel id="demo-radio-buttons-group-label">Head</FormLabel>
       <select className={classes.actionSelect} value={avatarSpec.head} onChange={headChange}>
   {headOpts}
       </select>
+      </div>
       </FormControl>
       </div>
       </div>
