@@ -19,6 +19,7 @@ import CustomDialog from '../CustomDialog';
 import { validBech32Address } from '../../utils/CSLBrowser'
 import AvatarPreview from '../AvatarPreview';
 import ColourPicker from '../ColourPicker';
+import { ucfirst } from '../../utils/Helpers';
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
@@ -35,6 +36,7 @@ const useStyles = makeStyles(theme => {
   actionSelect: { 
     '& *': { 
       fontFamily: "'Baloo Thambi 2', cursive",
+      fontSize: '0.9em'
     },
     marginTop:'0.5em',
     paddingLeft:'1em',
@@ -42,6 +44,7 @@ const useStyles = makeStyles(theme => {
     paddingBottom:'1em',
     paddingRight:'3em',
     fontFamily: "'Baloo Thambi 2', cursive",
+    fontSize:'0.9em',
     borderRadius:'15px',
     appearance: 'none',
     cursor:'pointer',
@@ -141,7 +144,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   const classes = useStyles();
   const policies = Object.keys(wallet.assets.tokens);
   const theme = useTheme();
-  const headOpts = heads.map((h)=><option key={h} value={h}>{h}</option>);
+  const headOpts = heads.map((h)=><option key={h} value={ucfirst(h.replace('_',' '))}>{h}</option>);
 
   return <>
     <DialogContent className={classes.dialog}>
