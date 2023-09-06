@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => {
                     -1px 0px 3px rgba(0,0,0,1)
                     `,
         letterSpacing:'0.05em',
-        fontSize: '150px',
+        fontSize: '100px',
         fontWeight: '900 !important',
     },
     subtleBigHead: { 
@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => {
                     -1px 0px 3px rgba(0,0,0,1)
                     `,
         letterSpacing:'0.05em',
-        fontSize: '110px',
+        fontSize: '80px',
         fontWeight: '900 !important',
     },
     littleHead: { 
