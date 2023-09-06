@@ -210,6 +210,7 @@ const Step1 = ({nextStep, onSpecChange, onFeatureTypeChange, goToStep, currentSt
   </>;
 };
 const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextStep, currentStep, handleClose, onImportChange }) => { 
+  const classes = useStyles();
   return <>
   <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
