@@ -289,8 +289,16 @@ queue.addEventListener("complete",()=>{
     layers.push({...getAnimations(), images:[bmp.cacheCanvas]})
   }
   if (spec.head) { 
-    layers.push({...getAnimations(), images:["/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png"]})
-   
+    const bmp = new createjs.Bitmap("/LPC-spritesheet-collection/input/head/heads/"+spec.head+"/universal.png");
+    console.log(spec.headColour)
+    bmp.filters = [
+      new createjs.ColorFilter(spec.headColour.rgb.r/255,spec.headColour.rgb.g/255,spec.headColour.rgb.b/255,1, spec.headColour.rgb.r-128,spec.headColour.rgb.g-128,spec.headColour.rgb.b-128,0)
+    ];
+    const bounds = bmp.getBounds();
+    
+    bmp.cache(0, 0,bounds?.width, bounds?.height);       // use our StageGL to cache
+    
+    layers.push({...getAnimations(), images:[bmp.cacheCanvas]})
   }
   for (const layer of layers) { 
     

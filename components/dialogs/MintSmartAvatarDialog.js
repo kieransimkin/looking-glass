@@ -97,6 +97,7 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
   
   const [enableNext, setEnableNext] = useState(false);
   const [bodyColour, setBodyColour] = useState({hex:'#ff0000',rgb:{r:255,g:0,b:0,a:1}})
+  const [headColour, setHeadColour] = useState({hex:'#ffff00',rgb:{r:255,g:0,b:0,a:1}})
   const [avatarSpec, setAvatarSpec] = useState({body:'pregnant',head:'pig', bodyColour:bodyColour})
   
 
@@ -111,10 +112,18 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
     console.log(newSpec);
     setEnableNext(true);
   }
-  const colourChange=(col) => { 
+  const bodyColourChange=(col) => { 
     setBodyColour(col);
     const newSpec={...avatarSpec}
     newSpec.bodyColour = col;
+    setAvatarSpec(newSpec)
+    console.log(col);
+  }
+
+  const headColourChange=(col) => { 
+    setHeadColour(col);
+    const newSpec={...avatarSpec}
+    newSpec.headColour = col;
     setAvatarSpec(newSpec)
     console.log(col);
   }
@@ -162,7 +171,8 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
         </div>
       </RadioGroup>
       </FormControl><br />
-      <ColourPicker colour={bodyColour} onChange={colourChange}/>
+      <ColourPicker colour={bodyColour} onChange={bodyColourChange}/>
+      <ColourPicker colour={headColour} onChange={headColourChange}/>
       <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">Head</FormLabel>
       <select className={classes.actionSelect} value={avatarSpec.head} onChange={headChange}>
