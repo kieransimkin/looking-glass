@@ -65,7 +65,7 @@ export default async function Browse(req, res) {
     const metadata = {
         [policyId]: {
           [assetName]: {
-            name: `📡 ${ucfirst(body.deviceName)}`,
+            name: `📡 ${ucfirst(body.spec.name)}`,
             description: 'iWozear test NFT',
             image: ["data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 22 41' wid",
                     "th='22' height='41' xmlns='http://www.w3.org/2000/svg'%3e%3cpat",
