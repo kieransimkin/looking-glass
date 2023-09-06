@@ -171,9 +171,14 @@ const Step1 = ({nextStep, onFeatureTypeChange, goToStep, currentStep, handleClos
         </div>
       </RadioGroup>
       </FormControl><br />
+      <div style={{display:'flex'}}>
+      <FormLabel id="demo-body-tone-label">Body Tone</FormLabel>
       <ColourPicker disableAlpha={true} colour={bodyColour} onChange={bodyColourChange}/>
+      <FormLabel id="demo-head-tone-label">Head Tone</FormLabel>
       <ColourPicker disableAlpha={true} colour={headColour} onChange={headColourChange}/>
-      <FormControl>
+      </div>
+      <FormControl style={{display: 'flex'}}>
+        
       <FormLabel id="demo-radio-buttons-group-label">Head</FormLabel>
       <select className={classes.actionSelect} value={avatarSpec.head} onChange={headChange}>
   {headOpts}
