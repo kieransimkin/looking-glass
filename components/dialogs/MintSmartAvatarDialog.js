@@ -279,7 +279,9 @@ const Step3 = ({spec, previousStep, goToStep, nextStep, currentStep, isActive, h
                 }).catch(e => { 
                   if (typeof e == "object" && e.hasOwnProperty('message')) { 
                     alert(e.message);
-                  } else {
+                  } else if (typeof e == "object" && e.hasOwnProperty('info')) {
+                    alert('Signature failed: '+e.info)
+                  } else { 
                     alert('Signature cancelled');
                     console.log(e);
                   }
