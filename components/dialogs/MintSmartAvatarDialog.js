@@ -213,8 +213,15 @@ const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextSt
   const [enableNext, setEnableNext] = useState(false);
   const [name, setName] = useState('');
   const nameChange=(e,v)=>{
-    console.log(e,v);
-    setName(v);
+    setName(e.target.value);
+    const newSpec={...spec}
+    newSpec.name=e.target.value;
+    onSpecChange(e, newSpec);
+    if (e.target.value.length>0) { 
+      setEnableNext(true); 
+    } else { 
+      setEnableNext(false); 
+    }
   }
   return <>
   <DialogContent className={classes.dialog}>
@@ -223,8 +230,8 @@ const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextSt
       </DialogTitle>
       <div style={{display:'flex', gap:'2em', alignItems:'center'}}>
       <div>
-      <FormLabel id="demo-name-label">Name your Avatar</FormLabel>
-      <TextField variant="outlined" onChange={nameChange} value={name} placeholder="Choose Name" label="Name" />
+      <FormLabel id="demo-name-label">Name your Avatar</FormLabel><br />&nbsp;<br />
+      <TextField variant="outlined" onChange={nameChange} value={name} placeholder="Choose Name" label="Name" /><br />&nbsp;<br />
       <Typography variant="caption">Clothes, weapons, accessories and batteries sold separately.</Typography>
       </div> 
       <AvatarPreview spec={spec} />
