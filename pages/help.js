@@ -189,11 +189,11 @@ export default function Help() {
               <Typography variant="body1">
                 Buy, sell or trade your Smart NFTs at <a href="https://plutus.art/" target="_blank" rel="noreferrer">Plutus.art</a>, with native support for CIP54 assets right in the marketplace.
                 <ul className="infolist">
-                <li><Link href="/launchpad/smart-life/about">Smart Life</Link> - The first CIP54 collection is now minting</li>
+                <li><Link href="/launchpad/smart-life/about">Smart Life</Link> - The first CIP54 collection is now minting <BuyButton /></li>
                 <li><Link href="/launchpad/smart-avatars/about">Smart Avatars</Link> - The first in a new series of true on-chain avatars</li>
                 <li><Link href="/launchpad/adaquote/about">ADAquote</Link> - The first practical use of CIP54 to offer an enhanced version of an existing project.</li>
                 </ul>
-                <BuyButton />
+                
               </Typography>
                 <a href="https://plutus.art/collection/smartlife" target="_blank" rel="noreferrer">
                   <img src="/examples/smart-life-thumb.png" width="250" height="227" alt="Smart Life" style={{borderRadius:'20px',border:'1px solid rgba(0,0,0,0.6)'}}/>
