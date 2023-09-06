@@ -212,6 +212,10 @@ const Step2 = ({ spec, featureType, onSpecChange, previousStep, goToStep, nextSt
   const classes = useStyles();
   const [enableNext, setEnableNext] = useState(false);
   const [name, setName] = useState('');
+  const nameChange=(e,v)=>{
+    console.log(e,v);
+    setName(v);
+  }
   return <>
   <DialogContent className={classes.dialog}>
       <DialogTitle currentStep={currentStep} id="customized-dialog-title" onClose={handleClose} goToStep={goToStep}>
