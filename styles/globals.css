@@ -45,9 +45,9 @@ a, a:link, a:visited, a:focus, a:active {
   position: fixed;
   font-family: monospace !important;
   letter-spacing: 0;
-  font-size: 8px;
+  font-size: 5px;
   font-weight: 900;
-  cursor: pointer;
+  cursor: none;
   margin-right:1em;
   bottom:0;
   right: 0;
