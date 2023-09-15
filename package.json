@@ -66,6 +66,7 @@
     "react-twitter-embed": "^4.0.4",
     "react-youtube": "^10.0.0",
     "recompose": "^0.30.0",
+    "redis": "^4.6.8",
     "remark-gfm": "^3.0.1",
     "sass": "^1.55.0",
     "smartnftportal": "file:submodules/SmartNFTPortal",
