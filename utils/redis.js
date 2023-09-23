@@ -7,7 +7,7 @@ export const getClient = async() => {
         client = await createClient({url: process.env.REDIS_URI})
         .on('error', err => console.log('Redis Client Error', err, process.env.REDIS_URI));
         if (client?.connect && typeof client?.connect == "function" ) { 
-            client.connect();
+            await client.connect();
         }
         
     }
