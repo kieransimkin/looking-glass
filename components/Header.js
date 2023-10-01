@@ -146,8 +146,12 @@ const Header = (props) => {
                     window.cardano[wallet.wallet].isEnabled().then((enabled)=> { 
                         if (enabled){
                             window.cardano[wallet.wallet].enable().catch((error) => { 
+                                let terror = error;
+                                if (typeof terror === 'object' && terror.info) { 
+                                    terror=terror.info;
+                                }
                                 console.error(error);
-                                alert('Wallet restore error: '+error);
+                                alert('Wallet restore error: '+terror);
                                 return false;
                             }).then((api) => { 
                             doOnWalletChange({
@@ -271,7 +275,11 @@ const Header = (props) => {
             window.cardano[value].isEnabled().then((enabled) => {
                 window.cardano[value].enable().catch((error) => { 
                         console.error(error);
-                        alert('Wallet connect error: '+error);
+                        let terror = error;
+                        if (typeof terror === 'object' && terror.info) { 
+                            terror=terror.info;
+                        }
+                        alert('Wallet connect error: '+terror);
                         callbackFn.fail();            
                         return false;
                     }).then((api) => { 
