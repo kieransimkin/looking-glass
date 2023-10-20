@@ -71,6 +71,7 @@
     "sass": "^1.55.0",
     "sharp": "^0.32.6",
     "smartnftportal": "file:submodules/SmartNFTPortal",
+    "react-mediaslide": "file:submodules/react-mediaslide",
     "styled-components": "^5.3.5",
     "swr": "^1.3.0",
     "terser": "^5.18.1",

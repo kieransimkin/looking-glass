@@ -10,3 +10,6 @@
 [submodule "public/LPC-spritesheet-collection"]
 	path = public/LPC-spritesheet-collection
 	url = https://github.com/kieransimkin/LPC-spritesheet-collection
+[submodule "submodules/react-mediaslide"]
+	path = submodules/react-mediaslide
+	url = https://github.com/kieransimkin/react-mediaslide
