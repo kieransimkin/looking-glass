@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { useEffect } from 'react';
-
+import {MediaSlide} from 'react-mediaslide'
 export default  function CIP54Playground(params) {
     const [uses, setUses] = useState(null);
     const [metadata, setMetadata] = useState(null);
@@ -15,8 +15,7 @@ export default  function CIP54Playground(params) {
     if (!filename) filename=[''];
     
     return (
-    <>
-        Hello
+    <><MediaSlide />
     </>
     );
 }
