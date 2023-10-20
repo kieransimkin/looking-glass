@@ -26,10 +26,6 @@ import { HelpOutline, HelpTwoTone, Home, KingBed, SportsKabaddi } from '@materia
 import NestedMenuItem from './NestedMenuItem';
 import ExamplesMenuItems from './ExamplesMenuItems';
 import eventBus from '../utils/EventBus';
-import ImportZipDialog from './dialogs/ImportZipDialog';
-import ImportBlockchainDialog from './dialogs/ImportBlockchainDialog';
-import NewDialog from './dialogs/NewDialog';
-import SaveAsDialog from './dialogs/SaveAsDialog';
 import LaunchpadMenuItems from './LaunchpadMenuItems';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
@@ -463,10 +459,9 @@ const Header = (props) => {
                         </>
                     }
                 <WalletSelector selectedValue={wallet} open={walletOpen} onClose={handleWalletClose} />
-                <ImportZipDialog open={importZipOpen} onClose={handleImportZipClose} />
-                <ImportBlockchainDialog open={importBlockchainOpen} onClose={handleImportBlockchainClose} />
-                <NewDialog open={newOpen} onClose={handleNewClose} />
-                <SaveAsDialog open={saveAsOpen} onClose={handleSaveAsClose} />
+                
+                
+
             </Drawer>
     )
 }

@@ -2,7 +2,6 @@
 import { MenuItem } from "@material-ui/core";
 import NestedMenuItem from "./NestedMenuItem";
 import launchpadList from '../data/launchpadList.json';
-import MintSmartAvatarDialog from "./dialogs/MintSmartAvatarDialog";
 import WalletContext from "./WalletContext";
 import Link from "next/link";
 import { useState , useEffect, useRef, useContext } from "react";
@@ -49,7 +48,6 @@ const LaunchpadMenuItems = (props) => {
     }
     return (
         <>
-        <MintSmartAvatarDialog onClose={mintClose} open={mintOpen} />
         {items}
         </>
     );

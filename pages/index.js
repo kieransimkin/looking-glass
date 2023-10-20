@@ -11,9 +11,7 @@ import { useState , useEffect, useRef } from "react";
 import PictureCard from '../components/PictureCard'
 import Card from '@material-ui/core/Card'
 import ExamplesButton from '../components/ExamplesButton';
-import PlaygroundButton from '../components/PlaygroundButton'
-import BigBuyButton from '../components/BigBuyButton'
-import AvatarExampleButton from '../components/AvatarExampleButton';
+
 
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.primary.main, 0.8);
@@ -227,9 +225,7 @@ export default function Home() {
                     </div>
                     <div className="column">
                         <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart Life</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>The first CIP54 collection, minting now</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <BigBuyButton />
-                        
+                        <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>The first CIP54 collection, minting now</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>                        
                     </div>
                 </div>
             </div>
@@ -249,7 +245,7 @@ export default function Home() {
                         <div><Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart Avatars</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
                         <Typography variant="h4" classes={{root: classes.subtleLittleHead}}><em>Coming soon, a demonstration of the power of CIP54</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div></div>
 
-                        <AvatarExampleButton />
+                        
                     </div>
                 </div>
             </div>
