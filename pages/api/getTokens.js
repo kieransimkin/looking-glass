@@ -6,7 +6,7 @@ import {getClient} from "../../utils/redis";
 
 export default async function Browse(req, res) {
   const redisClient = await getClient();
-  init(process.env.NETWORK?.toLowerCase(), pgClient, null, null, redisClient);
+  init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
   let {which, page} = req.body;
   let result={};
   which = getStakeFromAny(which);
