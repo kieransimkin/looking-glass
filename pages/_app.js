@@ -50,6 +50,7 @@ function CIP54Playground({ Component, pageProps }) {
               enter: TIMEOUT,
               exit: 0
             }}
+            style={{height:'100vh'}}
             loadingClassNames="loading-indicator"
           >
             <Component key={router.route} {...pageProps} />
@@ -59,19 +60,25 @@ function CIP54Playground({ Component, pageProps }) {
         <style>{`
           .page-transition-enter {
             opacity: 0;
+            height: 100vh;
             
           }
           .page-transition-enter-active {
             opacity: 1;
-            
+            height: 100vh;
             transition: opacity ${TIMEOUT}ms, transform ${TIMEOUT}ms;
+          }
+          .page-transition-enter-done { 
+            height: 100vh;
           }
           .page-transition-exit {
             opacity: 1;
+            height: 100vh;
           }
           .page-transition-exit-active {
             opacity: 0;
             transition: opacity ${TIMEOUT}ms;
+            height: 100vh;
           }
           .loading-indicator-appear,
           .loading-indicator-enter {

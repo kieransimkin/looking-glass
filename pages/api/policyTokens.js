@@ -19,9 +19,6 @@ export default async function Browse(req, res) {
     if (!tokens) {
         tokens = await getTokensFromPolicy(policy);
         await cacheItem('getTokensFromPolicy:'+policy,tokens)
-        console.log('New cache');
-    } else { 
-        console.log('cached');
     }
     tokens = tokens.slice(start, end);
     

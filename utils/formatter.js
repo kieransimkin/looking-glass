@@ -10,12 +10,10 @@ export const getTokenData = async function (token) {
             tokenData.title = tokenData.metadata?.title;
         }
         tokenData.thumb = '/api/getTokenThumb?unit='+token.unit;
+        tokenData.tiny = '/api/getTokenThumb?unit='+token.unit+'&size=64';
         tokenData.full = '/api/getTokenFull?unit='+token.unit;
         tokenData.video = '/api/getTokenVideo?unit='+token.unit;
         await cacheItem('getTokenData:'+token.unit,tokenData)
-        console.log('New cache');
-    } else {
-        console.log('cached');
     }
     return tokenData;
 }
