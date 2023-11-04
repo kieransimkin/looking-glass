@@ -13,6 +13,7 @@ export const getTokenData = async function (token) {
         tokenData.tiny = '/api/getTokenThumb?unit='+token.unit+'&size=64';
         tokenData.full = '/api/getTokenFull?unit='+token.unit;
         tokenData.video = '/api/getTokenVideo?unit='+token.unit;
+        tokenData.files = token.metadata?.files;
         await cacheItem('getTokenData:'+token.unit,tokenData)
     }
     return tokenData;

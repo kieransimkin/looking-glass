@@ -11,7 +11,7 @@ export default async function Browse(req, res) {
     if (!page) page=0;
     page=parseInt(page);
     if (page<0) page = 0;
-    const perPage = 20;
+    const perPage = 10;
     const start = page*perPage;
     const end = (page+1)*perPage;
 
@@ -20,6 +20,8 @@ export default async function Browse(req, res) {
         tokens = await getTokensFromPolicy(policy);
         await cacheItem('getTokensFromPolicy:'+policy,tokens)
     }
+    console.log(tokens.length);
+    const totalPages = Math.ceil(tokens.length/perPage);
     tokens = tokens.slice(start, end);
     
     const promises = [];
@@ -27,5 +29,5 @@ export default async function Browse(req, res) {
         promises.push(getTokenData(token));
     }
     const result = await Promise.all(promises)
-    res.status(200).json({tokens:result, page, start, end });
+    res.status(200).json({tokens:result, page, start, end, totalPages, perPage });
 }
