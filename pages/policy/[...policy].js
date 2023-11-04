@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { useEffect } from 'react';
-import { getData } from '../../utils/Api';
+import { getData, postData } from '../../utils/Api';
 import {MediaSlide} from 'react-mediaslide'
 import {SmartNFTPortal} from 'smartnftportal'
 export default  function CIP54Playground(params) {
@@ -26,10 +26,18 @@ export default  function CIP54Playground(params) {
         });
         
     },[policy])
-    const renderFile=(item, callback) => { 
-        callback();
-        console.log(item);
-        return <SmartNFTPortal loading={false} metadata={item.metadata} smartImports={{tokenUnit:''}} style={{width:'100%',height:'100%', borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
+    const renderFile= async (item, ready) => { 
+        let smI = {tokenUnit:''};
+        if (item.metadata?.uses) { 
+            const imports = await postData('/getSmartImports',{metadata: item.metadata, unit: item.unit, walletAddr:'foo'});
+            const importJson = await imports.json();
+            smI=importJson;
+            
+        }
+        const doCallback = () => { 
+            ready();
+        }
+        return <SmartNFTPortal key={Math.random()} onReady={doCallback} loading={false} metadata={item.metadata} smartImports={smI} style={{width:'100%',height:'100%', borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
 
     }
     const loadMoreData = ({page}) => { 
