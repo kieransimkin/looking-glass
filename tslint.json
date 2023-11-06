@@ -3,7 +3,8 @@
     "rules": {
         "no-empty": [true, "allow-empty-catch"],
         "no-bitwise": false,
-        "prefer-for-of": false
+        "prefer-for-of": false,
+        "one-variable-per-declaration": false
     }
     
 }
