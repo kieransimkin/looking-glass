@@ -9,6 +9,7 @@ import {MediaSlide} from 'react-mediaslide'
 import {SmartNFTPortal} from 'smartnftportal'
 import * as JsonTree from 'json-tree-viewer'
 import { useTheme } from '@material-ui/core';
+import humanNumber from 'human-number'
 const renderFile= async (item, ready, width='100%', height='100%') => { 
     let smI = {tokenUnit:''};
     if (item?.metadata?.files[0]?.mediaType?.substring(0,9)!='text/html') return;
@@ -23,6 +24,24 @@ const renderFile= async (item, ready, width='100%', height='100%') => {
         ready();
     }
     return <SmartNFTPortal key={Math.random()} onReady={doCallback} loading={false} metadata={item.metadata} smartImports={smI} style={{width:width,height:height, borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
+}
+function TokenRoundall({quantity}) { 
+    let colour = 'blue';
+    let text = 'FT';
+    let margin = '1em';
+    if (quantity==1) { 
+        text = 'NFT'
+        colour='green';
+        margin = '0'
+    }
+    console.log(quantity);
+    return <div style={{marginTop: '0.4em', marginBottom: margin,float: 'left',textAlign: 'center', borderRadius: '1.25em', width:'2.5em',height:'2.5em', background: colour, display: 'inline-block'}}>
+    <div style={{marginBlockStart:0, marginBlockEnd: 0, top:'50%', transform: 'translateY(-50%)', position:'relative'}}>{text}
+    <div style={{position: 'absolute', width:'100%', display:quantity!=1?'block':'none', fontSize:'0.7em', marginTop:'0.3em'}}>
+        {humanNumber(quantity, n => Number.parseFloat(n).toFixed(1)*1)}
+    </div>
+    </div>
+    </div>
 }
 function AdaHandle({stake}) { 
     const [handle, setHandle] = useState(null);
@@ -41,7 +60,7 @@ function AdaHandle({stake}) {
     if (handle) { 
         
         return <>
-            <span style={{color: 'green'}}>$</span> {handle}
+            <a target="_blank" href={"/wallet/"+stake}><span style={{color: 'green'}}>$</span> {handle}</a>
         </>
     } else { 
         return <>
@@ -105,9 +124,11 @@ function BigInfoBox({item}) {
         {portalHTML}
         </div>
         </div>
-        <h1>{item.title}</h1>
+        <div style={{position: 'relative', marginBottom: '0.5em'}}>
+        <TokenRoundall quantity={item.quantity} /><h1 style={{display: 'inline-block', marginLeft:'0.4em', marginBlockStart:0, marginBlockEnd: 0}}>{item.title}</h1>
+        </div>
         <ul className="owner-list">{ownerList.map((i) => <li><AdaHandle stake={i.stake} /> </li>)}</ul>
-        Metadata:
+        <h2 style={{margin:0}}>Metadata:</h2>
         <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
         </div>
         

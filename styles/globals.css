@@ -503,6 +503,7 @@ input[type="range"]:focus::-moz-range-thumb {
   list-style-type: none;
   height: 5em;
   overflow-y:auto;
+  text-align: center;
 }
 .owner-list > li { 
   border: 1px solid rgba(255,255,255,.3);

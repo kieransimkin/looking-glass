@@ -40,6 +40,7 @@
     "filereader": "^0.10.3",
     "fs": "^0.0.1-security",
     "html-minifier-terser": "^7.2.0",
+    "human-number": "^2.0.4",
     "json-tree-viewer": "^0.0.2",
     "jszip": "^3.10.1",
     "libcip54": "file:submodules/libcip54",
