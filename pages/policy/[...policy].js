@@ -74,15 +74,26 @@ function BigInfoBox({item}) {
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [portalOpacity, setPortalOpacity] = useState(0);
+    const [width, setWidth] = useState(null);
+    const [height, setHeight] = useState(null);
     const metadataRef = useRef();
     const imgRef = useRef();
     
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
-    const load = (e) => { 
-        setLoaded(true);
+    const load = (e) => {
+        setTimeout(() => { 
+            setHeight(imgRef.current.offsetHeight);
+            setWidth(imgRef.current.offsetWidth)
+            console.log(imgRef.current.clientWidth);
+            setLoaded(true);
+        },0) 
+        
     }
+    useEffect(()=> { 
+        console.log('new sidebar item');
+    },[item])
     useEffect(() => { 
         if (imgRef.current) { 
             imgRef.current.addEventListener('load', load);
@@ -96,8 +107,8 @@ function BigInfoBox({item}) {
         
         setPortalOpacity(0);
         if (loaded) {
-            
-            renderFile(item,readyCallback, imgRef.current.clientWidth, imgRef.current.clientHeight).then((h) => { 
+            console.log(width,height);
+            renderFile(item,readyCallback, width, height).then((h) => { 
                 setPortalHTML(h);
             })
         }
@@ -115,17 +126,17 @@ function BigInfoBox({item}) {
             }
             if (metadataRef.current)  metadataRef.current.innerHTML='';
         }
-    },[item,loaded])
+    },[item,loaded, width, height])
     
     return <div style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
     <div style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}>
-        <img ref={imgRef} src={item.thumb} style={{maxWidth:'100%'}} />
+        <img ref={imgRef} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible'}} />
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}
         </div>
         </div>
         <div style={{position: 'relative', marginBottom: '0.5em'}}>
-        <TokenRoundall quantity={item.quantity} /><h1 style={{display: 'inline-block', marginLeft:'0.4em', marginBlockStart:0, marginBlockEnd: 0}}>{item.title}</h1>
+        <TokenRoundall quantity={item.quantity} /><h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlockStart:0, marginBlockEnd: 0}}>{item.title}</h1>
         </div>
         <ul className="owner-list">{ownerList.map((i) => <li><AdaHandle stake={i.stake} /> </li>)}</ul>
         <h2 style={{margin:0}}>Metadata:</h2>
@@ -142,10 +153,12 @@ export default  function CIP54Playground(params) {
     if (!policy) policy='';
     
     useEffect(() => { 
+        if (!policy || policy=='') return;
         setMediaSlideLoading(true);
         getData('/policyTokens?policy='+policy).then((d)=>{
             d.json().then((j) => { 
                 setGallery(j);
+                console.log(j);
                 setMediaSlideLoading(false);
             });
             
@@ -158,11 +171,13 @@ export default  function CIP54Playground(params) {
         return <BigInfoBox item={i} />
     }
     const loadMoreData = ({page}) => { 
+        if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
         getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+1)).then((d)=>{
             d.json().then((j) => { 
                 const newArray = [...gallery.tokens];
                 newArray.push(...j.tokens);
+                console.log({tokens:newArray,page:j.page, totalPages: j.totalPages})
                 setGallery({tokens:newArray,page:j.page, totalPages: j.totalPages});
                 
                 setMediaSlideLoading(false);   
