@@ -102,7 +102,7 @@ const Header = (props) => {
     const [importBlockchainOpen, setImportBlockchainOpen] = React.useState(false);
     const [importZipOpen, setImportZipOpen] = React.useState(false);
     const [wallet, setWallet] = React.useState(null);
-    const [darkMode, setDarkMode] = React.useState('light');
+    const [darkMode, setDarkMode] = React.useState('dark');
     const [walletApi, setWalletAPI] = React.useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [callbackFn, setCallbackFn] = React.useState({'fn': () => { return; }, 'fail': () => {return; }});

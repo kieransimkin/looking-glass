@@ -56,11 +56,13 @@ const Layout = ({children}) => {
         },
         palette: {
             type: 'dark',
+            background: { paper: '#151000', default: '#040302'
+            },
             primary: {
-              main: '#ffaadd',
+              main: '#ffddaa',
             },
             secondary: {
-              main: '#ddccff',
+              main: '#ddaa88',
             },
           },
     });

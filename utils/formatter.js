@@ -3,7 +3,7 @@ import { checkCacheItem, cacheItem } from "./redis";
 export const getTokenData = async function (token) { 
     let tokenData = await checkCacheItem('getTokenData:'+token.unit);
     if (!tokenData) {
-        tokenData={unit:token.unit, quantity: token.quantity, title:''};
+        tokenData={id: token.unit, unit:token.unit, quantity: token.quantity, title:''};
         tokenData.metadata=await getMetadata(token.unit);
         tokenData.title = tokenData.metadata?.name;
         if (tokenData.metadata?.title) { 

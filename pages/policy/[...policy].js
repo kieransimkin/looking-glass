@@ -26,10 +26,11 @@ export default  function CIP54Playground(params) {
         });
         
     },[policy])
-    const renderFile= async (item, ready) => { 
+    const renderFile= async (item, ready, width='100%', height='100%') => { 
         let smI = {tokenUnit:''};
         if (item.metadata?.uses) { 
-            const imports = await postData('/getSmartImports',{metadata: item.metadata, unit: item.unit, walletAddr:'foo'});
+            const walletAddr = (await (await getData('/getTokenHolders?unit='+item.unit)).json())[0].stake;
+            const imports = await postData('/getSmartImports',{metadata: item.metadata, unit: item.unit, walletAddr});
             const importJson = await imports.json();
             smI=importJson;
             
@@ -37,7 +38,8 @@ export default  function CIP54Playground(params) {
         const doCallback = () => { 
             ready();
         }
-        return <SmartNFTPortal key={Math.random()} onReady={doCallback} loading={false} metadata={item.metadata} smartImports={smI} style={{width:'100%',height:'100%', borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
+        console.log(width,height);
+        return <SmartNFTPortal key={Math.random()} onReady={doCallback} loading={false} metadata={item.metadata} smartImports={smI} style={{width:width,height:height, borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
 
     }
     const loadMoreData = ({page}) => { 
