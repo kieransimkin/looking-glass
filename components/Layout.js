@@ -25,7 +25,7 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' })(({ 
 }));
 const Layout = ({children}) => {
     const [walletState, setWalletState] = useState(null);
-    const [themeState, setThemeState] = useState('light');
+    const [themeState, setThemeState] = useState('dark');
     const [open, setOpen] = useState(true);
    
     // TODO XXX This is where you define the theme
