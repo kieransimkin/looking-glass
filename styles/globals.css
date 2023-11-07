@@ -495,3 +495,28 @@ input[type="range"]:focus::-moz-range-thumb {
 .jsontree_node_empty > .jsontree_label-wrapper > .jsontree_label {
   cursor: default !important;
 }
+.owner-list { 
+  margin-block-end: 0;
+  margin-block-start: 0;
+  padding-inline-start: 1em;
+  line-height: 2em;
+  list-style-type: none;
+  height: 5em;
+  overflow-y:auto;
+}
+.owner-list > li { 
+  border: 1px solid rgba(255,255,255,.3);
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  margin: 0.2em;
+  margin-bottom: 0.2em;
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+}
+.owner-list > li:hover { 
+  background-color: rgba(255,255,255,0.3);
+}
+.preview img { 
+  object-fit: contain;
+}

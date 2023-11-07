@@ -11,6 +11,7 @@ import * as JsonTree from 'json-tree-viewer'
 import { useTheme } from '@material-ui/core';
 const renderFile= async (item, ready, width='100%', height='100%') => { 
     let smI = {tokenUnit:''};
+    if (item?.metadata?.files[0]?.mediaType?.substring(0,9)!='text/html') return;
     if (item.metadata?.uses) { 
         const walletAddr = (await (await getData('/getTokenHolders?unit='+item.unit)).json())[0].stake;
         const imports = await postData('/getSmartImports',{metadata: item.metadata, unit: item.unit, walletAddr});
@@ -23,17 +24,50 @@ const renderFile= async (item, ready, width='100%', height='100%') => {
     }
     return <SmartNFTPortal key={Math.random()} onReady={doCallback} loading={false} metadata={item.metadata} smartImports={smI} style={{width:width,height:height, borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
 }
+function AdaHandle({stake}) { 
+    const [handle, setHandle] = useState(null);
+    useEffect(() => { 
+        if (!handle) { 
+            getData('/getAdaHandle?address='+stake).then((h) => { 
+                h.json().then((j)=> {
+                    setHandle(j)
+                })
+                
+                
+            });
+        }
+    },[stake]);
+
+    if (handle) { 
+        
+        return <>
+            <span style={{color: 'green'}}>$</span> {handle}
+        </>
+    } else { 
+        return <>
+            {stake.substring(0,7)}...{stake.slice(-6)}
+        </>
+    }
+}
 function BigInfoBox({item}) { 
     const theme = useTheme();
     const [ownerList, setOwnerList] = useState([]);
     const [portalHTML, setPortalHTML] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const [portalOpacity, setPortalOpacity] = useState(0);
     const metadataRef = useRef();
     const imgRef = useRef();
+    
     const readyCallback = () => { 
         setPortalOpacity(1);
+    }       
+    const load = (e) => { 
+        setLoaded(true);
     }
     useEffect(() => { 
+        if (imgRef.current) { 
+            imgRef.current.addEventListener('load', load);
+        }
         const tree = JsonTree.create(item.metadata, metadataRef.current)
         metadataRef.current.querySelectorAll('.jsontree_value_string').forEach((div)=>div.style.color=theme.palette.primary.main)
         metadataRef.current.querySelectorAll('.jsontree_value_number').forEach((div)=>div.style.color='#ff0000')
@@ -42,10 +76,13 @@ function BigInfoBox({item}) {
         setOwnerList([])
         
         setPortalOpacity(0);
-        renderFile(item,readyCallback, imgRef.current.clientWidth, imgRef.current.clientHeight).then((h) => { 
-            setPortalHTML(h);
-        })
-        
+        if (loaded) {
+            
+            renderFile(item,readyCallback, imgRef.current.clientWidth, imgRef.current.clientHeight).then((h) => { 
+                setPortalHTML(h);
+            })
+        }
+
         getData('/getTokenHolders?unit='+item.unit).then((data) => { 
             data.json().then((o) => { 
                 
@@ -54,9 +91,12 @@ function BigInfoBox({item}) {
             })
         })
         return ()=> { 
+            if (imgRef.current) { 
+                imgRef.current.removeEventListener('load',load);
+            }
             if (metadataRef.current)  metadataRef.current.innerHTML='';
         }
-    },[item])
+    },[item,loaded])
     
     return <div style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
     <div style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}>
@@ -66,7 +106,7 @@ function BigInfoBox({item}) {
         </div>
         </div>
         <h1>{item.title}</h1>
-        <ul>{ownerList.map((i) => <li>{i.stake}</li>)}</ul>
+        <ul className="owner-list">{ownerList.map((i) => <li><AdaHandle stake={i.stake} /> </li>)}</ul>
         Metadata:
         <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
         </div>
