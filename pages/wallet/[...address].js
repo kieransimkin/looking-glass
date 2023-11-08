@@ -14,15 +14,15 @@ import {tokenPortal} from '../../utils/tokenPortal';
 export default  function CIP54Playground(params) {
     
     const router = useRouter();
-    let {policy} = router.query;  
+    let {address} = router.query;  
     const [gallery, setGallery] = useState(null);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
-    if (!policy) policy='';
+    if (!address) address='';
     
     useEffect(() => { 
-        if (!policy || policy=='') return;
+        if (!address || address=='') return;
         setMediaSlideLoading(true);
-        getData('/policyTokens?policy='+policy).then((d)=>{
+        getData('/addressTokens?address='+address).then((d)=>{
             d.json().then((j) => { 
                 setGallery(j);
                 console.log(j);
@@ -31,7 +31,7 @@ export default  function CIP54Playground(params) {
             
         });
         
-    },[policy])
+    },[address])
 
     const renderBigInfo = async (i) => { 
         
@@ -40,7 +40,7 @@ export default  function CIP54Playground(params) {
     const loadMoreData = ({page}) => { 
         if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
-        getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+1)).then((d)=>{
+        getData('/addressTokens?address='+address+'&page='+(parseInt(page)+1)).then((d)=>{
             d.json().then((j) => { 
                 const newArray = [...gallery.tokens];
                 newArray.push(...j.tokens);

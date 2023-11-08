@@ -15,7 +15,9 @@ import React, { useEffect, useState,useCallback, useContext } from 'react'
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import WhatshotIcon from '@material-ui/icons/Whatshot';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import PermMediaIcon from '@material-ui/icons/PermMedia';
+import PersonIcon from '@material-ui/icons/Person';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import { useWindowDimensions } from '../utils/Hooks'
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
@@ -27,6 +29,7 @@ import NestedMenuItem from './NestedMenuItem';
 import ExamplesMenuItems from './ExamplesMenuItems';
 import eventBus from '../utils/EventBus';
 import LaunchpadMenuItems from './LaunchpadMenuItems';
+import { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } from 'next/dist/shared/lib/constants';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -103,8 +106,10 @@ const Header = (props) => {
     const [importZipOpen, setImportZipOpen] = React.useState(false);
     const [wallet, setWallet] = React.useState(null);
     const [darkMode, setDarkMode] = React.useState('dark');
+    const [disableLockout, setDisableLockout] = React.useState(false);
     const [walletApi, setWalletAPI] = React.useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const anchorRef = React.useRef();
     const [callbackFn, setCallbackFn] = React.useState({'fn': () => { return; }, 'fail': () => {return; }});
     const [hide, setHide] = useState(false);
     const [hover, setHover] = useState(false);
@@ -115,7 +120,7 @@ const Header = (props) => {
     const walletCtx = useContext(WalletContext);
     
     let connectContent = <PowerIcon fontSize='small' sx={{padding: 0, margin: 0}} />;
-
+    // 🔌
     const buttonsize='medium';
     const buttonclass='nomwbtn';
     const doOnWalletChange=(props)=>{
@@ -306,9 +311,16 @@ const Header = (props) => {
         setAnchorEl(null);
         
     }
+    const handleLeave = () => { 
+        setDisableLockout(true);
+        console.log('leave');
+    }
 
-    const handleClick = (value) => { 
-        setAnchorEl(value.currentTarget);
+    const handleClick = (a,e) => { 
+        console.log(a.currentTarget);
+        console.log(anchorRef);
+        setDisableLockout(false);
+        setAnchorEl(a.currentTarget);
     }
 
     const toggleDarkMode = (e) => { 
@@ -346,17 +358,10 @@ const Header = (props) => {
               }}
                     
              variant="persistent" anchor='right' open={!hide} className={className}>
-                {!walletApi &&
+                
+                
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <Button title="Connect Wallet" size={buttonsize} className={buttonclass} sx={{margin: 0, padding: 0}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
-                            {connectContent}
-                            </Button>
-                        </div>
-                        
-                }
-                {walletApi &&
-                        <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <IconButton className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                            <IconButton style={{cursor: 'pointer'}} ref={anchorRef} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onMouseEnter={handleClick} onMouseLeave={handleLeave} onClick={handleClick}>
                                 <MenuIcon fontSize={buttonsize} color="secondary" />
                             </IconButton>
                             <Menu
@@ -369,6 +374,13 @@ const Header = (props) => {
                                 open={Boolean(anchorEl)}
                                 getContentAnchorEl={null} 
                                 onClose={handleClose}
+                                onMouseLeave={()=>{ 
+                                    console.log('mouseleave menu');
+                                }}
+                                onMouseEnter={() => {
+                                    console.log('mouseenter');
+                                }}
+                                
                                 anchorOrigin={{
                                     vertical: 'bottom',
                                     horizontal: 'right',
@@ -377,35 +389,19 @@ const Header = (props) => {
                                     vertical: 'top',
                                     horizontal: 'left',
                                 }}
+                                style={{pointerEvents: (!disableLockout?'none':'all')}}
                             >
-                            <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
-                            <NestedMenuItem direction="left" label="File..." parentMenuOpen={Boolean(anchorEl)}>
-                                <MenuItem onClick={handleNewClick}>New...</MenuItem>
-                                {(router.route.substring(0,5)=='/play') &&
-                                    <>
-                                    <MenuItem onClick={openNewDialog}>Save</MenuItem>
-                                    <MenuItem onClick={handleSaveAsClick}>Save As...</MenuItem>
-                                    </>
-                                }
-                                <NestedMenuItem direction="left" label="Import..." parentMenuOpen={Boolean(anchorEl)}>
-                                    <MenuItem onClick={handleImportBlockchainClick}>From blockchain...</MenuItem>
-                                    <MenuItem onClick={handleImportZipClick}>From ZIP...</MenuItem>
-                                </NestedMenuItem>
-                                {(router.route.substring(0,5)=='/play') &&
-                                    <NestedMenuItem direction="left" label="Export..." parentMenuOpen={Boolean(anchorEl)}>
-                                        <MenuItem onClick={exportZip}>To ZIP...</MenuItem>
-                                        <MenuItem onClick={exportHtml}>To HTML...</MenuItem>
-                                    </NestedMenuItem>
-                                }
+                            
+                            <NestedMenuItem direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
+                                <MenuItem onClick={handleNewClick}>Searchbox here</MenuItem>
+                               
+                              
                             </NestedMenuItem>                          
-                            <Link href="/play"><MenuItem>Play</MenuItem></Link>
-                            <Link href="/examples"><NestedMenuItem onClick={()=>router.push('/examples')} direction="left" label="Examples..." parentMenuOpen={Boolean(anchorEl)}>
-                                <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
-                            </NestedMenuItem></Link>
-                            <Link href="/launchpad"><NestedMenuItem onClick={()=>router.push('/launchpad')} direction="left" label="Launchpad..." parentMenuOpen={Boolean(anchorEl)}>
-                                <LaunchpadMenuItems onDialogOpen={launchpadDialogOpen} onDialogClose={launchpadDialogClose} parentMenuOpen={Boolean(anchorEl)} />
-                            </NestedMenuItem></Link>
-                                <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
+                            <Link href="/wallet"><MenuItem>👥 Collectors</MenuItem></Link>
+                            <Link href="/policy"><MenuItem>📂 Creators</MenuItem></Link>
+                         
+                            
+                                <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? '🌃 Dark Mode':'🔦 Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'75px'}}>
                                 <ToggleButtonGroup
                                     value='light'
@@ -424,40 +420,23 @@ const Header = (props) => {
                                     </ToggleButtonGroup>
                                 </div>
                                 </MenuItem>
-                                <Link href="/help"><MenuItem>Help</MenuItem></Link>
-                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                <Link href="/help"><MenuItem>🩺 Help</MenuItem></Link>
+                                {walletApi &&
+                                    <MenuItem onClick={handleLogout}>🏃 Logout</MenuItem>
+                                }
+                                <Link href="/"><MenuItem onClick={handleClose}>🏠Home</MenuItem></Link>
                             </Menu>
                         </div>
-                    }
-                    {!walletApi &&
-                        <>
-                        <Link href="/">
-                            <Button size='large' startIcon=<Home /> color={(router.route=='/') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
-                                Home
+                        {!walletApi &&
+                        <div style={{marginLeft:'auto', marginRight: 'auto', zIndex:100}}>
+                            <Button title="Connect Wallet" size={buttonsize} className={buttonclass} style={{margin: 0, paddingBottom: 20, border:'none'}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
+                            {connectContent}
                             </Button>
-                        </Link>
-                        <Link href="/play">
-                            <Button size='large' startIcon=<SportsKabaddi /> color={(router.route.substring(0,5)=='/play') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
-                                Play
-                            </Button>
-                        </Link>
-                        <Link href="/examples">
-                            <Button size='large' startIcon=<CastForEducationIcon /> color={router.route=='/examples' ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
-                                Examples
-                            </Button>
-                        </Link>
-                        <Link href="/launchpad">
-                            <Button size='large' startIcon=<WhatshotIcon /> color={(router.route.substring(0,10)=='/launchpad') ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
-                                Launchpad
-                            </Button>
-                        </Link>
-                        <Link href="/help">
-                            <Button size='large' startIcon=<HelpOutline /> color={router.route=='/help' ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
-                                Help
-                            </Button>
-                        </Link>
-                        </>
-                    }
+
+                        </div>
+                        
+                }
+                    
                 <WalletSelector selectedValue={wallet} open={walletOpen} onClose={handleWalletClose} />
                 
                 
