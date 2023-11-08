@@ -41,6 +41,7 @@ const fetcher = url => fetch(ROOT + url, {
     referrerPolicy: 'no-referrer',
 }).then(r => r.json())
 
+
 const buildWitnessed = async (witness, api, callback) => {
     postData("/wit", witness).then(res => {
         console.log("C", res);
