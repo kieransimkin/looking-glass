@@ -397,8 +397,8 @@ const Header = (props) => {
                                
                               
                             </NestedMenuItem>                          
-                            <Link href="/wallet"><MenuItem>👤 👥 Wallets</MenuItem></Link>
-                            <Link href="/policy"><MenuItem>📂 Projects</MenuItem></Link>
+                            <Link href="/wallet"><MenuItem>👥 Collectors</MenuItem></Link>
+                            <Link href="/policy"><MenuItem>📂 Creators</MenuItem></Link>
                          
                             
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? '🌃 Dark Mode':'🔦 Light Mode'}

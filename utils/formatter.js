@@ -1,6 +1,7 @@
 import { getMetadata, getSmartImports } from "libcip54"
 import { checkCacheItem, cacheItem } from "./redis";
 export const getTokenData = async function (token) { 
+    if (!(await checkCacheItem('policyProfile:'+token.unit.substring(0,56)))) cacheItem('policyProfile:'+token.unit.substring(0,56), token.unit);
     let tokenData = await checkCacheItem('getTokenData:'+token.unit);
     if (!tokenData) {
         tokenData={id: token.unit, unit:token.unit, quantity: token.quantity, title:''};
