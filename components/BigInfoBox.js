@@ -65,17 +65,22 @@ export default function BigInfoBox ({item}) {
         }
     },[item,loaded, width, height])
     
-    return <div style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
-    <div style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}>
+    return <div style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}><div style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
+    
         <img ref={imgRef} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible'}} />
+        <TokenRoundall quantity={item.quantity} />
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}
         </div>
-        </div>
+        
+        <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
+        
+        
         <div style={{position: 'relative', marginBottom: '0.5em'}}>
-        <TokenRoundall quantity={item.quantity} /><h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlockStart:0, marginBlockEnd: 0}}>{item.title}</h1>
-        </div>
         <ul className="owner-list">{ownerList.map((i) => <li><AdaHandle stake={i.stake} /> </li>)}</ul>
+        </div>
+        </div>
+        
         <h2 style={{margin:0}}>Metadata:</h2>
         <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
         </div>

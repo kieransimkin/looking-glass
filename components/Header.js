@@ -354,7 +354,7 @@ const Header = (props) => {
                         </div>
                         
                 }
-                {walletApi &&
+                
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
                             <IconButton className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                                 <MenuIcon fontSize={buttonsize} color="secondary" />
@@ -378,33 +378,15 @@ const Header = (props) => {
                                     horizontal: 'left',
                                 }}
                             >
-                            <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
-                            <NestedMenuItem direction="left" label="File..." parentMenuOpen={Boolean(anchorEl)}>
-                                <MenuItem onClick={handleNewClick}>New...</MenuItem>
-                                {(router.route.substring(0,5)=='/play') &&
-                                    <>
-                                    <MenuItem onClick={openNewDialog}>Save</MenuItem>
-                                    <MenuItem onClick={handleSaveAsClick}>Save As...</MenuItem>
-                                    </>
-                                }
-                                <NestedMenuItem direction="left" label="Import..." parentMenuOpen={Boolean(anchorEl)}>
-                                    <MenuItem onClick={handleImportBlockchainClick}>From blockchain...</MenuItem>
-                                    <MenuItem onClick={handleImportZipClick}>From ZIP...</MenuItem>
-                                </NestedMenuItem>
-                                {(router.route.substring(0,5)=='/play') &&
-                                    <NestedMenuItem direction="left" label="Export..." parentMenuOpen={Boolean(anchorEl)}>
-                                        <MenuItem onClick={exportZip}>To ZIP...</MenuItem>
-                                        <MenuItem onClick={exportHtml}>To HTML...</MenuItem>
-                                    </NestedMenuItem>
-                                }
+                            
+                            <NestedMenuItem direction="left" label="Search..." parentMenuOpen={Boolean(anchorEl)}>
+                                <MenuItem onClick={handleNewClick}>Searchbox here</MenuItem>
+                               
+                              
                             </NestedMenuItem>                          
-                            <Link href="/play"><MenuItem>Play</MenuItem></Link>
-                            <Link href="/examples"><NestedMenuItem onClick={()=>router.push('/examples')} direction="left" label="Examples..." parentMenuOpen={Boolean(anchorEl)}>
-                                <ExamplesMenuItems parentMenuOpen={Boolean(anchorEl)} />
-                            </NestedMenuItem></Link>
-                            <Link href="/launchpad"><NestedMenuItem onClick={()=>router.push('/launchpad')} direction="left" label="Launchpad..." parentMenuOpen={Boolean(anchorEl)}>
-                                <LaunchpadMenuItems onDialogOpen={launchpadDialogOpen} onDialogClose={launchpadDialogClose} parentMenuOpen={Boolean(anchorEl)} />
-                            </NestedMenuItem></Link>
+                            <Link href="/play"><MenuItem></MenuItem></Link>
+                         
+                            
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'75px'}}>
                                 <ToggleButtonGroup
@@ -425,39 +407,14 @@ const Header = (props) => {
                                 </div>
                                 </MenuItem>
                                 <Link href="/help"><MenuItem>Help</MenuItem></Link>
-                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                {walletApi &&
+                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                }
+                                <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
                             </Menu>
                         </div>
-                    }
-                    {!walletApi &&
-                        <>
-                        <Link href="/">
-                            <Button size='large' startIcon=<Home /> color={(router.route=='/') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
-                                Home
-                            </Button>
-                        </Link>
-                        <Link href="/play">
-                            <Button size='large' startIcon=<SportsKabaddi /> color={(router.route.substring(0,5)=='/play') ? 'primary' : 'secondary'} style={{marginLeft:'0.3em'}}>
-                                Play
-                            </Button>
-                        </Link>
-                        <Link href="/examples">
-                            <Button size='large' startIcon=<CastForEducationIcon /> color={router.route=='/examples' ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
-                                Examples
-                            </Button>
-                        </Link>
-                        <Link href="/launchpad">
-                            <Button size='large' startIcon=<WhatshotIcon /> color={(router.route.substring(0,10)=='/launchpad') ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
-                                Launchpad
-                            </Button>
-                        </Link>
-                        <Link href="/help">
-                            <Button size='large' startIcon=<HelpOutline /> color={router.route=='/help' ? 'primary' : 'secondary'}  style={{marginLeft:'0.3em'}}>
-                                Help
-                            </Button>
-                        </Link>
-                        </>
-                    }
+                    
+                    
                 <WalletSelector selectedValue={wallet} open={walletOpen} onClose={handleWalletClose} />
                 
                 
