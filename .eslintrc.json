@@ -1,4 +1,6 @@
 {
   "extends": "next",
-  "react/jsx-no-target-blank": false
+  "rules": {
+    "react/jsx-no-target-blank": false
+  }
 }
