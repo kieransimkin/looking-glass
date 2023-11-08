@@ -78,7 +78,7 @@ export default function BigInfoBox ({item}) {
         
         
         <div style={{position: 'relative', marginBottom: '0.5em'}}>
-        <ul className="owner-list">{ownerList.map((i) => <li><AdaHandle stake={i.stake} /> </li>)}</ul>
+        <ul className="owner-list">{ownerList.map((i) => <li key={i.stake}><AdaHandle stake={i.stake} /> </li>)}</ul>
         </div>
         </div>
         
