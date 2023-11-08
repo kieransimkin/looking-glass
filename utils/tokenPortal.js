@@ -3,7 +3,7 @@ import {SmartNFTPortal} from 'smartnftportal'
 
 export const tokenPortal = async (item, ready, width='100%', height='100%') => { 
     let smI = {tokenUnit:''};
-    if (item?.metadata?.files[0]?.mediaType?.substring(0,9)!='text/html') return;
+    if (item?.metadata?.files && item?.metadata?.files.length>0 && item?.metadata?.files[0]?.mediaType?.substring(0,9)!='text/html') return;
     if (item.metadata?.uses) { 
         const walletAddr = (await (await getData('/getTokenHolders?unit='+item.unit)).json())[0].stake;
         const imports = await postData('/getSmartImports',{metadata: item.metadata, unit: item.unit, walletAddr});

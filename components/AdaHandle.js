@@ -17,11 +17,11 @@ export default function AdaHandle({stake}) {
     if (handle) { 
         
         return <>
-            <a target="_blank" href={"/wallet/"+stake}><span style={{color: 'green'}}>$</span> {handle}</a>
+            <a target="_blank" title={stake} href={"/wallet/"+stake}><span style={{color: 'green'}}>$</span> {handle}</a>
         </>
     } else { 
         return <>
-            {stake.substring(0,7)}...{stake.slice(-6)}
+            <a href={"/wallet/"+stake} title={stake}>{stake.substring(0,7)}...{stake.slice(-6)}</a>
         </>
     }
   }

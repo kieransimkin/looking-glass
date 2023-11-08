@@ -68,6 +68,7 @@ export default function BigInfoBox ({item}) {
     return <div style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}><div style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
     
         <img ref={imgRef} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible'}} />
+        
         <TokenRoundall quantity={item.quantity} />
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}

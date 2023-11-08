@@ -27,6 +27,7 @@ import NestedMenuItem from './NestedMenuItem';
 import ExamplesMenuItems from './ExamplesMenuItems';
 import eventBus from '../utils/EventBus';
 import LaunchpadMenuItems from './LaunchpadMenuItems';
+import { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } from 'next/dist/shared/lib/constants';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -103,8 +104,10 @@ const Header = (props) => {
     const [importZipOpen, setImportZipOpen] = React.useState(false);
     const [wallet, setWallet] = React.useState(null);
     const [darkMode, setDarkMode] = React.useState('dark');
+    const [disableLockout, setDisableLockout] = React.useState(false);
     const [walletApi, setWalletAPI] = React.useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const anchorRef = React.useRef();
     const [callbackFn, setCallbackFn] = React.useState({'fn': () => { return; }, 'fail': () => {return; }});
     const [hide, setHide] = useState(false);
     const [hover, setHover] = useState(false);
@@ -306,9 +309,16 @@ const Header = (props) => {
         setAnchorEl(null);
         
     }
+    const handleLeave = () => { 
+        setDisableLockout(true);
+        console.log('leave');
+    }
 
-    const handleClick = (value) => { 
-        setAnchorEl(value.currentTarget);
+    const handleClick = (a,e) => { 
+        console.log(a.currentTarget);
+        console.log(anchorRef);
+        setDisableLockout(false);
+        setAnchorEl(a.currentTarget);
     }
 
     const toggleDarkMode = (e) => { 
@@ -346,17 +356,10 @@ const Header = (props) => {
               }}
                     
              variant="persistent" anchor='right' open={!hide} className={className}>
-                {!walletApi &&
-                        <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <Button title="Connect Wallet" size={buttonsize} className={buttonclass} sx={{margin: 0, padding: 0}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
-                            {connectContent}
-                            </Button>
-                        </div>
-                        
-                }
+                
                 
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <IconButton className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                            <IconButton style={{cursor: 'pointer'}} ref={anchorRef} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onMouseEnter={handleClick} onMouseLeave={handleLeave} onClick={handleClick}>
                                 <MenuIcon fontSize={buttonsize} color="secondary" />
                             </IconButton>
                             <Menu
@@ -369,6 +372,13 @@ const Header = (props) => {
                                 open={Boolean(anchorEl)}
                                 getContentAnchorEl={null} 
                                 onClose={handleClose}
+                                onMouseLeave={()=>{ 
+                                    console.log('mouseleave menu');
+                                }}
+                                onMouseEnter={() => {
+                                    console.log('mouseenter');
+                                }}
+                                
                                 anchorOrigin={{
                                     vertical: 'bottom',
                                     horizontal: 'right',
@@ -377,6 +387,7 @@ const Header = (props) => {
                                     vertical: 'top',
                                     horizontal: 'left',
                                 }}
+                                style={{pointerEvents: (!disableLockout?'none':'all')}}
                             >
                             
                             <NestedMenuItem direction="left" label="Search..." parentMenuOpen={Boolean(anchorEl)}>
@@ -384,7 +395,7 @@ const Header = (props) => {
                                
                               
                             </NestedMenuItem>                          
-                            <Link href="/play"><MenuItem></MenuItem></Link>
+                            <Link href="/play"><MenuItem>Play</MenuItem></Link>
                          
                             
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
@@ -413,7 +424,15 @@ const Header = (props) => {
                                 <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
                             </Menu>
                         </div>
-                    
+                        {!walletApi &&
+                        <div style={{marginLeft:'auto', marginRight: 'auto', zIndex:100}}>
+                            <Button title="Connect Wallet" size={buttonsize} className={buttonclass} style={{margin: 0, paddingBottom: 20, border:'none'}} variant='outlined' color="secondary" onClick={handleWalletClickOpen}>
+                            {connectContent}
+                            </Button>
+
+                        </div>
+                        
+                }
                     
                 <WalletSelector selectedValue={wallet} open={walletOpen} onClose={handleWalletClose} />
                 
