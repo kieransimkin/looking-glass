@@ -15,7 +15,9 @@ import React, { useEffect, useState,useCallback, useContext } from 'react'
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import WhatshotIcon from '@material-ui/icons/Whatshot';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import PermMediaIcon from '@material-ui/icons/PermMedia';
+import PersonIcon from '@material-ui/icons/Person';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import { useWindowDimensions } from '../utils/Hooks'
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
@@ -118,7 +120,7 @@ const Header = (props) => {
     const walletCtx = useContext(WalletContext);
     
     let connectContent = <PowerIcon fontSize='small' sx={{padding: 0, margin: 0}} />;
-
+    // 🔌
     const buttonsize='medium';
     const buttonclass='nomwbtn';
     const doOnWalletChange=(props)=>{
@@ -390,15 +392,16 @@ const Header = (props) => {
                                 style={{pointerEvents: (!disableLockout?'none':'all')}}
                             >
                             
-                            <NestedMenuItem direction="left" label="Search..." parentMenuOpen={Boolean(anchorEl)}>
+                            <NestedMenuItem direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
                                 <MenuItem onClick={handleNewClick}>Searchbox here</MenuItem>
                                
                               
                             </NestedMenuItem>                          
-                            <Link href="/play"><MenuItem>Play</MenuItem></Link>
+                            <Link href="/wallet"><MenuItem>👤 👥 Wallets</MenuItem></Link>
+                            <Link href="/policy"><MenuItem>📂 Projects</MenuItem></Link>
                          
                             
-                                <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? 'Dark Mode':'Light Mode'}
+                                <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? '🌃 Dark Mode':'🔦 Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'75px'}}>
                                 <ToggleButtonGroup
                                     value='light'
@@ -417,11 +420,11 @@ const Header = (props) => {
                                     </ToggleButtonGroup>
                                 </div>
                                 </MenuItem>
-                                <Link href="/help"><MenuItem>Help</MenuItem></Link>
+                                <Link href="/help"><MenuItem>🩺 Help</MenuItem></Link>
                                 {walletApi &&
-                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                    <MenuItem onClick={handleLogout}>🏃 Logout</MenuItem>
                                 }
-                                <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
+                                <Link href="/"><MenuItem onClick={handleClose}>🏠Home</MenuItem></Link>
                             </Menu>
                         </div>
                         {!walletApi &&
