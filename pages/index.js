@@ -176,109 +176,18 @@ export default function Home() {
     return (
     <div>
       <Head>
-        <title>Cardano Smart NFT Playground</title>
+        <title>clg.wtf</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="fullscreen"> <Carousel 
-        selectedItem={currentSlide}
-        onChange={updateCurrentSlide}
-        autoFocus={true} 
-        showThumbs={false} 
-        showStatus={false} 
-        useKeyboardArrows 
-        autoPlay={autoPlay} 
-        stopOnHover={false} 
-        infiniteLoop={true} 
-        interval={7000} 
-        className="presentation-mode"
-        >
-       <div key="content-1" className="my-slide content" onClick={toggleOnOff}>
-            <div className={classes.bg}>
-                
-            </div>
-            <div className={classes.wideContent + ' slide-content'}>
-                <div className="row" style={{display:'flex', alignItems: 'center', gap:'4em', justifyContent:'space-around'}}>     
-                    <div className="column" style={{marginLeft:'2em'}}>
-                        <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart NFTs</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <Typography variant="h3" classes={{root: classes.subtleLittleHead}}><em>Arden - a flexible framework for Javascript NFTs on Cardano</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        
-                    </div>
-                    <div className="column" style={{minWidth:'40%', flexGrow: 1, marginRight:'2em'}}>
-                        <VideoCard src="/cubes.mp4" onLoad={onLoad} />
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div key="content-2" className="my-slide content" onClick={toggleOnOff}>
-            <div className={classes.bg2}>
-                
-            </div>
-            <div className={classes.wideContent + ' slide-content'}>
-                <div className="row" style={{display:'flex', alignItems: 'center', gap:'4em', justifyContent:'space-around'}}>     
-                    
-                    <div className="column" style={{minWidth:'40%',maxWidth: '50%', marginLeft:'2em'}}>
-                        <PictureCard src="/examples/smart-life-thumb.png" alt="Smart Life" width={952} height={865} />
-                        
-                    </div>
-                    <div className="column">
-                        <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart Life</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>The first CIP54 collection, minting now</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div key="content-3" className="my-slide content" onClick={toggleOnOff}>
-            <div className={classes.bg}>
-                
-            </div>
-            <div className={classes.wideContent + ' slide-content'}>
-                <div style={{display:'flex', flexDirection:'column',alignItems: 'center', gap:'4em', justifyContent:'space-around'}}>     
-                    
-                    <div className="column" style={{minWidth:'60%',maxWidth: '60%', marginLeft:'2em'}}>
-                        <VideoCard src="/smart-avatar.mp4" onLoad={onLoad} />
-                        
-                    </div>
-                    <div className="column" style={{display:'flex', alignItems:'flex-start'}}>
-                        <div><Typography variant="h1" classes={{root: classes.subtleBigHead}}>Smart Avatars</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <Typography variant="h4" classes={{root: classes.subtleLittleHead}}><em>Coming soon, a demonstration of the power of CIP54</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div></div>
-
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div key="content-4" className="my-slide content" onClick={toggleOnOff}>
-            <div className={classes.bg2}>
-                
-            </div>
-            <div className={classes.wideContent + ' slide-content'}>
-                <div className="row" style={{display:'flex', alignItems: 'center', gap:'2em', justifyContent:'space-around' }}>     
-                    
-                    <div className="column" style={{flexGrow:''}}>
-                        <Typography variant="h1" classes={{root: classes.subtleBigHead}}>Get Started</Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <Typography variant="h2" classes={{root: classes.subtleLittleHead}}><em>Press a button</em></Typography><br /><div className="hiding-space">&nbsp;<br /></div>
-                        <ExamplesButton />
-                    </div>                   
-                    <div className="column" style={{minWidth:'40%',maxWidth: '50%'}}>
-                        <PictureCard src="/token-cubes-screenshot.png" alt="Token cubes screenshot" width={2111} height={1907} />
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-       
-    </Carousel>
-    <div className="bottom-button" style={{position:'fixed', bottom:'3em', width:'100%', textAlign:'center', transition: `opacity 0.8s ease`, opacity: autoPlay ? 0 : 1 }}> 
-    <Card style={{cursor: 'pointer', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}} onClick={toggleOnOff}>
+      
+    <Card style={{cursor: 'pointer', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}}>
     <Typography variant="h4">
         {loadingContent}
         </Typography>
     </Card>
     </div>
-      </main>
-    </div>
+    
   )
 }
