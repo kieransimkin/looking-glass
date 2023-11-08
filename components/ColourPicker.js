@@ -17,7 +17,6 @@ import remarkGfm from 'remark-gfm'
 import Image from "next/image";
 import {useHeadingsData} from '../utils/Hooks';
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
-
 import { ChromePicker } from 'react-color'
 
 const ColourPicker = (props) => {

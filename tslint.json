@@ -4,7 +4,7 @@
         "no-empty": [true, "allow-empty-catch"],
         "no-bitwise": false,
         "prefer-for-of": false,
-        "one-variable-per-declaration": false
+        "one-variable-per-declaration": false,
+        "react/jsx-no-target-blank": false
     }
-    
 }
