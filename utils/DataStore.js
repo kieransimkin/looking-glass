@@ -18,7 +18,7 @@ export const getDataURL = (key, type) => {
 }
 export const saveData = (key, type, data) => { 
     const loc = getDataLocation(key,type);
-    fs.mkdirSync(process.cwd()+'/public'+path.dirname(loc),{recursive:true});
-    fs.writeFileSync(process.cwd()+'/public'+loc, data, {mode:755,flush:true});
+    fs.mkdirSync(process.cwd()+'/public'+path.dirname(loc),{recursive:true,mode:parseInt('0775',8)});
+    fs.writeFileSync(process.cwd()+'/public'+loc, data, {mode:parseInt('0664',8),flush:true});
     return encodeURI(loc);
 }
