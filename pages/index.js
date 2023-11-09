@@ -279,9 +279,10 @@ export default function Home() {
       <planeGeometry args={[1000, 1000]} />
       <meshStandardMaterial color="#ff0000" roughness={0.5} depthTest={false} />
     </mesh>
-    <Swarm count={20000} color="#100200" />
-    <Swarm count={20000} color="#100210" />
-    <Swarm count={20000} color="#020215" />
+    <Swarm count={10000} color="#000201" />
+    <Swarm count={10000} color="#100301" />
+    <Swarm count={4000} color="#020209" />
+    <Swarm count={10000} color="#040200" />
     <Box position={[-1.2, 0, 0]} />
       <Box position={[1.2, 0, 0]} />
       
