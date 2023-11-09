@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
-
+const withTM = require('next-transpile-modules')(['three'])
 const {join} = require('path');
 const {access, symlink} = require('fs/promises')
 
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+
   //output:'standalone',
   webpack: function (config, options) {
     
@@ -23,43 +24,6 @@ const nextConfig = {
       })
     );
 
-    // There is some weird bug with dynamic wasm imports (again, triggered by serialization lib), this workaround is from github:
-    // https://github.com/vercel/next.js/issues/25852
-    /*
-    config.plugins.push(
-      new (class {
-        apply(compiler) {
-          compiler.hooks.afterEmit.tapPromise(
-            'SymlinkWebpackPlugin',
-            async (compiler) => {
-              if (isServer) {
-                const from = join(compiler.options.output.path, '../static');
-                const to = join(compiler.options.output.path, 'static');
-                
-                try {
-                  await access(from);
-                  console.log(`${from} already exists`);
-                  return;
-                } catch (error) {
-                  if (error.code === 'ENOENT') {
-                    // No link exists
-                  } else {
-                    throw error;
-                  }
-                }
-    
-                
-                await symlink(to, from, 'junction');
-                console.log(`created symlink ${from} -> ${to}`);
-              }
-            },
-          );
-        }
-      })(),
-    );
-    */
-  // Important: return the modified config
-    //return newconfig
 		return config;
 	},
 }
@@ -82,4 +46,5 @@ function patchWasmModuleImport(config, isServer) {
       config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
   }
 }
-module.exports = nextConfig
+module.exports = withTM(nextConfig)
+

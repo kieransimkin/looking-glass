@@ -30,6 +30,7 @@ import ExamplesMenuItems from './ExamplesMenuItems';
 import eventBus from '../utils/EventBus';
 import LaunchpadMenuItems from './LaunchpadMenuItems';
 import { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } from 'next/dist/shared/lib/constants';
+import SearchBox from './SearchBox';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -393,7 +394,7 @@ const Header = (props) => {
                             >
                             
                             <NestedMenuItem direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
-                                <MenuItem onClick={handleNewClick}>Searchbox here</MenuItem>
+                                <MenuItem onClick={handleNewClick}><SearchBox width={300} /></MenuItem>
                                
                               
                             </NestedMenuItem>                          

@@ -1,10 +1,10 @@
 import '../styles/globals.css'
 import Layout from '../components/Layout'
 import React from "react";
+import { useRouter } from 'next/router';
 import App from "next/app";
 import { PageTransition } from "next-page-transitions";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {useRouter} from 'next/router';
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 

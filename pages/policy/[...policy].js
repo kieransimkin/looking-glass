@@ -9,6 +9,7 @@ import {MediaSlide} from 'react-mediaslide'
 import {SmartNFTPortal} from 'smartnftportal'
 import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
+import { CircularProgress } from '@material-ui/core';
 
 
 export default  function CIP54Playground(params) {
@@ -59,7 +60,7 @@ export default  function CIP54Playground(params) {
     */
     return (
         <>
-            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<CircularProgress /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
