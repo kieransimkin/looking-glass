@@ -59,5 +59,8 @@ export default function Search(params) {
         }
         
     },[search])
-    return (<><CircularProgress /></>);
+    return <div style={{textAlign:'center', position:'absolute', left:'50%', transform:'translateX(-50%)'}}>
+
+                <h1>Loading...</h1><CircularProgress /> 
+                </div>
 }
