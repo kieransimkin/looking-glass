@@ -27,6 +27,7 @@
     "@mui/material": "^5.10.6",
     "@mui/x-data-grid": "^5.17.4",
     "@observablehq/plot": "^0.6.0",
+    "@react-three/drei": "^9.88.11",
     "@react-three/fiber": "^8.15.10",
     "@types/three": "^0.158.2",
     "@uiw/react-codemirror": "^4.19.16",
