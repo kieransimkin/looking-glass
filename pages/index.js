@@ -204,7 +204,7 @@ const useStyles = makeStyles(theme => {
         const a = Math.cos(t) + Math.sin(t * 1) / 10
         const b = Math.sin(t) + Math.cos(t * 2) / 10
         const s = Math.cos(t)
-        particle.mx += (state.mouse.x * 200 - particle.mx) * 0.01
+        particle.mx += (state.mouse.x * 800 - particle.mx) * 0.01
         particle.my += (state.mouse.y * 200 - 1 - particle.my) * 0.01
         dummy.position.set(
           (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
@@ -280,8 +280,8 @@ export default function Home() {
       <meshStandardMaterial color="#ff0000" roughness={0.5} depthTest={false} />
     </mesh>
     <Swarm count={10000} color="#000201" />
-    <Swarm count={10000} color="#100301" />
-    <Swarm count={4000} color="#020209" />
+    <Swarm count={10000} color="#090301" />
+    <Swarm count={4000} color="#040302" />
     <Swarm count={10000} color="#040200" />
     <Box position={[-1.2, 0, 0]} />
       <Box position={[1.2, 0, 0]} />
@@ -316,6 +316,7 @@ function Postpro() {
         <unrealBloomPass args={[undefined, 1.25, 1, 0]} />
         <filmPass args={[0.2, 0.5, 1500, false]} />
         
+        <lUTPass lut={data.texture} intensity={0.1} />
       </Effects>
     )
   }
