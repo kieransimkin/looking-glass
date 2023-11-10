@@ -9,7 +9,7 @@
     "dev": "rm -rfv node_modules/.cache/* && next dev",
     "build": "rm -rfv node_modules/.cache/* && next build",
     "export": "next export",
-    "start": "next build && next start",
+    "start": "next start",
     "lint": "next lint "
   },
   "dependencies": {
