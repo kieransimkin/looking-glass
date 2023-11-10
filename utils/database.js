@@ -77,7 +77,7 @@ export const getWalletKeyList = async () => {
         list = [];
     }
     let list2 = await client.query(
-        `select distinct stake from wallet where stake where stake=slug`,[]
+        `select distinct stake from wallet where stake=slug`,[]
     )
     if (list2 && list2.rows && list2.rows.length) { 
         list2.rows.forEach(element=> {
