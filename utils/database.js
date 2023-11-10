@@ -51,7 +51,7 @@ export const getPolicyKeyList = async () => {
     );
 
     if (list && list.rows && list.rows.length) { 
-        list = list.rows.map((d)=>d.policyID);
+        list = list.rows.map((d)=>d.slug);
     } else { 
         list = [];
     }
@@ -60,7 +60,7 @@ export const getPolicyKeyList = async () => {
     );
     if (list2 && list2.rows && list2.rows.length) { 
         list2.rows.forEach(element => {
-            list.push(element.slug);
+            list.push(element.policyID);
         });
     }
     
@@ -72,7 +72,7 @@ export const getWalletKeyList = async () => {
         `select distinct slug from wallet where slug!=stake`,[]
     );
     if (list && list.rows && list.rows.length) { 
-        list = list.rows.map((d)=>d.stake);
+        list = list.rows.map((d)=>d.slug);
     } else { 
         list = [];
     }
@@ -81,7 +81,7 @@ export const getWalletKeyList = async () => {
     )
     if (list2 && list2.rows && list2.rows.length) { 
         list2.rows.forEach(element=> {
-            list.push(element.slug);
+            list.push(element.stake);
         });
     }
     return list;
