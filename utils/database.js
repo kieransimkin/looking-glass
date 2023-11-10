@@ -47,7 +47,7 @@ const bindPolicyMethods = (policy) => {
 }
 export const getPolicyKeyList = async () => { 
     let list = await client.query(
-        `select distinct encode("policyID",'hex') as "policyID" from policy`,[]
+        `select distinct slug from policy where slug!=encode("policyID",'hex')`,[]
     );
 
     if (list && list.rows && list.rows.length) { 
@@ -56,7 +56,7 @@ export const getPolicyKeyList = async () => {
         list = [];
     }
     let list2 = await client.query( 
-        `select distinct slug from policy where slug!=encode("policyID",'hex')`,[]
+        `select distinct encode("policyID",'hex') as "policyID" from policy where encode("policyID",'hex')=slug`,[]
     );
     if (list2 && list2.rows && list2.rows.length) { 
         list2.rows.forEach(element => {
@@ -69,7 +69,7 @@ export const getPolicyKeyList = async () => {
 
 export const getWalletKeyList = async () => { 
     let list = await client.query(
-        `select distinct stake from wallet`,[]
+        `select distinct slug from wallet where slug!=stake`,[]
     );
     if (list && list.rows && list.rows.length) { 
         list = list.rows.map((d)=>d.stake);
@@ -77,7 +77,7 @@ export const getWalletKeyList = async () => {
         list = [];
     }
     let list2 = await client.query(
-        `select distinct slug from wallet where slug!=stake`,[]
+        `select distinct stake from wallet where stake where stake=slug`,[]
     )
     if (list2 && list2.rows && list2.rows.length) { 
         list2.rows.forEach(element=> {
