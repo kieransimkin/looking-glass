@@ -20,7 +20,7 @@ export const getServerSideProps = async (context) => {
     let props = {};
 
     if (result) { 
-        props.policy = JSON.stringify(result);
+        props.policy = JSON.parse(JSON.stringify(result));
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
         if (tokens) { 
