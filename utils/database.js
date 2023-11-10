@@ -59,7 +59,7 @@ export const getPolicyKeyList = async () => {
         `select distinct slug from policy where slug!=encode("policyID",'hex')`,[]
     );
     if (list2 && list2.rows && list2.rows.length) { 
-        list2.forEach(element => {
+        list2.rows.forEach(element => {
             list.push(element.slug);
         });
     }
@@ -80,7 +80,7 @@ export const getWalletKeyList = async () => {
         `select distinct slug from wallet where slug!=stake`,[]
     )
     if (list2 && list2.rows && list2.rows.length) { 
-        list2.forEach(element=> {
+        list2.rows.forEach(element=> {
             list.push(element.slug);
         });
     }
