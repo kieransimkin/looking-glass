@@ -1,0 +1,12 @@
+[source]
+type = "N2N"
+address = ["Tcp", "localhost:3001"]
+magic = "mainnet"
+
+[[filters]]
+type = "Fingerprint"
+
+[sink]
+type = "Redis"
+brokers = ["127.0.0.1:53147"]
+topic = "testnet"

@@ -11,7 +11,8 @@
     "export": "next export",
     "start": "next start",
     "lint": "next lint ",
-    "import": "tsx scripts/importPolicies.mjs"
+    "import": "tsx scripts/importPolicies.mjs",
+    "precache": "tsx scripts/precache.mjs"
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.2.0",
