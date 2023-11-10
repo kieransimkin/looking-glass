@@ -2,6 +2,7 @@ import { init, getTokensFromAny } from "libcip54"
 import pgClient from "../../utils/dbsync";
 import {getClient, checkCacheItem, cacheItem} from "../../utils/redis";
 import { getTokenData } from "../../utils/formatter";
+import { getWallet } from "../../utils/database";
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
@@ -14,20 +15,28 @@ export default async function Browse(req, res) {
     const perPage = 10;
     const start = page*perPage;
     const end = (page+1)*perPage;
-
+    let uncached = false;
     let tokens = await checkCacheItem('getTokensFromAddress:'+address);
     if (!tokens) {
+        uncached=true;
         tokens = await getTokensFromAny(address);
         await cacheItem('getTokensFromAddress:'+address,tokens)
     }
+    const wallet = await getWallet(address);
     
     const totalPages = Math.ceil(tokens.length/perPage);
+    const presliced = tokens;
     tokens = tokens.slice(start, end);
     
     const promises = [];
     for (const token of tokens) { 
         promises.push(getTokenData(token));
     }
+    
     const result = await Promise.all(promises)
+    
+    if (!wallet.profileUnit && uncached) { 
+        wallet.setProfileUnit(presliced);
+    }
     res.status(200).json({tokens:result, page, start, end, totalPages, perPage });
 }

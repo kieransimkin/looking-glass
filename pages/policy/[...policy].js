@@ -20,7 +20,7 @@ export const getServerSideProps = async (context) => {
     let props = {};
 
     if (result) { 
-        props.policy = result;
+        props.policy = JSON.stringify(result);
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
         if (tokens) { 
@@ -64,7 +64,6 @@ export default  function CIP54Playground(props) {
         getData('/policyTokens?policy='+policy).then((d)=>{
             d.json().then((j) => { 
                 setGallery(j);
-                console.log(j);
                 setMediaSlideLoading(false);
             });
             
@@ -85,9 +84,7 @@ export default  function CIP54Playground(props) {
             d.json().then((j) => { 
                 const newArray = [...gallery.tokens];
                 newArray.push(...j.tokens);
-                console.log({tokens:newArray,page:j.page, totalPages: j.totalPages})
                 setGallery({tokens:newArray,page:j.page, totalPages: j.totalPages});
-                
                 setMediaSlideLoading(false);   
             });
             
@@ -98,17 +95,24 @@ export default  function CIP54Playground(props) {
     /*
     
     */
+   const title = props.policy.name+" - Cardano Looking Glass - clg.wtf"
     return (
         <>
             <Head>
-                <title>{props.policy.name+" - Cardano Looking Glass - clg.wtf"}</title>
+                <title>{title}</title>
                 <meta name="description" content={props.policy.description} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content={"https://clg.wtf/policy/"+props.policy.slug} />
                 <meta property="og:site_name" content="Cardano Looking Glass" />
-                <meta property="og:title" content={props.policy.name+' - Cardano Looking Glass - clg.wtf'} />
+                <meta property="og:title" content={title} />
                 <meta property="og:description" content={props.policy.description} />
                 <meta property="og:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.policyProfile} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta property="twitter:domain" content="clg.wtf" />
+                <meta property="twitter:url" content={"https://clg.wtf/policy/"+props.policy.slug} />
+                <meta name="twitter:title" content={title} />
+                <meta name="twitter:description" content={props.policy.description} />
+                <meta name="twitter:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.policyProfile} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<CircularProgress /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />

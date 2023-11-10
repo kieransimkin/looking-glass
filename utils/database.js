@@ -5,6 +5,8 @@ import dbSyncClient from './dbsync'
 import { validatePolicyID } from './Helpers';
 let client = new pgCon.Pool({connectionString: process.env.DATABASE_URI});
 import { getStakeFromAny, validAddress } from 'libcip54';
+import * as walletMethods from "../models/wallet"
+import * as policyMethods from "../models/policy"
 // client.connect();
 export default client;
 
@@ -25,6 +27,20 @@ export const getWallet = async (key) => {
         return await getWalletBySlug(key);
     }
 }
+const bindWalletMethods = (wallet) => { 
+    for (var method in walletMethods) { 
+        wallet[method]=walletMethods[method].bind(wallet);
+    
+    }
+    return wallet;
+}
+const bindPolicyMethods = (policy) => { 
+    for (var method in policyMethods) { 
+        policy[method]=policyMethods[method].bind(policy);
+    
+    }
+    return policy;
+}
 export const getPolicyKeyList = async () => { 
     let list = await client.query(
         `select distinct encode("policyID",'hex') as "policyID" from policy`,[]
@@ -43,6 +59,7 @@ export const getPolicyKeyList = async () => {
             list.push(element.slug);
         });
     }
+    
     return list;
 }
 
@@ -68,6 +85,7 @@ export const getWalletKeyList = async () => {
 
 
 export const getWalletByStake = async (stake) => { 
+    
     let wallet = await client.query(
         `
         SELECT 
@@ -82,6 +100,7 @@ export const getWalletByStake = async (stake) => {
         `,
         [stake],
       );
+      
       if (!wallet?.rows || wallet?.rows.length<1) { 
         const foundStake = getStakeFromAny(stake);
         if (!foundStake) { 
@@ -99,7 +118,8 @@ export const getWalletByStake = async (stake) => {
             }
         }
       } else {
-        return wallet.rows[0];
+
+        return bindWalletMethods(wallet.rows[0]);
       }
 }
 export const getWalletBySlug = async (slug) => { 
@@ -118,7 +138,7 @@ export const getWalletBySlug = async (slug) => {
       if (!wallet?.rows || wallet?.rows.length<1) { 
         return null;
       } else { 
-        return wallet.rows[0];
+        return bindWalletMethods(wallet.rows[0]);
       }
 }
 export const getPolicyByID = async (policyID) => { 
@@ -159,7 +179,7 @@ export const getPolicyByID = async (policyID) => {
             return null;   
         }
       } else { 
-        return policy.rows[0];
+        return bindPolicyMethods(policy.rows[0]);
       }
 }
 export const getPolicyBySlug = async (slug) => { 
@@ -180,6 +200,6 @@ export const getPolicyBySlug = async (slug) => {
       if (!policy?.rows || policy?.rows.length<1) { 
         return null;
       } else { 
-        return policy.rows[0];
+        return bindPolicyMethods(policy.rows[0]);
       }
 }

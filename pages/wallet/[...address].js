@@ -20,7 +20,7 @@ export const getServerSideProps = async (context) => {
     let props = {};
 
     if (result) { 
-        props.wallet = result;
+        props.wallet = JSON.stringify(result);
         
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
@@ -94,20 +94,28 @@ export default  function CIP54Playground(props) {
         console.log('Called outer load more data function');
         
     }
+    const title = props.wallet.name+" - Cardano Looking Glass - clg.wtf"
     /*
     
     */
     return (
         <>
             <Head>
-                <title>{props.wallet.name} - Cardano Looking Glass - clg.wtf</title>
+                <title>{title}</title>
                 <meta name="description" content={props.wallet.bio} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content={"https://clg.wtf/wallet/"+props.wallet.slug} />
                 <meta property="og:site_name" content="Cardano Looking Glass" />
-                <meta property="og:title" content={props.wallet.name+' - Cardano Looking Glass - clg.wtf'} />
+                <meta property="og:title" content={title} />
                 <meta property="og:description" content={props.wallet.bio} />
                 <meta property="og:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.wallet.profileUnit} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta property="twitter:domain" content="clg.wtf" />
+                <meta property="twitter:url" content={"https://clg.wtf/wallet/"+props.wallet.slug} />
+                <meta name="twitter:title" content={title} />
+                <meta name="twitter:description" content={props.wallet.bio} />
+                <meta name="twitter:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.wallet.profileUnit} />
+
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<CircularProgress style={{marginLeft: 'auto', marginRight:'auto'}} /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
