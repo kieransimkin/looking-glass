@@ -32,7 +32,9 @@ export const getWallet = async (key) => {
 }
 const bindWalletMethods = (wallet) => { 
     for (var method in walletMethods) { 
-        wallet[method]=walletMethods[method].bind(wallet);
+        if (typeof walletMethods[method]=='function') { 
+            wallet[method]=walletMethods[method].bind(wallet);
+        }
     
     }
     return wallet;
@@ -40,7 +42,9 @@ const bindWalletMethods = (wallet) => {
 const bindPolicyMethods = (policy) => { 
     for (var method in policyMethods) { 
         console.log(method);
-        policy[method]=policyMethods[method].bind(policy);
+        if (typeof policyMethods[method]=='function') { 
+            policy[method]=policyMethods[method].bind(policy);
+        }
     
     }
     return policy;
