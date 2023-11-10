@@ -7,6 +7,5 @@ magic = "mainnet"
 type = "Fingerprint"
 
 [sink]
-type = "Redis"
-brokers = ["127.0.0.1:53147"]
-topic = "testnet"
+type = "WebHook"
+url = "http://localhost:3000"

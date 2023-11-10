@@ -7,6 +7,9 @@ import { PageTransition } from "next-page-transitions";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { useEffect, useState } from 'react'
+import io from 'Socket.IO-client'
+let socket;
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -35,6 +38,18 @@ const TIMEOUT = 400;
 function CIP54Playground({ Component, pageProps }) {
   
   const router = useRouter();
+  useEffect(() => socketInitializer(), [])
+
+  const socketInitializer = async () => {
+    await fetch('/api/socket');
+    socket = io()
+
+    socket.on('connect', () => {
+      console.log('connected')
+    })
+
+  
+  }
   //console.log("%c Ignore cardano serialization lib errors, it likes to throw them. ","background: lightgreen; color: black;")
   return (
     <>
