@@ -10,6 +10,10 @@ const fileContents = await fs.readFileSync(process.cwd()+'/data/policyIDs.json')
         console.log(policy);
         const existing = await database.getPolicy(policy);
         if (existing) {
+            const result = await database.default.query(`
+            UPDATE policy SET name=$1::TEXT, slug=$2::TEXT WHERE encode("policyID",'hex')=$3::TEXT
+            `,[json[policy].title, json[policy].slug, existing.policyID])
+            console.log(result)
             console.log('found');
         } else {
             console.log('not found');
