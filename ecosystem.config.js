@@ -22,12 +22,12 @@ function calcPath(relativePath) {
 module.exports = {
 	apps: [
 		{
-			script: 'npm',
-			instances: "max",
-            args: "start",
-            "exec_mode": "cluster",
-			name: 'clg',
-            env: getEnvVariables()
+      script: 'node_modules/.bin/next',
+      instances: "max",
+      args: "start",
+      "exec_mode": "cluster",
+      name: 'clg',
+      env: getEnvVariables()
 		},
 	],
 }
