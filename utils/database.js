@@ -182,6 +182,7 @@ export const getPolicyByID = async (policyID) => {
                 return await getPolicyByID(policyID);
             }
         } else { 
+            console.log(dbSyncResult)
             return null;   
         }
       } else { 
