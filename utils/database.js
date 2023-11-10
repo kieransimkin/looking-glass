@@ -4,7 +4,8 @@ import pgCon from 'pg';
 import dbSyncClient from './dbsync'
 import { validatePolicyID } from './Helpers';
 let client = new pgCon.Pool({connectionString: process.env.DATABASE_URI});
-import { getStakeFromAny, validAddress } from 'libcip54';
+import { validAddress } from 'libcip54';
+import { getStakeFromAny } from './CSL';
 import * as walletMethods from "../models/wallet"
 import * as policyMethods from "../models/policy"
 // client.connect();

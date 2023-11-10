@@ -95,6 +95,7 @@ export default  function CIP54Playground(props) {
     /*
     
     */
+   console.log(props);
    const title = props.policy.name+" - Cardano Looking Glass - clg.wtf"
     return (
         <>

@@ -1,4 +1,4 @@
-const networkId = process.env.NETWORK?.toLowerCase() == "testnet" ? 0 : 1
+const networkId = 1
 
 import * as CSL from "@emurgo/cardano-serialization-lib-browser"
 

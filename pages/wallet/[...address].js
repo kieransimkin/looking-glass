@@ -20,7 +20,15 @@ export const getServerSideProps = async (context) => {
     let props = {};
 
     if (result) { 
-        props.wallet = JSON.stringify(result);
+        if (result.stake != context.query.address[0]) { 
+            return {
+                redirect: {
+                    destination: '/wallet/'+result.stake,
+                    permanent: true
+                }
+            }
+        }
+        props.wallet = JSON.parse(JSON.stringify(result));
         
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
@@ -98,6 +106,7 @@ export default  function CIP54Playground(props) {
     /*
     
     */
+   console.log(props);
     return (
         <>
             <Head>
