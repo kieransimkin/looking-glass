@@ -52,9 +52,7 @@ export const getServerSideProps = async (context) => {
 
 export default  function CIP54Playground(props) {
     const dbWallet = props.wallet;
-    if (!dbWallet) { 
-        return <h1>Wallet Not Found</h1>
-    }
+ 
     const router = useRouter();
     let {address} = router.query;  
     const [gallery, setGallery] = useState(props.gallery);
@@ -74,7 +72,9 @@ export default  function CIP54Playground(props) {
         });
         
     },[address])
-
+    if (!dbWallet) { 
+        return <h1>Wallet Not Found</h1>
+    }
     const renderBigInfo = async (i) => { 
         
         return <BigInfoBox item={i} />

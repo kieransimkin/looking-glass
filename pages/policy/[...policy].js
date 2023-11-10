@@ -50,9 +50,7 @@ export const getServerSideProps = async (context) => {
 
 export default  function CIP54Playground(props) {
     const dbPolicy = props.policy;
-    if (!dbPolicy) { 
-        return <h1>Policy Not Found</h1>
-    }
+    
     const router = useRouter();
     let {policy} = router.query;  
     const [gallery, setGallery] = useState(props?.gallery);
@@ -73,7 +71,9 @@ export default  function CIP54Playground(props) {
         });
         
     },[policy])
-
+    if (!dbPolicy) { 
+        return <h1>Policy Not Found</h1>
+    }
     const renderBigInfo = async (i) => { 
         
         return <BigInfoBox item={i} />
