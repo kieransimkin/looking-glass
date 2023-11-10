@@ -10,23 +10,64 @@ import {SmartNFTPortal} from 'smartnftportal'
 import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
-
-
-export default  function CIP54Playground(params) {
+import { getWallet } from '../../utils/database';
+import { checkCacheItem } from '../../utils/redis';
+import { getTokenData } from '../../utils/formatter';
+import Head from 'next/head'
+export const getServerSideProps = async (context) => { 
     
+    let result = await getWallet(context.query.address[0]);
+    let props = {};
+
+    if (result) { 
+        props.wallet = result;
+        
+        
+        let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
+        if (tokens) { 
+            const perPage = 10;
+            const totalPages =  Math.ceil(tokens.length/perPage)
+            tokens = tokens.slice(0, perPage);       
+            const promises = [];
+            for (const token of tokens) { 
+                promises.push(getTokenData(token,true));
+            }
+            const tokResult = await Promise.all(promises)
+            let failed = false;
+            for (let c=0;c<tokResult.length;c++ ) { 
+                if (!tokResult[c]) { 
+                    failed=true;
+                    break;
+                }
+            }
+            if (!failed) { 
+                props.gallery={tokens:tokResult, page:0, start:0, end:perPage, totalPages, perPage: perPage};
+            }
+        }
+    }
+    return {
+        props
+    }
+}
+
+export default  function CIP54Playground(props) {
+    const dbWallet = props.wallet;
+    if (!dbWallet) { 
+        return <h1>Wallet Not Found</h1>
+    }
     const router = useRouter();
     let {address} = router.query;  
-    const [gallery, setGallery] = useState(null);
+    const [gallery, setGallery] = useState(props.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
     if (!address) address='';
     
     useEffect(() => { 
         if (!address || address=='') return;
+        if (gallery) return;
         setMediaSlideLoading(true);
         getData('/addressTokens?address='+address).then((d)=>{
             d.json().then((j) => { 
                 setGallery(j);
-                console.log(j);
                 setMediaSlideLoading(false);
             });
             
@@ -45,9 +86,7 @@ export default  function CIP54Playground(params) {
             d.json().then((j) => { 
                 const newArray = [...gallery.tokens];
                 newArray.push(...j.tokens);
-                console.log({tokens:newArray,page:j.page, totalPages: j.totalPages})
                 setGallery({tokens:newArray,page:j.page, totalPages: j.totalPages});
-                
                 setMediaSlideLoading(false);   
             });
             
@@ -60,6 +99,17 @@ export default  function CIP54Playground(params) {
     */
     return (
         <>
+            <Head>
+                <title>{props.wallet.name} - Cardano Looking Glass - clg.wtf</title>
+                <meta name="description" content={props.wallet.bio} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={"https://clg.wtf/wallet/"+props.wallet.slug} />
+                <meta property="og:site_name" content="Cardano Looking Glass" />
+                <meta property="og:title" content={props.wallet.name+' - Cardano Looking Glass - clg.wtf'} />
+                <meta property="og:description" content={props.wallet.bio} />
+                <meta property="og:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.wallet.profileUnit} />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<CircularProgress style={{marginLeft: 'auto', marginRight:'auto'}} /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );

@@ -5,8 +5,7 @@ import { getTokenData } from "../../utils/formatter";
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
-    let {policy, page} = req.query;
-    
+    let {policy, page, cachedOnly} = req.query;
 
     if (!page) page=0;
     page=parseInt(page);
@@ -17,10 +16,10 @@ export default async function Browse(req, res) {
 
     let tokens = await checkCacheItem('getTokensFromPolicy:'+policy);
     if (!tokens) {
+        if (cachedOnly) return res.status(425).json({message:'Not cached yet'});
         tokens = await getTokensFromPolicy(policy);
         await cacheItem('getTokensFromPolicy:'+policy,tokens)
     }
-    console.log(tokens.length);
     const totalPages = Math.ceil(tokens.length/perPage);
     tokens = tokens.slice(start, end);
     

@@ -1,5 +1,22 @@
 
 var Buffer = require('buffer/').Buffer;
+import validator from 'validator';
+const { isIn, isHexadecimal } = validator.default;
+
+function asciiToHex(str) {
+  const arr1 = [];
+  for (let n = 0, l = str.length; n < l; n++) {
+    const hex = Number(str.charCodeAt(n)).toString(16);
+    arr1.push(hex);
+  }
+  return arr1.join('');
+}
+
+// Policy IDs are always 56 characters hexadecimal string
+const validatePolicyID = (val) => { 
+  if (val.length!=56) return false;
+  return isHexadecimal(val);
+}
 function unicodeToBase64(str) {
   // First we use encodeURIComponent to get percent-encoded UTF-8,
   // then we convert the percent encodings into raw bytes which
@@ -152,5 +169,7 @@ export {
 	getPOSTBody,
 	containsSpecialPolicy,
   unicodeToBase64,
-  base64ToUnicode
+  base64ToUnicode,
+  validatePolicyID,
+  asciiToHex
 }

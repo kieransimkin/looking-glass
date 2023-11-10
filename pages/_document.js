@@ -16,7 +16,8 @@ export default class MyDocument extends Document {
           <script src="https://code.createjs.com/1.0.0/createjs.min.js" />
           <script src="https://code.createjs.com/1.0.0/preloadjs.min.js" />
           <link rel="manifest" href="/site.webmanifest" />
-          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />          
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />        
+          <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         </Head>
         <body>
           <Main />

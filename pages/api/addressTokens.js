@@ -20,7 +20,7 @@ export default async function Browse(req, res) {
         tokens = await getTokensFromAny(address);
         await cacheItem('getTokensFromAddress:'+address,tokens)
     }
-    console.log(tokens.length);
+    
     const totalPages = Math.ceil(tokens.length/perPage);
     tokens = tokens.slice(start, end);
     

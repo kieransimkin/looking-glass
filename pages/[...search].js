@@ -3,40 +3,11 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { getData} from '../utils/Api'
-import validator from 'validator';
-import * as CSL from "@emurgo/cardano-serialization-lib-browser"
-const { isIn, isHexadecimal } = validator.default;
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
+import { validatePolicyID, asciiToHex } from "../utils/Helpers";
+import { validAddress } from "../utils/CSLBrowser"
 
-export function asciiToHex(str) {
-    const arr1 = [];
-    for (let n = 0, l = str.length; n < l; n++) {
-      const hex = Number(str.charCodeAt(n)).toString(16);
-      arr1.push(hex);
-    }
-    return arr1.join('');
-  }
-  
-export function validAddress(address) {
-    try {
-        return CSL.Address.from_bech32(address)
-    } catch (e) {
-    }
-
-    try {
-        return CSL.Address.from_hex(address)
-    } catch (e) {
-    }
-
-    return
-}
-
-// Policy IDs are always 56 characters hexadecimal string
-const validatePolicyID = (val) => { 
-    if (val.length!=56) return false;
-    return isHexadecimal(val);
-}
 export default function Search(params) {
     
     const router = useRouter();

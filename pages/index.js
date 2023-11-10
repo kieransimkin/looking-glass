@@ -280,7 +280,7 @@ export default function Home() {
       <meshStandardMaterial color="#ff0000" roughness={0.5} depthTest={false} />
     </mesh>
     <Swarm count={10000} color="#000201" />
-    <Swarm count={10000} color="#090301" />
+    <Swarm count={20000} color="#090301" />
     <Swarm count={4000} color="#040302" />
     <Swarm count={10000} color="#040200" />
     <Box position={[-1.2, 0, 0]} />
