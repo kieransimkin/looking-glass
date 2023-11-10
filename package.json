@@ -10,7 +10,8 @@
     "build": "rm -rfv node_modules/.cache/* && next build",
     "export": "next export",
     "start": "next start",
-    "lint": "next lint "
+    "lint": "next lint ",
+    "import": "tsx scripts/importPolicies.mjs"
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.2.0",
@@ -94,6 +95,7 @@
     "@types/node": "20.7.0",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.2",
+    "tsx": "^4.1.0",
     "typescript": "5.2.2"
   }
 }

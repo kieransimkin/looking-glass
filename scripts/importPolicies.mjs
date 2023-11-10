@@ -1,14 +1,14 @@
-const fs = require('fs');
 import fs from 'fs';
-import { getPolicy } from '../utils/database';
-
+import database from '../utils/database.js'
+import dotenv from 'dotenv';
+dotenv.config()
 async function doIt() {
-const fileContents = await fs.readFileSync(process.cwd()+'/../data/policyIDs.json')
+const fileContents = await fs.readFileSync(process.cwd()+'/data/policyIDs.json')
     console.log(fileContents);
     const json = JSON.parse(fileContents)
     for (var policy in json) { 
         console.log(policy);
-        const existing = await getPolicy(policy);
+        const existing = await database.getPolicy(policy);
         if (existing) {
             console.log('found');
         } else {
