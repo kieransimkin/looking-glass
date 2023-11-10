@@ -5,6 +5,7 @@ import AdaHandle from './AdaHandle';
 import TokenRoundall from '../components/TokenRoundall';
 import { useState, useRef, useEffect } from 'react';
 import {tokenPortal} from '../utils/tokenPortal';
+import PolicyInfo from './PolicyInfo';
 export default function BigInfoBox ({item}) { 
     const theme = useTheme();
     const [ownerList, setOwnerList] = useState([]);
@@ -77,6 +78,9 @@ export default function BigInfoBox ({item}) {
         <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
         
         
+        <div style={{position: 'relative', marginBottom: '0.3em', marginTop:'0em', paddingTop:'0em'}}>
+        <PolicyInfo policyID={item.unit.substring(0,56)} />
+        </div>
         <div style={{position: 'relative', marginBottom: '0.5em'}}>
         <ul className="owner-list">{ownerList.map((i) => <li key={i.stake}><AdaHandle stake={i.stake} /> </li>)}</ul>
         </div>
