@@ -21,6 +21,23 @@ export const getServerSideProps = async (context) => {
     let props = {};
 
     if (result) { 
+
+        if (result.slug != result.policyID && context.query.address[0]!=result.slug) { 
+            return {
+                redirect: {
+                    destination: '/policy/'+result.slug,
+                    permanent: true
+                }
+            }
+        }
+        if (result.policyID != context.query.address[0] && context.query.address[0]!=result.slug) { 
+            return {
+                redirect: {
+                    destination: '/wallet/'+result.slug,
+                    permanent: true
+                }
+            }
+        }
         props.policy = JSON.parse(JSON.stringify(result));
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
@@ -53,7 +70,8 @@ export default  function CIP54Playground(props) {
     const dbPolicy = props.policy;
     
     const router = useRouter();
-    let {policy} = router.query;  
+    //let {policy} = router.query;  
+    let policy = dbPolicy.policyID;
     const [gallery, setGallery] = useState(props?.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
     if (!policy) policy='';

@@ -21,7 +21,15 @@ export const getServerSideProps = async (context) => {
     let props = {};
 
     if (result) { 
-        if (result.stake != context.query.address[0]) { 
+        if (result.slug != result.stake && context.query.address[0]!=result.slug) { 
+            return {
+                redirect: {
+                    destination: '/wallet/'+result.slug,
+                    permanent: true
+                }
+            }
+        }
+        if (result.stake != context.query.address[0] && context.query.address[0]!=result.slug) { 
             return {
                 redirect: {
                     destination: '/wallet/'+result.stake,
@@ -29,6 +37,7 @@ export const getServerSideProps = async (context) => {
                 }
             }
         }
+        
         props.wallet = JSON.parse(JSON.stringify(result));
         
         
@@ -63,7 +72,7 @@ export default  function CIP54Playground(props) {
     const dbWallet = props.wallet;
  
     const router = useRouter();
-    let {address} = router.query;  
+    let address = props.wallet.stake;
     const [gallery, setGallery] = useState(props.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
     if (!address) address='';
