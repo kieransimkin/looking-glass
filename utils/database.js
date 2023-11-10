@@ -14,10 +14,8 @@ export default client;
 
 export const getPolicy = async (key) => { 
     if (validatePolicyID(key)) { 
-        console.log('by id')
         return await getPolicyByID(key);
     } else {
-        console.log('by slug')
         return await getPolicyBySlug(key);
     }
 }
@@ -35,13 +33,11 @@ const bindWalletMethods = (wallet) => {
         if (typeof walletMethods[method]=='function') { 
             wallet[method]=walletMethods[method].bind(wallet);
         }
-    
     }
     return wallet;
 }
 const bindPolicyMethods = (policy) => { 
     for (var method in policyMethods) { 
-        console.log(method);
         if (typeof policyMethods[method]=='function') { 
             policy[method]=policyMethods[method].bind(policy);
         }
@@ -164,7 +160,6 @@ export const getPolicyByID = async (policyID) => {
         [policyID],
       );
       if (!policy?.rows || policy?.rows.length<1) { 
-        console.log('not found');
         let dbSyncResult = await dbSyncClient.query(
             `
             SELECT * FROM multi_asset WHERE encode(policy,'hex')=$1::TEXT
@@ -174,20 +169,17 @@ export const getPolicyByID = async (policyID) => {
         )
         
         if (dbSyncResult?.rows && dbSyncResult?.rows.length) { 
-            console.log('found in dbsync');
             let result = await client.query(
                 `
                 INSERT INTO policy ("policyID", name, slug) VALUES(decode($1::TEXT,'hex'),$2::TEXT,$3::TEXT)
                 `
             ,[policyID,policyID,policyID])
             if (result.rowCount!=1) { 
-                console.log('insert failed')
                 return null;
             } else { 
                 return await getPolicyByID(policyID);
             }
         } else { 
-            console.log(dbSyncResult)
             return null;   
         }
       } else { 
