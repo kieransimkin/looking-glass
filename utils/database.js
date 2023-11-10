@@ -39,6 +39,7 @@ const bindWalletMethods = (wallet) => {
 }
 const bindPolicyMethods = (policy) => { 
     for (var method in policyMethods) { 
+        console.log(method);
         policy[method]=policyMethods[method].bind(policy);
     
     }
