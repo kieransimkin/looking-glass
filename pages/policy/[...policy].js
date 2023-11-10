@@ -22,7 +22,7 @@ export const getServerSideProps = async (context) => {
 
     if (result) { 
 
-        if (result.slug != result.policyID && context.query.address[0]!=result.slug) { 
+        if (result.slug != result.policyID && context.query.policy[0]!=result.slug) { 
             return {
                 redirect: {
                     destination: '/policy/'+result.slug,
@@ -30,7 +30,7 @@ export const getServerSideProps = async (context) => {
                 }
             }
         }
-        if (result.policyID != context.query.address[0] && context.query.address[0]!=result.slug) { 
+        if (result.policyID != context.query.policy[0] && context.query.policy[0]!=result.slug) { 
             return {
                 redirect: {
                     destination: '/wallet/'+result.slug,
