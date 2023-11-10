@@ -14,6 +14,7 @@ import { getWallet } from '../../utils/database';
 import { checkCacheItem } from '../../utils/redis';
 import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
+import LoadingTicker from '../../components/LoadingTicker';
 export const getServerSideProps = async (context) => { 
     
     let result = await getWallet(context.query.address[0]);
@@ -127,7 +128,7 @@ export default  function CIP54Playground(props) {
 
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<CircularProgress style={{marginLeft: 'auto', marginRight:'auto'}} /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }

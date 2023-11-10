@@ -14,6 +14,7 @@ import { CircularProgress } from '@material-ui/core';
 import { checkCacheItem } from '../../utils/redis';
 import { getPolicy} from '../../utils/database';
 import { getTokenData } from '../../utils/formatter';
+import LoadingTicker from '../../components/LoadingTicker';
 export const getServerSideProps = async (context) => { 
     
     let result = await getPolicy(context.query.policy[0]);
@@ -116,7 +117,7 @@ export default  function CIP54Playground(props) {
                 <meta name="twitter:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.policyProfile} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<CircularProgress /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
