@@ -34,7 +34,7 @@ export default async function Browse(req, res) {
         await incrementCacheItem('policyActive:'+req.body.output_asset.policy);
         await cacheItem('policyLastActive:'+req.body.output_asset.policy,Date.now());
         await clearCacheItem('getTokensFromAddress:'+outputAddress);
-        await clearCacheItem('getTokenHolders:'+CC+req.body.output_asset.asset);
+        await clearCacheItem('getTokenHolders:'+req.body.output_asset.policy+req.body.output_asset.asset);
         await clearCacheItem('getTokenData:'+req.body.output_asset.policy+req.body.output_asset.asset);
         await cacheItem('refreshTransactionInputs:'+req.body.context.tx_hash,{message: req.body, timestamp: Date.now()})
         await cacheItem('refreshWallet:'+outputAddress,{message: req.body, timestamp: Date.now()})

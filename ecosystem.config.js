@@ -34,6 +34,12 @@ module.exports = {
             instances:'1',
             args:'daemon --config oura.toml',
             name: 'oura'
+        },
+        {
+            script:'node_modules/.bin/tsx',
+            instances:'1',
+            args:'scripts/refreshWallet.mjs',
+            name:'refreshWallet'
         }
 	],
 }

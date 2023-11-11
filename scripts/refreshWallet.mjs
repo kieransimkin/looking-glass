@@ -6,7 +6,11 @@ import redis from '../utils/redis.js'
 
 import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
-
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
@@ -26,11 +30,37 @@ async function doIt() {
                 console.log('Cached tokens for '+stake)
                 await redis.cacheItem('getTokensFromAddress:'+stake,tokens)
             }
+            const perPage = 10;
+            const doPage = async (tokens, page=0) => { 
+                
+                
+                const start = page*perPage;
+                const end = (page+1)*perPage;
+                tokens = tokens.slice(start, end);
+                
+                const promises = [];
+                for (const token of tokens) { 
+                    promises.push(formatter.default.getTokenData(token));
+                }
+                
+                const result = await Promise.all(promises)
+            }
+            let page =0;
+            const totalPages = Math.ceil(tokens.length/perPage);
+            
+            while (page<totalPages) {
+                console.log('Page '+page+' of '+totalPages)
+                await doPage(tokens, page);
+                page++;
+                //sleep(2000);
+            }
             await redisClient.del(key);
+            await sleep(2000)
         }
     }
+    await sleep(120000) // two minutes
     console.log('Complete');
-    process.exit();
+    process.exit(0);
     
 }
 doIt();
