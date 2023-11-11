@@ -19,7 +19,8 @@ export default async function Browse(req, res) {
         await getPolicy(req.body.mint.policy);
         await clearCacheItem('getTokensFromPolicy:'+req.body.mint.policy);
         await clearCacheItem('getTokenData:'+req.body.mint.policy+req.body.mint.asset);
-        
+        console.log('getTokensFromPolicy:'+req.body.mint.policy)
+        console.log('getTokenData:'+req.body.mint.policy+req.body.mint.asset)
         const rClient = await getClient();
         rClient.publish('mint',JSON.stringify(req.body));
 

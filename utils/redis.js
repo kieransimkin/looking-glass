@@ -34,7 +34,6 @@ export const cacheItem = async(name, data, ttl=null) => {
 
 export const clearCacheItem = async(name) => { 
     await getClient();
-    console.log('clearing cache item: '+name)
     await client.del('lg:'+name);
 }
 
