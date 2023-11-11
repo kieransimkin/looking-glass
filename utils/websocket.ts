@@ -39,7 +39,14 @@ console.log('got connection');
     client.on('ready', () => {
         console.log('Websocket connection id# '+socket.id);
 
-        
+        client.subscribe('block', (message: any) => {
+            message = JSON.parse(message);
+            socket.emit('block', message);
+        });
+        client.subscribe('mint', (message: any) => { 
+            message = JSON.parse(message);
+            socket.emit('mint', message);
+        });
 
 
     })

@@ -19,6 +19,8 @@ export default async function Browse(req, res) {
         await getPolicy(req.body.mint.policy);
         await clearCacheItem('getTokensFromPolicy:'+req.body.mint.policy);
         await clearCacheItem('getTokenData:'+req.body.mint.policy+req.body.mint.asset);
+        await cacheItem('refreshTransaction:'+req.body.context.tx_hash,{message: req.body, timestamp: Date.now()})
+        await cacheItem('refreshToken:'+req.body.mint.policy+req.body.mint.asset,{message: req.body, timestamp: Date.now()})
         console.log('getTokensFromPolicy:'+req.body.mint.policy)
         console.log('getTokenData:'+req.body.mint.policy+req.body.mint.asset)
         const rClient = await getClient();
