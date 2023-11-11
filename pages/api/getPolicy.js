@@ -1,5 +1,5 @@
 
-import { getPolicy } from "../../utils/database";
+import { getPolicy, setPolicyAssetCount } from "../../utils/database";
 import {getClient, checkCacheItem} from "../../utils/redis";
 import pgClient from "../../utils/dbsync"
 import { init } from "libcip54";
