@@ -1,4 +1,4 @@
-import { Server } from 'Socket.IO'
+import { Server } from 'socket.io'
 import { onConnection } from '../../utils/websocket'
 
 const SocketHandler = (req, res) => {

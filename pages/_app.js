@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useEffect, useState } from 'react'
-import io from 'Socket.IO-client'
+import io from 'socket.io-client'
 let socket;
 
 class ErrorBoundary extends React.Component {
