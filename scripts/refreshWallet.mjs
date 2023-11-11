@@ -6,11 +6,7 @@ import redis from '../utils/redis.js'
 
 import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
-function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
+import { sleep } from '../utils/Helpers.js';
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();

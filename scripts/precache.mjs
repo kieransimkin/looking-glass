@@ -5,6 +5,7 @@ import * as formatter from '../utils/formatter';
 import redis from '../utils/redis.js'
 import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
+import { sleep } from '../utils/Helpers.js';
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
@@ -26,19 +27,35 @@ async function doIt() {
         }
         const page = 0;
         const perPage = 10;
-        const start = page*perPage;
-        const end = (page+1)*perPage;
-        tokens = tokens.slice(start, end);
+        const doPage = async (tokens, page=0) => { 
+            
         
-        const promises = [];
-        for (const token of tokens) { 
-            promises.push(formatter.default.getTokenData(token));
+            const start = page*perPage;
+            const end = (page+1)*perPage;
+            tokens = tokens.slice(start, end);
+            
+            const promises = [];
+            for (const token of tokens) { 
+                promises.push(formatter.default.getTokenData(token));
+            }
+            
+            const result = await Promise.all(promises)
+        }
+        const totalPages = Math.ceil(tokens.length/perPage);
+        while (totalPages>page) {
+            console.log('Page '+page+' of '+totalPages)
+            await doPage(tokens, page);
+            page++;
+            if (page>2) break;
+            //sleep(2000);
         }
         
-        const result = await Promise.all(promises)
         console.log('Done '+policy)
     }
-
+    await sleep(120000) // two minutes
+    console.log('Complete');
+    process.exit(0);
+    
     return;
     const json = JSON.parse(fileContents)
     for (var policy in json) { 

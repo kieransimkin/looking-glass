@@ -40,6 +40,12 @@ module.exports = {
             instances:'1',
             args:'scripts/refreshWallet.mjs',
             name:'refreshWallet'
+        },
+        {
+            script:'npm run precache',
+            instances:'1',
+            args:'scripts/precache.mjs',
+            name:'precache'
         }
 	],
 }

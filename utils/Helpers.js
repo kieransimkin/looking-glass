@@ -2,7 +2,11 @@
 var Buffer = require('buffer/').Buffer;
 import validator from 'validator';
 const { isIn, isHexadecimal } = validator.default;
-
+export function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 function asciiToHex(str) {
   const arr1 = [];
   for (let n = 0, l = str.length; n < l; n++) {
