@@ -16,7 +16,8 @@ export default async function Browse(req, res) {
         console.log('Transaction sent Asset '+req.body.output_asset.policy+req.body.output_asset.asset+' to '+req.body.context.output_address);
     }
     if (req.body.variant == 'TxInput') { 
-        console.log(req.body);
+        console.log('Got input hash '+req.body.tx_input.tx_id+' index #'+req.body.tx_input.tx_id )
+        
     
     }
     res.status(200).json({ok:'ok'});
