@@ -39,6 +39,7 @@ export const clearCacheItem = async(name) => {
 
 export const incrementCacheItem = async(name, ttl=null) => { 
     await getClient();
+    console.log(name,ttl);
     if (!await client.get('lg:'+name)) { 
         if (ttl) { 
             await client.setEx('lg:'+name, JSON.stringify(1),  ttl ? ttl : 3600);
