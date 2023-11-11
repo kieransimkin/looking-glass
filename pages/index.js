@@ -240,6 +240,10 @@ export default function Home() {
     const [loadingContent, setLoadingContent] = useState((<><CircularProgress size="1em" style={{position: 'relative', top:'0.15em', marginRight: '0.3em', marginLeft:'0.2em'}} /> Loading slideshow&hellip;</>));
     const [currentSlide, setCurrentSlide] = useState(0);
     const [objects, setObjects] = useState([]);
+    const ringRef1=useRef();
+    const ringRef2=useRef();
+    const ringRef3=useRef();
+    const ringRef4=useRef();
     const [cardanoObjects, setCardanoObjects] = useState([]);
     
     useEffect(() => { 
@@ -393,17 +397,20 @@ export default function Home() {
       if (!cardanoSvgData || !cardanoSvgData.xml || !cardanoSvgData.xml.children) return;
       const rings = [];
       rings.push(loader.parse(xmlHeading+cardanoSvgData.xml?.children['r1'].outerHTML+`</svg>`));
-      rings.push(loader.parse(xmlHeading+cardanoSvgData.xml?.children['r1'].outerHTML+`</svg>`))
-      rings.push(loader.parse(xmlHeading+cardanoSvgData.xml?.children['r1'].outerHTML+`</svg>`))
-      rings.push(loader.parse(xmlHeading+cardanoSvgData.xml?.children['r1'].outerHTML+`</svg>`))
+      rings.push(loader.parse(xmlHeading+cardanoSvgData.xml?.children['r2'].outerHTML+`</svg>`))
+      rings.push(loader.parse(xmlHeading+cardanoSvgData.xml?.children['r3'].outerHTML+`</svg>`))
+      rings.push(loader.parse(xmlHeading+cardanoSvgData.xml?.children['r4'].outerHTML+`</svg>`))
 
       console.log(rings)
       
-      const svgMaterial = new THREE.MeshBasicMaterial({ color: "#775500" });
-      const cShapes = [];
+      const svgMaterial = new THREE.MeshBasicMaterial({ color: "#775500", depthTest: 0 });
+      
       console.log(cardanoSvgData);
-
-      rings.forEach((ritem) => { 
+      
+      const cobj = [];
+      rings.forEach((ritem, ringNo) => { 
+        const cShapes = [];
+        const cObjects=[];
         ritem.paths.forEach((path, i) => {
         
           const sh = path.toShapes(true);
@@ -412,21 +419,34 @@ export default function Home() {
             cShapes.push(s);
           })
         });
-      })
- 
-      
-      const cobj = [];
-      cShapes.forEach((shape, i) => {
-        const geometry = new THREE.ExtrudeGeometry(shape, {
-          depth: 20,
-          bevelEnabled: false
+        let reference = ringRef1;
+        if (ringNo==1) reference=ringRef2
+        else if (ringNo==2) reference=ringRef3
+        else if (ringNo==3) reference=ringRef4
+
+        cShapes.forEach((shape, i) => {
+          const geometry = new THREE.ExtrudeGeometry(shape, {
+            depth: 20,
+            bevelEnabled: false
+          });
+
+          const mesh = new THREE.Mesh(geometry,svgMaterial);
+          console.log(mesh);
+          cObjects.push(<primitive object={mesh} scale={0.9} position={[-166,-150,-18]} >
+          </primitive>)
         });
         
-        const mesh = new THREE.Mesh(geometry,svgMaterial);
-        cobj.push(<primitive object={mesh} scale={4} position={[350, -500, -900]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
-        </primitive>)
-      });
-      setCardanoObjects(cobj)
+        cobj.push(
+        <group position={[700, -500, -900]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]} ref={reference}>
+          {cObjects}
+        </group>)
+      })
+      console.log(cobj);
+      setCardanoObjects(
+        <group>
+          {cobj}
+        </group>
+      )
       const svgMarkup = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
       <!-- Created with Inkscape (http://www.inkscape.org/) -->
       
@@ -493,13 +513,31 @@ export default function Home() {
         });
         
         const mesh = new THREE.Mesh(geometry,svgMaterial);
-        obj.push(<primitive object={mesh} scale={4} position={[350, -500, -900]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
+        obj.push(<primitive object={mesh} scale={4} position={[350, -500, -850]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
         </primitive>)
         
       });
       setObjects(obj);
     },[])
+
+    const Framer = () => { 
+      useFrame((state) => {
+      if (ringRef1.current) { 
+        
+        ringRef1.current.rotation.y+=0.1
+        ringRef2.current.rotation.z+=0.1
+        ringRef3.current.rotation.x+=0.1
+        ringRef4.current.rotation.z-=0.1
+        console.log(ringRef4);
+        var box = new THREE.Box3().setFromObject(ringRef4.current);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        console.log(size);
       
+        }
+      });
+      return (<></>)
+    }
       // ...
 
 
@@ -540,14 +578,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div style={{height:'100%', position:'relative'}}>
-      <Canvas style={{position:'absolute'}} linear flat legacy dpr={1} camera={{ fov: 1000, position: [0, 0, 30] }}>
+      <Canvas style={{position:'absolute'}} linear flat legacy dpr={1} camera={{ far: 2000,fov: 1000, position: [0, 0, 30] }}>
     <ambientLight intensity={4} color="#ffaa00" />
     
     <spotLight intensity={200} position={[0, 0,100]} penumbra={1} color="red" />
     
-    
+    <Framer />
     
     {objects}
+    {cardanoObjects}
     {
       /*
       
@@ -594,7 +633,7 @@ function Postpro() {
     useFrame((state) => (water.current.time = state.clock.elapsedTime * 4))
     return (
       <Effects disableGamma>
-      <waterPass ref={water} factor={1} />
+      <waterPass ref={water} factor={0} />
       <unrealBloomPass args={[undefined, 1.25, 1, 0]} />
       <filmPass args={[0.2, 0.5, 1500, false]} />
 
