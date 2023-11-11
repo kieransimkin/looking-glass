@@ -1,4 +1,4 @@
-import { getClient, clearCacheItem, cacheItem } from "../../utils/redis";
+import { getClient, clearCacheItem, cacheItem, incrementCacheItem } from "../../utils/redis";
 import { getStakeFromAny, init } from "libcip54";
 import { getWallet, getPolicy } from "../../utils/database";
 
@@ -30,10 +30,11 @@ export default async function Browse(req, res) {
         let outputAddress = req.body.context.output_address;
         outputAddress = getStakeFromAny(outputAddress);
         await getWallet(outputAddress);
-        const policy = await getPolicy(req.body.output_asset.policy);
-        await policy.setLastMoved(Date.now());
+        await getPolicy(req.body.output_asset.policy); // Todo get rid of these once we've populated the database a bit more
+        await incrementCacheItem('policyActive:'+req.body.output_asset.policy);
+        await cacheItem('policyLastActive:'+req.body.output_asset.policy,Date.now());
         await clearCacheItem('getTokensFromAddress:'+outputAddress);
-        await clearCacheItem('getTokenHolders:'+req.body.output_asset.policy+req.body.output_asset.asset);
+        await clearCacheItem('getTokenHolders:'+CC+req.body.output_asset.asset);
         await clearCacheItem('getTokenData:'+req.body.output_asset.policy+req.body.output_asset.asset);
         await cacheItem('refreshTransactionInputs:'+req.body.context.tx_hash,{message: req.body, timestamp: Date.now()})
         await cacheItem('refreshWallet:'+outputAddress,{message: req.body, timestamp: Date.now()})

@@ -37,6 +37,15 @@ export const clearCacheItem = async(name) => {
     await client.del('lg:'+name);
 }
 
+export const incrementCacheItem = async(name, ttl=null) => { 
+    await getClient();
+    if (!await client.get('lg:'+name)) { 
+        await client.setEx('lg:'+name, 1,  ttl ? ttl : 3600);
+    } else { 
+        await client.incr('lg:'+name)
+    }
+}
+
 export const checkCache = async (req, res) => {
     if (req.method != "GET") console.error('checkCache called from non-GET method');
     if (req.headers['x-plutus-recache']) return { cached: false };
