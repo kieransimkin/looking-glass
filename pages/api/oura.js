@@ -22,8 +22,6 @@ export default async function Browse(req, res) {
         await clearCacheItem('getTokenData:'+req.body.mint.policy+req.body.mint.asset);
         await cacheItem('refreshTransaction:'+req.body.context.tx_hash,{message: req.body, timestamp: Date.now()})
         await cacheItem('refreshToken:'+req.body.mint.policy+req.body.mint.asset,{message: req.body, timestamp: Date.now()})
-        console.log('getTokensFromPolicy:'+req.body.mint.policy)
-        console.log('getTokenData:'+req.body.mint.policy+req.body.mint.asset)
         const rClient = await getClient();
         rClient.publish('mint',JSON.stringify(req.body));
 
@@ -32,7 +30,8 @@ export default async function Browse(req, res) {
         let outputAddress = req.body.context.output_address;
         outputAddress = getStakeFromAny(outputAddress);
         await getWallet(outputAddress);
-        await getPolicy(req.body.output_asset.policy);
+        const policy = await getPolicy(req.body.output_asset.policy);
+        await policy.setLastMoved(Date.now());
         await clearCacheItem('getTokensFromAddress:'+outputAddress);
         await clearCacheItem('getTokenHolders:'+req.body.output_asset.policy+req.body.output_asset.asset);
         await clearCacheItem('getTokenData:'+req.body.output_asset.policy+req.body.output_asset.asset);
