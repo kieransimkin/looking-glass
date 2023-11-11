@@ -24,7 +24,7 @@ console.log('got connection');
         console.error(e);
     }
     const disconnect = () => { 
-        console.log('Websocket disconnect id# '+socket.id+' from user: '+socket.user.stakeAddress);
+        console.log('Websocket disconnect id# '+socket.id);
         usersConnected--;
         socket.disconnect(0);
         socket.conn.close();

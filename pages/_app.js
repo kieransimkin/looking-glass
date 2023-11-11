@@ -42,11 +42,18 @@ function CIP54Playground({ Component, pageProps }) {
 
   const socketInitializer = async () => {
     await fetch('/api/socket');
-    socket = io()
-
+    socket = io('/',{transports: ["websocket", "polling"]})
     socket.on('connect', () => {
+      const engine = socket.io.engine;
+
       console.log('connected')
     })
+
+    socket.on('block',(data)=>{
+      console.log(data);
+      //alert(data);
+    })
+    
 
   
   }
