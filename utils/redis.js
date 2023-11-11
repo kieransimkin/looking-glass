@@ -32,6 +32,11 @@ export const cacheItem = async(name, data, ttl=null) => {
     }
 }
 
+export const clearCacheItem = async(name) => { 
+    await getClient();
+    await client.del('lg:'+name);
+}
+
 export const checkCache = async (req, res) => {
     if (req.method != "GET") console.error('checkCache called from non-GET method');
     if (req.headers['x-plutus-recache']) return { cached: false };
