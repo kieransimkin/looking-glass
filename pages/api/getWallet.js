@@ -9,10 +9,13 @@ export default async function Browse(req, res) {
     init(process.env.NETWORK?.toLowerCase(), pgClient,  process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
     let {id} = req.query;
     let result = await getWallet(id);
-    if (result) {
-        res.status(200).json(result);
-    } else {
+    if (!result) {
         res.status(404).json({'message':'File Not Found'})
-    } 
+    }
+    incrementCacheItem('walletHits:'+result.stake);
+    incrementCacheItem('walletRecentHits:'+result.stake, 3600);
+    
+    res.status(200).json(result);
+    
 
 }
