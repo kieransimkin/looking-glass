@@ -363,7 +363,8 @@ const Header = (props) => {
                 
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
                             <IconButton style={{cursor: 'pointer'}} ref={anchorRef} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onMouseEnter={handleClick} onMouseLeave={handleLeave} onClick={handleClick}>
-                                <MenuIcon fontSize={buttonsize} color="secondary" />
+                                
+                                <img src="/favicon-default.png" width="32" height="32" title="Menu" alt="Menu" />
                             </IconButton>
                             <Menu
                                 id="simple-menu"

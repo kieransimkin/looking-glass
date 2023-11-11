@@ -2,6 +2,7 @@ import {useState, useRef} from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import path from 'path';
+import { setPolicyAssetCount } from '../../utils/database';
 import { promises as fs } from 'fs';
 import { useEffect } from 'react';
 import Head from 'next/head'
@@ -42,6 +43,9 @@ export const getServerSideProps = async (context) => {
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
         if (tokens) { 
+            if (!result.assetCount) { 
+                await setPolicyAssetCount(result.policyID, tokens.length);
+            }
             const perPage = 10;
             tokens = tokens.slice(0, perPage);       
             const promises = [];
