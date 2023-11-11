@@ -12,7 +12,7 @@ import {SmartNFTPortal} from 'smartnftportal'
 import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
-import { checkCacheItem } from '../../utils/redis';
+import { checkCacheItem, incrementCacheItem } from '../../utils/redis';
 import { getPolicy} from '../../utils/database';
 import { getTokenData } from '../../utils/formatter';
 import LoadingTicker from '../../components/LoadingTicker';

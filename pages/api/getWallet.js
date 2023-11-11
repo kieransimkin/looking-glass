@@ -1,8 +1,9 @@
 
 import { getWallet } from "../../utils/database";
-import {getClient} from "../../utils/redis";
+import {getClient, incrementCacheItem} from "../../utils/redis";
 import pgClient from "../../utils/dbsync"
 import { init } from "libcip54";
+
 
 export default async function Browse(req, res) {
     const redisClient = await getClient();

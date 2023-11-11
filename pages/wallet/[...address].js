@@ -11,7 +11,7 @@ import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
 import { getWallet } from '../../utils/database';
-import { checkCacheItem } from '../../utils/redis';
+import { checkCacheItem, incrementCacheItem } from '../../utils/redis';
 import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
 import LoadingTicker from '../../components/LoadingTicker';
