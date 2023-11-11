@@ -5,7 +5,7 @@ import * as formatter from '../utils/formatter.js';
 import redis from '../utils/redis.js'
 
 import syncClient from "../utils/dbsync.js";
-import * as libcip from "libcip54"
+import libcip from "libcip54"
 import * as helpers from '../utils/Helpers.js';
 dotenv.config()
 async function doIt() {
