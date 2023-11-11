@@ -2,6 +2,7 @@ import { init, getTokensFromPolicy } from "libcip54"
 import pgClient from "../../utils/dbsync";
 import {getClient, checkCacheItem, cacheItem} from "../../utils/redis";
 import { getTokenData } from "../../utils/formatter";
+import { setPolicyAssetCount } from "../../utils/database";
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
@@ -18,6 +19,7 @@ export default async function Browse(req, res) {
     if (!tokens) {
         if (cachedOnly) return res.status(425).json({message:'Not cached yet'});
         tokens = await getTokensFromPolicy(policy);
+        await setPolicyAssetCount(policy, tokens.length);
         await cacheItem('getTokensFromPolicy:'+policy,tokens)
     }
     const totalPages = Math.ceil(tokens.length/perPage);

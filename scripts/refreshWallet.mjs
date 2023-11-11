@@ -29,6 +29,8 @@ async function doIt() {
             await redisClient.del(key);
         }
     }
+    console.log('Complete');
+    process.exit();
     
 }
 doIt();

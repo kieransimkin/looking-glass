@@ -11,6 +11,11 @@ import * as policyMethods from "../models/policy"
 // client.connect();
 export default client;
 
+export const setPolicyAssetCount = async (policy, count) => { 
+    return await client.query(
+        `update policy set "assetCount"=$1 WHERE encode("policyID",'hex')=$2`, [count, policy]
+    )
+}
 
 export const getPolicy = async (key) => { 
     if (validatePolicyID(key)) { 
@@ -97,7 +102,8 @@ export const getWalletByStake = async (stake) => {
             name, 
             slug,
             bio,
-            "profileUnit"
+            "profileUnit",
+            "createdAt"
         FROM wallet
         WHERE stake=$1::TEXT
           LIMIT 1;
@@ -132,7 +138,10 @@ export const getWalletBySlug = async (slug) => {
         SELECT 
             stake,
             name, 
-            slug
+            slug,
+            bio,
+            "profileUnit",
+            "createdAt"
         FROM wallet
         WHERE slug=$1::TEXT
           LIMIT 1;
@@ -152,7 +161,12 @@ export const getPolicyByID = async (policyID) => {
              encode("policyID",'hex') as "policyID",
              name,
              slug,
-             description
+             description,
+             "createdAt",
+             "isFeatured",
+             "lastMinted",
+             "lastMoved",
+             "assetCount"
         FROM policy
         WHERE encode("policyID",'hex')=$1::TEXT
           LIMIT 1;
@@ -194,7 +208,12 @@ export const getPolicyBySlug = async (slug) => {
              encode("policyID",'hex') as "policyID",
              name,
              slug,
-             description
+             description,
+             "createdAt",
+             "isFeatured",
+             "lastMinted",
+             "lastMoved",
+             "assetCount"
         FROM policy
         WHERE slug=$1::TEXT
           LIMIT 1;
