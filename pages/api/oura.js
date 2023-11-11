@@ -26,7 +26,6 @@ export default async function Browse(req, res) {
 
     }
     if (req.body.variant == 'OutputAsset') { 
-        console.log('Transaction sent Asset '+req.body.output_asset.policy+req.body.output_asset.asset+' to '+req.body.context.output_address);
         let outputAddress = req.body.context.output_address;
         outputAddress = getStakeFromAny(outputAddress);
         await getWallet(outputAddress);

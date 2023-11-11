@@ -23,13 +23,10 @@ async function doIt() {
             await redis.cacheItem('getTokensFromPolicy:'+policy,tokens)
             console.log('Saving cache for row: '+policy)
         }
-    
-        
         const page = 0;
         const perPage = 10;
         const start = page*perPage;
         const end = (page+1)*perPage;
-        const totalPages = Math.ceil(tokens.length/perPage);
         tokens = tokens.slice(start, end);
         
         const promises = [];
