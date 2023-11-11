@@ -46,6 +46,12 @@ module.exports = {
             instances:'1',
             args:'scripts/precache.mjs',
             name:'precache'
+        },
+        {
+            script:'npm run runHits',
+            instances:'1',
+            args:'scripts/runHits.mjs',
+            name:'runHits'
         }
 	],
 }

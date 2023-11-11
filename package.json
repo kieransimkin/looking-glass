@@ -13,7 +13,8 @@
     "lint": "next lint ",
     "import": "tsx scripts/importPolicies.mjs",
     "precache": "tsx scripts/precache.mjs",
-    "refreshWallet": "tsx scripts/refreshWallet.mjs"
+    "refreshWallet": "tsx scripts/refreshWallet.mjs",
+    "runHits": "tsx scripts/runHits.mjs"
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.2.0",

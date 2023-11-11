@@ -16,6 +16,11 @@ export const setPolicyAssetCount = async (policy, count) => {
         `update policy set "assetCount"=$1 WHERE encode("policyID",'hex')=$2`, [count, policy]
     )
 }
+export const setPolicyLastMoved = async (policy, date) => { 
+    return await client.query(
+        `update policy set "lastMoved"=$1 WHERE encode("policyID",'hex')=$2`, [new Date(date), policy]
+    )
+}
 
 export const getPolicy = async (key) => { 
     if (validatePolicyID(key)) { 
