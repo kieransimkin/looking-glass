@@ -26,7 +26,7 @@ export const checkCacheItem = async(name) => {
 export const cacheItem = async(name, data, ttl=null) => { 
     await getClient();
     if (ttl) { 
-        await client.setEx('lg:'+name, ttl ? ttl : 1800, JSON.stringify(data));
+        await client.setEx('lg:'+name, JSON.stringify(data), ttl ? ttl : 1800,);
     } else { 
         await client.set('lg:'+name, JSON.stringify(data))
     }
