@@ -46,7 +46,7 @@ async function doIt() {
             console.log('Page '+page+' of '+totalPages)
             await doPage(tokens, page);
             page++;
-            if (page>2) break;
+            if (page>10) break;
             //sleep(2000);
         }
         
