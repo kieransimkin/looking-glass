@@ -12,8 +12,8 @@ export default async function Browse(req, res) {
     if (!result) {
         res.status(404).json({'message':'File Not Found'})
     }
-    incrementCacheItem('walletHits:'+result.stake);
-    incrementCacheItem('walletRecentHits:'+result.stake, 3600);
+    await incrementCacheItem('walletHits:'+result.stake);
+    await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
     
     res.status(200).json(result);
     

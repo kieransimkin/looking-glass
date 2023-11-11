@@ -11,8 +11,8 @@ export default async function Browse(req, res) {
     let result = await getPolicy(id);
     if (!result) return res.status(404).json({'message':'File Not Found'});
 
-    incrementCacheItem('policyHits:'+result.policyID);
-    incrementCacheItem('policyRecentHits:'+result.policyID, 3600);
+    await incrementCacheItem('policyHits:'+result.policyID);
+    await incrementCacheItem('policyRecentHits:'+result.policyID, 3600);
     
     if (!result.assetCount) { 
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
