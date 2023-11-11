@@ -29,5 +29,11 @@ module.exports = {
       name: 'clg',
       env: getEnvVariables()
 		},
+        {
+            script:'bin/oura',
+            instances:'1',
+            args:'daemon --config oura.toml',
+            name: 'oura'
+        }
 	],
 }

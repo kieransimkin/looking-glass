@@ -8,4 +8,4 @@ type = "Fingerprint"
 
 [sink]
 type = "Webhook"
-url = "http://clg.wtf/api/oura"
+url = "https://clg.wtf/api/oura"
