@@ -5,7 +5,7 @@ import * as formatter from '../utils/formatter';
 import redis from '../utils/redis.js'
 import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
-import { sleep } from '../utils/Helpers.js';
+import * as helpers from '../utils/Helpers.js';
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
@@ -52,7 +52,7 @@ async function doIt() {
         
         console.log('Done '+policy)
     }
-    await sleep(120000) // two minutes
+    await helpers.default.sleep(120000) // two minutes
     console.log('Complete');
     process.exit(0);
     
