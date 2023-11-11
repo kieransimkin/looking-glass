@@ -36,7 +36,7 @@ module.exports = {
             name: 'oura'
         },
         {
-            script:'node_modules/.bin/tsx',
+            script:'npm run refreshWallet',
             instances:'1',
             args:'scripts/refreshWallet.mjs',
             name:'refreshWallet'
