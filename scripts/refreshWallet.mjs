@@ -48,7 +48,7 @@ async function doIt() {
             let page =0;
             const totalPages = Math.ceil(tokens.length/perPage);
             
-            while (page<totalPages) {
+            while (totalPages>page) {
                 console.log('Page '+page+' of '+totalPages)
                 await doPage(tokens, page);
                 page++;
