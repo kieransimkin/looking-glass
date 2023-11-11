@@ -41,9 +41,9 @@ export const incrementCacheItem = async(name, ttl=null) => {
     await getClient();
     if (!await client.get('lg:'+name)) { 
         if (ttl) { 
-            await client.setEx('lg:'+name, 1,  ttl ? ttl : 3600);
+            await client.setEx('lg:'+name, "1",  ttl ? ttl : 3600);
         } else { 
-            await client.set('lg:'+name, 1);
+            await client.set('lg:'+name, "1");
         }
     } else { 
         await client.incr('lg:'+name)
