@@ -42,6 +42,8 @@ export const getServerSideProps = async (context) => {
         props.policy = JSON.parse(JSON.stringify(result));
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
+        await incrementCacheItem('policyHits:'+result.policyID);
+        await incrementCacheItem('policyRecentHits:'+result.policyID, 3600);
         if (tokens) { 
             if (!result.assetCount) { 
                 await setPolicyAssetCount(result.policyID, tokens.length);

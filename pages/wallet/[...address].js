@@ -42,6 +42,8 @@ export const getServerSideProps = async (context) => {
         
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
+        await incrementCacheItem('walletHits:'+result.stake);
+        await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
         if (tokens) { 
             const perPage = 10;
             const totalPages =  Math.ceil(tokens.length/perPage)
