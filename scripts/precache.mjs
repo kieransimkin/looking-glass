@@ -25,7 +25,7 @@ async function doIt() {
             await redis.cacheItem('getTokensFromPolicy:'+policy,tokens)
             console.log('Saving cache for row: '+policy)
         }
-        const page = 0;
+        let page = 0;
         const perPage = 10;
         const doPage = async (tokens, page=0) => { 
             
