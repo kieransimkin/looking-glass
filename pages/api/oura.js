@@ -16,7 +16,8 @@ export default async function Browse(req, res) {
     if (req.body.variant == 'Mint') { 
         console.log('Token minted: '+req.body.mint.policy+req.body.mint.asset+' quantity: '+req.body.mint.quantity)
         console.error(req.body);
-        await getPolicy(req.body.mint.policy);
+        const policy = await getPolicy(req.body.mint.policy);
+        await policy.setLastMinted(Date.now());
         await clearCacheItem('getTokensFromPolicy:'+req.body.mint.policy);
         await clearCacheItem('getTokenData:'+req.body.mint.policy+req.body.mint.asset);
         await cacheItem('refreshTransaction:'+req.body.context.tx_hash,{message: req.body, timestamp: Date.now()})
