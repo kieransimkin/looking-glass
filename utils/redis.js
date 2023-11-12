@@ -14,7 +14,6 @@ export const getClient = async() => {
     return client;
 }
 
-
 export const checkCacheItem = async(name) => { 
     await getClient();
     let cache = await client.get('lg:'+name);
@@ -39,7 +38,6 @@ export const clearCacheItem = async(name) => {
 
 export const incrementCacheItem = async(name, ttl=null) => { 
     await getClient();
-    console.log(name,ttl);
     if (!await client.get('lg:'+name)) { 
         if (ttl) { 
             await client.set('lg:'+name, JSON.stringify(1));

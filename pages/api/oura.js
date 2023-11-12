@@ -33,6 +33,7 @@ export default async function Browse(req, res) {
         await getPolicy(req.body.output_asset.policy); // Todo get rid of these once we've populated the database a bit more
         await incrementCacheItem('policyActive:'+outputAddress, 3600);
         await incrementCacheItem('walletActive:'+req.body.output_asset.policy, 3600);
+        await redisClient.lpush('lg:policyActiveLog:'+outputAddress, JSON.stringify(Date.now()))
         await cacheItem('policyLastActive:'+req.body.output_asset.policy,Date.now());
         await cacheItem('walletLastActive:'+outputAddress,Date.now());
         await clearCacheItem('getTokensFromAddress:'+outputAddress);

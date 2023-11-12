@@ -26,7 +26,7 @@ export const saveData = (key, type, data) => {
 
 export const saveSend = (key, type, data, res, contentType='image/jpg') => { 
     writeFile(key,type,data);
-    res.send(data).setHeader('Content-type',contentType).status(200).end();
+    res.setHeader('Content-type',contentType).setHeader('X-Plutus-Cache', true).status(200).send(data).end();
 
 }
 
