@@ -5,10 +5,11 @@ import * as formatter from '../utils/formatter.js';
 import redis from '../utils/redis.js'
 
 import syncClient from "../utils/dbsync.js";
-import libcip from "libcip54"
+import * as libcip from "libcip54"
 import * as helpers from '../utils/Helpers.js';
 dotenv.config()
 async function doIt() {
+	console.log(libcip);
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
