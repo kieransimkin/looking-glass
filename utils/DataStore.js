@@ -1,6 +1,8 @@
 import crypto from 'crypto';
 import fs from 'fs';
+import { RESPONSE_LIMIT_DEFAULT } from 'next/dist/server/api-utils';
 import path from 'path'
+
 const getDataLocation = (key, type) => { 
     const hash = crypto.createHash('sha512');
     hash.update(key);
@@ -16,9 +18,20 @@ export const getDataURL = (key, type) => {
         return null;
     }
 }
+
 export const saveData = (key, type, data) => { 
+    writeFile(key,type,data);
+    return encodeURI(loc);
+}
+
+export const saveSend = (key, type, data, res, contentType='image/jpg') => { 
+    writeFile(key,type,data);
+    res.send(data).setHeader('Content-type',contentType).status(200).end();
+
+}
+
+export const writeFile = (key, type, data) => { 
     const loc = getDataLocation(key,type);
     fs.mkdirSync(process.cwd()+'/public'+path.dirname(loc),{recursive:true,mode:parseInt('0775',8)});
     fs.writeFileSync(process.cwd()+'/public'+loc, data, {mode:parseInt('0664',8),flush:true});
-    return encodeURI(loc);
 }

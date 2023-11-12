@@ -2,6 +2,7 @@
 var Buffer = require('buffer/').Buffer;
 import validator from 'validator';
 const { isIn, isHexadecimal } = validator.default;
+
 export function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);

@@ -2,13 +2,15 @@ import axios from "axios";
 import * as libcip54 from "libcip54"
 import pgClient from "../../utils/dbsync";
 import {getClient} from "../../utils/redis";
-import { getDataURL, saveData } from "../../utils/DataStore";
+import { getDataURL, saveData, saveSend } from "../../utils/DataStore";
+import { getCachedTokenThumb } from '../../utils/Helpers'
 import sharp from 'sharp';
 
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
 
   const redisClient = await getClient();
+  
   libcip54.init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
 
   if (!size || size==0) { 
@@ -37,9 +39,12 @@ export default async function Browse(req, res) {
     resizeOpts = {height:size};
   }
   if (mode!='transparent') { 
-    res.writeHead(302,{'Location':saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#000000':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()))});
-  } else { 
-    res.writeHead(302,{'Location':saveData(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()))});
+        return saveSend(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#000000':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()),res, 'image/jpg');
+      } else { 
+    saveSend
+      
+    
+        return saveSend(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()),res,'image/png');
+        //return res.end();
   }
-  return res.end();
 }

@@ -10,7 +10,6 @@ import * as helpers from '../utils/Helpers.js';
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
-    //console.log(syncClient.default.query);
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
     select distinct "policyID", encode("policyID",'hex') as policy from policy
