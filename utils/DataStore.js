@@ -27,14 +27,14 @@ export const saveData = (key, type, data) => {
 
 export const saveSend = (key, type, data, res, contentType='image/jpg') => { 
     writeFile(key,type,data);
-    res.setHeader('Content-type',contentType).status(200).send(data).end();
+    res.setHeader('Content-type',contentType).status(200).send(data)
 
 }
 
 export const sendData = (key, type, res, contentType='image/jpg') => { 
     const loc = getDataLocation(key, type);
     const data = fs.readFileSync(process.cwd()+'/public'+loc);
-    res.setHeader('Content-type',contentType).status(200).send(data).end();
+    res.setHeader('Content-type',contentType).status(200).send(data);
 }
 
 export const writeFile = (key, type, data) => { 

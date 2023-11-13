@@ -362,10 +362,12 @@ const Header = (props) => {
                 
                 
                         <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <IconButton style={{cursor: 'pointer'}} ref={anchorRef} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onMouseEnter={handleClick} onMouseLeave={handleLeave} onClick={handleClick}>
+                            <Link href="/">
+                                <IconButton style={{cursor: 'pointer'}} ref={anchorRef} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onMouseEnter={handleClick} onMouseLeave={handleLeave} onClick={handleClick}>
                                 
-                                <img src="/favicon-default.png" width="32" height="32" title="Menu" alt="Menu" />
-                            </IconButton>
+                                    <img src="/favicon-default.png" width="32" height="32" title="Menu" alt="Menu" />
+                                </IconButton>
+                            </Link>
                             <Menu
                                 id="simple-menu"
                                 classes={{
@@ -426,7 +428,6 @@ const Header = (props) => {
                                 {walletApi &&
                                     <MenuItem onClick={handleLogout}>🏃 Logout</MenuItem>
                                 }
-                                <Link href="/"><MenuItem onClick={handleClose}>🏠Home</MenuItem></Link>
                             </Menu>
                         </div>
                         {!walletApi &&
