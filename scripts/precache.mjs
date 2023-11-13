@@ -12,7 +12,8 @@ async function doIt() {
     //console.log(syncClient.default.query);
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
-    select distinct "policyID", encode("policyID",'hex') as policy from policy
+    
+    select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity" from policy where "totalActivity"!=0 order by "totalActivity" desc
     `,[])
     for (var row of results.rows) { 
         

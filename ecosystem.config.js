@@ -52,6 +52,12 @@ module.exports = {
             instances:'1',
             args:'scripts/runHits.mjs',
             name:'runHits'
+        },
+        {
+            script:'npm run generateThumbnails',
+            instances:'1',
+            args:'scripts/generateThumbnails.mjs',
+            name:'generateThumbnails'
         }
 	],
 }
