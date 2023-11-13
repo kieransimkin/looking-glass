@@ -49,7 +49,33 @@ export const incrementWalletTotalHits = async (stake, hits) => {
         `update wallet set "totalHits"="totalHits"+$1 WHERE stake=$2`, [hits, stake]
     )
 }
-
+export const getFeaturedPolicies = async(sort, sortOrder, page=0) => { 
+    if (typeof sort != "array") sort = [sort];
+    const sortOptions = [];
+    const perPage = 10;
+    const args = [];
+    for (const s of sort) { 
+        switch (s) { 
+            case 'recentMint':
+                sortOptions.push(`"lastMint" ${sortOrder}`)
+                break;
+            case 'totalActivity':
+                sortOptions.push(`"totalActivity" ${sortOrder}`)
+                break;
+            case 'totalHits':
+                sortOptions.push(`"totalHits" ${sortOrder}`)
+                break;
+            case 'recentlyActive':
+                sortOptions.push(`"lastMoved" ${sortOrder}`)
+                break;
+        }
+    }
+    const sortString = sortOptions.join(", ")
+    const policies = await client.query(`
+        select * from policy where assetCount>100 ORDER BY ${sortString} LIMIT $1
+        OFFSET $2 
+    `,[perPage, perPage * page])
+}
 export const getPolicy = async (key) => { 
     if (validatePolicyID(key)) { 
         return await getPolicyByID(key);
