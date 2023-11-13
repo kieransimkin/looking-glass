@@ -12,12 +12,14 @@ import {SmartNFTPortal} from 'smartnftportal'
 import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
-import { checkCacheItem, incrementCacheItem } from '../../utils/redis';
+import { checkCacheItem, incrementCacheItem, getClient } from '../../utils/redis';
 import { getPolicy} from '../../utils/database';
 import { getTokenData } from '../../utils/formatter';
 import LoadingTicker from '../../components/LoadingTicker';
+
 export const getServerSideProps = async (context) => { 
-    
+    const redisClient = await getClient();
+
     let result = await getPolicy(context.query.policy[0]);
     let props = {};
 
@@ -44,6 +46,7 @@ export const getServerSideProps = async (context) => {
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
         await incrementCacheItem('policyHits:'+result.policyID);
         await incrementCacheItem('policyRecentHits:'+result.policyID, 3600);
+        await redisClient.lPush('lg:policyHitLog:'+result.policyID, JSON.stringify(Date.now()))
         if (tokens) { 
             if (!result.assetCount) { 
                 await setPolicyAssetCount(result.policyID, tokens.length);

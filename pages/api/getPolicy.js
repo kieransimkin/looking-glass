@@ -13,6 +13,7 @@ export default async function Browse(req, res) {
 
     await incrementCacheItem('policyHits:'+result.policyID);
     await incrementCacheItem('policyRecentHits:'+result.policyID, 3600);
+    await redisClient.lPush('lg:policyHitLog:'+result.policyID, JSON.stringify(Date.now()))
     
     if (!result.assetCount) { 
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);

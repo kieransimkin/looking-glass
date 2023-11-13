@@ -15,7 +15,7 @@ export default async function Browse(req, res) {
     }
     await incrementCacheItem('walletHits:'+result.stake);
     await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
-    
+    await redisClient.lPush('lg:walletHitLog:'+result.stake, JSON.stringify(Date.now()))
     res.status(200).json(result);
     
 

@@ -22,6 +22,34 @@ export const setPolicyLastMoved = async (policy, date) => {
     )
 }
 
+export const setWalletLastMoved = async (stake, date) => { 
+    return await client.query(
+        `update wallet set "lastMoved"=$1 WHERE stake=$2`, [new Date(date), stake]
+    )
+}
+
+export const incrementPolicyTotalActivity = async (policy, activity) => { 
+    return await client.query(
+        `update policy set "totalActivity"="totalActivity"+$1 WHERE encode("policyID",'hex')=$2`, [activity, policy]
+    )
+}
+export const incrementWalletTotalActivity = async (stake, activity) => { 
+    return await client.query(
+        `update wallet set "totalActivity"="totalActivity"+$1 WHERE stake=$2`, [activity, stake]
+    )
+}
+
+export const incrementPolicyTotalHits = async (policy, hits) => { 
+    return await client.query(
+        `update policy set "totalHits"="totalHits"+$1 WHERE encode("policyID",'hex')=$2`, [hits, policy]
+    )
+}
+export const incrementWalletTotalHits = async (stake, hits) => { 
+    return await client.query(
+        `update wallet set "totalHits"="totalHits"+$1 WHERE stake=$2`, [hits, stake]
+    )
+}
+
 export const getPolicy = async (key) => { 
     if (validatePolicyID(key)) { 
         return await getPolicyByID(key);
@@ -108,7 +136,10 @@ export const getWalletByStake = async (stake) => {
             slug,
             bio,
             "profileUnit",
-            "createdAt"
+            "createdAt",
+            "lastMoved",
+            "totalActivity",
+            "totalHits"
         FROM wallet
         WHERE stake=$1::TEXT
           LIMIT 1;
@@ -146,7 +177,10 @@ export const getWalletBySlug = async (slug) => {
             slug,
             bio,
             "profileUnit",
-            "createdAt"
+            "createdAt",
+            "lastMoved",
+            "totalActivity",
+            "totalHits"
         FROM wallet
         WHERE slug=$1::TEXT
           LIMIT 1;
@@ -171,7 +205,9 @@ export const getPolicyByID = async (policyID) => {
              "isFeatured",
              "lastMinted",
              "lastMoved",
-             "assetCount"
+             "assetCount",
+             "totalActivity",
+             "totalHits"
         FROM policy
         WHERE encode("policyID",'hex')=$1::TEXT
           LIMIT 1;
@@ -218,7 +254,9 @@ export const getPolicyBySlug = async (slug) => {
              "isFeatured",
              "lastMinted",
              "lastMoved",
-             "assetCount"
+             "assetCount",
+             "totalActivity",
+             "totalHits"
         FROM policy
         WHERE slug=$1::TEXT
           LIMIT 1;

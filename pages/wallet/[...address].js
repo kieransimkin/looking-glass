@@ -11,12 +11,12 @@ import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
 import { getWallet } from '../../utils/database';
-import { checkCacheItem, incrementCacheItem } from '../../utils/redis';
+import { checkCacheItem, getClient, incrementCacheItem } from '../../utils/redis';
 import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
 import LoadingTicker from '../../components/LoadingTicker';
 export const getServerSideProps = async (context) => { 
-    
+    const redisClient = await getClient();
     let result = await getWallet(context.query.address[0]);
     let props = {};
 
@@ -44,6 +44,7 @@ export const getServerSideProps = async (context) => {
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
         await incrementCacheItem('walletHits:'+result.stake);
         await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
+        await redisClient.lPush('lg:walletHitLog:'+result.stake, JSON.stringify(Date.now()))
         if (tokens) { 
             const perPage = 10;
             const totalPages =  Math.ceil(tokens.length/perPage)
