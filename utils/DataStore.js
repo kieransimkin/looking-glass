@@ -20,14 +20,21 @@ export const getDataURL = (key, type) => {
 }
 
 export const saveData = (key, type, data) => { 
+    const loc = getDataLocation(key, type);
     writeFile(key,type,data);
     return encodeURI(loc);
 }
 
 export const saveSend = (key, type, data, res, contentType='image/jpg') => { 
     writeFile(key,type,data);
-    res.setHeader('Content-type',contentType).setHeader('X-Plutus-Cache', true).status(200).send(data).end();
+    res.setHeader('Content-type',contentType).status(200).send(data).end();
 
+}
+
+export const sendData = (key, type, res, contentType='image/jpg') => { 
+    const loc = getDataLocation(key, type);
+    const data = fs.readFileSync(process.cwd()+'/public'+loc);
+    res.setHeader('Content-type',contentType).status(200).send(data).end();
 }
 
 export const writeFile = (key, type, data) => { 

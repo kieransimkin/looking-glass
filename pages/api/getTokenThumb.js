@@ -2,7 +2,7 @@ import axios from "axios";
 import * as libcip54 from "libcip54"
 import pgClient from "../../utils/dbsync";
 import {getClient} from "../../utils/redis";
-import { getDataURL, saveData, saveSend } from "../../utils/DataStore";
+import { getDataURL, saveData, sendData, saveSend } from "../../utils/DataStore";
 import { getCachedTokenThumb } from '../../utils/Helpers'
 import sharp from 'sharp';
 
@@ -22,10 +22,9 @@ export default async function Browse(req, res) {
     mode='dark';
   }
   const name = 'tokenThumb:'+unit+':'+size+':'+mode;
-  let dataUrl;
-  if ((dataUrl = getDataURL(name,mode=='transparent'?'png':'jpg'))) { 
-    res.writeHead(302,{'Location':dataUrl});
-    return res.end();
+  
+  if (getDataURL(name,mode=='transparent'?'png':'jpg')) { 
+    return sendData(name, mode=='transparent'?'png':'jpg', res, mode=='transparent'?'image/png':'image/jpg');
   }
   
   const metadata = await libcip54.getMetadata(unit);
@@ -39,7 +38,7 @@ export default async function Browse(req, res) {
     resizeOpts = {height:size};
   }
   if (mode!='transparent') { 
-        return saveSend(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#000000':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()),res, 'image/jpg');
+        return saveSend(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#040302':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()),res, 'image/jpg');
       } else { 
     saveSend
       

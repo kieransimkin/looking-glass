@@ -14,7 +14,8 @@
     "import": "tsx scripts/importPolicies.mjs",
     "precache": "tsx scripts/precache.mjs",
     "refreshWallet": "tsx scripts/refreshWallet.mjs",
-    "runHits": "tsx scripts/runHits.mjs"
+    "runHits": "tsx scripts/runHits.mjs",
+    "generateThumbnails":"tsx scripts/generateThumbnails.mjs"
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.2.0",
