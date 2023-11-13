@@ -73,8 +73,8 @@ async function doIt() {
             console.log('Done '+policy)
         }
         waiting.push(doPolicy(tokens));
-        if (waiting.length>99) { 
-            console.log('100 queued, now waiting')
+        if (waiting.length>999) { 
+            console.log('1000 queued, now waiting')
             await Promise.all(waiting);
             waiting = [];
         }
