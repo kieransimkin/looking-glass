@@ -51,6 +51,7 @@ async function doIt() {
                 await doPage(tokens, page);
                 page++;
                 //sleep(2000);
+                if (page>100) break;
             }
             await redisClient.del(key);
             await helpers.default.sleep(2000)
