@@ -14,7 +14,7 @@ export default function SearchBox({width}) {
     return (
             <form onSubmit={onSubmit} autoComplete="on" noValidate style={{display: 'flex',width: width?width:600}}> 
             
-            <TextField inputProps={{onChange:searchChange }} type="search" id="search" label={width?'Search':"Search by Policy ID, Wallet Address or 💲handle"} name="search" variant="outlined" fullWidth />
+            <TextField inputProps={{onChange:searchChange, autoFocus:true }} type="search" id="search" label={width?'Search':"Search by Policy ID, Wallet Address or 💲handle"} name="search" variant="outlined" fullWidth />
             <IconButton type="submit" aria-label="search" >🔎</IconButton>
             </form>
     );

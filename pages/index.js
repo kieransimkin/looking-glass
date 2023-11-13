@@ -138,145 +138,6 @@ function CardanoLogo(props) {
       </group>
     )
 }
-const useStyles = makeStyles(theme => { 
-    const first = alpha(theme.palette.primary.main, 0.8);
-    const second = alpha(theme.palette.secondary.main, 0.4);
-    const darkfirst = alpha(theme.palette.primary.main, 0.2);
-    const darksecond = alpha(theme.palette.secondary.main, 0.2);
-    let bg=`linear-gradient(125deg, ${first} 0%, ${second} 100%),linear-gradient(0deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%),url('/flowers.jpg') !important`;
-    if (theme.palette.type=='dark') { 
-        bg = `linear-gradient(120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 100%), url('/flowers.jpg') !important`;
-    }
-    let bg2=`linear-gradient(-95deg, ${first} 0%, ${second} 100%),linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.85) 100%),url('/circuit2.png') !important`;
-    if (theme.palette.type=='dark') { 
-        bg2 = `linear-gradient(-120deg, ${darkfirst} 0%, ${darksecond} 100%), linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), url('/circuit2.png') !important`;
-    }
-    return {
-    bigHead: { 
-        textShadow: `
-                    1px 1px 15px rgba(0,0,0,1), 
-                    1px 1px 25px rgba(0,0,0,1),
-                    0px 0px 3px rgba(0,0,0,1), 
-                    1px 1px 3px rgba(0,0,0,1),
-                    -1px -1px 3px rgba(0,0,0,1),
-                    0px -1px 3px rgba(0,0,0,1),
-                    0px 1px 3px rgba(0,0,0,1),
-                    1px 0px 3px rgba(0,0,0,1),
-                    -1px 0px 3px rgba(0,0,0,1)
-                    `,
-        letterSpacing:'0.05em',
-        fontSize: '100px',
-        fontWeight: '900 !important',
-    },
-    subtleBigHead: { 
-        wordBreak: 'break-word',
-        textShadow: `
-                    1px 1px 15px rgba(0,0,0,1), 
-                    0px 0px 3px rgba(0,0,0,1), 
-                    1px 1px 3px rgba(0,0,0,1),
-                    -1px -1px 3px rgba(0,0,0,1),
-                    0px -1px 3px rgba(0,0,0,1),
-                    0px 1px 3px rgba(0,0,0,1),
-                    1px 0px 3px rgba(0,0,0,1),
-                    -1px 0px 3px rgba(0,0,0,1)
-                    `,
-        letterSpacing:'0.05em',
-        fontSize: '80px',
-        fontWeight: '900 !important',
-    },
-    littleHead: { 
-        textShadow: `
-        1px 1px 15px rgba(0,0,0,1), 
-        1px 1px 10px rgba(0,0,0,1), 
-        0px 0px 3px rgba(0,0,0,1), 
-        1px 1px 3px rgba(0,0,0,1),
-        -1px -1px 3px rgba(0,0,0,1),
-        0px -1px 3px rgba(0,0,0,1),
-        0px 1px 3px rgba(0,0,0,1),
-        1px 0px 3px rgba(0,0,0,1),
-        -1px 0px 3px rgba(0,0,0,1)
-        `,
-        letterSpacing:'0.05em',
-        fontWeight: '600 !important',
-        '& em': { 
-            color: 'white !important'
-        }
-    },
-    subtleLittleHead: { 
-        wordBreak: 'break-word',
-        textShadow: `
-                    1px 1px 15px rgba(0,0,0,1), 
-                    0px 0px 3px rgba(0,0,0,1), 
-                    1px 1px 3px rgba(0,0,0,1),
-                    -1px -1px 3px rgba(0,0,0,1),
-                    0px -1px 3px rgba(0,0,0,1),
-                    0px 1px 3px rgba(0,0,0,1),
-                    1px 0px 3px rgba(0,0,0,1),
-                    -1px 0px 3px rgba(0,0,0,1)
-                    `,
-        letterSpacing:'0.05em',
-        fontWeight: '600 !important',
-        '& em': { 
-            color: 'white !important'
-        }
-    },
-    bg: { 
-      minHeight: '100vh',
-      backgroundImage: bg,
-      backgroundSize: `cover, cover, 990px`,
-      backgroundRepeat: `no-repeat, no-repeat, repeat`,
-      top: 0,
-      left: 0,
-      right: 0,
-      minWidth:'100vw'
-    },
-    
-    bg2: { 
-        minHeight: '100vh',
-        backgroundImage: bg2,
-        backgroundSize: `cover, cover, 950px`,
-        backgroundRepeat: `no-repeat, no-repeat, repeat`,
-        top: 0,
-        left: 0,
-        right: 0,
-        minWidth:'100vw'
-    },
-    bgImageCont: { 
-        width: '100vw',
-        height: '100vh',
-        top:'0px',
-        left:'0px',
-        position: '',
-        '& div': { 
-            position: 'unset !important'
-        }
-    },
-    bgImage: { 
-        objectFit: 'cover', 
-        width: '100vw', 
-        height: '100vh'
-    },
-    content: { 
-        position:'absolute',
-        width:'100vw',
-        top: '50%',
-        textAlign: 'left',
-        paddingLeft: '5em',
-        paddingRight: '5em',
-        transform: `translateY(-50%)`
-    },
-    wideContent: { 
-        position:'absolute',
-        width:'100vw',
-        top: '50%',
-        textAlign: 'left',
-        paddingLeft: '2em',
-        paddingRight: '2em',
-        transform: `translateY(-50%)`
-    },
-    root: {
-    }
-  }});
 
   // https://codesandbox.io/s/qpfgyp
   function Swarm({ color, count, dummy = new THREE.Object3D() }) {
@@ -332,10 +193,7 @@ const useStyles = makeStyles(theme => {
   }
 
 export default function Home() {
-    const classes=useStyles();
-    const [autoPlay, setAutoplay] = useState(false);
-    const [loadingContent, setLoadingContent] = useState((<><CircularProgress size="1em" style={{position: 'relative', top:'0.15em', marginRight: '0.3em', marginLeft:'0.2em'}} /> Loading slideshow&hellip;</>));
-    const [currentSlide, setCurrentSlide] = useState(0);
+
     const [cardanoObjects, setCardanoObjects] = useState([]);
     const ringRef1=useRef();
     const ringRef2=useRef();
@@ -404,7 +262,7 @@ export default function Home() {
      class="st0"
      d="m 187.4,325.7 c -5.7,-0.3 -10.6,4.1 -11,9.8 -0.4,5.7 4.1,10.6 9.8,11 5.7,0.3 10.6,-4 11,-9.7 0.3,-5.8 -4.1,-10.7 -9.8,-11.1 z"
      id="path28" /></g><g
-   id="r3"><path
+   id="r4"><path
      class="st0"
      d="m 91,134.9 c 6.9,4.5 16.1,2.6 20.5,-4.3 4.5,-6.9 2.6,-16.1 -4.3,-20.5 -6.9,-4.5 -16.1,-2.6 -20.5,4.3 -4.5,6.8 -2.6,16 4.3,20.5 z"
      id="path8" /><path
@@ -423,7 +281,7 @@ export default function Home() {
      class="st0"
      d="m 187.5,260.4 c -8.2,-0.5 -15.2,5.8 -15.6,14 -0.5,8.2 5.8,15.2 14,15.6 8.2,0.4 15.2,-5.8 15.6,-14 0.5,-8.1 -5.8,-15.2 -14,-15.6 z"
      id="path29" /></g><g
-   id="r4"><path
+   id="r3"><path
      class="st0"
      d="m 126.8,70.1 c 6.2,-3.1 8.7,-10.7 5.6,-16.9 -3.1,-6.2 -10.7,-8.7 -16.9,-5.6 -6.2,3.1 -8.7,10.7 -5.6,16.9 3.1,6.2 10.7,8.7 16.9,5.6 z"
      id="path4" /><path
@@ -513,12 +371,12 @@ export default function Home() {
     const Framer = () => { 
       useFrame((state) => {
       if (ringRef1.current) { 
-        /*
-        ringRef1.current.rotation.y+=0.1
-        ringRef2.current.rotation.z+=0.1
-        ringRef3.current.rotation.x+=0.1
-        ringRef4.current.rotation.z-=0.1
-        */
+        
+        ringRef1.current.rotation.z+=0.01
+        ringRef2.current.rotation.z+=0.01
+        ringRef3.current.rotation.z+=0.01
+        ringRef4.current.rotation.z-=0.001
+        
         var box = new THREE.Box3().setFromObject(ringRef4.current);
         const size = new THREE.Vector3();
         box.getSize(size);
@@ -543,28 +401,27 @@ export default function Home() {
               //A = new T.Points(pg, mats[i]);
 
 
-              
-    const onLoad = (e) => { 
-        setAutoplay(true);
-        setLoadingContent((<><PauseIcon /> Paused&hellip;</>));
-    }
-    const toggleOnOff = () => { 
-        if (!autoPlay) { 
-            setCurrentSlide(currentSlide+1);
-        }
-        setAutoplay(!autoPlay);
-    }
-    const updateCurrentSlide = (index) => { 
-        if (currentSlide !== index) { 
-            setCurrentSlide(index);
-        }
-      }
       
+    const description = "A blockchain explorer for Cardano focused on rich media and Smart NFTs."
+    const title = "Cardano Looking Glass - clg.wtf"
     return (
     <>
       <Head>
-        <title>clg.wtf</title>
-        <meta name="description" content="" />
+        <title>{title}</title>
+        
+        <meta name="description" content={title} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={"https://clg.wtf/"} />
+        <meta property="og:site_name" content="Cardano Looking Glass" />
+        <meta property="og:title" content={title}  />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={"https://clg.wtf/favicon-default.png"} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="clg.wtf" />
+        <meta property="twitter:url" content={"https://clg.wtf/"} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={"https://clg.wtf/favicon-default.png"} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div style={{height:'100%', position:'relative'}}>
@@ -576,27 +433,14 @@ export default function Home() {
     <Framer />
     
     {cardanoObjects}
-    
-    {
-      /*
-      
 
-    */
-    }
     <Swarm count={9000} color="#550201" />
     <Swarm count={20000} color="#291301" />
     <Swarm count={5000} color="#040302" />
     <Swarm count={10000} color="#040200" />
     <Postpro />
     <CardanoLogo />
-    {
-      /*
-    <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
-      
-    
-      */
-    }
+ 
       
   </Canvas>
       
@@ -623,6 +467,7 @@ function Postpro() {
     useFrame((state) => (water.current.time = state.clock.elapsedTime * 4))
     return (
       <Effects disableGamma>
+      
       <waterPass ref={water} factor={0.5} />
       <unrealBloomPass args={[undefined, 1.26, 1, 0]} />
       <filmPass args={[0.2, 0.9, 1300, false]} />

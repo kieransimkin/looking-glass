@@ -22,6 +22,9 @@ export default async function Browse(req, res) {
         await clearCacheItem('getTokenData:'+req.body.mint.policy+req.body.mint.asset);
         await cacheItem('refreshTransaction:'+req.body.context.tx_hash,{message: req.body, timestamp: Date.now()})
         await cacheItem('refreshToken:'+req.body.mint.policy+req.body.mint.asset,{message: req.body, timestamp: Date.now()})
+        await incrementCacheItem('policyActive:'+req.body.mint.policy);
+        await incrementCacheItem('policyCulmativeActive:'+req.body.mint.policy, 3600);
+        await redisClient.lPush('lg:policyActiveLog:'+req.body.mint.policy, JSON.stringify(Date.now()))
         const rClient = await getClient();
         rClient.publish('mint',JSON.stringify(req.body));
 
@@ -31,9 +34,12 @@ export default async function Browse(req, res) {
         outputAddress = getStakeFromAny(outputAddress);
         await getWallet(outputAddress);
         await getPolicy(req.body.output_asset.policy); // Todo get rid of these once we've populated the database a bit more
-        await incrementCacheItem('policyActive:'+outputAddress, 3600);
-        await incrementCacheItem('walletActive:'+req.body.output_asset.policy, 3600);
-        await redisClient.lPush('lg:policyActiveLog:'+outputAddress, JSON.stringify(Date.now()))
+        await incrementCacheItem('walletActive:'+outputAddress, 3600);
+        await incrementCacheItem('policyActive:'+req.body.output_asset.policy, 3600);
+        await incrementCacheItem('walletCulmativeActive:'+outputAddress);
+        await incrementCacheItem('policyCulmativeActive:'+req.body.output_asset.policy);
+        await redisClient.lPush('lg:policyActiveLog:'+req.body.output_asset.policy, JSON.stringify(Date.now()))
+        await redisClient.lPush('lg:walletActiveLog:'+outputAddress, JSON.stringify(Date.now()))
         await cacheItem('policyLastActive:'+req.body.output_asset.policy,Date.now());
         await cacheItem('walletLastActive:'+outputAddress,Date.now());
         await clearCacheItem('getTokensFromAddress:'+outputAddress);
