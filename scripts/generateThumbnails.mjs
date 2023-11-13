@@ -37,6 +37,7 @@ async function doIt() {
        const doPolicy = async (tokens) => {
         for (var token of tokens) { 
             doneTokens++;
+            try { 
                 const name = 'tokenThumb:'+token.unit+':500:dark';
             
                 if (datastore.default.getDataURL(name,'jpg')) { 
@@ -68,7 +69,9 @@ async function doIt() {
                 datastore.default.saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:'#040302'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
                 
                 
-                
+                } catch (e) { 
+                    console.error(e);
+                }
             }
             console.log('Done '+policy)
         }
