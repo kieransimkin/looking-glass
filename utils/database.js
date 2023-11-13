@@ -50,7 +50,7 @@ export const incrementWalletTotalHits = async (stake, hits) => {
     )
 }
 export const getFeaturedPolicies = async(sort, sortOrder, page=0) => { 
-    if (typeof sort != "array") sort = [sort];
+    if (Array.isArray(sort)) sort = [sort];
     const sortOptions = [];
     const perPage = 10;
     const args = [];
