@@ -27,7 +27,7 @@ export const saveData = (key, type, data) => {
 
 export const saveSend = (key, type, data, res, contentType='image/jpg') => { 
     writeFile(key,type,data);
-    res.setHeader('Content-type',contentType).status(200).send(data)
+    res.setHeader('Content-type',contentType).status(200).send(data);
 
 }
 
