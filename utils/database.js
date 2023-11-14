@@ -49,7 +49,7 @@ export const incrementWalletTotalHits = async (stake, hits) => {
         `update wallet set "totalHits"="totalHits"+$1 WHERE stake=$2`, [hits, stake]
     )
 }
-export const getFeaturedPolicies = async(sort, sortOrder, page=0) => { 
+export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=true) => { 
     if (!Array.isArray(sort)) sort = [sort];
     const sortOptions = [];
     const perPage = 10;
@@ -68,9 +68,15 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0) => {
             case 'recentlyActive':
                 sortOptions.push(`"lastMoved" ${sortOrder}`)
                 break;
+            case 'random':
+                sortOptions.push(`random()`);
+                break;
         }
     }
-    
+    let featuredString ='';
+    if (featuredOnly) { 
+        featuredString=` AND "isFeatured"=true`;
+    }
     const sortString = sortOptions.join(", ")
     const policies = await client.query(`
         select         
@@ -78,13 +84,13 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0) => {
         name,
         slug,
         description,
-        "createdAt",
+        to_char("createdAt",'YYYY-MM-DD HH24:MI:SS'),
         "isFeatured",
-        "lastMinted",
-        "lastMoved",
+        to_char("lastMinted",'YYYY-MM-DD HH24:MI:SS'),
+        to_char("lastMoved",'YYYY-MM-DD HH24:MI:SS'),
         "assetCount",
         "totalActivity",
-        "totalHits" from policy where "assetCount">100 ORDER BY ${sortString} LIMIT $1
+        "totalHits" from policy where "assetCount">100 and "notFeatured"=false ${featuredString} ORDER BY ${sortString} LIMIT $1
         OFFSET $2 
     `,[perPage, perPage * page])
     return policies.rows;

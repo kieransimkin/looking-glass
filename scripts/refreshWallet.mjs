@@ -12,9 +12,7 @@ async function doIt() {
 	console.log(libcip);
     const redisClient = await redis.getClient();
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
-    const results = await database.default.query(`
-    select distinct "policyID", encode("policyID",'hex') as policy from policy
-    `,[])
+
     const keys = await redisClient.keys("lg:refreshWallet:*");
     for (const key of keys) { 
         const stake = key.substr(17)

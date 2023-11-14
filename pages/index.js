@@ -13,7 +13,7 @@ import Card from '@material-ui/core/Card'
 import ExamplesButton from '../components/ExamplesButton';
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import * as THREE from 'three'
-
+import { getFeaturedPolicies } from '../utils/database';
 
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
 import { Effects } from '@react-three/drei'
@@ -191,9 +191,16 @@ function CardanoLogo(props) {
       </>
     )
   }
-
-export default function Home() {
-
+export const getServerSideProps = async (context) => { 
+  const props = {};
+  props.featuredPolicies = await getFeaturedPolicies('random','asc',0,true);  
+  return {
+    props
+  }
+}
+export default function Home(props) {
+    const featuredPolicies = props.featuredPolicies;
+    console.log(featuredPolicies)
     const [cardanoObjects, setCardanoObjects] = useState([]);
     const ringRef1=useRef();
     const ringRef2=useRef();
@@ -455,6 +462,18 @@ export default function Home() {
         </>
         </Typography>
     </Card>
+    <div style={ {cursor: 'pointer', top: '50%', transform:'translateY(-50%)', position:'relative', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'0em'}}>
+    <Card style={{position:'absolute', cursor: 'pointer',width:'fit-content', transform:'translateX(-50%)', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}}>
+    <Typography variant="h4">
+        <>
+        <div style={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
+        
+            <SearchBox /> 
+            </div>
+        </>
+        </Typography>
+    </Card>
+    </div>
     </div>
     </>)
 

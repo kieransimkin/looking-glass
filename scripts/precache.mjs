@@ -6,6 +6,7 @@ import redis from '../utils/redis.js'
 import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
 import * as helpers from '../utils/Helpers.js';
+import { PolicyTwoTone } from '@material-ui/icons';
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
@@ -13,7 +14,7 @@ async function doIt() {
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
     
-    select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity" from policy where "totalActivity"!=0 order by "totalActivity" desc
+    select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", random(), "isFeatured" from policy where "totalActivity"!=0 order by "isFeatured" desc, random()
     `,[])
     for (var row of results.rows) { 
         
@@ -47,13 +48,14 @@ async function doIt() {
             console.log('Page '+page+' of '+totalPages)
             await doPage(tokens, page);
             page++;
-            if (page>10) break;
+            if (page>10 && !policy.isFeatured) break;
             
             //sleep(2000);
         }
         
         console.log('Done '+policy)
     }
+    
     await helpers.default.sleep(120000) // two minutes
     console.log('Complete');
     process.exit(0);
