@@ -1,7 +1,8 @@
+
 import { getData, postData } from './Api';
 import {SmartNFTPortal} from 'smartnftportal'
 
-export const tokenPortal = async (item, ready, width='100%', height='100%') => { 
+export const tokenPortal = async (item, ready, width='100%', height='100%', mouseMove=null) => { 
     let smI = {tokenUnit:''};
     if (item?.metadata?.files && item?.metadata?.files.length>0 && item?.metadata?.files[0]?.mediaType?.substring(0,9)!='text/html') return;
     if (item.metadata?.uses) { 
@@ -14,5 +15,5 @@ export const tokenPortal = async (item, ready, width='100%', height='100%') => {
     const doCallback = () => { 
         ready();
     }
-    return <SmartNFTPortal key={Math.random()} onReady={doCallback} loading={false} metadata={item.metadata} smartImports={smI} style={{width:width,height:height, borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
+    return <SmartNFTPortal key={Math.random()} onMouseMove={mouseMove} onReady={doCallback} loading={false} metadata={item.metadata} smartImports={smI} style={{width:width,height:height, borderWidth:'0', minWidth:'10px',minHeight:'10px'}} />
 }

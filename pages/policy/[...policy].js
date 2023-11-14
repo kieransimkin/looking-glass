@@ -1,6 +1,7 @@
 import {useState, useRef} from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import path from 'path';
 import { setPolicyAssetCount } from '../../utils/database';
 import { promises as fs } from 'fs';
@@ -19,28 +20,24 @@ import LoadingTicker from '../../components/LoadingTicker';
 
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
-
-    let result = await getPolicy(context.query.policy[0]);
+    console.log(context);
+    let policy = context.query.policy[0];
+    const segs = policy.split('.');
+    policy = segs[0];
+    let result = await getPolicy(policy);
     let props = {};
 
     if (result) { 
 
-        if (result.slug != result.policyID && context.query.policy[0]!=result.slug) { 
+        if (result.slug != policy && context.query.policy[0]!=result.slug) { 
             return {
                 redirect: {
-                    destination: '/policy/'+result.slug,
+                    destination: '/policy/'+result.slug+(segs[1]?.length?'.'+segs[1]:''),
                     permanent: true
                 }
             }
         }
-        if (result.policyID != context.query.policy[0] && context.query.policy[0]!=result.slug) { 
-            return {
-                redirect: {
-                    destination: '/wallet/'+result.slug,
-                    permanent: true
-                }
-            }
-        }
+        
         props.policy = JSON.parse(JSON.stringify(result));
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
@@ -120,11 +117,25 @@ export default  function CIP54Playground(props) {
         console.log('Called outer load more data function');
         
     }
+    const slideItemHTML = (click,ts) => { 
+        return (item) => { 
+            // The 60 below is the number of pixels we reserve in the slide bar for the label
+            return <li key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+        }
+    }
     /*
     
     */
    console.log(props);
    const title = props.policy.name+" - Cardano Looking Glass - clg.wtf"
+   let newGallery = null;
+   if (gallery) {
+    newGallery=gallery.tokens.map((i)=>{
+    i.linkUrl='/policy/'+props.policy.slug+'.'+i.unit.substr(56);
+    console.log(i.linkUrl);
+    return i;
+    })
+}
     return (
         <>
             <Head>
@@ -144,7 +155,7 @@ export default  function CIP54Playground(props) {
                 <meta name="twitter:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.policyProfile} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }

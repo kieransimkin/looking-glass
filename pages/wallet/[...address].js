@@ -15,6 +15,7 @@ import { checkCacheItem, getClient, incrementCacheItem } from '../../utils/redis
 import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
 import LoadingTicker from '../../components/LoadingTicker';
+import Link from 'next/link';
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let result = await getWallet(context.query.address[0]);
@@ -116,6 +117,20 @@ export default  function CIP54Playground(props) {
         
     }
     const title = props.wallet.name+" - Cardano Looking Glass - clg.wtf"
+    let newGallery = null;
+    if (gallery) {
+        newGallery=gallery.tokens.map((i)=>{
+        i.linkUrl='/policy/'+i.unit.substring(0,56)+'.'+i.unit.substr(56);
+        console.log(i.linkUrl);
+        return i;
+        })
+    }
+    const slideItemHTML = (click,ts) => { 
+        return (item) => { 
+            // The 60 below is the number of pixels we reserve in the slide bar for the label
+            return <li key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+        }
+    }
     /*
     
     */
@@ -140,7 +155,7 @@ export default  function CIP54Playground(props) {
 
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={gallery?.tokens} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide slideItemHTML={slideItemHTML} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
