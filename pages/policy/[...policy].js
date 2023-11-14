@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import {useState, useRef} from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
