@@ -55,7 +55,8 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
   const menuContainerRef = useRef();
 
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
-  
+  console.log(isSubMenuOpen)
+  console.log(containerRef.current)
   const handleMouseEnter = (event) => {
     setIsSubMenuOpen(true)
 
@@ -120,7 +121,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     }
   }
 
-  const open = (isSubMenuOpen && parentMenuOpen) || searchFocused
+  const open = isSubMenuOpen && parentMenuOpen
   const menuItemClasses = useMenuItemStyles({open})
 
   // Root element must have a `tabIndex` attribute for keyboard navigation
@@ -134,7 +135,6 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     iconStyle={position:'absolute', left:'0px', top:'10px'}
     icon = leftIcon;
   }
-  console.log(searchFocused,menuItemRef.current);
   return (
     <div
       {...ContainerProps}
@@ -144,7 +144,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onKeyDown={handleKeyDown}
-      style={{top:'0px !important'}}
+      style={{top:'0px !important; right:0px !important;'}}
     >
       <MenuItem
         {...MenuItemProps}
@@ -156,10 +156,10 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       <div style={iconStyle}>{icon}</div>
       </MenuItem>
       <Popper
-                            modifiers={{offset:{offset:'-0px'}}}
+                            modifiers={{offset:{offset:'-20px'}}}
                                 
                              
-                                anchorEl={searchFocused?containerRef.current:menuItemRef?.current}
+                                anchorEl={menuItemRef?.current}
                                 keepMounted
                                 open={open}
                                 getContentAnchorEl={null} 
@@ -169,7 +169,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
                                   
                                 }}
                                 style={{position:'relative',top:'50'}}
-                                className="menupopper"
+                                
                             
                                 
                             >

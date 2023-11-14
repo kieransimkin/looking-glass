@@ -27,9 +27,9 @@ button, .MuiButton-root {
 div.MuiDataGrid-root { 
   border: none !important;
 }
-#simple-menu, .menupopper {
-  pointer-events: all !important;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+#simple-menu, .menupaper {
+  
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !;
 }
 .mapboxgl-control-container { 
   display: none;
