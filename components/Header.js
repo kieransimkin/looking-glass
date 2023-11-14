@@ -113,12 +113,13 @@ const Header = (props) => {
     const [walletApi, setWalletAPI] = React.useState(null);
     const [searchFocused, setSearchFocused] = React.useState(false);
     const [tanchorEl, setAnchorEl] = React.useState(null);
+    const [prevAnchor, setPrevAnchor]=React.useState();
     const anchorRef = React.useRef();
     let anchorEl = tanchorEl;
     if (searchFocused && anchorRef?.current) {
         //anchorEl=anchorRef.current;
     }
-    console.log(searchFocused)
+    
     
     
     const [callbackFn, setCallbackFn] = React.useState({'fn': () => { return; }, 'fail': () => {return; }});
@@ -147,6 +148,7 @@ const Header = (props) => {
             callback(walletCtx);
         }
     });
+    
     useEffect( () => { 
         if (!walletCtx) {  
             let wallet = null
@@ -337,9 +339,11 @@ const Header = (props) => {
         console.log('leave');
     }
     const mouseEnter = () => {
+        if (!searchFocused) { 
         console.log('mouse enter');
         
         clearTimeout(menuCloseTimer);
+        }
         
     }
 
@@ -349,12 +353,12 @@ const Header = (props) => {
     }
 
     const handleClick = (a,e) => { 
-        console.log(a.currentTarget);
-        console.log(anchorRef);
-        clearTimeout(menuCloseTimer);
-        clearTimeout(timer);
-        setAnchorEl(a.currentTarget);
-        setSearchFocused(false);
+        if (!searchFocused) { 
+            clearTimeout(menuCloseTimer);
+            clearTimeout(timer);
+            setAnchorEl(a.currentTarget);
+            setSearchFocused(false);
+        }
     }
 
     const toggleDarkMode = (e) => { 
@@ -394,7 +398,7 @@ const Header = (props) => {
              variant="persistent" anchor='right' open={!hide} className={className}>
                 
                 
-                        <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} onMouseLeave={()=>{if (searchFocused) return; menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose()},1000)}} >
+                        <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} onMouseLeave={()=>{if (searchFocused) return; menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose()},2000)}} >
                             <Link href="/" passHref><a>
                                 <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={()=>console.log('got here')} >
                                 
@@ -416,7 +420,7 @@ const Header = (props) => {
                                 placement='right-start'
                                 onMouseLeave={()=>{ 
                                     if (searchFocused) return;
-                                    menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose();},1000)
+                                    menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose();},2000)
                                 }}
                                 style={{position:'relative',top:'50'}}
                                 onMouseEnter={mouseEnter}
@@ -425,7 +429,7 @@ const Header = (props) => {
                             >
                              <Paper id="menupaper" className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
                                 <MenuList>
-                            <NestedMenuItem direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
+                            <NestedMenuItem searchFocused={searchFocused} direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
                                 <MenuItem><SearchBox width={300} autoComplete='off' autoFocus={false} onFocus={()=>setSearchFocused(true)} onBlur={()=>setSearchFocused(false)} /></MenuItem>
                                
                               

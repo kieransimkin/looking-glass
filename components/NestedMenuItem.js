@@ -5,7 +5,7 @@ import MenuItem, {MenuItemProps} from '@material-ui/core/MenuItem'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
 import clsx from 'clsx'
-
+import { Popper,Paper, MenuList } from '@material-ui/core'
 // This is copied from https://github.com/azmenak/material-ui-nested-menu-item
 // I added directionality, so that menus can open left as well as right. 
 // I've submitted a pull request to the original author:
@@ -36,7 +36,9 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     tabIndex: tabIndexProp,
     MenuProps = {},
     ContainerProps: ContainerPropsProp = {},
+    searchFocused=false,
     ...MenuItemProps
+    
   } = props
 
   const {ref: containerRefProp, ...ContainerProps} = ContainerPropsProp
@@ -53,7 +55,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
   const menuContainerRef = useRef();
 
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
-
+  
   const handleMouseEnter = (event) => {
     setIsSubMenuOpen(true)
 
@@ -62,11 +64,14 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     }
   }
   const handleMouseLeave = (event) => {
-    setIsSubMenuOpen(false)
+    if (!searchFocused) {
+      setIsSubMenuOpen(false)
 
-    if (ContainerProps?.onMouseLeave) {
-      ContainerProps.onMouseLeave(event)
+      if (ContainerProps?.onMouseLeave) {
+        ContainerProps.onMouseLeave(event)
+      }
     }
+    
   }
 
   // Check if any immediate children are active
@@ -81,7 +86,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
   }
 
   const handleFocus = (event) => {
-    if (event.target === containerRef.current) {
+    if (event.target === containerRef.current || searchFocused) {
       setIsSubMenuOpen(true)
     }
 
@@ -115,7 +120,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     }
   }
 
-  const open = isSubMenuOpen && parentMenuOpen
+  const open = (isSubMenuOpen && parentMenuOpen) || searchFocused
   const menuItemClasses = useMenuItemStyles({open})
 
   // Root element must have a `tabIndex` attribute for keyboard navigation
@@ -129,6 +134,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     iconStyle={position:'absolute', left:'0px', top:'10px'}
     icon = leftIcon;
   }
+  console.log(searchFocused,menuItemRef.current);
   return (
     <div
       {...ContainerProps}
@@ -138,6 +144,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onKeyDown={handleKeyDown}
+      style={{top:'0px !important'}}
     >
       <MenuItem
         {...MenuItemProps}
@@ -148,31 +155,32 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
         {label}
       <div style={iconStyle}>{icon}</div>
       </MenuItem>
-      <Menu
-        // Set pointer events to 'none' to prevent the invisible Popover div
-        // from capturing events for clicks and hovers
-        style={{pointerEvents: 'none'}}
-        anchorEl={menuItemRef?.current}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: direction=='right' ? 'right' : 'left'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: direction=='right' ? 'left' : 'right'
-        }}
-        open={open}
-        autoFocus={false}
-        disableAutoFocus
-        disableEnforceFocus
-        onClose={() => {
-          setIsSubMenuOpen(false)
-        }}
-      >
+      <Popper
+                            modifiers={{offset:{offset:'-0px'}}}
+                                
+                             
+                                anchorEl={searchFocused?containerRef.current:menuItemRef?.current}
+                                keepMounted
+                                open={open}
+                                getContentAnchorEl={null} 
+                                placement='right'
+                                onMouseLeave={()=>{ 
+                                  return;
+                                  
+                                }}
+                                style={{position:'relative',top:'50'}}
+                                className="menupopper"
+                            
+                                
+                            >
+                             <Paper className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
+                                <MenuList>
+      
         <div ref={menuContainerRef} style={{pointerEvents: 'auto'}}>
           {children}
         </div>
-      </Menu>
+      
+      </MenuList></Paper></Popper>
     </div>
   )
 })
