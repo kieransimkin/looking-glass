@@ -1,3 +1,5 @@
+/* eslint-disable react/display-name */
+
 import {MediaSlide} from 'react-mediaslide'
 import Link from 'next/link';
 export default function PolicyQuickBrowse({policyID})  { 
@@ -10,13 +12,14 @@ export default function PolicyQuickBrowse({policyID})  {
         p.linkUrl='/policy/'+p?.policyID;
                 return p;
     })
-    console.log(list);
+    
     const slideItemHTML = (click,ts) => { 
         return (item) => { 
             // The 60 below is the number of pixels we reserve in the slide bar for the label
             return <li key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a style={{pointerEvents:'all'}}><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
         }
     }
+    
     return (
         <div>
         <MediaSlide slideItemHTML={slideItemHTML} defaultThumbSize={100} defaultDisplayType='slide' defaultStageHidden={true} defaultNavbarHidden={true} gallery={list} />
