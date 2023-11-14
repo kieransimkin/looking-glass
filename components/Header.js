@@ -23,7 +23,7 @@ import { useWindowDimensions } from '../utils/Hooks'
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import PropTypes from 'prop-types';
 import WalletContext from '../components/WalletContext';
-import { Drawer } from '@material-ui/core';
+import { Drawer, MenuList, Paper } from '@material-ui/core';
 import { HelpOutline, HelpTwoTone, Home, KingBed, SportsKabaddi } from '@material-ui/icons';
 import NestedMenuItem from './NestedMenuItem';
 import ExamplesMenuItems from './ExamplesMenuItems';
@@ -31,6 +31,8 @@ import eventBus from '../utils/EventBus';
 import LaunchpadMenuItems from './LaunchpadMenuItems';
 import { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } from 'next/dist/shared/lib/constants';
 import SearchBox from './SearchBox';
+import {Popper} from '@material-ui/core';
+import { NextCookies } from 'next/dist/server/web/spec-extension/cookies';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -109,8 +111,16 @@ const Header = (props) => {
     const [darkMode, setDarkMode] = React.useState('dark');
     const [disableLockout, setDisableLockout] = React.useState(false);
     const [walletApi, setWalletAPI] = React.useState(null);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [searchFocused, setSearchFocused] = React.useState(false);
+    const [tanchorEl, setAnchorEl] = React.useState(null);
     const anchorRef = React.useRef();
+    let anchorEl = tanchorEl;
+    if (searchFocused && anchorRef?.current) {
+        //anchorEl=anchorRef.current;
+    }
+    console.log(searchFocused)
+    
+    
     const [callbackFn, setCallbackFn] = React.useState({'fn': () => { return; }, 'fail': () => {return; }});
     const [hide, setHide] = useState(false);
     const [hover, setHover] = useState(false);
@@ -210,12 +220,12 @@ const Header = (props) => {
         }
     
         timer = setTimeout(() => {
-          if (!hover && !launchpadDialogIsOpen) {
+          if (!hover && !launchpadDialogIsOpen && !anchorEl) {
             toggleVisibility(true, 'none');
             setAnchorEl(null);
           }
         }, 5000);
-      }, [hide, hover, setHide]);
+      }, [hide, hover, setHide, anchorEl]);
     
    
     // Events:
@@ -240,9 +250,6 @@ const Header = (props) => {
       setCallbackFn({fn: () => { return; }, fail: () => { return; } });
       setWalletOpen(true);
     };
-    const handleNewClick = () => { 
-        setNewOpen(true);
-    }
     const handleSaveAsClick = () => { 
         setSaveAsOpen(true);
     }
@@ -309,19 +316,45 @@ const Header = (props) => {
     };
 
     const handleClose = (value) => {
-        setAnchorEl(null);
+        //setSearchFocused(false);
+        //setAnchorEl(null);
+        doClose();
+        console.log('closed');
+        clearTimeout(menuCloseTimer);
         
     }
+    let menuCloseTimer = null;
+    const doClose = () => { 
+        console.log(searchFocused)
+        setSearchFocused(false);
+        setAnchorEl(null);
+    };
     const handleLeave = () => { 
-        setDisableLockout(true);
+        clearTimeout(menuCloseTimer);
+
+        
+        
         console.log('leave');
+    }
+    const mouseEnter = () => {
+        console.log('mouse enter');
+        
+        clearTimeout(menuCloseTimer);
+        
+    }
+
+    const keepMenuFocus = () => {
+        console.log('keeping menu focus'); 
+        //clearTimeout(menuCloseTimer);
     }
 
     const handleClick = (a,e) => { 
         console.log(a.currentTarget);
         console.log(anchorRef);
-        setDisableLockout(false);
+        clearTimeout(menuCloseTimer);
+        clearTimeout(timer);
         setAnchorEl(a.currentTarget);
+        setSearchFocused(false);
     }
 
     const toggleDarkMode = (e) => { 
@@ -361,14 +394,17 @@ const Header = (props) => {
              variant="persistent" anchor='right' open={!hide} className={className}>
                 
                 
-                        <div style={{marginLeft:'auto', marginRight: 'auto'}}>
-                            <Link href="/">
-                                <IconButton style={{cursor: 'pointer'}} ref={anchorRef} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onMouseEnter={handleClick} onMouseLeave={handleLeave} onClick={handleClick}>
+                        <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} onMouseLeave={()=>{if (searchFocused) return; menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose()},1000)}} >
+                            <Link href="/" passHref><a>
+                                <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={()=>console.log('got here')} >
                                 
                                     <img src="/favicon-default.png" width="32" height="32" title="Menu" alt="Menu" />
                                 </IconButton>
+                                </a>
                             </Link>
-                            <Menu
+                            <div ref={anchorRef} style={{position:'absolute', top:'50'}}></div>
+                            <Popper
+                            modifiers={{offset:{offset:'200'}}}
                                 id="simple-menu"
                                 classes={{
                                     paper: classes.menuPaper
@@ -377,30 +413,24 @@ const Header = (props) => {
                                 keepMounted
                                 open={Boolean(anchorEl)}
                                 getContentAnchorEl={null} 
-                                onClose={handleClose}
+                                placement='right-start'
                                 onMouseLeave={()=>{ 
-                                    console.log('mouseleave menu');
+                                    if (searchFocused) return;
+                                    menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose();},1000)
                                 }}
-                                onMouseEnter={() => {
-                                    console.log('mouseenter');
-                                }}
-                                
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                style={{pointerEvents: (!disableLockout?'none':'all')}}
-                            >
+                                style={{position:'relative',top:'50'}}
+                                onMouseEnter={mouseEnter}
                             
+                                
+                            >
+                             <Paper id="menupaper" className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
+                                <MenuList>
                             <NestedMenuItem direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
-                                <MenuItem onClick={handleNewClick}><SearchBox width={300} /></MenuItem>
+                                <MenuItem><SearchBox width={300} autoComplete='off' autoFocus={false} onFocus={()=>setSearchFocused(true)} onBlur={()=>setSearchFocused(false)} /></MenuItem>
                                
                               
-                            </NestedMenuItem>                          
+                            </NestedMenuItem>             
+                                         
                             <Link href="/wallet"><MenuItem>👥 Collectors</MenuItem></Link>
                             <Link href="/policy"><MenuItem>📂 Creators</MenuItem></Link>
                          
@@ -428,7 +458,9 @@ const Header = (props) => {
                                 {walletApi &&
                                     <MenuItem onClick={handleLogout}>🏃 Logout</MenuItem>
                                 }
-                            </Menu>
+                                </MenuList>
+                                </Paper>
+                            </Popper>
                         </div>
                         {!walletApi &&
                         <div style={{marginLeft:'auto', marginRight: 'auto', zIndex:100}}>
