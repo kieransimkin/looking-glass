@@ -2,7 +2,7 @@
 
 import {MediaSlide} from 'react-mediaslide'
 import Link from 'next/link';
-export default function PolicyQuickBrowse({policyID})  { 
+export default function PolicyQuickBrowse({policies})  { 
     if (!policies) { 
         return <>Loading...</>
     }
