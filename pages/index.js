@@ -6,6 +6,7 @@ import { alpha } from '@material-ui/core/styles/colorManipulator';
 import PauseIcon from '@material-ui/icons/Pause';
 import Image from 'next/image';
 import VideoCard from '../components/VideoCard';
+import { checkCacheItem } from '../utils/redis';
 import { IconButton } from '@material-ui/core';
 import React, { useState , useMemo, useEffect, useRef, useLayoutEffect } from "react";
 import PictureCard from '../components/PictureCard'
@@ -24,6 +25,7 @@ extend({ WaterPass, UnrealBloomPass, FilmPass, LUTPass, GlitchPass })
 import {TextField, InputAdornment} from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 import SearchBox from '../components/SearchBox';
+import PolicyQuickBrowse from '../components/PolicyQuickBrowse';
 function Box(props) {
   const mesh = useRef(null)
   const [hovered, setHover] = useState(false)
@@ -194,6 +196,14 @@ function CardanoLogo(props) {
 export const getServerSideProps = async (context) => { 
   const props = {};
   props.featuredPolicies = await getFeaturedPolicies('random','asc',0,true);  
+  
+  for (const policy of props.featuredPolicies) { 
+    const policyProfile = await checkCacheItem('policyProfile:'+policy.policyID);
+    const tokenData = await checkCacheItem('getTokenData:'+policyProfile);
+    policy.policyProfile=tokenData;
+  }
+  
+
   return {
     props
   }
@@ -462,16 +472,17 @@ export default function Home(props) {
         </>
         </Typography>
     </Card>
-    <div style={ {cursor: 'pointer', top: '50%', transform:'translateY(-50%)', position:'relative', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'0em'}}>
-    <Card style={{position:'absolute', cursor: 'pointer',width:'fit-content', transform:'translateX(-50%)', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}}>
-    <Typography variant="h4">
+    <div style={ {top: '50%', transform:'translateY(-50%)', position:'relative', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'0em'}}>
+    <Card style={{position:'absolute', minHeight:'30', width:'fit-content', transform:'translateX(-50%)', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}}>
+    
         <>
         <div style={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
-        
-            <SearchBox /> 
+        <div style={{width:'80vw', height:'35vh'}}>
+           <PolicyQuickBrowse policies={featuredPolicies} />
+           </div>
             </div>
         </>
-        </Typography>
+    
     </Card>
     </div>
     </div>

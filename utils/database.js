@@ -81,13 +81,14 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
     const policies = await client.query(`
         select         
         encode("policyID",'hex') as "policyID",
+        encode("policyID",'hex') as "id",
         name,
         slug,
         description,
-        to_char("createdAt",'YYYY-MM-DD HH24:MI:SS'),
+        to_char("createdAt",'YYYY-MM-DD HH24:MI:SS') as "createdAt",
         "isFeatured",
-        to_char("lastMinted",'YYYY-MM-DD HH24:MI:SS'),
-        to_char("lastMoved",'YYYY-MM-DD HH24:MI:SS'),
+        to_char("lastMinted",'YYYY-MM-DD HH24:MI:SS') as "lastMinted",
+        to_char("lastMoved",'YYYY-MM-DD HH24:MI:SS') as "lastMoved",
         "assetCount",
         "totalActivity",
         "totalHits" from policy where "assetCount">100 and "notFeatured"=false ${featuredString} ORDER BY ${sortString} LIMIT $1
