@@ -33,8 +33,9 @@ async function doIt() {
        if (tokens.length>10000) { 
         continue;
        }
-       
+
        const doPolicy = async (tokens) => {
+        console.log('Doing a policy');
         for (var token of tokens) { 
             doneTokens++;
             try { 
@@ -47,14 +48,20 @@ async function doIt() {
                 }
                 
                 let tokenData = await redis.checkCacheItem('getTokenData:'+token.unit);
-                if (!tokenData) continue;
+                if (!tokenData) {
+                    console.log('Skipping a token because we don\'t have cache on it');
+                    continue;
+                } 
                 
                 
                 let result;
                 try { 
                     result = await libcip.getFile(token.unit, null, tokenData.metadata)
                 } catch (e) { }
-                if (!result?.buffer) continue;
+                if (!result?.buffer) {
+                    console.log('Skipping a token because I failed to get a file for it');
+                    continue;
+                }
                 
                 
                 const img = sharp(Buffer.from(result.buffer));
@@ -76,8 +83,8 @@ async function doIt() {
             console.log('Done '+policy)
         }
         waiting.push(doPolicy(tokens));
-        if (waiting.length>2999) { 
-            console.log('3000 queued, now waiting')
+        if (waiting.length>999) { 
+            console.log('1000 queued, now waiting')
             await Promise.all(waiting);
             waiting = [];
         }
