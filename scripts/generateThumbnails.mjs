@@ -33,7 +33,7 @@ async function doIt() {
        if (tokens.length>10000) { 
         continue;
        }
-       const donePolicies = 0;
+       
        const doPolicy = async (tokens) => {
         for (var token of tokens) { 
             doneTokens++;
@@ -75,14 +75,11 @@ async function doIt() {
             }
             console.log('Done '+policy)
         }
-        waiting.push(async () => { 
-            donePolicies++;
-            return await doPolicy(tokens);
-        });
-        if (waiting.length-donePolicies>2999) { 
+        waiting.push(doPolicy(tokens));
+        if (waiting.length>2999) { 
             console.log('3000 queued, now waiting')
-            await sleep(120000)
-        
+            await Promise.all(waiting);
+            waiting = [];
         }
  
     }

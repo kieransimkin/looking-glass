@@ -50,7 +50,7 @@ export const incrementWalletTotalHits = async (stake, hits) => {
     )
 }
 export const getFeaturedPolicies = async(sort, sortOrder, page=0) => { 
-    if (Array.isArray(sort)) sort = [sort];
+    if (!Array.isArray(sort)) sort = [sort];
     const sortOptions = [];
     const perPage = 10;
     const args = [];
@@ -70,11 +70,24 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0) => {
                 break;
         }
     }
+    
     const sortString = sortOptions.join(", ")
     const policies = await client.query(`
-        select * from policy where assetCount>100 ORDER BY ${sortString} LIMIT $1
+        select         
+        encode("policyID",'hex') as "policyID",
+        name,
+        slug,
+        description,
+        "createdAt",
+        "isFeatured",
+        "lastMinted",
+        "lastMoved",
+        "assetCount",
+        "totalActivity",
+        "totalHits" from policy where "assetCount">100 ORDER BY ${sortString} LIMIT $1
         OFFSET $2 
     `,[perPage, perPage * page])
+    return policies.rows;
 }
 export const getPolicy = async (key) => { 
     if (validatePolicyID(key)) { 
