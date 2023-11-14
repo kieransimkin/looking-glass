@@ -3,6 +3,9 @@
 import {MediaSlide} from 'react-mediaslide'
 import Link from 'next/link';
 export default function PolicyQuickBrowse({policyID})  { 
+    if (!policies) { 
+        return <>Loading...</>
+    }
     const list = policies.map((p) => { 
         console.log(p);
         p.thumb=p.policyProfile?.thumb;
