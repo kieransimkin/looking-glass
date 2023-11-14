@@ -49,7 +49,7 @@ async function doIt() {
                 
                 let tokenData = await redis.checkCacheItem('getTokenData:'+token.unit);
                 if (!tokenData) {
-                    console.log('Skipping a token because we don\'t have cache on it');
+                    //console.log('Skipping a token because we don\'t have cache on it');
                     continue;
                 } 
                 
@@ -59,7 +59,7 @@ async function doIt() {
                     result = await libcip.getFile(token.unit, null, tokenData.metadata)
                 } catch (e) { }
                 if (!result?.buffer) {
-                    console.log('Skipping a token because I failed to get a file for it');
+                    console.log('Skipping a token because I failed to get a file for it: '+token.unit);
                     continue;
                 }
                 
@@ -83,8 +83,8 @@ async function doIt() {
             console.log('Done '+policy)
         }
         waiting.push(doPolicy(tokens));
-        if (waiting.length>999) { 
-            console.log('1000 queued, now waiting')
+        if (waiting.length>4999) { 
+            console.log('5000 queued, now waiting')
             await Promise.all(waiting);
             waiting = [];
         }
