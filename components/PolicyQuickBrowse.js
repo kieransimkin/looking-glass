@@ -1,6 +1,6 @@
 import {MediaSlide} from 'react-mediaslide'
 import Link from 'next/link';
-const PolicyQuickBrowse = ({policies}) => { 
+export default function PolicyQuickBrowse({policyID})  { 
     const list = policies.map((p) => { 
         console.log(p);
         p.thumb=p.policyProfile?.thumb;
@@ -18,11 +18,9 @@ const PolicyQuickBrowse = ({policies}) => {
         }
     }
     return (
-        
+        <div>
         <MediaSlide slideItemHTML={slideItemHTML} defaultThumbSize={100} defaultDisplayType='slide' defaultStageHidden={true} defaultNavbarHidden={true} gallery={list} />
-            
+        </div>
         
     )
 }
-PolicyQuickBrowse.displayName='PolicyQuickBrowse';
-export default PolicyQuickBrowse;
