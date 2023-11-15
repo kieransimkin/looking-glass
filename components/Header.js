@@ -398,7 +398,7 @@ const Header = (props) => {
              variant="persistent" anchor='right' open={!hide} className={className}>
                 
                 
-                        <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} onMouseLeave={()=>{if (searchFocused) return; menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose()},2000)}} >
+                        <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} >
                             <Link href="/" passHref><a>
                                 <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={()=>console.log('got here')} >
                                 
@@ -422,7 +422,7 @@ const Header = (props) => {
                                     if (searchFocused) return;
                                     menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose();},2000)
                                 }}
-                                style={{position:'relative',top:'50'}}
+                                style={{position:'relative',top:'50', zIndex:'1000000000'}}
                                 onMouseEnter={mouseEnter}
                             
                                 
@@ -435,8 +435,15 @@ const Header = (props) => {
                               
                             </NestedMenuItem>             
                                          
-                            <Link href="/wallet"><MenuItem>👥 Collectors</MenuItem></Link>
-                            <Link href="/policy"><MenuItem>📂 Creators</MenuItem></Link>
+                            <NestedMenuItem searchFocused={searchFocused} direction="left" parentMenuOpen={Boolean(anchorEl)} label="👥 Collect">
+                                {walletApi &&
+                                    <Link ><MenuItem>My Wallet</MenuItem></Link>
+                                }   
+                            
+                                <MenuItem>Live Data</MenuItem>
+
+                            </NestedMenuItem>
+                            <Link href="/policy"><MenuItem>📂 Create</MenuItem></Link>
                          
                             
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? '🌃 Dark Mode':'🔦 Light Mode'}

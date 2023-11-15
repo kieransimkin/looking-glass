@@ -24,7 +24,7 @@ export default function PolicyQuickBrowse({policies})  {
     }
     
     return (
-        <div>
+        <div style={{height:'35vh'}}>
         <MediaSlide slideItemHTML={slideItemHTML} defaultThumbSize={100} defaultDisplayType='slide' defaultStageHidden={true} defaultNavbarHidden={true} gallery={list} />
         </div>
         

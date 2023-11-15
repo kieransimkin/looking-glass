@@ -144,7 +144,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onKeyDown={handleKeyDown}
-      style={{top:'0px !important; right:0px !important;'}}
+      style={{top:'0px !important; right:0px !important; zIndex:1000000000'}}
     >
       <MenuItem
         {...MenuItemProps}
@@ -157,7 +157,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       </MenuItem>
       <Popper
                             modifiers={{offset:{offset:'-20px'}}}
-                                
+                                className='nested'
                              
                                 anchorEl={menuItemRef?.current}
                                 keepMounted
