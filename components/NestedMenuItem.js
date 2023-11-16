@@ -123,7 +123,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
 
   const open = isSubMenuOpen && parentMenuOpen
   const menuItemClasses = useMenuItemStyles({open})
-
+  const anchorRef = useRef();
   // Root element must have a `tabIndex` attribute for keyboard navigation
   let tabIndex
   if (!props.disabled) {
@@ -155,11 +155,12 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
         {label}
       <div style={iconStyle}>{icon}</div>
       </MenuItem>
+      <div ref={anchorRef} style={{position:'absolute', top:'50'}}></div>
       <Popper
                             modifiers={{offset:{offset:'-20px'}}}
                                 className='nested'
                              
-                                anchorEl={menuItemRef?.current}
+                                anchorEl={anchorRef.current}
                                 keepMounted
                                 open={open}
                                 getContentAnchorEl={null} 
@@ -168,11 +169,12 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
                                   return;
                                   
                                 }}
-                                style={{position:'relative',top:'50'}}
+                                style={{position:'relative',top:'50', zIndex:'1000000000'}}
                                 
                             
                                 
                             >
+                                                 
                              <Paper className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
                                 <MenuList>
       
