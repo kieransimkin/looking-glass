@@ -435,7 +435,7 @@ const Header = (props) => {
                                          
                             <NestedMenuItem searchFocused={searchFocused} direction="left" parentMenuOpen={Boolean(anchorEl)} label="👥 Collect">
                                 {walletApi &&
-                                    <Link ><MenuItem>My Wallet</MenuItem></Link>
+                                    <Link href="/" ><MenuItem>My Wallet</MenuItem></Link>
                                 }   
                             
                                 <MenuItem>Live Data</MenuItem>
