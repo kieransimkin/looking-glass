@@ -7,7 +7,6 @@ import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
 import sharp from 'sharp';
 import * as helpers from '../utils/Helpers.js';
-import { sleep } from '../utils/Helpers.js';
 import * as datastore from '../utils/DataStore.js'
 dotenv.config()
 let donePolicies=0;
@@ -91,7 +90,7 @@ async function doIt() {
     
         while (waiting.length-donePolicies>9) { 
             console.log((waiting.length-donePolicies)+' queued, now waiting')
-            await sleep(60000);
+            await helpers.default.sleep(60000);
         }
  
     }
