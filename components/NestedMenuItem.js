@@ -56,8 +56,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
   const menuContainerRef = useRef();
 
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
-  console.log(isSubMenuOpen)
-  console.log(containerRef.current)
+  
   const handleMouseEnter = (event) => {
     setIsSubMenuOpen(true)
 

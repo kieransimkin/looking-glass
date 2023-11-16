@@ -108,6 +108,7 @@ const Header = (props) => {
     const [wallet, setWallet] = React.useState(null);
     const [darkMode, setDarkMode] = React.useState('dark');
     const [disableLockout, setDisableLockout] = React.useState(false);
+    const [stakeAddr, setStakeAddr] = React.useState(null);
     const [walletApi, setWalletAPI] = React.useState(null);
     const [searchFocused, setSearchFocused] = React.useState(false);
     const [tanchorEl, setAnchorEl] = React.useState(null);
@@ -174,6 +175,7 @@ const Header = (props) => {
                                 connectContent: connectWallet
                             })
                             setWalletAPI(api);
+                            setStakeAddr(wallet.stakeAddrRaw);
                             setWallet(wallet.wallet);
                             })
                         } else { 
@@ -435,10 +437,10 @@ const Header = (props) => {
                                          
                             <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-collect" direction="left" parentMenuOpen={Boolean(anchorEl)} label="👥 Collect">
                                 {walletApi &&
-                                    <Link href="/" ><MenuItem>My Wallet</MenuItem></Link>
+                                    <Link href={"/wallet/"+stakeAddr} ><MenuItem>💸 My Wallet</MenuItem></Link>
                                 }   
                             
-                                <MenuItem>Live Data</MenuItem>
+                                <MenuItem>⚡ Live Feed</MenuItem>
 
                             </NestedMenuItem>
                             <Link href="/policy"><MenuItem>📂 Create</MenuItem></Link>
