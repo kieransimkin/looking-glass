@@ -7,7 +7,9 @@ const {access, symlink} = require('fs/promises')
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
-
+  eslint: { 
+    ignoreDuringBuilds: ['/data']
+  },
   //output:'standalone',
   webpack: function (config, options) {
     
