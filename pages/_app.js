@@ -41,8 +41,8 @@ function CIP54Playground({ Component, pageProps }) {
   useEffect(() => socketInitializer(), [])
 
   const socketInitializer = async () => {
-    await fetch('/api/socket');
-    socket = io('/',{transports: ["websocket", "polling"]})
+    
+    socket = io('/api/socket',{transports: ["websocket", "polling"]})
     socket.on('connect', () => {
       const engine = socket.io.engine;
 
