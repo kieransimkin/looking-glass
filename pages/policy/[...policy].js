@@ -66,7 +66,7 @@ export const getServerSideProps = async (context) => {
                 const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
                 let thumbURL;
                 if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-                    r.thumb = thumbURL;
+                    tokResult[c].thumb = thumbURL;
                 }   
             }
             if (!failed) { 
