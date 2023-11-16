@@ -157,7 +157,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       </MenuItem>
       <Popper
                             modifiers={{offset:{offset:'-20px'},'computeStyles': {
-        gpuAcceleration: false, // true by default
+        gpuAcceleration: true, // true by default
         adaptive: true
       },
     }}
