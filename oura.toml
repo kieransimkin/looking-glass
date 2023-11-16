@@ -4,12 +4,11 @@ address = ["Tcp", "localhost:3001"]
 magic = "mainnet"
 
 [[filters]]
-type = "Fingerprint"
-
-[[filters]]
 type = "Selection"
+
+[filters.check]
 predicate = "variant_in"
-argument = ["Block", "Mint", "OutputAsset"]
+argument = ["Block", "Transaction"]
 
 [sink]
 type = "Webhook"

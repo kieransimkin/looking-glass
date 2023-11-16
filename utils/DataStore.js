@@ -12,7 +12,7 @@ const getDataLocation = (key, type) => {
 
 export const getDataURL = (key, type) => { 
     const loc = getDataLocation(key,type);
-    if (fs.existsSync(process.cwd()+'/public'+loc)) { 
+    if (fs.existsSync(process.cwd()+loc)) { 
         return encodeURI(loc)
     } else { 
         return null;
@@ -33,12 +33,12 @@ export const saveSend = (key, type, data, res, contentType='image/jpg') => {
 
 export const sendData = (key, type, res, contentType='image/jpg') => { 
     const loc = getDataLocation(key, type);
-    const data = fs.readFileSync(process.cwd()+'/public'+loc);
+    const data = fs.readFileSync(process.cwd()+loc);
     res.setHeader('Content-type',contentType).status(200).send(data);
 }
 
 export const writeFile = (key, type, data) => { 
     const loc = getDataLocation(key,type);
-    fs.mkdirSync(process.cwd()+'/public'+path.dirname(loc),{recursive:true,mode:parseInt('0775',8)});
-    fs.writeFileSync(process.cwd()+'/public'+loc, data, {mode:parseInt('0664',8),flush:true});
+    fs.mkdirSync(process.cwd()+path.dirname(loc),{recursive:true,mode:parseInt('0775',8)});
+    fs.writeFileSync(process.cwd()+loc, data, {mode:parseInt('0664',8),flush:true});
 }
