@@ -8,7 +8,7 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   eslint: { 
-    ignorePatterns: ['/data/*']
+    dirs: ['/components','/pages','/models','/scripts','/types','/utils']
   },
   //output:'standalone',
   webpack: function (config, options) {
