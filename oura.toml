@@ -6,6 +6,11 @@ magic = "mainnet"
 [[filters]]
 type = "Fingerprint"
 
+[[filters]]
+type = "Selection"
+predicate = "variant_in"
+argument = ["Block", "Mint", "OutputAsset"]
+
 [sink]
 type = "Webhook"
 url = "https://clg.wtf/api/oura"
