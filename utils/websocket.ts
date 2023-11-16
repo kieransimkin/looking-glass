@@ -60,6 +60,7 @@ console.log('got connection');
 export const authorization = async (data: any, accept: any) => { 
     let accessToken = null;
     return accept();
+    /*
     if (data.handshake.headers.cookie) { 
         const cookies = cookie.parse(data.handshake.headers.cookie);
         accessToken = cookies.token;
@@ -87,7 +88,8 @@ export const authorization = async (data: any, accept: any) => {
             data.conn.close();
         }, 1000)
     }
-    */
+    
     return accept();
+    //*/
 }
 
