@@ -156,14 +156,15 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
       <div style={iconStyle}>{icon}</div>
       </MenuItem>
       <div ref={anchorRef} style={{position:'absolute', top:'50'}}></div>
+      <div style={{position:'relative', display:'block'}}>
       <Popper
                             modifiers={{offset:{offset:'-20px'}}}
                                 className='nested'
                              
-                                anchorEl={anchorRef.current}
+                                anchorEl={menuItemRef?.current}
                                 keepMounted
                                 open={open}
-                                getContentAnchorEl={null} 
+                                
                                 placement='right'
                                 onMouseLeave={()=>{ 
                                   return;
@@ -182,7 +183,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
           {children}
         </div>
       
-      </MenuList></Paper></Popper>
+      </MenuList></Paper></Popper></div>
     </div>
   )
 })
