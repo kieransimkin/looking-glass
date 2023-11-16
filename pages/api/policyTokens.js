@@ -3,6 +3,7 @@ import pgClient from "../../utils/dbsync";
 import {getClient, checkCacheItem, cacheItem} from "../../utils/redis";
 import { getTokenData } from "../../utils/formatter";
 import { setPolicyAssetCount } from "../../utils/database";
+import { getDataURL } from "../../utils/DataStore";
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
@@ -30,5 +31,12 @@ export default async function Browse(req, res) {
         promises.push(getTokenData(token));
     }
     const result = await Promise.all(promises)
+    for (const r of result) { 
+        const thumbName = 'tokenThumb:'+r.unit+':500:dark';
+        let thumbURL;
+        if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+            r.thumb = thumbURL;
+        }
+    }
     res.status(200).json({tokens:result, page, start, end, totalPages, perPage });
 }

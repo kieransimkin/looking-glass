@@ -3,6 +3,7 @@ import pgClient from "../../utils/dbsync";
 import {getClient, checkCacheItem, cacheItem} from "../../utils/redis";
 import { getTokenData } from "../../utils/formatter";
 import { getWallet } from "../../utils/database";
+import { getDataURL } from "../../utils/DataStore";
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
@@ -29,12 +30,19 @@ export default async function Browse(req, res) {
     tokens = tokens.slice(start, end);
     
     const promises = [];
-    for (const token of tokens) { 
-        promises.push(getTokenData(token));
+    for (const token of tokens) {
+        const tD = getTokenData(token)
+        promises.push(tD);
     }
     
     const result = await Promise.all(promises)
-    
+    for (const r of result) { 
+        const thumbName = 'tokenThumb:'+r.unit+':500:dark';
+        let thumbURL;
+        if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+            r.thumb = thumbURL;
+        }
+    }
     if (!wallet.profileUnit && uncached) { 
         wallet.setProfileUnit(presliced);
     }
