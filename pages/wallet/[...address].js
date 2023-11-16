@@ -17,6 +17,7 @@ import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
 import LoadingTicker from '../../components/LoadingTicker';
 import Link from 'next/link';
+import { getDataURL } from '../../utils/DataStore';
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let result = await getWallet(context.query.address[0]);
@@ -61,6 +62,11 @@ export const getServerSideProps = async (context) => {
                 if (!tokResult[c]) { 
                     failed=true;
                     break;
+                }
+                const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
+                let thumbURL;
+                if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                    r.thumb = thumbURL;
                 }
             }
             if (!failed) { 

@@ -18,6 +18,7 @@ import { checkCacheItem, incrementCacheItem, getClient } from '../../utils/redis
 import { getPolicy} from '../../utils/database';
 import { getTokenData } from '../../utils/formatter';
 import LoadingTicker from '../../components/LoadingTicker';
+import { getDataURL } from '../../utils/DataStore';
 
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
@@ -62,6 +63,11 @@ export const getServerSideProps = async (context) => {
                     failed=true;
                     break;
                 }
+                const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
+                let thumbURL;
+                if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                    r.thumb = thumbURL;
+                }   
             }
             if (!failed) { 
                 props.gallery={tokens:tokResult, page:0, start:0, end:perPage, totalPages: Math.ceil(tokens.length/perPage), perPage: perPage};
