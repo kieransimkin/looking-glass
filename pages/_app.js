@@ -10,6 +10,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { useEffect, useState } from 'react'
 import io from 'socket.io-client'
 let socket;
+import { getData } from '../utils/Api';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
