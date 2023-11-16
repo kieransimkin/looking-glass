@@ -14,7 +14,7 @@ async function doIt() {
     //console.log(syncClient.default.query);
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
-    select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", random() from policy where "totalActivity"!=0 AND "isFeatured"=true order by random() 
+    select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", "isFeatured", random() from policy where "totalActivity"!=0 AND order by "isFeatured" desc, random() 
     `,[])
     let doneTokens = 0;
     let waiting = [];
@@ -83,8 +83,8 @@ async function doIt() {
             console.log('Done '+policy)
         }
         waiting.push(doPolicy(tokens));
-        if (waiting.length>4999) { 
-            console.log('5000 queued, now waiting')
+        if (waiting.length>9) { 
+            console.log('10 queued, now waiting')
             await Promise.all(waiting);
             waiting = [];
         }
