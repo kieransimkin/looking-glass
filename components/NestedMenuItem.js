@@ -155,10 +155,12 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
         {label}
       <div style={iconStyle}>{icon}</div>
       </MenuItem>
-      <div ref={anchorRef} style={{position:'absolute', top:'50'}}></div>
-      <div style={{position:'relative', display:'block'}}>
       <Popper
-                            modifiers={{offset:{offset:'-20px'}}}
+                            modifiers={{offset:{offset:'-20px'},'computeStyles': {
+        gpuAcceleration: false, // true by default
+        adaptive: true
+      },
+    }}
                                 className='nested'
                              
                                 anchorEl={menuItemRef?.current}
@@ -183,7 +185,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
           {children}
         </div>
       
-      </MenuList></Paper></Popper></div>
+      </MenuList></Paper></Popper>
     </div>
   )
 })
