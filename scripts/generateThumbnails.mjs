@@ -91,7 +91,6 @@ async function doIt() {
         while (waiting.length-donePolicies>9) { 
             console.log((waiting.length-donePolicies)+' queued, now waiting')
             await sleep(60000);
-            continue;
         }
  
     }
