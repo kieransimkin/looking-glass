@@ -427,13 +427,13 @@ const Header = (props) => {
                             >
                              <Paper id="menupaper" className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
                                 <MenuList>
-                            <NestedMenuItem searchFocused={searchFocused} direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
+                            <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-searchbox" direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
                                 <MenuItem><SearchBox width={300} autoComplete='off' autoFocus={false} onFocus={()=>setSearchFocused(true)} onBlur={()=>setSearchFocused(false)} /></MenuItem>
                                
                               
                             </NestedMenuItem>             
                                          
-                            <NestedMenuItem searchFocused={searchFocused} direction="left" parentMenuOpen={Boolean(anchorEl)} label="👥 Collect">
+                            <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-collect" direction="left" parentMenuOpen={Boolean(anchorEl)} label="👥 Collect">
                                 {walletApi &&
                                     <Link href="/" ><MenuItem>My Wallet</MenuItem></Link>
                                 }   

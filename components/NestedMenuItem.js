@@ -33,6 +33,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
     children,
     onClick,
     className,
+    paperClassName,
     tabIndex: tabIndexProp,
     MenuProps = {},
     ContainerProps: ContainerPropsProp = {},
@@ -174,7 +175,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
                                 
                             >
                                                  
-                             <Paper className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
+                             <Paper className={clsx('menupaper', paperClassName)}>
                                 <MenuList>
       
         <div ref={menuContainerRef} style={{pointerEvents: 'auto'}}>
