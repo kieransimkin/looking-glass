@@ -9,6 +9,7 @@ import sharp from 'sharp';
 import * as helpers from '../utils/Helpers.js';
 import * as datastore from '../utils/DataStore.js'
 dotenv.config()
+let donePolicies=0;
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
@@ -36,6 +37,7 @@ async function doIt() {
 
        const doPolicy = async (tokens) => {
         console.log('Doing a policy');
+        
         for (var token of tokens) { 
             doneTokens++;
             try { 
@@ -80,13 +82,16 @@ async function doIt() {
                     console.error(e);
                 }
             }
+            donePolicies++;
             console.log('Done '+policy)
         }
         waiting.push(doPolicy(tokens));
-        if (waiting.length>9) { 
-            console.log('10 queued, now waiting')
-            await Promise.all(waiting);
-            waiting = [];
+        
+    
+        while (waiting.length-donePolicies>9) { 
+            console.log((waiting.length-donePolicies)+' queued, now waiting')
+            await sleep(60000);
+            continue;
         }
  
     }
