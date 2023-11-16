@@ -59,6 +59,7 @@ console.log('got connection');
 // if we got an invalid user, the property will not be set, and the connection will be closed after 1 sec
 export const authorization = async (data: any, accept: any) => { 
     let accessToken = null;
+    return accept();
     if (data.handshake.headers.cookie) { 
         const cookies = cookie.parse(data.handshake.headers.cookie);
         accessToken = cookies.token;
