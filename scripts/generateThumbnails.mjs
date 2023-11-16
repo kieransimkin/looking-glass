@@ -75,7 +75,7 @@ async function doIt() {
                 
                 datastore.default.saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:'#040302'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
                 
-                
+                console.log("File saved: "+name+'.jpg')
                 } catch (e) { 
                     console.error(e);
                 }
