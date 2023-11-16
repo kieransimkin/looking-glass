@@ -26,7 +26,7 @@ import WalletContext from '../components/WalletContext';
 import { Drawer, MenuList, Paper } from '@material-ui/core';
 import { HelpOutline, HelpTwoTone, Home, KingBed, SportsKabaddi } from '@material-ui/icons';
 import NestedMenuItem from './NestedMenuItem';
-import ExamplesMenuItems from './ExamplesMenuItems';
+
 import eventBus from '../utils/EventBus';
 import LaunchpadMenuItems from './LaunchpadMenuItems';
 import { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } from 'next/dist/shared/lib/constants';
