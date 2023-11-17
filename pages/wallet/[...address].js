@@ -20,22 +20,25 @@ import Link from 'next/link';
 import { getDataURL } from '../../utils/DataStore';
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
-    let result = await getWallet(context.query.address[0]);
+    let wallet = context.query.address[0];
+    const segs = wallet.split('.');
+    wallet = segs[0];
+    let result = await getWallet(wallet);
     let props = {};
 
     if (result) { 
-        if (result.slug != result.stake && context.query.address[0]!=result.slug) { 
+        if (result.slug != result.stake && wallet!=result.slug) { 
             return {
                 redirect: {
-                    destination: '/wallet/'+result.slug,
+                    destination: '/wallet/'+result.slug+(segs[1]?.length?'.'+segs[1]:''),
                     permanent: true
                 }
             }
         }
-        if (result.stake != context.query.address[0] && context.query.address[0]!=result.slug) { 
+        if (result.stake != wallet && wallet!=result.slug) { 
             return {
                 redirect: {
-                    destination: '/wallet/'+result.stake,
+                    destination: '/wallet/'+result.stake+(segs[1]?.length?'.'+segs[1]:''),
                     permanent: true
                 }
             }
@@ -63,10 +66,12 @@ export const getServerSideProps = async (context) => {
                     failed=true;
                     break;
                 }
-                const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
-                let thumbURL;
-                if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-                    tokResult[c].thumb = thumbURL;
+                if (process.env.NODE_ENV=='production') { 
+                    const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
+                    let thumbURL;
+                    if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                        tokResult[c].thumb = thumbURL;
+                    }
                 }
             }
             if (!failed) { 
@@ -81,7 +86,7 @@ export const getServerSideProps = async (context) => {
 
 export default  function CIP54Playground(props) {
     const dbWallet = props.wallet;
- 
+    
     const router = useRouter();
     let address = props.wallet.stake;
     const [gallery, setGallery] = useState(props.gallery);
@@ -128,7 +133,6 @@ export default  function CIP54Playground(props) {
     if (gallery) {
         newGallery=gallery.tokens.map((i)=>{
         i.linkUrl='/policy/'+i.unit.substring(0,56)+'.'+i.unit.substr(56);
-        console.log(i.linkUrl);
         return i;
         })
     }
@@ -138,6 +142,13 @@ export default  function CIP54Playground(props) {
             // The 60 below is the number of pixels we reserve in the slide bar for the label
             return <li key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
         }
+    }
+    const selectionChange = (item) => { 
+        console.log(item);
+        router.push({
+            pathname: '/wallet/'+address+'.'+item.unit,
+            query: {  }
+        }, undefined, {shallow:true})
     }
     /*
     
@@ -163,7 +174,7 @@ export default  function CIP54Playground(props) {
 
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide slideItemHTML={slideItemHTML} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide slideItemHTML={slideItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }

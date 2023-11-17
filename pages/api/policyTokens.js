@@ -31,11 +31,13 @@ export default async function Browse(req, res) {
         promises.push(getTokenData(token));
     }
     const result = await Promise.all(promises)
-    for (const r of result) { 
-        const thumbName = 'tokenThumb:'+r.unit+':500:dark';
-        let thumbURL;
-        if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-            r.thumb = thumbURL;
+    if (process.env.NODE_ENV=='production') { 
+        for (const r of result) { 
+            const thumbName = 'tokenThumb:'+r.unit+':500:dark';
+            let thumbURL;
+            if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                r.thumb = thumbURL;
+            }
         }
     }
     res.status(200).json({tokens:result, page, start, end, totalPages, perPage });

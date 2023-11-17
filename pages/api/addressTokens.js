@@ -36,11 +36,13 @@ export default async function Browse(req, res) {
     }
     
     const result = await Promise.all(promises)
-    for (const r of result) { 
-        const thumbName = 'tokenThumb:'+r.unit+':500:dark';
-        let thumbURL;
-        if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-            r.thumb = thumbURL;
+    if (process.env.NODE_ENV=='production') { 
+        for (const r of result) { 
+            const thumbName = 'tokenThumb:'+r.unit+':500:dark';
+            let thumbURL;
+            if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                r.thumb = thumbURL;
+            }
         }
     }
     if (!wallet.profileUnit && uncached) { 

@@ -22,24 +22,21 @@ import { getDataURL } from '../../utils/DataStore';
 
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
-    console.log(context);
     let policy = context.query.policy[0];
     const segs = policy.split('.');
     policy = segs[0];
+    const token = segs[1];
     let result = await getPolicy(policy);
     let props = {};
-
     if (result) { 
-
         if (result.slug != policy && context.query.policy[0]!=result.slug) { 
             return {
                 redirect: {
-                    destination: '/policy/'+result.slug+(segs[1]?.length?'.'+segs[1]:''),
+                    destination: '/policy/'+result.slug+(token?'.'+token:''),
                     permanent: true
                 }
             }
         }
-        
         props.policy = JSON.parse(JSON.stringify(result));
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
@@ -51,7 +48,15 @@ export const getServerSideProps = async (context) => {
                 await setPolicyAssetCount(result.policyID, tokens.length);
             }
             const perPage = 10;
-            tokens = tokens.slice(0, perPage);       
+            let page = 0;
+            let start=0,end=perPage;
+            if (token) { 
+                const idx = tokens.findIndex((i)=>i.unit==props.policy.policyID+token);
+                page = Math.floor(idx/perPage);
+                start = page*perPage;
+                end = (page+1)*perPage;
+            }
+            tokens = tokens.slice(start, end);
             const promises = [];
             for (const token of tokens) { 
                 promises.push(getTokenData(token,true));
@@ -63,14 +68,19 @@ export const getServerSideProps = async (context) => {
                     failed=true;
                     break;
                 }
-                const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
-                let thumbURL;
-                if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-                    tokResult[c].thumb = thumbURL;
-                }   
+                if (token && tokResult[c].unit==props.policy.policyID+token) { 
+                    props.token=tokResult[c];
+                }
+                if (process.env.NODE_ENV=='production') { 
+                    const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
+                    let thumbURL;
+                    if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                        tokResult[c].thumb = thumbURL;
+                    }   
+                }
             }
             if (!failed) { 
-                props.gallery={tokens:tokResult, page:0, start:0, end:perPage, totalPages: Math.ceil(tokens.length/perPage), perPage: perPage};
+                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: Math.ceil(tokens.length/perPage), perPage: perPage};
             }
         }
     }
@@ -133,36 +143,61 @@ export default  function CIP54Playground(props) {
     /*
     
     */
-   console.log(props);
-   const title = props.policy.name+" - Cardano Looking Glass - clg.wtf"
-   let newGallery = null;
-   if (gallery) {
-    newGallery=gallery.tokens.map((i)=>{
-    i.linkUrl='/policy/'+props.policy.slug+'.'+i.unit.substr(56);
-    console.log(i.linkUrl);
-    return i;
-    })
-}
+   
+    let title = props.policy.name+" - Cardano Looking Glass - clg.wtf"
+    let description = props.policy.description;
+    let unit = props.policyProfile;
+    let url = "https://clg.wtf/policy/"+props.policy.slug;
+    
+    if (props.token) { 
+        title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
+        url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);
+        unit = props.token.unit;
+    }
+    let image = "https://clg.wtf/api/getTokenThumb?unit="+unit;
+    if (process.env.NODE_ENV=='production') { 
+        const thumbName = 'tokenThumb:'+unit+':500:dark';
+        let thumbURL;
+        if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+            image = thumbURL;
+        }   
+    }
+    
+    let newGallery = null;
+    if (gallery) {
+        newGallery=gallery.tokens.map((i)=>{
+            i.linkUrl='/policy/'+props.policy.slug+'.'+i.unit.substr(56);
+            return i;
+        })
+    }
+
+    const selectionChange = (item) => { 
+        
+        router.push({
+            pathname: '/policy/'+props.policy.slug+'.'+item.unit.substr(56),
+            query: {  }
+        }, undefined, {shallow:true})
+    }
     return (
         <>
             <Head>
                 <title>{title}</title>
-                <meta name="description" content={props.policy.description} />
+                <meta name="description" content={description} />
+                <meta property="og:description" content={description} />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content={"https://clg.wtf/policy/"+props.policy.slug} />
-                <meta property="og:site_name" content="Cardano Looking Glass" />
                 <meta property="og:title" content={title} />
-                <meta property="og:description" content={props.policy.description} />
-                <meta property="og:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.policyProfile} />
-                <meta name="twitter:card" content="summary_large_image" />
+                <meta property="og:site_name" content="Cardano Looking Glass" />
+                <meta property="og:url" content={url} />
+                <meta property="og:image" content={image} />
+                <meta property="twitter:url" content={url} />
                 <meta property="twitter:domain" content="clg.wtf" />
-                <meta property="twitter:url" content={"https://clg.wtf/policy/"+props.policy.slug} />
+                <meta name="twitter:image" content={image} />
                 <meta name="twitter:title" content={title} />
-                <meta name="twitter:description" content={props.policy.description} />
-                <meta name="twitter:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.policyProfile} />
+                <meta name="twitter:description" content={description} />
+                <meta name="twitter:card" content="summary_large_image" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide slideItemHTML={slideItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
