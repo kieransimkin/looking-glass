@@ -10,6 +10,9 @@ const nextConfig = {
   eslint: { 
     dirs: ['/components','/pages','/models','/scripts','/types','/utils']
   },
+  env: { 
+    'SOCKET_PORT':process.env.SOCKET_PORT
+  },
   //output:'standalone',
   webpack: function (config, options) {
     

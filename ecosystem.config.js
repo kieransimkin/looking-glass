@@ -58,6 +58,13 @@ module.exports = {
             instances:'1',
             args:'scripts/generateThumbnails.mjs',
             name:'generateThumbnails'
+        },
+        {
+          script:'npm run socket',
+          instances:'1',
+          args:'scripts/socket.mjs',
+          name:'socket',
+          env: getEnvVariables()
         }
 	],
 }
