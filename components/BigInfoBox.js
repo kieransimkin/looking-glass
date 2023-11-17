@@ -35,7 +35,7 @@ export default function BigInfoBox ({item}) {
     useEffect(() => { 
         if (imgRef.current) { 
             if (imgRef.current.complete) { 
-                setTimeout(()=>{load();},0);
+                setTimeout(()=>{load();},100);
             } else { 
                 imgRef.current.addEventListener('load', load);
             }
