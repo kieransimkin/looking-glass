@@ -67,6 +67,7 @@
     "node_modules",
     "dist",
     "build",
+    "data",
     "**/__tests__/*"
   ]
 }
