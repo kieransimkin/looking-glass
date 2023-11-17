@@ -7,9 +7,6 @@ const {access, symlink} = require('fs/promises')
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
-  eslint: { 
-    dirs: ['/components','/pages','/models','/scripts','/types','/utils']
-  },
   env: { 
     'SOCKET_PORT':process.env.SOCKET_PORT
   },
