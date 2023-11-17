@@ -25,7 +25,6 @@ export default function BigInfoBox ({item}) {
         setTimeout(() => { 
             setHeight(imgRef.current.offsetHeight);
             setWidth(imgRef.current.offsetWidth)
-            console.log(imgRef.current.clientWidth);
             setLoaded(true);
         },0) 
         
@@ -35,8 +34,11 @@ export default function BigInfoBox ({item}) {
     },[item])
     useEffect(() => { 
         if (imgRef.current) { 
-            imgRef.current.addEventListener('load', load);
-            console.log('got here');
+            if (imgRef.current.complete) { 
+                setTimeout(()=>{load();},0);
+            } else { 
+                imgRef.current.addEventListener('load', load);
+            }
         }
         
         setMetadataContent(null)
@@ -46,12 +48,9 @@ export default function BigInfoBox ({item}) {
         metadataRef.current.querySelectorAll('.jsontree_value_boolean').forEach((div)=>div.style.color='#ff0000')
         metadataRef.current.querySelectorAll('.jsontree_value_null').forEach((div)=>div.style.color='#ff0000')
         setOwnerList([])
-        
         setPortalOpacity(0);
         if (loaded) {
-            console.log(width,height);
             tokenPortal(item,readyCallback, width, height).then((h) => { 
-                console.log('got here 2');
                 setPortalHTML(h);
             })
         }

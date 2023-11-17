@@ -162,7 +162,7 @@ export default  function CIP54Playground(props) {
     let description = props.policy.description;
     let url = "https://clg.wtf/policy/"+props.policy.slug;
     let image = props.policyProfileThumb;
-    let initialSelection = gallery[0];
+    let initialSelection = gallery?gallery[0]:null;
     if (props.token) { 
         title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
         url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);
