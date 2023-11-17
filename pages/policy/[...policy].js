@@ -23,10 +23,21 @@ import { getDataURL } from '../../utils/DataStore';
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let policy = context.query.policy[0];
+    console.log('Policy: '+policy);
     const segs = policy.split('.');
-    policy = segs[0];
-    const token = segs[1];
+    let token = segs.length>1?segs[segs.length-1]:null;
+    if (token) { 
+        policy = policy.substr(0,policy.length-(token.length+1));
+    }
+    console.log('Token '+token)
+    console.log(policy);
     let result = await getPolicy(policy);
+    if (!result && token) { 
+        token=null;
+        policy = context.query.policy[0];
+        result = await getPolicy(policy);
+    }
+    console.log(result);
     let props = {};
     if (result) { 
         if (result.slug != policy && context.query.policy[0]!=result.slug) { 
