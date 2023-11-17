@@ -22,8 +22,16 @@ export const getServerSideProps = async (context) => {
     const redisClient = await getClient();
     let wallet = context.query.address[0];
     const segs = wallet.split('.');
-    wallet = segs[0];
+    let token = segs.length>1?segs[segs.length-1]:null;
+    if (token) { 
+        wallet = wallet.substr(0,wallet.length-(token.length+1));
+    }
     let result = await getWallet(wallet);
+    if (!result && token) { 
+        token = null;
+        wallet = context.query.address[0];
+        let result = await getWallet(wallet);
+    }
     let props = {};
 
     if (result) { 
