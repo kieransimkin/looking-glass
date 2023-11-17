@@ -39,6 +39,13 @@ export const getServerSideProps = async (context) => {
         }
         props.policy = JSON.parse(JSON.stringify(result));
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
+        if (process.env.NODE_ENV=='production' && props.policyProfile) { 
+            const thumbName = 'tokenThumb:'+props.policyProfile+':500:dark';
+            let thumbURL;
+            if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                props.policyProfileThumb = thumbURL;
+            }   
+        }
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
         await incrementCacheItem('policyHits:'+result.policyID);
         await incrementCacheItem('policyRecentHits:'+result.policyID, 3600);
@@ -68,15 +75,15 @@ export const getServerSideProps = async (context) => {
                     failed=true;
                     break;
                 }
-                if (token && tokResult[c].unit==props.policy.policyID+token) { 
-                    props.token=tokResult[c];
-                }
                 if (process.env.NODE_ENV=='production') { 
                     const thumbName = 'tokenThumb:'+tokResult[c].unit+':500:dark';
                     let thumbURL;
                     if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                         tokResult[c].thumb = thumbURL;
                     }   
+                }
+                if (token && tokResult[c].unit==props.policy.policyID+token) { 
+                    props.token=tokResult[c];
                 }
             }
             if (!failed) { 
@@ -148,19 +155,12 @@ export default  function CIP54Playground(props) {
     let description = props.policy.description;
     let unit = props.policyProfile;
     let url = "https://clg.wtf/policy/"+props.policy.slug;
-    
+    let image = props.policyProfileThumb;
     if (props.token) { 
         title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
         url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);
         unit = props.token.unit;
-    }
-    let image = "https://clg.wtf/api/getTokenThumb?unit="+unit;
-    if (process.env.NODE_ENV=='production') { 
-        const thumbName = 'tokenThumb:'+unit+':500:dark';
-        let thumbURL;
-        if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-            image = thumbURL;
-        }   
+        image = props.token.thumb;
     }
     
     let newGallery = null;
