@@ -14,6 +14,7 @@ export default function BigInfoBox ({item}) {
     const [portalOpacity, setPortalOpacity] = useState(0);
     const [width, setWidth] = useState(null);
     const [height, setHeight] = useState(null);
+    const [metadataContent, setMetadataContent] = useState(<pre>{JSON.stringify(item.metadata,null,'  ')}</pre>)
     const metadataRef = useRef();
     const imgRef = useRef();
     
@@ -35,7 +36,10 @@ export default function BigInfoBox ({item}) {
     useEffect(() => { 
         if (imgRef.current) { 
             imgRef.current.addEventListener('load', load);
+            console.log('got here');
         }
+        
+        setMetadataContent(null)
         const tree = JsonTree.create(item.metadata, metadataRef.current)
         metadataRef.current.querySelectorAll('.jsontree_value_string').forEach((div)=>div.style.color=theme.palette.primary.main)
         metadataRef.current.querySelectorAll('.jsontree_value_number').forEach((div)=>div.style.color='#ff0000')
@@ -47,6 +51,7 @@ export default function BigInfoBox ({item}) {
         if (loaded) {
             console.log(width,height);
             tokenPortal(item,readyCallback, width, height).then((h) => { 
+                console.log('got here 2');
                 setPortalHTML(h);
             })
         }
@@ -65,7 +70,7 @@ export default function BigInfoBox ({item}) {
             if (metadataRef.current)  metadataRef.current.innerHTML='';
         }
     },[item,loaded, width, height])
-    
+    // Todo format the initial metadata JSON better for SEO reasons
     return <div style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}><div style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
     
         <img ref={imgRef} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible'}} />
@@ -88,6 +93,7 @@ export default function BigInfoBox ({item}) {
         
         <h2 style={{margin:0}}>Metadata:</h2>
         <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
+        {metadataContent}
         </div>
         
 }

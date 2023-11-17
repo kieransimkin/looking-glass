@@ -63,6 +63,7 @@ export const getServerSideProps = async (context) => {
                 start = page*perPage;
                 end = (page+1)*perPage;
             }
+            const totalPages = Math.ceil(tokens.length/perPage);
             tokens = tokens.slice(start, end);
             const promises = [];
             for (const token of tokens) { 
@@ -87,7 +88,7 @@ export const getServerSideProps = async (context) => {
                 }
             }
             if (!failed) { 
-                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: Math.ceil(tokens.length/perPage), perPage: perPage};
+                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: totalPages, perPage: perPage};
             }
         }
     }
@@ -122,17 +123,23 @@ export default  function CIP54Playground(props) {
     if (!dbPolicy) { 
         return <h1>Policy Not Found</h1>
     }
-    const renderBigInfo = async (i) => { 
+    const renderBigInfo = (i) => { 
         
         return <BigInfoBox item={i} />
     }
-    const loadMoreData = ({page}) => { 
+    const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
-        getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+1)).then((d)=>{
+        getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+offset)).then((d)=>{
             d.json().then((j) => { 
-                const newArray = [...gallery.tokens];
-                newArray.push(...j.tokens);
+                let newArray;
+                if (offset>0) { 
+                    newArray = [...gallery.tokens];
+                    newArray.push(...j.tokens);
+                } else { 
+                    newArray = [...j.tokens];
+                    newArray.push(...gallery.tokens);
+                }
                 setGallery({tokens:newArray,page:j.page, totalPages: j.totalPages});
                 setMediaSlideLoading(false);   
             });
@@ -153,14 +160,14 @@ export default  function CIP54Playground(props) {
    
     let title = props.policy.name+" - Cardano Looking Glass - clg.wtf"
     let description = props.policy.description;
-    let unit = props.policyProfile;
     let url = "https://clg.wtf/policy/"+props.policy.slug;
     let image = props.policyProfileThumb;
+    let initialSelection = gallery[0];
     if (props.token) { 
         title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
         url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);
-        unit = props.token.unit;
         image = props.token.thumb;
+        initialSelection=props.token;
     }
     
     let newGallery = null;
@@ -197,7 +204,7 @@ export default  function CIP54Playground(props) {
                 <meta name="twitter:card" content="summary_large_image" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide slideItemHTML={slideItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide initialSelection={initialSelection} slideItemHTML={slideItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
