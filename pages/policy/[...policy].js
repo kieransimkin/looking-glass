@@ -110,11 +110,11 @@ export default  function CIP54Playground(props) {
     useEffect(() => { 
         if (!policy || policy=='') return;
         if (gallery) return;
-        setMediaSlideLoading(true);
+        
         getData('/policyTokens?policy='+policy).then((d)=>{
             d.json().then((j) => { 
                 setGallery(j);
-                setMediaSlideLoading(false);
+        
             });
             
         });
@@ -129,7 +129,7 @@ export default  function CIP54Playground(props) {
     }
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
-        setMediaSlideLoading(true);
+        
         getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+offset)).then((d)=>{
             d.json().then((j) => { 
                 let newArray;
