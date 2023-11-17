@@ -109,7 +109,7 @@ export default  function CIP54Playground(props) {
     if (!dbWallet) { 
         return <h1>Wallet Not Found</h1>
     }
-    const renderBigInfo = async (i) => { 
+    const renderBigInfo = (i) => { 
         
         return <BigInfoBox item={i} />
     }
