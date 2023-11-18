@@ -61,8 +61,16 @@ export const getServerSideProps = async (context) => {
         await redisClient.lPush('lg:walletHitLog:'+result.stake, JSON.stringify(Date.now()))
         if (tokens) { 
             const perPage = 10;
-            const totalPages =  Math.ceil(tokens.length/perPage)
-            tokens = tokens.slice(0, perPage);       
+            let page = 0;
+            let start=0,end=perPage;
+            if (token) { 
+                const idx = tokens.findIndex((i)=>i.unit==token);
+                page = Math.floor(idx/perPage);
+                start = page*perPage;
+                end = (page+1)*perPage;
+            }
+            const totalPages = Math.ceil(tokens.length/perPage);
+            tokens = tokens.slice(start, end);
             const promises = [];
             for (const token of tokens) { 
                 promises.push(getTokenData(token,true));
@@ -79,11 +87,14 @@ export const getServerSideProps = async (context) => {
                     let thumbURL;
                     if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                         tokResult[c].thumb = thumbURL;
-                    }
+                    }   
+                }
+                if (token && tokResult[c].unit==props.policy.policyID+token) { 
+                    props.token=tokResult[c];
                 }
             }
             if (!failed) { 
-                props.gallery={tokens:tokResult, page:0, start:0, end:perPage, totalPages, perPage: perPage};
+                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: totalPages, perPage: perPage};
             }
         }
     }
@@ -124,10 +135,16 @@ export default  function CIP54Playground(props) {
     const loadMoreData = ({page}) => { 
         if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
-        getData('/addressTokens?address='+address+'&page='+(parseInt(page)+1)).then((d)=>{
+        getData('/addressTokens?address='+address+'&page='+(parseInt(page)+offset)).then((d)=>{
             d.json().then((j) => { 
-                const newArray = [...gallery.tokens];
-                newArray.push(...j.tokens);
+                let newArray;
+                if (offset>0) { 
+                    newArray = [...gallery.tokens];
+                    newArray.push(...j.tokens);
+                } else { 
+                    newArray = [...j.tokens];
+                    newArray.push(...gallery.tokens);
+                }
                 setGallery({tokens:newArray,page:j.page, totalPages: j.totalPages});
                 setMediaSlideLoading(false);   
             });
@@ -136,6 +153,7 @@ export default  function CIP54Playground(props) {
         console.log('Called outer load more data function');
         
     }
+
     const title = props.wallet.name+" - Cardano Looking Glass - clg.wtf"
     let newGallery = null;
     if (gallery) {
