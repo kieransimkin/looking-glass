@@ -6,8 +6,8 @@
   "author": "Kieran Simkin <382129+kieransimkin@users.noreply.github.com>",
   "license": "BSD-3-Clause-Attribution",
   "scripts": {
-    "dev": "rm -rfv node_modules/.cache/* && next dev",
-    "build": "rm -rfv node_modules/.cache/* && next build",
+    "dev": "rm -rfv node_modules/.cache/* && next dev &&",
+    "build": "bash -c \"rm -rfv node_modules/.cache/* && pushd submodules/libcip54 && npm run build && pushd .. && pushd SmartNFTPortal && npm run build && pushd ../.. && next build\"",
     "export": "next export",
     "start": "next start",
     "lint": "next lint ",

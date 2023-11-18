@@ -18,7 +18,7 @@
         "node_modules/*"
       ]
     },
-    "module": "esnext",
+    "module": "NodeNext",
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitUseStrict": false,
