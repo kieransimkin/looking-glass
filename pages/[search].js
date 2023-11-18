@@ -16,7 +16,7 @@ export async function getStaticPaths() {
     const fs = require('fs');
     //fs.readFileSync()
     return {
-      paths: [{ params: { search: '$adawhale' } },{params:{ search:'$kieran' } }],
+      paths: [],
       fallback: true, // can also be true or 'blocking'
     }
   }
