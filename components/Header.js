@@ -31,6 +31,7 @@ import { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } from 'next/dist/shared/lib/const
 import SearchBox from './SearchBox';
 import {Popper} from '@material-ui/core';
 import { NextCookies } from 'next/dist/server/web/spec-extension/cookies';
+import AboutDialog from './dialogs/AboutDialog';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -113,13 +114,16 @@ const Header = (props) => {
     const [searchFocused, setSearchFocused] = React.useState(false);
     const [tanchorEl, setAnchorEl] = React.useState(null);
     const [prevAnchor, setPrevAnchor]=React.useState();
+    const [aboutOpen, setAboutOpen] =React.useState(false);
     const anchorRef = React.useRef();
     let anchorEl = tanchorEl;
     if (searchFocused && anchorRef?.current) {
         //anchorEl=anchorRef.current;
     }
     
-    
+    const onAboutClose = () => { 
+        setAboutOpen(false);
+    }
     
     const [callbackFn, setCallbackFn] = React.useState({'fn': () => { return; }, 'fail': () => {return; }});
     const [hide, setHide] = useState(false);
@@ -390,7 +394,7 @@ const Header = (props) => {
         eventBus.dispatch("saveHtml", {message: 'saving html'});
     }
     return (
-        
+        <>
             <Drawer id="drawer"  classes={{
                 paper: anchorEl?classes.drawerPaperOpen:classes.drawerPaper,
               }}
@@ -465,7 +469,12 @@ const Header = (props) => {
                                     </ToggleButtonGroup>
                                 </div>
                                 </MenuItem>
-                                <Link href="/help"><MenuItem>🩺 Help</MenuItem></Link>
+                                <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-help" direction="left" parentMenuOpen={Boolean(anchorEl)} label="🩺 Help">
+                                
+                                    <MenuItem onClick={()=>setAboutOpen(true)}>📇 About Info</MenuItem>
+
+                                </NestedMenuItem>
+                                
                                 {walletApi &&
                                     <MenuItem onClick={handleLogout}>🏃 Logout</MenuItem>
                                 }
@@ -488,6 +497,8 @@ const Header = (props) => {
                 
 
             </Drawer>
+            <AboutDialog  open={aboutOpen} onClose={onAboutClose} />
+            </>
     )
 }
 Header.propTypes = {
