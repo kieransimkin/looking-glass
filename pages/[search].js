@@ -56,9 +56,7 @@ export default function Search(params) {
         ext = String(search).substr(-4,4);
     }
     console.log(ext);
-    if (ext=='.jpg') { 
-        return fs.readFileSync('public/'+search);    
-    }
+
     console.log(search);
     useEffect(() => { 
         if (!search) return;     
