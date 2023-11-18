@@ -33,7 +33,7 @@ export const getServerSideProps = async (context) => {
         let result = await getWallet(wallet);
     }
     let props = {};
-
+    
     if (result) { 
         if (result.slug != result.stake && wallet!=result.slug) { 
             return {
@@ -89,7 +89,7 @@ export const getServerSideProps = async (context) => {
                         tokResult[c].thumb = thumbURL;
                     }   
                 }
-                if (token && tokResult[c].unit==props.policy.policyID+token) { 
+                if (token && tokResult[c].unit==token) { 
                     props.token=tokResult[c];
                 }
             }
@@ -132,7 +132,7 @@ export default  function CIP54Playground(props) {
         
         return <BigInfoBox item={i} />
     }
-    const loadMoreData = ({page}) => { 
+    const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
         getData('/addressTokens?address='+address+'&page='+(parseInt(page)+offset)).then((d)=>{
@@ -154,7 +154,6 @@ export default  function CIP54Playground(props) {
         
     }
 
-    const title = props.wallet.name+" - Cardano Looking Glass - clg.wtf"
     let newGallery = null;
     if (gallery) {
         newGallery=gallery.tokens.map((i)=>{
@@ -168,6 +167,17 @@ export default  function CIP54Playground(props) {
             // The 60 below is the number of pixels we reserve in the slide bar for the label
             return <li key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
         }
+    }
+    let title = props.wallet.name+" - Cardano Looking Glass - clg.wtf"
+    
+    let description = "";
+    let url = "https://clg.wtf/policy/"+props.token?.unit?.substr(0,56);
+    let image = props.walletProfileThumb;
+    let initialSelection = gallery?gallery[0]:null;
+    if (props.token) { 
+        title = props.token.title + ' - ' + props.wallet.name+" - Cardano Looking Glass - clg.wtf";
+        url = "https://clg.wtf/policy/"+props.token.unit.substr(0,56)+"."+props.token.unit.substr(56);
+        initialSelection=props.token;
     }
     const selectionChange = (item) => { 
         console.log(item);
@@ -184,23 +194,22 @@ export default  function CIP54Playground(props) {
         <>
             <Head>
                 <title>{title}</title>
-                <meta name="description" content={props.wallet.bio} />
+                <meta name="description" content={description} />
+                <meta property="og:description" content={description} />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content={"https://clg.wtf/wallet/"+props.wallet.slug} />
-                <meta property="og:site_name" content="Cardano Looking Glass" />
                 <meta property="og:title" content={title} />
-                <meta property="og:description" content={props.wallet.bio} />
-                <meta property="og:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.wallet.profileUnit} />
-                <meta name="twitter:card" content="summary_large_image" />
+                <meta property="og:site_name" content="Cardano Looking Glass" />
+                <meta property="og:url" content={url} />
+                <meta property="og:image" content={image} />
+                <meta property="twitter:url" content={url} />
                 <meta property="twitter:domain" content="clg.wtf" />
-                <meta property="twitter:url" content={"https://clg.wtf/wallet/"+props.wallet.slug} />
+                <meta name="twitter:image" content={image} />
                 <meta name="twitter:title" content={title} />
-                <meta name="twitter:description" content={props.wallet.bio} />
-                <meta name="twitter:image" content={"https://clg.wtf/api/getTokenThumb?unit="+props.wallet.profileUnit} />
-
+                <meta name="twitter:description" content={description} />
+                <meta name="twitter:card" content="summary_large_image" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide slideItemHTML={slideItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide initialSelection={initialSelection} slideItemHTML={slideItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
