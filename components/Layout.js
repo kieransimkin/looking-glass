@@ -56,7 +56,7 @@ const Layout = ({children}) => {
         },
         palette: {
             type: 'dark',
-            background: { paper: '#151000', default: '#040302'
+            background: { paper: '#150800', default: '#040102'
             },
             primary: {
               main: '#ffddaa',
