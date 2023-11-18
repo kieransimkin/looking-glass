@@ -133,9 +133,9 @@ export default  function CIP54Playground(props) {
     if (!dbPolicy) { 
         return <h1>Policy Not Found</h1>
     }
-    const renderBigInfo = (i) => { 
+    const renderBigInfo = (i, onClose, goFullscreen) => { 
         
-        return <BigInfoBox item={i} />
+        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen} item={i} />
     }
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
@@ -158,10 +158,10 @@ export default  function CIP54Playground(props) {
         console.log('Called outer load more data function');
         
     }
-    const slideItemHTML = (click,ts) => { 
+    const slideItemHTML = (click,ts, thumbSpacing) => { 
         return (item) => { 
             // The 60 below is the number of pixels we reserve in the slide bar for the label
-            return <li key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+            return <li style={{paddingLeft:thumbSpacing,paddingBottom:thumbSpacing,paddingRight:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
         }
     }
     /*
