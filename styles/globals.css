@@ -504,3 +504,10 @@ input[type="range"]:focus::-moz-range-thumb {
 .preview img { 
   object-fit: contain;
 }
+.MuiListItem-button:hover  { 
+  border-radius: 15px;
+  backdrop-filter:blur(1px);
+  box-shadow: inset 1px 1px 5px 2px rgba(0,0,0,0.5);
+  
+  background-color:none !important;
+}
