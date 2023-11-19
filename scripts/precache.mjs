@@ -48,8 +48,8 @@ async function doIt() {
             console.log('Page '+page+' of '+totalPages)
             await doPage(tokens, page);
             page++;
-            if (page>20 && !row.isFeatured) break;
-            if (page>200) break;
+            if (page>30 && !row.isFeatured) break;
+            if (page>300) break;
             
             //sleep(2000);
         }
