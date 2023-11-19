@@ -32,6 +32,7 @@ import SearchBox from './SearchBox';
 import {Popper} from '@material-ui/core';
 import { NextCookies } from 'next/dist/server/web/spec-extension/cookies';
 import AboutDialog from './dialogs/AboutDialog';
+import Image from 'next/image';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -443,13 +444,13 @@ const Header = (props) => {
                                 {walletApi &&
                                     <Link href={"/wallet/"+stakeAddr} ><MenuItem>💸 My Wallet</MenuItem></Link>
                                 }   
-                            
+                                <MenuItem>📈 Stats</MenuItem>
                                 <MenuItem>⚡ Live Feed</MenuItem>
 
                             </NestedMenuItem>
-                            <Link href="/policy"><MenuItem>📂 Create</MenuItem></Link>
-                         
-                            
+                            <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-collect" direction="left" parentMenuOpen={Boolean(anchorEl)} label="📂 Create">
+                            <a target="_blank" href="https://nft-playground.dev/"><MenuItem><img width="32" src="/nft-playground-small.png" style={{paddingRight:'5px'}} />NFT Playground</MenuItem></a>
+                            </NestedMenuItem>
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? '🌃 Dark Mode':'🔦 Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'75px'}}>
                                 <ToggleButtonGroup

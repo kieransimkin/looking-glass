@@ -15,19 +15,108 @@ body {
   color: inherit;
   text-decoration: inherit;
 }
+@property --a {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 10deg;
+}
+@property --o {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
+@property --s {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 10px;
+}
 
+@keyframes menuthrob { 
+  from {
+    --o: 0%;
+    --s: 0px;
+    --a:20deg;  
+  }
+  10% { 
+    --o: 85%;
+    --s: 15px;
+  }
+  20% { 
+    --o: 0%;
+    --s: 0px;
+  }
+  30% { 
+    --o: 85%
+    --s: 15px;
+  }
+  40% { 
+    --o: 0%;
+    --s: 0px;
+  }
+  50% { 
+    --o: 85%
+    --s: 15px;
+  }
+  60% { 
+    --o: 0%;
+    --s: 0px;
+  }
+  70% { 
+    --o: 85%;
+    --s: 15px;
+  }
+  80% { 
+    --o: 0%;
+    --s: 0px;
+  }
+  90% { 
+    --o: 85%;
+    --s: 15px;
+  }
+
+  to { 
+    --o: 0%;
+    --s: 0px;
+    --a:200deg;
+  }
+}
 #menupaper { 
-  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.3);
+  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 25px 25px rgba(0,0,0,0.05), 1px 1px var(--s) 1px rgba(245,200,50,var(--o));
+  
   border: 1px solid rgba(212,105,0,0);
   background-size: contain !important;
   background-color: rgba(200,100,0,1);
   background-blend-mode:color-burn;
+  animation: menuthrob 10s linear infinite alternate;
+  animation-timing-function: ease-in-out;
+  transition: menuthrob 10s, --a 10s, --o 1s, --s 1s, box-shadow 1s;
   
-  background:url("/fibres-texture3-adj2.png"), linear-gradient(90deg, rgba(255,255,255,0.0), rgba(200,100,0,0.9) 100%);
+  --a:10deg;
+  --o:0;
+  --s:0;
+
+  /* background:url("/fibres-texture3-adj2.png"), linear-gradient(90deg, rgba(255,255,255,0.0), rgba(200,100,0,0.9) 100%); */
+  background: url(https://clg.wtf/fibres-texture3-adj2.png),linear-gradient(90deg,hsla(0,0%,100%,0),rgba(200,100,0,.9) 100%), linear-gradient(var(--a), rgba(230,230,100,1), transparent);
 }
 .menupaper { 
-  box-shadow: inset 2px 1px 10px 1px rgba(0,0,0,0.9);
-  background:url("/fibres-texture2-adj.png"), linear-gradient(90deg, rgba(255,255,255,0.0), rgba(255,0,0,0.9) 100%);
+  background-size: contain !important;
+  background:url(https://clg.wtf/fibres-texture2-adj.png), linear-gradient(var(--a), rgba(255,200,0,1), rgba(255,255,255,0.9));
+  border: 1px solid rgba(212,105,0,0);
+  
+  animation: menuthrob 10s linear infinite alternate;
+  background-blend-mode: hard-light;
+  animation-timing-function: ease-in-out;
+  transition: menuthrob 10s, --a 10s, --o 1s, --s 1s, box-shadow 1s;
+  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 30px 30px rgba(0,0,0,0.4), 1px 1px var(--s) 1px rgba(245,200,50,var(--o)) !important;
+  --a:10deg;
+  --o:0;
+  --s:0;
+
+}
+#menupaper
+.menupaper { 
+  
+  
   outline: 1px solid rgba(150,100,0,0.5);
   border: 1px solid rgba(212,105,0,0);
   background-size:cover !important;
@@ -225,6 +314,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 1.2em;
   z-index: 100;
   width:1rem;
+  cursor: col-resize;
 }
 
 input[type="range"]:focus::-webkit-slider-thumb,

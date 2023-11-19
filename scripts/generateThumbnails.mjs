@@ -88,7 +88,7 @@ async function doIt() {
         waiting.push(doPolicy(tokens));
         
     
-        while (waiting.length-donePolicies>3) { 
+        while (waiting.length-donePolicies>30) { 
             console.log((waiting.length-donePolicies)+' queued, now waiting')
             await helpers.default.sleep(60000);
         }
