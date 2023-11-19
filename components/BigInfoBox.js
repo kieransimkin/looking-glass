@@ -268,7 +268,9 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         <div style={{position:'relative'}}> 
         <div ref={floatingBottomHoverDiv} onClick={onFullscreen} style={{zIndex: '1000',position: 'absolute',top:'-200px', width:'300px', height:'300px',backgroundColor:'transparent'}}>&nbsp;</div>
         </div>
+        <div>
         <TokenRoundall overlaysVisible={overlaysVisible} quantity={item.quantity} />
+        </div>
    
         
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
