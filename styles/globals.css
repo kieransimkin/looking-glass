@@ -81,7 +81,7 @@ body {
   }
 }
 #menupaper { 
-  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 25px 25px rgba(0,0,0,0.05), 1px 1px var(--s) 1px rgba(245,200,50,var(--o));
+  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 25px 25px rgba(0,0,0,0.02), 1px 1px var(--s) 1px rgba(245,200,50,var(--o));
   
   border: 1px solid rgba(212,105,0,0);
   background-size: contain !important;
@@ -107,7 +107,7 @@ body {
   background-blend-mode: hard-light;
   animation-timing-function: ease-in-out;
   transition: menuthrob 10s, --a 10s, --o 1s, --s 1s, box-shadow 1s;
-  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 30px 30px rgba(0,0,0,0.4), 1px 1px var(--s) 1px rgba(245,200,50,var(--o)) !important;
+  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 30px 30px rgba(0,0,0,0.05), 1px 1px var(--s) 1px rgba(245,200,50,var(--o)) !important;
   --a:10deg;
   --o:0;
   --s:0;
