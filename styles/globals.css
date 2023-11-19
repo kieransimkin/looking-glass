@@ -21,9 +21,9 @@ body {
   initial-value: 10deg;
 }
 @property --o {
-  syntax: '<percentage>';
+  syntax: '<number>';
   inherits: false;
-  initial-value: 0%;
+  initial-value: 0;
 }
 @property --s {
   syntax: '<length>';
@@ -33,52 +33,52 @@ body {
 
 @keyframes menuthrob { 
   from {
-    --o: 0%;
+    --o: 0;
     --s: 0px;
     --a:20deg;  
   }
   9.09% { 
-    --o: 85%;
+    --o: 0.85;
     --s: 15px;
   }
   18.18% { 
-    --o: 0%;
+    --o: 0;
     --s: 0px;
   }
   27.27% { 
-    --o: 85%;
+    --o: 0.85;
     --s: 15px;
   }
   36.36% { 
-    --o: 0%;
+    --o: 0;
     --s: 0px;
   }
   45.45% { 
-    --o: 85%;
+    --o: 0.85;
     --s: 15px;
   }
   54.54% { 
-    --o: 0%;
+    --o: 0;
     --s: 0px;
   }
   63.63% { 
-    --o: 85%;
+    --o: 0.85;
     --s: 15px;
   }
   72.72% { 
-    --o: 0%;
+    --o: 0;
     --s: 0px;
   }
   81.81% { 
-    --o: 85%;
+    --o: 0.85;
     --s: 15px;
   }
   90.90% { 
-    --o: 0%;
+    --o: 0;
     --s: 15px;
   }
   to { 
-    --o: 85%;
+    --o: 0.85;
     --s: 15px;
     --a:200deg;
   }
