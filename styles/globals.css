@@ -110,7 +110,7 @@ body {
   background-blend-mode: hard-light;
   animation-timing-function: ease-in-out;
   transition: menuthrob 10s;
-  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 30px 30px rgba(0,0,0,0.05), 1px 1px var(--s) 1px rgba(245,200,50,var(--o)) !important;
+  box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 30px 30px rgba(0,0,0,0.05), 1px 1px var(--s) 1px rgba(245,200,50,1.0) !important;
   --a:10deg;
   --o:0;
   --s:0;
