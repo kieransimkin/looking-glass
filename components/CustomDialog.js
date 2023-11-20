@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => {
     let bgImg='url(/paper-texture-light.jpg)';
 
     if (theme.palette.type=='dark') { 
-        bgImg=`linear-gradient(rgba(20, 19, 18, 0.995),rgba(20, 19, 18, 0.995)) , url('/paper-texture.jpg')`;
+        bgImg=`linear-gradient(rgba(20, 10, 0, 0.75),rgba(20, 12, 0, 0.995)) , url('/fibres-texture2-adj.png')`;
     }
     return {
     root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => {
     paper: { 
         backgroundImage: bgImg,
         backgroundRepeat: 'repeat',
-        backgroundSize: 'auto',
+        backgroundSize: 'cover',
         backgroundColor:'inherit !important',
         outline: '1px solid black',
         boxShadow: (theme.palette.type=='dark') ? `1px 1px 10px 5px inset rgba(0,0,0,0.4), 0px 0px 35px 10px rgba(0,0,0,0.3)` : '',

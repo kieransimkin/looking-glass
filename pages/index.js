@@ -483,7 +483,7 @@ export default function Home(props) {
         <>
         <div style={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
         <div style={{width:'80vw', height:'35vh'}}>
-           <PolicyQuickBrowse policies={featuredPolicies} />
+           <PolicyQuickBrowse style={{height:'35vh'}} policies={featuredPolicies} />
            </div>
             </div>
         </>

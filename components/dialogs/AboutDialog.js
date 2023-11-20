@@ -17,7 +17,7 @@ import CustomDialog from '../CustomDialog';
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import { javascript } from '@codemirror/lang-javascript';
-
+import Image from 'next/image';
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
@@ -88,7 +88,11 @@ const AboutDialog = (props) => {
             <MuiDialogTitle disableTypography className={classes.root}>
               <div style={{display: 'flex', paddingRight:'-4em', justifyContent:'space-between'}}>
                 <div style={{flexGrow:1}}> 
-                  <Typography variant="h6">About Cardano Looking Glass</Typography>
+                  <div style={{display: 'flex', gap:'4em'}}>
+                  <div style={{width:'32px', display:'inline'}}>
+                  <Image src="/favicon-32x32.png" width="32" height="32" alt="Cardano Looking Glass Logo" /></div><Typography variant="h6" style={{display:'inline', position:'relative',top:'25px'}}>Cardano</Typography>
+                  </div>
+                  
                 </div>
                 <div style={{position: 'relative', 'top':'-0.5em', 'right':'-0.5em'}}>
                   {onClose ? (
@@ -99,7 +103,10 @@ const AboutDialog = (props) => {
                 </div> 
               </div>
             </MuiDialogTitle>
-            <Typography variant='h6'><b>Version:</b> 0.0.1</Typography>
+            
+            <Image src="/logo.svg" width="500" height="200" alt="Cardano Looking Glass" style={{filter:'brightness(50%) sepia(100%) saturate(2000%) hue-rotate(9deg)'}} />
+            
+            <Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Version:</b> 0.0.1</Typography>
             <br />
           </DialogContent>
           <DialogActions sx={{backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary}}>

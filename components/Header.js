@@ -405,7 +405,7 @@ const Header = (props) => {
                 
                         <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} >
                             <Link href="/" passHref><a>
-                                <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={()=>console.log('got here')} >
+                                <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true">
                                 
                                     <img src="/favicon-default.png" width="32" height="32" title="Menu" alt="Menu" />
                                 </IconButton>
@@ -435,7 +435,13 @@ const Header = (props) => {
                              <Paper id="menupaper" className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
                                 <MenuList>
                             <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-searchbox" direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
-                                <MenuItem><SearchBox width={300} autoComplete='off' autoFocus={false} onFocus={()=>setSearchFocused(true)} onBlur={()=>setSearchFocused(false)} /></MenuItem>
+                                <MenuItem><SearchBox width={300} autoComplete='off' autoFocus={false} onFocus={()=>setSearchFocused(true)} onBlur={()=>{
+            clearTimeout(menuCloseTimer);
+            clearTimeout(timer);
+            setAnchorEl(null);
+            setSearchFocused(false);
+                                setSearchFocused(false);
+                                }} /></MenuItem>
                                
                               
                             </NestedMenuItem>             
@@ -444,7 +450,7 @@ const Header = (props) => {
                                 {walletApi &&
                                     <Link href={"/wallet/"+stakeAddr} ><MenuItem>💸 My Wallet</MenuItem></Link>
                                 }   
-                                <MenuItem>📈 Stats</MenuItem>
+                                <Link href="/stats" passHref><a><MenuItem>📈 Stats</MenuItem></a></Link>
                                 <MenuItem>⚡ Live Feed</MenuItem>
 
                             </NestedMenuItem>

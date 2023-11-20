@@ -2,7 +2,7 @@
 
 import {MediaSlide} from 'react-mediaslide'
 import Link from 'next/link';
-export default function PolicyQuickBrowse({policies})  { 
+export default function PolicyQuickBrowse({policies, style})  { 
     if (!policies) { 
         return <>Loading...</>
     }
@@ -24,7 +24,7 @@ export default function PolicyQuickBrowse({policies})  {
     }
     
     return (
-        <div style={{height:'35vh'}}>
+        <div style={style}>
         <MediaSlide slideItemHTML={slideItemHTML} defaultThumbSize={100} defaultDisplayType='slide' defaultStageHidden={true} defaultNavbarHidden={true} gallery={list} />
         </div>
         
