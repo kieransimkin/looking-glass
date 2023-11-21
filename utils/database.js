@@ -69,6 +69,7 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
                 break;
             case 'recentlyActive':
                 sortOptions.push(`"lastMoved" ${sortOrder}`)
+                whereOptions.push(`"lastMoved" IS NOT NULL`);
                 break;
             case 'random':
                 sortOptions.push(`random()`);
