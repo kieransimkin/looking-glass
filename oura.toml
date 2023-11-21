@@ -8,7 +8,7 @@ type = "Selection"
 
 [filters.check]
 predicate = "variant_in"
-argument = ["Block", "Transaction"]
+argument = ["Block", "OutputAsset", "Mint"]
 
 [sink]
 type = "Webhook"
