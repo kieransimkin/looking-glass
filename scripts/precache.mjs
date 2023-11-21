@@ -49,7 +49,7 @@ async function doIt() {
             await doPage(tokens, page);
             page++;
             if (page>50 && !row.isFeatured) break;
-            if (page>300) break;
+            if (page>500) break;
             
             //sleep(2000);
         }

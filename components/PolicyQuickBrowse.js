@@ -13,7 +13,7 @@ export default function PolicyQuickBrowse({policies, style})  {
         p.full=p.policyProfile?.full;
         p.title=p?.name;
         if (p?.name == p?.policyID) { 
-            p.name = p.policyID.substring(0,8)+'...'+p.policyID.slice(-4);
+            p.name = p.policyID.substring(0,6)+'...'+p.policyID.slice(-4);
         
         }
         p.linkUrl='/policy/'+p?.policyID;

@@ -20,7 +20,7 @@ export default function PolicyInfo({policyID}) {
     },[policyID]);
   */
         return <>
-            <b>Policy</b>: <small><a target="_blank" title={policyID} href={"/policy/"+policyID}>{policyID.substring(0,8)}...{policyID.slice(-4)}</a></small><CopyToClipboard text={policyID}><IconButton style={{padding:0}} color="primary" title="Copy to clipboard">⎘</IconButton></CopyToClipboard>
+            <b>Policy</b>: <small><a target="_blank" title={policyID} href={"/policy/"+policyID}>{policyID.substring(0,6)}...{policyID.slice(-4)}</a></small><CopyToClipboard text={policyID}><IconButton style={{padding:0}} color="primary" title="Copy to clipboard">⎘</IconButton></CopyToClipboard>
             </>
   
   }

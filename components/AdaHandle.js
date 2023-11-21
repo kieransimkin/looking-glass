@@ -21,7 +21,7 @@ export default function AdaHandle({stake}) {
         </>
     } else { 
         return <>
-            <a target="_blank" href={"/wallet/"+stake} title={stake}>{stake.substring(0,7)}...{stake.slice(-6)}</a>
+            <a target="_blank" href={"/wallet/"+stake} title={stake}>{stake.substring(0,6)}...{stake.slice(-4)}</a>
         </>
     }
   }
