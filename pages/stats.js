@@ -20,8 +20,10 @@ export const getServerSideProps = async (context) => {
     props.popularPolicies = await getFeaturedPolicies('totalHits', 'desc',0, false);
     for (const policy of [...props.mintingPolicies, ...props.recentlyActivePolicies, ...props.activePolicies, ...props.popularPolicies]) { 
       const policyProfile = await checkCacheItem('policyProfile:'+policy.policyID);
-      const tokenData = await checkCacheItem('getTokenData:'+policyProfile);
-      const thumbName = 'tokenThumb:'+tokenData.unit+':500:dark';
+      let tokenData = await checkCacheItem('getTokenData:'+policyProfile);
+
+      if (!tokenData) tokenData={};
+      const thumbName = 'tokenThumb:'+policyProfile+':500:dark';
       let thumbURL;
       if ((thumbURL = getDataURL(thumbName,'jpg'))) {
           tokenData.thumb = thumbURL;
