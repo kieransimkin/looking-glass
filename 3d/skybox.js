@@ -13,6 +13,7 @@ import { BufferAttribute,
 
 import { Random } from "../utils/Random.js";
 
+
 export const skybox = new Mesh();
 export const dirToLight = new Vector3();
 export const rotationMatrix = new Uniform(new Matrix3());
