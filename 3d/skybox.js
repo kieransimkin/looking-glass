@@ -10,9 +10,8 @@ import { BufferAttribute,
             Uniform, 
             Vector2, 
             Vector3 } from "three";
-import { fragment, vertex } from "../shaders/SkyboxShader.js";
 
-import { Random } from "../scripts/Random.js";
+import { Random } from "../utils/Random.js";
 
 export const skybox = new Mesh();
 export const dirToLight = new Vector3();
