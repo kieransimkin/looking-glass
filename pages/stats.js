@@ -21,7 +21,6 @@ export const getServerSideProps = async (context) => {
     for (const policy of [...props.mintingPolicies, ...props.recentlyActivePolicies, ...props.activePolicies, ...props.popularPolicies]) { 
       const policyProfile = await checkCacheItem('policyProfile:'+policy.policyID);
       let tokenData = await checkCacheItem('getTokenData:'+policyProfile);
-
       if (!tokenData) tokenData={};
       const thumbName = 'tokenThumb:'+policyProfile+':500:dark';
       let thumbURL;
