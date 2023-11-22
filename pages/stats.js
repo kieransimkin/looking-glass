@@ -16,7 +16,7 @@ import { BufferAttribute, BufferGeometry, MathUtils, Matrix3, Mesh, Uniform, Vec
 import * as THREE from 'three'
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
 import { Effects } from '@react-three/drei'
-import {Skybox} from '../3d/skybox'
+import {Start as StartSkybox, skybox as Skybox} from '../3d/skybox'
 import { FilmPass, WaterPass, UnrealBloomPass, LUTPass, LUTCubeLoader, GlitchPass, AfterimagePass } from 'three-stdlib'
 export const getServerSideProps = async (context) => { 
     const props = {};
@@ -51,7 +51,8 @@ export default  function CIP54Playground(props) {
     const [skybox, setSkybox] = useState(null);
 
     useEffect(() => {
-        Skybox.Start();
+
+        StartSkybox();
         setSkybox(Skybox);
     },[])
     const renderBigInfo = (i, onClose, goFullscreen) => { 
