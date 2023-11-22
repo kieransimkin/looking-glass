@@ -51,8 +51,8 @@ export default  function CIP54Playground(props) {
     const [skybox, setSkybox] = useState(null);
 
     useEffect(() => {
-        skybox.Start();
-        setSkybox(skybox);
+        Skybox.Start();
+        setSkybox(Skybox);
     },[])
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
