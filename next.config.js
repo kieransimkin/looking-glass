@@ -10,7 +10,7 @@ const nextConfig = {
   env: { 
     'SOCKET_PORT':process.env.SOCKET_PORT
   },
-  rewrites: [
+  rewrites: () => { return[
     
       // we need to define a no-op rewrite to trigger checking
       // all pages/static files before we attempt proxying
@@ -18,7 +18,7 @@ const nextConfig = {
         source: '/:path*',
         destination: '/:path*',
       }
-    ],
+    ];},
   //output:'standalone',
   webpack: function (config, options) {
     
