@@ -1,5 +1,15 @@
-import { BufferAttribute, BufferGeometry, MathUtils, Matrix3, Mesh, Uniform, Vector3 } from "three";
-import { DataTexture, MathUtils, RepeatWrapping, ShaderMaterial, TextureLoader, Uniform, Vector2, Vector3 } from "three";
+import { BufferAttribute, 
+            BufferGeometry, 
+            MathUtils, 
+            Matrix3, 
+            Mesh,
+            DataTexture, 
+            RepeatWrapping, 
+            ShaderMaterial, 
+            TextureLoader, 
+            Uniform, 
+            Vector2, 
+            Vector3 } from "three";
 import { fragment, vertex } from "../shaders/SkyboxShader.js";
 import { dirToLight, rotationMatrix } from "../scene/Skybox.js";
 import { Random } from "../scripts/Random.js";
