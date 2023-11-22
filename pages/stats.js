@@ -112,21 +112,21 @@ export default  function CIP54Playground(props) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div>
-            <h5>Currently Minting:</h5>
+            <h4>Currently Minting:</h4>
             <PolicyQuickBrowse style={{height:'15vh'}} policies={mintingGallery} />
             </div>
             <div >
-            <h5>Recently Active:</h5>
+            <h4>Recently Active:</h4>
             <PolicyQuickBrowse style={{height:'15vh'}} policies={recentlyActiveGallery} />
             </div>
             
             <div>
-            <h5>Total Activity:</h5>
+            <h4>Total Activity:</h4>
             <PolicyQuickBrowse style={{height:'15vh'}} policies={activeGallery} />
             </div>
             
             <div>
-            <h5>Popular on Looking Glass:</h5>
+            <h4>Popular on Looking Glass:</h4>
             <PolicyQuickBrowse style={{height:'15vh'}} policies={popularGallery} />
             </div> 
         </>
