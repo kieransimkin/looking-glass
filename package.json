@@ -16,7 +16,7 @@
     "refreshWallet": "tsx scripts/refreshWallet.mjs",
     "runHits": "tsx scripts/runHits.mjs",
     "generateThumbnails": "tsx scripts/generateThumbnails.mjs",
-    "socket":"tsx scripts/websocket.mjs"
+    "socket": "tsx scripts/websocket.mjs"
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.2.0",
@@ -42,7 +42,9 @@
     "blake2b": "^2.1.4",
     "buffer": "^6.0.3",
     "cbor": "^8.1.0",
+    "codegen": "^0.1.0",
     "cookie": "^0.6.0",
+    "copy-webpack-plugin": "^11.0.0",
     "crypto": "^1.0.1",
     "d3-milestones": "^1.4.2",
     "faunadb": "^4.7.0",
