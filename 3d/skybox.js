@@ -11,7 +11,7 @@ import { BufferAttribute,
             Vector2, 
             Vector3 } from "three";
 import { fragment, vertex } from "../shaders/SkyboxShader.js";
-import { dirToLight, rotationMatrix } from "../scene/Skybox.js";
+
 import { Random } from "../scripts/Random.js";
 
 export const skybox = new Mesh();
