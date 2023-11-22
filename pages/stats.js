@@ -12,6 +12,11 @@ import {MediaSlide} from 'react-mediaslide';
 import {tokenPortal} from '../utils/tokenPortal'
 import LoadingTicker from '../components/LoadingTicker';
 import PolicyQuickBrowse from '../components/PolicyQuickBrowse';
+import { BufferAttribute, BufferGeometry, MathUtils, Matrix3, Mesh, Uniform, Vector3 } from "three"
+import * as THREE from 'three'
+import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
+import { Effects } from '@react-three/drei'
+import { FilmPass, WaterPass, UnrealBloomPass, LUTPass, LUTCubeLoader, GlitchPass, AfterimagePass } from 'three-stdlib'
 export const getServerSideProps = async (context) => { 
     const props = {};
     props.mintingPolicies = await getFeaturedPolicies('recentMint','desc',0,false);  
@@ -112,6 +117,20 @@ export default  function CIP54Playground(props) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div>
+
+            <Canvas style={{position:'absolute'}} linear flat legacy dpr={1} camera={{ far: 2000,fov: 1000, position: [0, 0, 30] }}>
+    <ambientLight intensity={4} color="#ffaa00" />
+    
+    <spotLight intensity={200} position={[0, 0,100]} penumbra={1} color="red" />
+    
+    
+    
+    
+ 
+      
+  </Canvas>
+
+
             <h4>Currently Minting:</h4>
             <PolicyQuickBrowse style={{height:'15vh'}} policies={mintingGallery} />
             </div>
