@@ -217,7 +217,7 @@ export function Start()
     geometry.setIndex(indices);
 
     skybox.geometry = geometry;
-    skybox.material = skyboxMaterial.material;
+    skybox.material = material;
 
     setSkyRotationMatrix(angle);
     initial.applyMatrix3(rotationMatrix.value);
@@ -232,7 +232,7 @@ export function Update()
     initial.applyMatrix3(rotationMatrix.value);
     dirToLight.set(-initial.x, initial.y, -initial.z);
     initial.set(0, 1, 0);
-    skyboxMaterial.Update();
+    
 
 //
     intensity = dirToLight.dot(up);
