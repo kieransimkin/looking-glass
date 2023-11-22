@@ -16,6 +16,7 @@ import { BufferAttribute, BufferGeometry, MathUtils, Matrix3, Mesh, Uniform, Vec
 import * as THREE from 'three'
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
 import { Effects } from '@react-three/drei'
+import {Skybox} from '../3d/skybox'
 import { FilmPass, WaterPass, UnrealBloomPass, LUTPass, LUTCubeLoader, GlitchPass, AfterimagePass } from 'three-stdlib'
 export const getServerSideProps = async (context) => { 
     const props = {};
@@ -47,7 +48,12 @@ export default  function CIP54Playground(props) {
     const [recentlyActiveGallery, setRecentlyActiveGallery] = useState(props.recentlyActivePolicies);
     const [activeGallery, setActiveGallery] = useState(props.activePolicies);
     const [popularGallery, setPopularGallery] = useState(props.popularPolicies);
+    const [skybox, setSkybox] = useState(null);
 
+    useEffect(() => {
+        skybox.Start();
+        setSkybox(skybox);
+    },[])
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen} item={i} />
@@ -124,7 +130,8 @@ export default  function CIP54Playground(props) {
     <spotLight intensity={200} position={[0, 0,100]} penumbra={1} color="red" />
     
     
-    
+    <primitive object={skybox} scale={1} position={[0,0,0]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
+        </primitive>
     
  
       
