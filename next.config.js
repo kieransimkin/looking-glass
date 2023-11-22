@@ -10,7 +10,15 @@ const nextConfig = {
   env: { 
     'SOCKET_PORT':process.env.SOCKET_PORT
   },
-  //output:'standalone',
+  rewrites: () => { return[
+    
+      // we need to define a no-op rewrite to trigger checking
+      // all pages/static files before we attempt proxying
+      {
+        source: '/:path*',
+        destination: '/:path*',
+      }
+    ];},
   webpack: function (config, options) {
     
 		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
