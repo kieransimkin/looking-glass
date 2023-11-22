@@ -7,7 +7,7 @@ import BigInfoBox from '../components/BigInfoBox';
 import { getDataURL } from '../utils/DataStore';
 import { checkCacheItem, incrementCacheItem, getClient } from '../utils/redis';
 import { getFeaturedPolicies } from '../utils/database';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {MediaSlide} from 'react-mediaslide';
 import {tokenPortal} from '../utils/tokenPortal'
 import LoadingTicker from '../components/LoadingTicker';
