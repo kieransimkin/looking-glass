@@ -7,7 +7,6 @@ export default function PolicyQuickBrowse({policies, style})  {
         return <>Loading...</>
     }
     const list = policies.map((p) => { 
-        console.log(p);
         p.thumb=p.policyProfile?.thumb;
         p.tiny=p.policyProfile?.tiny;
         p.full=p.policyProfile?.full;

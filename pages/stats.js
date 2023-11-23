@@ -17,6 +17,8 @@ import * as THREE from 'three'
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
 import { Effects } from '@react-three/drei'
 import {Start as StartSkybox, skybox as Skybox} from '../3d/skybox'
+import {Start as StartOcean, surface as OceanSurface, volume as OceanVolume} from '../3d/ocean'
+import * as Common3d from "../3d/common"
 import { FilmPass, WaterPass, UnrealBloomPass, LUTPass, LUTCubeLoader, GlitchPass, AfterimagePass } from 'three-stdlib'
 export const getServerSideProps = async (context) => { 
     const props = {};
@@ -49,11 +51,16 @@ export default  function CIP54Playground(props) {
     const [activeGallery, setActiveGallery] = useState(props.activePolicies);
     const [popularGallery, setPopularGallery] = useState(props.popularPolicies);
     const [skybox, setSkybox] = useState(null);
+    const [oSurface, setOSurface] = useState(null);
+    const [oVolume, setOVolume] = useState(null);
 
     useEffect(() => {
-
+Common3d.Start();
         StartSkybox();
+        StartOcean();
         setSkybox(Skybox);
+        setOSurface(OceanSurface);
+        setOVolume(OceanVolume);
     },[])
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
@@ -123,9 +130,7 @@ export default  function CIP54Playground(props) {
                 <meta name="twitter:card" content="summary_large_image" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div>
-
-            <Canvas style={{position:'absolute'}} linear flat legacy dpr={1} camera={{ far: 2000,fov: 1000, position: [0, 0, 30] }}>
+      <Canvas style={{backgroundColor: 'transparent',position:'absolute', top:0}} linear flat dpr={1} camera={{ far: 4000,fov: 70, position: [0, 0, 30] }}>
     <ambientLight intensity={4} color="#ffaa00" />
     
     <spotLight intensity={200} position={[0, 0,100]} penumbra={1} color="red" />
@@ -134,11 +139,16 @@ export default  function CIP54Playground(props) {
     <primitive object={skybox} scale={1} position={[0,0,0]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
         </primitive>
     
+        <primitive object={oSurface} scale={1} position={[0,0,0]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
+        </primitive>
  
       
+        <primitive object={oVolume} scale={1} position={[0,0,0]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
+        </primitive>
   </Canvas>
 
-
+            <div style={{position:'absolute', overflow:'hidden'}}>
+            <div>
             <h4>Currently Minting:</h4>
             <PolicyQuickBrowse style={{height:'15vh'}} policies={mintingGallery} />
             </div>
@@ -155,6 +165,7 @@ export default  function CIP54Playground(props) {
             <div>
             <h4>Popular on Looking Glass:</h4>
             <PolicyQuickBrowse style={{height:'15vh'}} policies={popularGallery} />
+            </div>
             </div> 
         </>
     );
