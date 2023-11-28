@@ -190,7 +190,7 @@ Common3d.StartTime();
         </Html>
         </group>
   </Canvas>
-<div>
+<div style={{position:'fixed'}}>
     <h3>Under Construction</h3>
 </div>
           
