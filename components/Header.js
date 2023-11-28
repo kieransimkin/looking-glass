@@ -36,7 +36,7 @@ import Image from 'next/image';
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
-    let bgi = 'url(/paper-texture-light.jpg)';
+    let bgi = 'url(/paper-texture-light.jpg) !important';
     if (theme.palette.type=='dark') { 
       bgi='';
     }
@@ -89,6 +89,11 @@ const useStyles = makeStyles(theme => {
         boxShadow: '2px 2px 25px 1px rgba(0,0,0,0.5)'
     },
     menuPaper: {
+        translate: '-2.0em',
+        borderTopRightRadius: '0px !important'
+    },
+    menuPaperLight: { 
+        background: bgi,
         translate: '-2.0em',
         borderTopRightRadius: '0px !important'
     }
@@ -416,7 +421,7 @@ const Header = (props) => {
                             modifiers={{offset:{offset:'200'}}}
                                 id="simple-menu"
                                 classes={{
-                                    paper: classes.menuPaper
+                                    paper: darkMode==='dark'?classes.menuPaper:classes.menuPaperLight
                                 }}
                                 anchorEl={anchorEl}
                                 keepMounted

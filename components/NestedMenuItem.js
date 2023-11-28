@@ -5,6 +5,7 @@ import MenuItem, {MenuItemProps} from '@material-ui/core/MenuItem'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
 import clsx from 'clsx'
+import {useTheme} from '@material-ui/core'
 import { Popper,Paper, MenuList } from '@material-ui/core'
 // This is copied from https://github.com/azmenak/material-ui-nested-menu-item
 // I added directionality, so that menus can open left as well as right. 
@@ -23,6 +24,7 @@ const useMenuItemStyles = makeStyles((theme) => ({
  * menu elements as children to this component.
  */
 const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
+  const theme = useTheme();
   const {
     parentMenuOpen,
     component = 'div',
@@ -174,7 +176,7 @@ const NestedMenuItem = React.forwardRef(function NestedMenuItem(props, ref) {
                                 
                             >
                                                  
-                             <Paper className={clsx('menupaper', paperClassName)}>
+                             <Paper className={clsx(theme.palette.type=='dark'?'menupaper':'menupaper-light', paperClassName)}>
                                 <MenuList>
       
         <div ref={menuContainerRef} style={{pointerEvents: 'auto'}}>
