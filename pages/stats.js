@@ -215,7 +215,9 @@ Common3d.StartTime();
       <Stars saturation={false} count={400} speed={0.5} />
         <StatsCube mintingGallery={mintingGallery} recentlyActiveGallery={recentlyActiveGallery} activeGallery={activeGallery} popularGallery={popularGallery} />
   </Canvas>
-
+<div style={{position:'fixed'}}>
+    <h3>Under Construction</h3>
+</div>
           
         </>
     );
