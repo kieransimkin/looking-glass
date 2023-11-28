@@ -8,9 +8,9 @@ import { getDataURL } from '../utils/DataStore';
 import { checkCacheItem, incrementCacheItem, getClient } from '../utils/redis';
 import { getFeaturedPolicies } from '../utils/database';
 import { useState, useEffect, Suspense, useRef } from 'react';
-
+import { easing } from 'maath'
 import PolicyQuickBrowse from '../components/PolicyQuickBrowse';
-
+import { Card } from '@material-ui/core';
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
 
 import Ocean from '../3d/ocean'
@@ -27,6 +27,7 @@ import {Start as StartOcean, surface as OceanSurface, volume as OceanVolume} fro
 
 
 import { FilmPass, WaterPass, UnrealBloomPass, LUTPass, LUTCubeLoader, GlitchPass, AfterimagePass } from 'three-stdlib'
+import { fontSize } from '@mui/system';
 export const getServerSideProps = async (context) => { 
     const props = {};
     props.mintingPolicies = await getFeaturedPolicies('recentMint','desc',0,false);  
@@ -50,6 +51,52 @@ export const getServerSideProps = async (context) => {
       props
     }
   }
+
+const StatsCube = ({mintingGallery, recentlyActiveGallery, activeGallery, popularGallery}) => { 
+    const cubeRef = useRef();
+    const [clicked, click] = useState(false)
+    useFrame((state, delta) => {
+        easing.dampE(cubeRef.current.rotation, clicked ? [0, Math.PI / 2, 0] : [0, 0, 0], 0.25, delta);
+
+    });
+    const doClick=()=>{ 
+        click(!clicked);
+        console.log('got click');
+    }
+    return (
+    <group ref={cubeRef} scale={[4,4,4]}>
+    <Html transform position={[0, 0, 10]}>
+    <h4 onClick={doClick}>Currently Minting:</h4>
+    <Card style={{minHeight:'30', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}}>
+    
+        
+        <div style={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
+        <div style={{width:'40vw', fontSize:'0.4em'}}>
+          <PolicyQuickBrowse style={{height:'15vh'}} policies={mintingGallery} />
+          </div>
+          </div></Card>
+        
+      </Html>
+      <Html transform position={[10, 0, 0]} rotation={[0, 90 * (Math.PI / 180), 0]}>
+      
+      <h4>Recently Active:</h4>
+          <PolicyQuickBrowse style={{height:'10vh'}} policies={recentlyActiveGallery} />
+        
+      </Html>
+      <Html transform position={[-10, 0, 0]} rotation={[0, 270 * (Math.PI / 180), 0]}>
+      <h4>Total Activity:</h4>
+          <PolicyQuickBrowse style={{height:'10vh'}} policies={activeGallery} />
+        
+      </Html>
+      <Html transform position={[0, 0, -10]} rotation={[0, 180 * (Math.PI / 180), 0]}>
+      <h4>Popular on Looking Glass:</h4>
+          <PolicyQuickBrowse style={{height:'10vh'}} policies={popularGallery} />
+        
+      </Html>
+      </group>
+    );
+
+}
 export default  function CIP54Playground(props) {
     
     const router = useRouter();
@@ -61,7 +108,7 @@ export default  function CIP54Playground(props) {
     const [oSurface, setOSurface] = useState(null);
     const [oVolume, setOVolume] = useState(null);
     
-    const cubeRef = useRef();
+    
     /*
     useFrame((state, delta) => {
         dampE(cubeRef.current.rotation, [0, Math.PI*3, 0], 0.1, delta)
@@ -166,29 +213,7 @@ Common3d.StartTime();
       </Suspense>
       <Sky scale={200} azimuth={40} inclination={0.1}  rayleigh={3} turbidity={0.1} />
       <Stars saturation={false} count={400} speed={0.5} />
-      <group ref={cubeRef} scale={[4,4,4]}>
-      <Html occlude={true} transform position={[0, 0, 10]}>
-      <h4>Currently Minting:</h4>
-            <PolicyQuickBrowse style={{height:'10vh'}} policies={mintingGallery} />
-          
-        </Html>
-        <Html occlude={true} transform position={[10, 0, 0]} rotation={[0, 90 * (Math.PI / 180), 0]}>
-        
-        <h4>Recently Active:</h4>
-            <PolicyQuickBrowse style={{height:'10vh'}} policies={recentlyActiveGallery} />
-          
-        </Html>
-        <Html occlude={true} transform position={[-10, 0, 0]} rotation={[0, 270 * (Math.PI / 180), 0]}>
-        <h4>Total Activity:</h4>
-            <PolicyQuickBrowse style={{height:'10vh'}} policies={activeGallery} />
-          
-        </Html>
-        <Html occlude={true} transform position={[0, 0, -10]} rotation={[0, 180 * (Math.PI / 180), 0]}>
-        <h4>Popular on Looking Glass:</h4>
-            <PolicyQuickBrowse style={{height:'10vh'}} policies={popularGallery} />
-          
-        </Html>
-        </group>
+        <StatsCube mintingGallery={mintingGallery} recentlyActiveGallery={recentlyActiveGallery} activeGallery={activeGallery} popularGallery={popularGallery} />
   </Canvas>
 
           
