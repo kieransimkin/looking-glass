@@ -437,7 +437,7 @@ const Header = (props) => {
                             
                                 
                             >
-                             <Paper id="menupaper" className="menupaper" style={{borderTopRightRadius:'0px !important'}}>
+                             <Paper id="menupaper" className={darkMode==='dark'?'menupaper':'menupaper-light'} style={{borderTopRightRadius:'0px !important'}}>
                                 <MenuList>
                             <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-searchbox" direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
                                 <MenuItem><SearchBox width={300} autoComplete='off' autoFocus={false} onFocus={()=>setSearchFocused(true)} onBlur={()=>{
