@@ -122,7 +122,7 @@ body {
   box-shadow: inset 2px 1px 3px 0px rgba(212,105,0,0.7),  0px 0px 30px 30px rgba(0,0,0,0.15), 1px 1px var(--s) 1px rgba(245,200,50,var(--o)) !important;
   outline: 1px solid rgba(150,100,0,0.5) !important;
   border: 1px solid rgba(212,105,0,0) !important;
-  background: url(/paper-texture-light.jpg) !important;
+  background-image: url(/paper-texture-light.jpg) !important;
 }
 :any-link {
   color: inherit;
