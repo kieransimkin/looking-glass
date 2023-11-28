@@ -7,18 +7,25 @@ import BigInfoBox from '../components/BigInfoBox';
 import { getDataURL } from '../utils/DataStore';
 import { checkCacheItem, incrementCacheItem, getClient } from '../utils/redis';
 import { getFeaturedPolicies } from '../utils/database';
-import { useState, useEffect } from 'react';
-import {MediaSlide} from 'react-mediaslide';
-import {tokenPortal} from '../utils/tokenPortal'
-import LoadingTicker from '../components/LoadingTicker';
+import { useState, useEffect, Suspense, useRef } from 'react';
+
 import PolicyQuickBrowse from '../components/PolicyQuickBrowse';
-import { BufferAttribute, BufferGeometry, MathUtils, Matrix3, Mesh, Uniform, Vector3 } from "three"
-import * as THREE from 'three'
+
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
-import { Effects } from '@react-three/drei'
+
+import Ocean from '../3d/ocean'
+import { Stars } from '@react-three/drei';
+import { Html } from '@react-three/drei'
+
+import { damp, damp2, damp3, damp4, dampE, dampM, dampQ, dampS, dampC } from 'maath/easing'
+import { OrbitControls, Sky } from '@react-three/drei'
+
+/*
 import {Start as StartSkybox, skybox as Skybox} from '../3d/skybox'
 import {Start as StartOcean, surface as OceanSurface, volume as OceanVolume} from '../3d/ocean'
-import * as Common3d from "../3d/common"
+*/
+
+
 import { FilmPass, WaterPass, UnrealBloomPass, LUTPass, LUTCubeLoader, GlitchPass, AfterimagePass } from 'three-stdlib'
 export const getServerSideProps = async (context) => { 
     const props = {};
@@ -32,7 +39,7 @@ export const getServerSideProps = async (context) => {
       if (!tokenData) tokenData={};
       const thumbName = 'tokenThumb:'+policyProfile+':500:dark';
       let thumbURL;
-      if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+      if ((thumbURL = getDataURL(thumbName,'jpg')) && (process.env.NODE_ENV=='production')) {
           tokenData.thumb = thumbURL;
       }   
       policy.policyProfile=tokenData;
@@ -53,14 +60,31 @@ export default  function CIP54Playground(props) {
     const [skybox, setSkybox] = useState(null);
     const [oSurface, setOSurface] = useState(null);
     const [oVolume, setOVolume] = useState(null);
-
+    
+    const cubeRef = useRef();
+    /*
+    useFrame((state, delta) => {
+        dampE(cubeRef.current.rotation, [0, Math.PI*3, 0], 0.1, delta)
+    });
+    */
     useEffect(() => {
+   
+        
+        //scene.add(Skybox.skybox);
+            /*
+        Ocean.Start();
+        setOSurface(Ocean.surface);
+        //scene.add(Ocean.surface);
+        /*
 Common3d.Start();
+Common3d.StartTime();
         StartSkybox();
         StartOcean();
+        
         setSkybox(Skybox);
         setOSurface(OceanSurface);
         setOVolume(OceanVolume);
+        */
     },[])
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
@@ -130,41 +154,56 @@ Common3d.Start();
                 <meta name="twitter:card" content="summary_large_image" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-      <Canvas style={{backgroundColor: 'transparent',position:'absolute', top:0}} linear flat dpr={1} camera={{ far: 4000,fov: 70, position: [0, 0, 30] }}>
-    <ambientLight intensity={4} color="#ffaa00" />
-    
-    <spotLight intensity={200} position={[0, 0,100]} penumbra={1} color="red" />
+      <Canvas style={{backgroundColor: 'transparent',position:'absolute', top:0}}  camera={{ position: [0, 5, 100], fov: 55, near: 1, far: 20000 }}>
     
     
-    <primitive object={skybox} scale={1} position={[0,0,0]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
-        </primitive>
     
-        <primitive object={oSurface} scale={1} position={[0,0,0]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
-        </primitive>
- 
-      
-        <primitive object={oVolume} scale={1} position={[0,0,0]} rotation={[1*Math.PI,2*Math.PI,1*Math.PI]}>
-        </primitive>
+    <pointLight position={[100, 100, 100]} />
+      <pointLight position={[-100, -100, -100]} />
+        <Suspense fallback={null}>
+        <Ocean />
+        
+      </Suspense>
+      <Sky scale={200} azimuth={40} inclination={0.1}  rayleigh={3} turbidity={0.1} />
+      <Stars saturation={false} count={400} speed={0.5} />
+      <group ref={cubeRef} scale={[5,5,5]}>
+      <Html transform position={[0, 0, 10]}>
+      <h4>Currently Minting:</h4>
+            <PolicyQuickBrowse style={{height:'15vh'}} policies={mintingGallery} />
+          
+        </Html>
+        <Html transform position={[10, 0, 0]} rotation={[0, 90 * (Math.PI / 180), 0]}>
+        
+        <h4>Recently Active:</h4>
+            <PolicyQuickBrowse style={{height:'15vh'}} policies={recentlyActiveGallery} />
+          
+        </Html>
+        <Html transform position={[-10, 0, 0]} rotation={[0, 270 * (Math.PI / 180), 0]}>
+        <h4>Total Activity:</h4>
+            <PolicyQuickBrowse style={{height:'15vh'}} policies={activeGallery} />
+          
+        </Html>
+        <Html transform position={[0, 0, -10]} rotation={[0, 180 * (Math.PI / 180), 0]}>
+        <h4>Popular on Looking Glass:</h4>
+            <PolicyQuickBrowse style={{height:'15vh'}} policies={popularGallery} />
+          
+        </Html>
+        </group>
   </Canvas>
 
             <div style={{position:'absolute', overflow:'hidden'}}>
             <div>
-            <h4>Currently Minting:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={mintingGallery} />
+            
             </div>
             <div >
-            <h4>Recently Active:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={recentlyActiveGallery} />
             </div>
             
             <div>
-            <h4>Total Activity:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={activeGallery} />
+            
             </div>
             
             <div>
-            <h4>Popular on Looking Glass:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={popularGallery} />
+            
             </div>
             </div> 
         </>
