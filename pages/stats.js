@@ -166,46 +166,32 @@ Common3d.StartTime();
       </Suspense>
       <Sky scale={200} azimuth={40} inclination={0.1}  rayleigh={3} turbidity={0.1} />
       <Stars saturation={false} count={400} speed={0.5} />
-      <group ref={cubeRef} scale={[5,5,5]}>
-      <Html transform position={[0, 0, 10]}>
+      <group ref={cubeRef} scale={[4,4,4]}>
+      <Html occlude={true} transform position={[0, 0, 10]}>
       <h4>Currently Minting:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={mintingGallery} />
+            <PolicyQuickBrowse style={{height:'10vh'}} policies={mintingGallery} />
           
         </Html>
-        <Html transform position={[10, 0, 0]} rotation={[0, 90 * (Math.PI / 180), 0]}>
+        <Html occlude={true} transform position={[10, 0, 0]} rotation={[0, 90 * (Math.PI / 180), 0]}>
         
         <h4>Recently Active:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={recentlyActiveGallery} />
+            <PolicyQuickBrowse style={{height:'10vh'}} policies={recentlyActiveGallery} />
           
         </Html>
-        <Html transform position={[-10, 0, 0]} rotation={[0, 270 * (Math.PI / 180), 0]}>
+        <Html occlude={true} transform position={[-10, 0, 0]} rotation={[0, 270 * (Math.PI / 180), 0]}>
         <h4>Total Activity:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={activeGallery} />
+            <PolicyQuickBrowse style={{height:'10vh'}} policies={activeGallery} />
           
         </Html>
-        <Html transform position={[0, 0, -10]} rotation={[0, 180 * (Math.PI / 180), 0]}>
+        <Html occlude={true} transform position={[0, 0, -10]} rotation={[0, 180 * (Math.PI / 180), 0]}>
         <h4>Popular on Looking Glass:</h4>
-            <PolicyQuickBrowse style={{height:'15vh'}} policies={popularGallery} />
+            <PolicyQuickBrowse style={{height:'10vh'}} policies={popularGallery} />
           
         </Html>
         </group>
   </Canvas>
 
-            <div style={{position:'absolute', overflow:'hidden'}}>
-            <div>
-            
-            </div>
-            <div >
-            </div>
-            
-            <div>
-            
-            </div>
-            
-            <div>
-            
-            </div>
-            </div> 
+          
         </>
     );
 }
