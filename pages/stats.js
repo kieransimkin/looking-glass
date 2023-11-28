@@ -167,12 +167,12 @@ Common3d.StartTime();
       <Sky scale={200} azimuth={40} inclination={0.1}  rayleigh={3} turbidity={0.1} />
       <Stars saturation={false} count={400} speed={0.5} />
       <group ref={cubeRef} scale={[4,4,4]}>
-      <Html occlude={true} transform position={[0, 0, 10]}>
+      <Html occlude={true} transform position={[0, 0, 10]} style={{height:'10vh'}}>
       <h4>Currently Minting:</h4>
             <PolicyQuickBrowse style={{height:'10vh'}} policies={mintingGallery} />
           
         </Html>
-        <Html occlude={true} transform position={[10, 0, 0]} rotation={[0, 90 * (Math.PI / 180), 0]}>
+        <Html occlude={true} transform position={[10, 0, 0]} style={{height:'10vh'}} rotation={[0, 90 * (Math.PI / 180), 0]}>
         
         <h4>Recently Active:</h4>
             <PolicyQuickBrowse style={{height:'10vh'}} policies={recentlyActiveGallery} />
