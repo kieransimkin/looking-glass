@@ -167,25 +167,25 @@ Common3d.StartTime();
       <Sky scale={200} azimuth={40} inclination={0.1}  rayleigh={3} turbidity={0.1} />
       <Stars saturation={false} count={400} speed={0.5} />
       <group ref={cubeRef} scale={[4,4,4]}>
-      <Html occlude={true} transform position={[0, 0, 10]} style={{height:'40vh'}}>
+      <Html occlude={true} transform position={[0, 0, 10]} style={{height:'10vh', minHeight:200}}>
       <h4>Currently Minting:</h4>
-            <PolicyQuickBrowse style={{height:'40vh'}} policies={mintingGallery} />
+            <PolicyQuickBrowse style={{height:'10vh', minHeight:200}} policies={mintingGallery} />
           
         </Html>
-        <Html occlude={true} transform position={[10, 0, 0]} style={{height:'40vh'}} rotation={[0, 90 * (Math.PI / 180), 0]}>
+        <Html occlude={true} transform position={[10, 0, 0]} style={{height:'10vh', minHeight:200}} rotation={[0, 90 * (Math.PI / 180), 0]}>
         
         <h4>Recently Active:</h4>
-            <PolicyQuickBrowse style={{height:'40vh'}} policies={recentlyActiveGallery} />
+            <PolicyQuickBrowse style={{height:'10vh', minHeight:200}} policies={recentlyActiveGallery} />
           
         </Html>
         <Html occlude={true} transform position={[-10, 0, 0]} rotation={[0, 270 * (Math.PI / 180), 0]}>
         <h4>Total Activity:</h4>
-            <PolicyQuickBrowse style={{height:'40vh'}} policies={activeGallery} />
+            <PolicyQuickBrowse style={{height:'10vh', minHeight:200}} policies={activeGallery} />
           
         </Html>
         <Html occlude={true} transform position={[0, 0, -10]} rotation={[0, 180 * (Math.PI / 180), 0]}>
         <h4>Popular on Looking Glass:</h4>
-            <PolicyQuickBrowse style={{height:'40vh'}} policies={popularGallery} />
+            <PolicyQuickBrowse style={{height:'10vh', minHeight:200}} policies={popularGallery} />
           
         </Html>
         </group>
