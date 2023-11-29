@@ -2,7 +2,7 @@ import { init, getTokensFromPolicy } from "libcip54"
 import pgClient from "../../utils/dbsync";
 import {getClient, checkCacheItem, cacheItem} from "../../utils/redis";
 import { getTokenData } from "../../utils/formatter";
-import { setPolicyAssetCount } from "../../utils/database";
+import { setPolicyAssetCount } from "../../utils/database.mjs";
 import { getDataURL } from "../../utils/DataStore";
 export default async function Browse(req, res) {
     const redisClient = await getClient();

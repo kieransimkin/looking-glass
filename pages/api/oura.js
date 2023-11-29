@@ -1,6 +1,6 @@
 import { getClient, clearCacheItem, cacheItem, incrementCacheItem } from "../../utils/redis";
 import { getStakeFromAny, init } from "libcip54";
-import { getWallet, getPolicy } from "../../utils/database";
+import { getWallet, getPolicy } from "../../utils/database.mjs";
 
 import pgClient from '../../utils/dbsync'
 export default async function Browse(req, res) {

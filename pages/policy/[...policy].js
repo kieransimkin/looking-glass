@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import path from 'path';
-import { setPolicyAssetCount } from '../../utils/database';
+import { setPolicyAssetCount } from '../../utils/database.mjs';
 import { promises as fs } from 'fs';
 import { useEffect } from 'react';
 import Head from 'next/head'
@@ -15,7 +15,7 @@ import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
 import { checkCacheItem, incrementCacheItem, getClient } from '../../utils/redis';
-import { getPolicy} from '../../utils/database';
+import { getPolicy} from '../../utils/database.mjs';
 import { getTokenData } from '../../utils/formatter';
 import LoadingTicker from '../../components/LoadingTicker';
 import { getDataURL } from '../../utils/DataStore';

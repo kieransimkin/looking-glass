@@ -1,5 +1,5 @@
 
-import { getWallet } from "../../utils/database";
+import { getWallet } from "../../utils/database.mjs";
 import {getClient, incrementCacheItem} from "../../utils/redis";
 import pgClient from "../../utils/dbsync"
 import { init } from "libcip54";

@@ -1,5 +1,5 @@
 
-import db from "../utils/database"
+import db from "../utils/database.mjs"
 export async function setProfileUnit(options) { 
     
     let choice = options[0];

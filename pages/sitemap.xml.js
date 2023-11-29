@@ -1,4 +1,4 @@
-import { getPolicyKeyList, getWalletKeyList } from "../utils/database"
+import { getPolicyKeyList, getWalletKeyList } from "../utils/database.mjs"
 
 export const getServerSideProps = async ({res}) => { 
     const policyKeys = await getPolicyKeyList();

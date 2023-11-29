@@ -1,4 +1,4 @@
-import db from "../utils/database"
+import db from "../utils/database.mjs"
 export async function setLastMinted(date) { 
     
         await db.query(

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import database from '../utils/database.js'
+import database from '../utils/database.mjs/index.js'
 import dotenv from 'dotenv';
 dotenv.config()
 async function doIt() {

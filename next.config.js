@@ -42,6 +42,7 @@ const nextConfig = {
 function patchWasmModuleImport(config, isServer) {
   config.experiments = Object.assign(config.experiments || {}, {
     asyncWebAssembly: true,
+    topLevelAwait: true
   });
   config.module.defaultRules = [
     {

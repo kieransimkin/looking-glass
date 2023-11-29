@@ -14,7 +14,7 @@ import Card from '@material-ui/core/Card'
 import ExamplesButton from '../components/ExamplesButton';
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import * as THREE from 'three'
-import { getFeaturedPolicies } from '../utils/database';
+import { getFeaturedPolicies } from '../utils/database.mjs';
 import { getDataURL } from '../utils/DataStore';
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
 import { Effects } from '@react-three/drei'
