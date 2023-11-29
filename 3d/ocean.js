@@ -27,15 +27,21 @@ function Ocean() {
       distortionScale: 8,
       fog: false,
       format: gl.encoding,
+      receiveShadows: true
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [waterNormals]
   );
   useFrame(
-    (state, delta) => (ref.current.material.uniforms.time.value += delta)
-  );
+    (state, delta) => {(ref.current.material.uniforms.time.value += delta);
+
+        ref.current.material.lights=true;
+    });
+
+  
   return (
-    <water
+    <water 
+    
       ref={ref}
       args={[geom, config]}
       rotation-x={-Math.PI / 2}

@@ -8,6 +8,14 @@ import { validAddress } from 'libcip54';
 import { getStakeFromAny } from './CSL';
 import * as walletMethods from "../models/wallet"
 import * as policyMethods from "../models/policy"
+import { getTokenHolders, init } from 'libcip54';
+import pgClient from './dbsync'
+import {getClient, checkCacheItem, cacheItem} from "./redis";
+
+const redisClient = await getClient();
+init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
+import * as Api from "./Api"
+import punycode from 'punycode'
 // client.connect();
 export default client;
 
@@ -109,12 +117,24 @@ export const getPolicy = async (key) => {
 }
 
 export const getWallet = async (key) => { 
-    let stake;
-    if (validAddress(key) && (stake=getStakeFromAny(key))) {
-        return await getWalletByStake(stake);
-    } else {
-        return await getWalletBySlug(key);
-    }
+    return new Promise((resolve, reject) => { 
+        let stake;
+        if (validAddress(key) && (stake=getStakeFromAny(key))) {
+            getWalletByStake(stake).then((w)=>{ 
+                resolve(w);
+            })
+        } else if (key.substring(0,1)=='$') { 
+                const punycoded = punycode.toASCII(key.substr(1).trim());
+                // Todo - redis cache this:
+                getTokenHolders('f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex'),0).then((a)=> { 
+                    if (a.length && a[0]?.stake) { 
+                        resolve(getWalletByStake(a[0].stake))
+                    }
+                });
+        } else {
+            resolve(getWalletBySlug(key));
+        }
+    });
 }
 const bindWalletMethods = (wallet) => { 
     for (var method in walletMethods) { 

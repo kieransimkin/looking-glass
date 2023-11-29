@@ -18,6 +18,7 @@ import Head from 'next/head'
 import LoadingTicker from '../../components/LoadingTicker';
 import Link from 'next/link';
 import { getDataURL } from '../../utils/DataStore';
+import punycode from 'punycode'
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let wallet = context.query.address[0];
@@ -104,10 +105,12 @@ export const getServerSideProps = async (context) => {
 }
 
 export default  function CIP54Playground(props) {
-    const dbWallet = props.wallet;
     
+    console.log(props);
+    let dbStake = props.wallet?.stake;
     const router = useRouter();
-    let address = props.wallet.stake;
+    let address = router.query.address[0];
+    
     const [gallery, setGallery] = useState(props.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
     if (!address) address='';
@@ -116,18 +119,27 @@ export default  function CIP54Playground(props) {
         if (!address || address=='') return;
         if (gallery) return;
         setMediaSlideLoading(true);
-        getData('/addressTokens?address='+address).then((d)=>{
-            d.json().then((j) => { 
-                setGallery(j);
-                setMediaSlideLoading(false);
+        if (address.substring(0,1)=='$') { 
+            const punycoded = punycode.toASCII(address.substr(1).trim());
+            getData('/getTokenHolders?unit=f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex')).then((a)=>{
+                a.json().then((j) => { 
+                    if (j.length && j[0]?.address) { 
+                        router.push({pathname:'/wallet/'+j[0].address})
+
+                    }})});
+        } else {
+        
+            getData('/addressTokens?address='+address).then((d)=>{
+                d.json().then((j) => { 
+                    setGallery(j);
+                    setMediaSlideLoading(false);
+                });
+                
             });
-            
-        });
+        }
         
     },[address])
-    if (!dbWallet) { 
-        return <h1>Wallet Not Found</h1>
-    }
+
     const renderBigInfo = (i) => { 
         
         return <BigInfoBox item={i} />
@@ -168,7 +180,7 @@ export default  function CIP54Playground(props) {
             return <li key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
         }
     }
-    let title = props.wallet.name+" - Cardano Looking Glass - clg.wtf"
+    let title = props.wallet?.name+" - Cardano Looking Glass - clg.wtf"
     
     let description = "";
     let url = "https://clg.wtf/policy/"+props.token?.unit?.substr(0,56);

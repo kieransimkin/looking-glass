@@ -7,40 +7,54 @@ import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers";
 import { validAddress } from "../utils/CSLBrowser"
+import { getWallet } from "../utils/database";
+import { getStakeFromAny } from "../utils/CSLBrowser";
 // Generates `/posts/1` and `/posts/2`
 function calcPath(relativePath) {
     const path = require('path');
     return path.join(__dirname, relativePath);
   }
-export async function getStaticPaths() {
-    const fs = require('fs');
-    //fs.readFileSync()
-    return {
-      paths: [],
-      fallback: true, // can also be true or 'blocking'
-    }
-  }
 
-export const getStaticProps = async (context) => { 
-    const fs = require('fs');
+export const getServerSideProps = async (context) => { 
     
+    const fs = require('fs');
+    console.log('hello');
     console.log(context);
-    let filename =  context.params.search;
+    let filename =  context.query.search;
     console.log(filename);
     let data=0;
+    try { 
     if ((data=fs.readFileSync(calcPath('../../../public/'+filename)))) {
-
+        data.toString();
+        // add something to props to make it serve the static file
+        console.log('TODO need to add static file serving');
     }
+    } catch (e) { }
+    try { 
+    if (validAddress(filename)) { 
+        return {
+            redirect: {
+                destination: '/wallet/'+filename
+            }
+        }
+    } else if (validatePolicyID(filename)) { 
+        return {
+            redirect: { 
+                destination: '/policy/'+filename
+            }
+        }
+    } else if (filename.substring(0,1)=='$') { 
+        return {
+            redirect: { 
+                destination: '/wallet/'+encodeURIComponent(filename)
+            }
+        }
+    }
+    } catch (e) { }
     
     
-    
-    const segs = wallet.split('.');
-    let token = segs.length>1?segs[segs.length-1]:null;
     const props = {};
-    if (token) { 
-        wallet = wallet.substr(0,wallet.length-(token.length+1));
-    }
-    let result = await getWallet(wallet);
+    props.filename = filename;
     return {
         props
     }
@@ -50,26 +64,28 @@ export const getStaticProps = async (context) => {
 export default function Search(params) {
     
     const router = useRouter();
-    let {search} = router.query;  
+    let search = params.filename  
     let ext;
     if (search) { 
         ext = String(search).substr(-4,4);
     }
-    console.log(ext);
-
-    console.log(search);
     useEffect(() => { 
         if (!search) return;     
-        if (validAddress(search[0])) { 
-            router.push({pathname:'/wallet/'+search[0]})
-        } else if (validatePolicyID(search[0]))  { 
-            router.push({pathname:'/policy/'+search[0]})
-        } else if (search[0].substring(0,1)=='$') { 
-            const punycoded = punycode.toASCII(search[0].substr(1).trim());
+        console.log(validAddress(search));
+        if (validAddress(search)) { 
+            console.log('got here');
+            router.push({pathname:'/wallet/'+search})
+        } else if (validatePolicyID(search))  { 
+            router.push({pathname:'/policy/'+search})
+        } else if (search.substring(0,1)=='$') { 
+            const punycoded = punycode.toASCII(search.substr(1).trim());
             getData('/getTokenHolders?unit=f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex')).then((a)=>{
                 a.json().then((j) => { 
                     if (j.length && j[0]?.address) { 
-                        router.push({pathname:'/wallet/'+j[0].address})
+                        getWallet(getStakeFromAny(j[0].address)).then((w) => { 
+                            router.push({pathname:'/wallet/'+w.slug})    
+                        })
+                        
                     }
                 });
             });

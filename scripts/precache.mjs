@@ -14,7 +14,7 @@ async function doIt() {
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
     
-    select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", random(), "isFeatured" from policy where "totalActivity"!=0 order by "isFeatured" desc, "totalActivity" desc, random()
+    select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", random(), "isFeatured" from policy where "totalActivity"!=0 order by "isFeatured" desc, random()
     `,[])
     for (var row of results.rows) { 
         
