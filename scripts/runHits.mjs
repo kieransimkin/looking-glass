@@ -11,7 +11,7 @@ dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
-    libcip.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     console.log('Doing policies');
     const keys = await redisClient.keys("lg:policyLastActive:*");
     console.log(database);
