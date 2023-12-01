@@ -1,5 +1,5 @@
 import { init, getUniquePoliciesFromStake } from "libcip54"
-import pgClient from "../../utils/dbsync";
+import pgClient from "../../utils/dbsync.mjs";
 import {getClient, checkCacheItem, cacheItem} from "../../utils/redis.mjs";
 export default async function Browse(req, res) {
     const redisClient = await getClient();

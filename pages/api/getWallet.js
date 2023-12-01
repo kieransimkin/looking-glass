@@ -1,7 +1,7 @@
 
 import { getWallet } from "../../utils/database.mjs";
 import {getClient, incrementCacheItem} from "../../utils/redis.mjs";
-import pgClient from "../../utils/dbsync"
+import pgClient from "../../utils/dbsync.mjs"
 import { init } from "libcip54";
 
 

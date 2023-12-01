@@ -1,7 +1,7 @@
 
 import { getPolicy, setPolicyAssetCount } from "../../utils/database.mjs";
 import {getClient, checkCacheItem, incrementCacheItem } from "../../utils/redis.mjs";
-import pgClient from "../../utils/dbsync"
+import pgClient from "../../utils/dbsync.mjs"
 import { init } from "libcip54";
 
 export default async function Browse(req, res) {

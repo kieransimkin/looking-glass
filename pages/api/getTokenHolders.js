@@ -1,5 +1,5 @@
 import { init, getTokenHolders } from "libcip54"
-import pgClient from "../../utils/dbsync";
+import pgClient from "../../utils/dbsync.mjs";
 import {getClient} from "../../utils/redis.mjs";
 import { checkCacheItem, cacheItem } from "../../utils/redis.mjs";
 export default async function Browse(req, res) {

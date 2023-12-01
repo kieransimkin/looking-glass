@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as libcip54 from "libcip54"
-import pgClient from "../../utils/dbsync";
+import pgClient from "../../utils/dbsync.mjs";
 import {getClient} from "../../utils/redis.mjs";
 import { getDataURL, saveData, sendData, saveSend } from "../../utils/DataStore";
 import { getCachedTokenThumb } from '../../utils/Helpers.mjs'

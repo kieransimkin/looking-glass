@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config()
 import pgCon from 'pg';
-import dbSyncClient from './dbsync'
+import dbSyncClient from './dbsync.mjs'
 import { validatePolicyID } from './Helpers.mjs';
 let client = new pgCon.Pool({connectionString: process.env.DATABASE_URI});
 import { validAddress } from 'libcip54';
@@ -9,7 +9,7 @@ import { getStakeFromAny } from './CSL.mjs';
 import * as walletMethods from "../models/wallet"
 import * as policyMethods from "../models/policy"
 import { getTokenHolders, init } from 'libcip54';
-import pgClient from './dbsync'
+import pgClient from './dbsync.mjs'
 import {getClient} from "./redis.mjs";
 
 let redisClient;

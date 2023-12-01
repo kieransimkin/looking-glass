@@ -2,7 +2,7 @@ import { getClient, clearCacheItem, cacheItem, incrementCacheItem } from "../../
 import { getStakeFromAny, init } from "libcip54";
 import { getWallet, getPolicy } from "../../utils/database.mjs";
 
-import pgClient from '../../utils/dbsync'
+import pgClient from '../../utils/dbsync.mjs'
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);

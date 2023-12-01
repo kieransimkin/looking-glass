@@ -1,5 +1,5 @@
 import { init, getTokensFromPolicy } from "libcip54"
-import pgClient from "../../utils/dbsync";
+import pgClient from "../../utils/dbsync.mjs";
 import {getClient, checkCacheItem, cacheItem} from "../../utils/redis.mjs";
 import { getTokenData } from "../../utils/formatter";
 import { setPolicyAssetCount } from "../../utils/database.mjs";
