@@ -13,7 +13,7 @@ let donePolicies=0;
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
-    libcip.default.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.default.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
     select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", "isFeatured", random() from policy where "totalActivity"!=0 order by "isFeatured" desc, random() 
     `,[])
