@@ -27,7 +27,7 @@ async function doIt() {
         if (!tokens) {
             tokens = await libcip.getTokensFromPolicy(policy);
             
-            await database.default.setPolicyAssetCount(policy, tokens.length)
+            await database.setPolicyAssetCount(policy, tokens.length)
             await redis.cacheItem('getTokensFromPolicy:'+policy,tokens)
             console.log('Saving cache for row: '+policy)
         }
