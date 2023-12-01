@@ -1,6 +1,6 @@
-const ROOT = "/api"
+export const ROOT = "/api"
 
-const postData = async (url = '', inData) => {
+export const postData = async (url = '', inData) => {
     return fetch(ROOT + url, {
       method: 'POST',
       mode: 'cors',
@@ -15,7 +15,7 @@ const postData = async (url = '', inData) => {
     })
   
 }
-const getData = async (url = '') => {
+export const getData = async (url = '') => {
     return fetch(ROOT + url, {
       method: 'GET',
       mode: 'cors',
@@ -29,7 +29,7 @@ const getData = async (url = '') => {
     })
   }
   
-const fetcher = url => fetch(ROOT + url, {
+export const fetcher = url => fetch(ROOT + url, {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',
@@ -42,7 +42,7 @@ const fetcher = url => fetch(ROOT + url, {
 }).then(r => r.json())
 
 
-const buildWitnessed = async (witness, api, callback) => {
+export const buildWitnessed = async (witness, api, callback) => {
     postData("/wit", witness).then(res => {
         console.log("C", res);
       
@@ -68,7 +68,7 @@ const buildWitnessed = async (witness, api, callback) => {
     });
 }
   
-const mkBase = async (wallet) => {
+export const mkBase = async (wallet) => {
     
     const addr = wallet.returnAddrRaw;
     const utxos = await wallet.api.getUtxos()
@@ -81,7 +81,7 @@ const mkBase = async (wallet) => {
       utxos : utxos
     }
   }
-  const refreshWallet = (txid) => {
+  export const refreshWallet = (txid) => {
     // TODO - remember to schedule a refresh of the wallet tokens
   // Todo these shouldn't be needed
   setTimeout(() => { 
@@ -94,12 +94,4 @@ const mkBase = async (wallet) => {
     getData("/sync-db/"+txid);
   }, 300000);
   // End ^^   
-  }
-  module.exports = {
-      fetcher,
-      postData,
-      getData,
-      mkBase,
-      buildWitnessed,
-      refreshWallet
   }

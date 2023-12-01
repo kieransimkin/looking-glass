@@ -1,8 +1,8 @@
 import fs from 'fs';
-import database from '../utils/database.mjs/index.js'
+import database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import * as formatter from '../utils/formatter';
-import redis from '../utils/redis.js'
+import * as redis from '../utils/redis.js'
 import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
 import * as helpers from '../utils/Helpers.js';
@@ -11,8 +11,8 @@ dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
-    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
-    const results = await database.default.query(`
+    libcip.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    const results = await database.query(`
     
     select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", random(), "isFeatured" from policy where "totalActivity"!=0 order by "isFeatured" desc, random()
     `,[])
@@ -38,7 +38,7 @@ async function doIt() {
             
             const promises = [];
             for (const token of tokens) { 
-                promises.push(formatter.default.getTokenData(token));
+                promises.push(formatter.getTokenData(token));
             }
             
             const result = await Promise.all(promises)
@@ -57,7 +57,7 @@ async function doIt() {
         console.log('Done '+policy)
     }
     
-    await helpers.default.sleep(120000) // two minutes
+    await helpers.sleep(120000) // two minutes
     console.log('Complete');
     process.exit(0);
     

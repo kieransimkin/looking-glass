@@ -1,10 +1,10 @@
 import fs from 'fs';
-import database from '../utils/database.mjs/index.js'
+import * as database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import * as formatter from '../utils/formatter.js';
-import redis from '../utils/redis.js'
+import * as redis from '../utils/redis.js'
 import syncClient from "../utils/dbsync.js";
-import libcip from "libcip54"
+import * as libcip from "libcip54"
 import sharp from 'sharp';
 import * as helpers from '../utils/Helpers.js';
 import * as datastore from '../utils/DataStore.js'
@@ -13,7 +13,7 @@ let donePolicies=0;
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
-    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.default.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
     select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", "isFeatured", random() from policy where "totalActivity"!=0 order by "isFeatured" desc, random() 
     `,[])
@@ -27,7 +27,7 @@ async function doIt() {
         if (!tokens) {
             tokens = await libcip.getTokensFromPolicy(policy);
             
-            await database.setPolicyAssetCount(policy, tokens.length)
+            await database.default.setPolicyAssetCount(policy, tokens.length)
             await redis.cacheItem('getTokensFromPolicy:'+policy,tokens)
             console.log('Saving cache for row: '+policy)
         }
@@ -43,7 +43,7 @@ async function doIt() {
             try { 
                 const name = 'tokenThumb:'+token.unit+':500:dark';
             
-                if (datastore.default.getDataURL(name,'jpg')) { 
+                if (datastore.getDataURL(name,'jpg')) { 
 
                     console.log('Already got a thumb for unit '+token.unit);
                     continue;
@@ -75,7 +75,7 @@ async function doIt() {
                 resizeOpts = {height:500};
                 }
                 
-                datastore.default.saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:'#040302'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
+                datastore.saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:'#040302'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
                 
                 console.log("File saved: "+name+'.jpg')
                 } catch (e) { 

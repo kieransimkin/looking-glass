@@ -1,8 +1,8 @@
 import fs from 'fs';
-import database from '../utils/database.mjs/index.js'
+import database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import * as formatter from '../utils/formatter.js';
-import redis from '../utils/redis.js'
+import * as redis from '../utils/redis.js'
 
 import syncClient from "../utils/dbsync.js";
 import * as libcip from "libcip54"
@@ -11,7 +11,7 @@ dotenv.config()
 async function doIt() {
 	console.log(libcip);
     const redisClient = await redis.getClient();
-    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
 
     const keys = await redisClient.keys("lg:refreshWallet:*");
     for (const key of keys) { 
@@ -36,7 +36,7 @@ async function doIt() {
                 
                 const promises = [];
                 for (const token of tokens) { 
-                    promises.push(formatter.default.getTokenData(token));
+                    promises.push(formatter.getTokenData(token));
                 }
                 
                 const result = await Promise.all(promises)
@@ -52,10 +52,10 @@ async function doIt() {
                 if (page>100) break;
             }
             await redisClient.del(key);
-            await helpers.default.sleep(2000)
+            await helpers.sleep(2000)
         }
     }
-    await helpers.default.sleep(120000) // two minutes
+    await helpers.sleep(120000) // two minutes
     console.log('Complete');
     process.exit(0);
     

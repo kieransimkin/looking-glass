@@ -1,5 +1,6 @@
 
-var Buffer = require('buffer/').Buffer;
+
+import {Buffer} from 'buffer';
 import validator from 'validator';
 const { isIn, isHexadecimal } = validator.default;
 
