@@ -2,18 +2,18 @@ import fs from 'fs';
 import * as database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import * as formatter from '../utils/formatter.js';
-import * as redis from '../utils/redis.js'
-import syncClient from "../utils/dbsync.js";
+import * as redis from '../utils/redis.mjs'
+import  syncClient from "../utils/dbsync.js";
 import * as libcip from "libcip54"
 import sharp from 'sharp';
-import * as helpers from '../utils/Helpers.js';
-import * as datastore from '../utils/DataStore.js'
+import * as helpers from '../utils/Helpers.mjs';
+import {default as datastore} from '../utils/DataStore.js'
 dotenv.config()
 let donePolicies=0;
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
-    libcip.default.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.default.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`
     select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", "isFeatured", random() from policy where "totalActivity"!=0 order by "isFeatured" desc, random() 
     `,[])

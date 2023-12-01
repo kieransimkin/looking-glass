@@ -2,7 +2,7 @@
 import CardanoWasm from "@emurgo/cardano-serialization-lib-nodejs";
 import { Buffer } from 'buffer';
 import cbor from "cbor";
-import { ucfirst } from '../../utils/Helpers';
+import { ucfirst } from '../../utils/Helpers.mjs';
 
 export default async function Browse(req, res) {
   

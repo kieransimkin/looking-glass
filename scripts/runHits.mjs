@@ -2,11 +2,11 @@ import fs from 'fs';
 import * as database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import * as formatter from '../utils/formatter.js';
-import * as redis from '../utils/redis.js'
+import * as redis from '../utils/redis.mjs'
 
 import syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
-import * as helpers from '../utils/Helpers.js';
+import * as helpers from '../utils/Helpers.mjs';
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();

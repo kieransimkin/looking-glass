@@ -6,7 +6,7 @@ import { alpha } from '@material-ui/core/styles/colorManipulator';
 import PauseIcon from '@material-ui/icons/Pause';
 import Image from 'next/image';
 import VideoCard from '../components/VideoCard';
-import { checkCacheItem } from '../utils/redis';
+import { checkCacheItem } from '../utils/redis.mjs';
 import { IconButton } from '@material-ui/core';
 import React, { useState , useMemo, useEffect, useRef, useLayoutEffect } from "react";
 import PictureCard from '../components/PictureCard'

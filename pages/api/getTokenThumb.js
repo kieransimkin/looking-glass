@@ -1,9 +1,9 @@
 import axios from "axios";
 import * as libcip54 from "libcip54"
 import pgClient from "../../utils/dbsync";
-import {getClient} from "../../utils/redis";
+import {getClient} from "../../utils/redis.mjs";
 import { getDataURL, saveData, sendData, saveSend } from "../../utils/DataStore";
-import { getCachedTokenThumb } from '../../utils/Helpers'
+import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
 export default async function Browse(req, res) {

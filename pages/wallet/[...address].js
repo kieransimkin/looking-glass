@@ -12,7 +12,7 @@ import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
 import { getWallet } from '../../utils/database.mjs';
-import { checkCacheItem, getClient, incrementCacheItem } from '../../utils/redis';
+import { checkCacheItem, getClient, incrementCacheItem } from '../../utils/redis.mjs';
 import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
 import LoadingTicker from '../../components/LoadingTicker';

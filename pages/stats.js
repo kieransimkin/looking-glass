@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { getData, postData } from '../utils/Api';
 import BigInfoBox from '../components/BigInfoBox';
 import { getDataURL } from '../utils/DataStore';
-import { checkCacheItem, incrementCacheItem, getClient } from '../utils/redis';
+import { checkCacheItem, incrementCacheItem, getClient } from '../utils/redis.mjs';
 import { getFeaturedPolicies } from '../utils/database.mjs';
 import { useState, useEffect, Suspense, useRef, useImperativeHandle } from 'react';
 import { easing } from 'maath'

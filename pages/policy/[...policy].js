@@ -14,7 +14,7 @@ import {SmartNFTPortal} from 'smartnftportal'
 import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
-import { checkCacheItem, incrementCacheItem, getClient } from '../../utils/redis';
+import { checkCacheItem, incrementCacheItem, getClient } from '../../utils/redis.mjs';
 import { getPolicy} from '../../utils/database.mjs';
 import { getTokenData } from '../../utils/formatter';
 import LoadingTicker from '../../components/LoadingTicker';

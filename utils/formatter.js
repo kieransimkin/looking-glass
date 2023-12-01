@@ -1,5 +1,5 @@
 import { getMetadata, getSmartImports } from "libcip54"
-import { checkCacheItem, cacheItem } from "./redis";
+import { checkCacheItem, cacheItem } from "./redis.mjs";
 import { getDataURL } from "./DataStore";
 export const getTokenData = async function (token, throwOnCacheMiss=false) { 
     

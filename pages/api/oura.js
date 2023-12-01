@@ -1,4 +1,4 @@
-import { getClient, clearCacheItem, cacheItem, incrementCacheItem } from "../../utils/redis";
+import { getClient, clearCacheItem, cacheItem, incrementCacheItem } from "../../utils/redis.mjs";
 import { getStakeFromAny, init } from "libcip54";
 import { getWallet, getPolicy } from "../../utils/database.mjs";
 

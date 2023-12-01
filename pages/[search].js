@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
-import { validatePolicyID, asciiToHex } from "../utils/Helpers";
+import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
 import { validAddress } from "../utils/CSLBrowser"
 import { getWallet } from "../utils/database.mjs";
 import { getStakeFromAny } from "../utils/CSLBrowser";

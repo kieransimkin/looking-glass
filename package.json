@@ -5,7 +5,6 @@
   "repository": "https://github.com/kieransimkin/cip54-playground",
   "author": "Kieran Simkin <382129+kieransimkin@users.noreply.github.com>",
   "license": "BSD-3-Clause-Attribution",
-  "type":"module",
   "scripts": {
     "dev": "rm -rfv node_modules/.cache/* && next dev",
     "build": "bash -c \"rm -rfv node_modules/.cache/* && pushd submodules/libcip54 && npm run build && pushd .. && pushd SmartNFTPortal && npm run build && pushd ../.. && next build\"",

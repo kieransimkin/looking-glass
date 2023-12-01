@@ -1,6 +1,6 @@
 import { init, getTokensFromAny } from "libcip54"
 import pgClient from "../../utils/dbsync";
-import {getClient, checkCacheItem, cacheItem} from "../../utils/redis";
+import {getClient, checkCacheItem, cacheItem} from "../../utils/redis.mjs";
 import { getTokenData } from "../../utils/formatter";
 import { getWallet } from "../../utils/database.mjs";
 import { getDataURL } from "../../utils/DataStore";

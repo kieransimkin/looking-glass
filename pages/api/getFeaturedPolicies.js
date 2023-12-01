@@ -1,6 +1,6 @@
 
 import { getFeaturedPolicies, setPolicyAssetCount } from "../../utils/database.mjs";
-import {getClient, checkCacheItem, incrementCacheItem } from "../../utils/redis";
+import {getClient, checkCacheItem, incrementCacheItem } from "../../utils/redis.mjs";
 import pgClient from "../../utils/dbsync"
 import { init } from "libcip54";
 

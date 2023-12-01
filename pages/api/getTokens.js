@@ -2,7 +2,7 @@
 
 import { getTokensFromStake, getStakeFromAny, init } from "libcip54";
 import pgClient from "../../utils/dbsync";
-import {getClient} from "../../utils/redis";
+import {getClient} from "../../utils/redis.mjs";
 
 export default async function Browse(req, res) {
   const redisClient = await getClient();

@@ -2,62 +2,72 @@ import dotenv from 'dotenv';
 dotenv.config()
 import pgCon from 'pg';
 import dbSyncClient from './dbsync'
-import { validatePolicyID } from './Helpers';
+import { validatePolicyID } from './Helpers.mjs';
 let client = new pgCon.Pool({connectionString: process.env.DATABASE_URI});
 import { validAddress } from 'libcip54';
-import { getStakeFromAny } from './CSL';
+import { getStakeFromAny } from './CSL.mjs';
 import * as walletMethods from "../models/wallet"
 import * as policyMethods from "../models/policy"
 import { getTokenHolders, init } from 'libcip54';
 import pgClient from './dbsync'
-import {getClient, checkCacheItem, cacheItem} from "./redis";
+import {getClient} from "./redis.mjs";
 
-const redisClient = await getClient();
-init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
+let redisClient;
 import * as Api from "./Api"
 import punycode from 'punycode'
 // client.connect();
 export default client;
-
+export const dbinit = async() => { 
+    redisClient = await getClient();
+    init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
+}
 export const setPolicyAssetCount = async (policy, count) => { 
+    await dbinit();
     return await client.query(
         `update policy set "assetCount"=$1 WHERE encode("policyID",'hex')=$2`, [count, policy]
     )
 }
 export const setPolicyLastMoved = async (policy, date) => { 
+    await dbinit();
     return await client.query(
         `update policy set "lastMoved"=$1 WHERE encode("policyID",'hex')=$2`, [new Date(date), policy]
     )
 }
 
 export const setWalletLastMoved = async (stake, date) => { 
+    await dbinit();
     return await client.query(
         `update wallet set "lastMoved"=$1 WHERE stake=$2`, [new Date(date), stake]
     )
 }
 
 export const incrementPolicyTotalActivity = async (policy, activity) => { 
+    await dbinit();
     return await client.query(
         `update policy set "totalActivity"="totalActivity"+$1 WHERE encode("policyID",'hex')=$2`, [activity, policy]
     )
 }
 export const incrementWalletTotalActivity = async (stake, activity) => { 
+    await dbinit();
     return await client.query(
         `update wallet set "totalActivity"="totalActivity"+$1 WHERE stake=$2`, [activity, stake]
     )
 }
 
 export const incrementPolicyTotalHits = async (policy, hits) => { 
+    await dbinit();
     return await client.query(
         `update policy set "totalHits"="totalHits"+$1 WHERE encode("policyID",'hex')=$2`, [hits, policy]
     )
 }
 export const incrementWalletTotalHits = async (stake, hits) => { 
+    await dbinit();
     return await client.query(
         `update wallet set "totalHits"="totalHits"+$1 WHERE stake=$2`, [hits, stake]
     )
 }
 export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=true) => { 
+    await dbinit();
     if (!Array.isArray(sort)) sort = [sort];
     const sortOptions = [];
     const whereOptions = [];
@@ -109,6 +119,7 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
     return policies.rows;
 }
 export const getPolicy = async (key) => { 
+    await dbinit();
     if (validatePolicyID(key)) { 
         return await getPolicyByID(key);
     } else {
@@ -117,6 +128,7 @@ export const getPolicy = async (key) => {
 }
 
 export const getWallet = async (key) => { 
+    await dbinit();
     return new Promise((resolve, reject) => { 
         let stake;
         if (validAddress(key) && (stake=getStakeFromAny(key))) {
@@ -137,6 +149,7 @@ export const getWallet = async (key) => {
     });
 }
 const bindWalletMethods = (wallet) => { 
+    
     for (var method in walletMethods) { 
         if (typeof walletMethods[method]=='function') { 
             wallet[method]=walletMethods[method].bind(wallet);
@@ -154,6 +167,7 @@ const bindPolicyMethods = (policy) => {
     return policy;
 }
 export const getPolicyKeyList = async () => { 
+    await dbinit();
     let list = await client.query(
         `select distinct slug from policy where slug!=encode("policyID",'hex')`,[]
     );
@@ -176,6 +190,7 @@ export const getPolicyKeyList = async () => {
 }
 
 export const getWalletKeyList = async () => { 
+    await dbinit();
     let list = await client.query(
         `select distinct slug from wallet where slug!=stake`,[]
     );
@@ -197,6 +212,7 @@ export const getWalletKeyList = async () => {
 
 
 export const getWalletByStake = async (stake) => { 
+    await dbinit();
     
     let wallet = await client.query(
         `
@@ -239,6 +255,7 @@ export const getWalletByStake = async (stake) => {
       }
 }
 export const getWalletBySlug = async (slug) => { 
+    await dbinit();
     let wallet = await client.query(
         `
         SELECT 
@@ -264,6 +281,7 @@ export const getWalletBySlug = async (slug) => {
       }
 }
 export const getPolicyByID = async (policyID) => { 
+    await dbinit();
     let policy = await client.query(
         `
         SELECT 
@@ -312,6 +330,7 @@ export const getPolicyByID = async (policyID) => {
       }
 }
 export const getPolicyBySlug = async (slug) => { 
+    await dbinit();
 
     let policy = await client.query(
         `

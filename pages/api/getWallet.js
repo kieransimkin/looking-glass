@@ -1,6 +1,6 @@
 
 import { getWallet } from "../../utils/database.mjs";
-import {getClient, incrementCacheItem} from "../../utils/redis";
+import {getClient, incrementCacheItem} from "../../utils/redis.mjs";
 import pgClient from "../../utils/dbsync"
 import { init } from "libcip54";
 
