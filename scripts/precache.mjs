@@ -3,7 +3,7 @@ import database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import {default as formatter} from '../utils/formatter';
 import * as redis from '../utils/redis.mjs'
-import syncClient from "../utils/dbsync.js";
+import * as syncClient from "../utils/dbsync.js";
 import libcip from "libcip54"
 import * as helpers from '../utils/Helpers.mjs';
 import { PolicyTwoTone } from '@material-ui/icons';
