@@ -90,13 +90,14 @@ async function doIt() {
     
         while (waiting.length-donePolicies>60) { 
             console.log((waiting.length-donePolicies)+' queued, now waiting')
-            await helpers.default.sleep(60000);
+        
+            await helpers.sleep(60000);
         }
  
     }
     await Promise.all(waiting);
     console.log("Done tokens: "+doneTokens)
-    await helpers.default.sleep(120000) // two minutes
+    await helpers.sleep(120000) // two minutes
     console.log('Complete');
     process.exit(0);
     
