@@ -4,14 +4,14 @@ import dotenv from 'dotenv';
 import * as formatter from '../utils/formatter.js';
 import * as redis from '../utils/redis.mjs'
 
-import * as syncClient from "../utils/dbsync.js";
+import {default as syncClient} from "../utils/dbsync.js";
 import libcip from "libcip54"
 import * as helpers from '../utils/Helpers.mjs';
 dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
-    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     console.log('Doing policies');
     const keys = await redisClient.keys("lg:policyLastActive:*");
     console.log(database);

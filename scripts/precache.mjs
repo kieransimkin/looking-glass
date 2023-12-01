@@ -3,7 +3,7 @@ import database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import {default as formatter} from '../utils/formatter';
 import * as redis from '../utils/redis.mjs'
-import * as syncClient from "../utils/dbsync.js";
+import {default as syncClient} from "../utils/dbsync.js";
 import libcip from "libcip54"
 import * as helpers from '../utils/Helpers.mjs';
 import { PolicyTwoTone } from '@material-ui/icons';
@@ -11,7 +11,7 @@ dotenv.config()
 async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
-    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.query(`
     
     select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", random(), "isFeatured" from policy where "totalActivity"!=0 order by "isFeatured" desc, random()

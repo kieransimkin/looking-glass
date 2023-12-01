@@ -4,14 +4,14 @@ import dotenv from 'dotenv';
 import {default as formatter} from '../utils/formatter';
 import * as redis from '../utils/redis.mjs'
 
-import * as syncClient from "../utils/dbsync.js";
+import {default as syncClient} from "../utils/dbsync.js";
 import * as libcip from "libcip54"
 import * as helpers from '../utils/Helpers.mjs';
 dotenv.config()
 async function doIt() {
 	console.log(libcip);
     const redisClient = await redis.getClient();
-    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
 
     const keys = await redisClient.keys("lg:refreshWallet:*");
     for (const key of keys) { 
