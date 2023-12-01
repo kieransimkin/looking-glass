@@ -3,8 +3,7 @@ import database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import {default as formatter} from '../utils/formatter';
 import * as redis from '../utils/redis.mjs'
-
-import {default as syncClient} from "../utils/dbsync.js";
+import * as syncClient from "../utils/dbsync.mjs";
 import * as libcip from "libcip54"
 import * as helpers from '../utils/Helpers.mjs';
 dotenv.config()
