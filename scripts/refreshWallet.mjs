@@ -1,5 +1,3 @@
-import fs from 'fs';
-import database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import {default as formatter} from '../utils/formatter';
 import * as redis from '../utils/redis.mjs'

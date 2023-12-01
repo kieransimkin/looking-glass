@@ -1,5 +1,5 @@
 import fs from 'fs';
-import database from '../utils/database.mjs'
+import * as database from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import {default as formatter} from '../utils/formatter';
 import * as redis from '../utils/redis.mjs'
@@ -12,7 +12,7 @@ async function doIt() {
     const redisClient = await redis.getClient();
     //console.log(syncClient.default.query);
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
-    const results = await database.query(`
+    const results = await database.default.query(`
     
     select distinct "policyID", encode("policyID",'hex') as policy, "totalActivity", random(), "isFeatured" from policy where "totalActivity"!=0 order by "isFeatured" desc, random()
     `,[])
