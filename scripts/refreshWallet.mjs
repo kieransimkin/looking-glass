@@ -11,7 +11,7 @@ dotenv.config()
 async function doIt() {
 	console.log(libcip);
     const redisClient = await redis.getClient();
-    libcip.init('mainnet',syncClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
+    libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
 
     const keys = await redisClient.keys("lg:refreshWallet:*");
     for (const key of keys) { 
