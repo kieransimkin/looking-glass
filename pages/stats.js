@@ -21,7 +21,7 @@ import {alpha} from '@material-ui/core/styles/colorManipulator'
 import { damp, damp2, damp3, damp4, dampE, dampM, dampQ, dampS, dampC } from 'maath/easing'
 import { OrbitControls, Sky } from '@react-three/drei'
 import { makeStyles } from '@material-ui/core/styles';
-
+import useWindowDimensions from '../utils/WindowDimensions';
 /*
 import {Start as StartSkybox, skybox as Skybox} from '../3d/skybox'
 import {Start as StartOcean, surface as OceanSurface, volume as OceanVolume} from '../3d/ocean'
@@ -96,6 +96,7 @@ const StatsCube = ({canvasRef, mintingGallery, recentlyActiveGallery, activeGall
         click(!clicked);
         console.log('got click');
     }
+    const { height, width } = useWindowDimensions();
     const spread = 25;
     return (
     <group ref={cubeRef} scale={[4,4,4]} position={[0,20,0]}>
