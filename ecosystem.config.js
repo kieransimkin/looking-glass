@@ -41,24 +41,30 @@ module.exports = {
             args:'scripts/refreshWallet.mjs',
             name:'refreshWallet'
         },
+        /*
         {
             script:'npm run precache',
             instances:'1',
             args:'scripts/precache.mjs',
             name:'precache'
         },
+        //*/
+        /*
         {
             script:'npm run runHits',
             instances:'1',
             args:'scripts/runHits.mjs',
             name:'runHits'
         },
+        //*/
+        /*
         {
             script:'npm run generateThumbnails',
             instances:'1',
             args:'scripts/generateThumbnails.mjs',
             name:'generateThumbnails'
         },
+        //*/
         {
           script:'npm run socket',
           instances:'1',
