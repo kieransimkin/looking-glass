@@ -6,7 +6,8 @@ import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
-import { validAddress } from "../utils/CSLBrowser"
+import { validAddress as validAddressS } from "../utils/CSL"
+import { validAddress as validAddressB } from "../utils/CSLBrowser"
 import { getWallet } from "../utils/database.mjs";
 import { getStakeFromAny } from "../utils/CSLBrowser";
 // Generates `/posts/1` and `/posts/2`
@@ -19,9 +20,10 @@ export const getServerSideProps = async (context) => {
     
     const fs = require('fs');
     console.log('hello');
-    console.log(context);
+    //console.log(context);
     let filename =  context.query.search;
     console.log(filename);
+    
     let data=0;
     try { 
     if ((data=fs.readFileSync(calcPath('../../../public/'+filename)))) {
@@ -31,7 +33,9 @@ export const getServerSideProps = async (context) => {
     }
     } catch (e) { }
     try { 
-    if (validAddress(filename)) { 
+        
+    if (validAddressS(filename)) { 
+        console.log('valid address');
         return {
             redirect: {
                 destination: '/wallet/'+filename
@@ -50,7 +54,10 @@ export const getServerSideProps = async (context) => {
             }
         }
     }
-    } catch (e) { }
+    } catch (e) { 
+console.log(e);
+
+    }
     
     
     const props = {};
@@ -65,14 +72,15 @@ export default function Search(params) {
     
     const router = useRouter();
     let search = params.filename  
+    return;
     let ext;
     if (search) { 
         ext = String(search).substr(-4,4);
     }
     useEffect(() => { 
         if (!search) return;     
-        console.log(validAddress(search));
-        if (validAddress(search)) { 
+        console.log(validAddressB(search));
+        if (validAddressB(search)) { 
             console.log('got here');
             router.push({pathname:'/wallet/'+search})
         } else if (validatePolicyID(search))  { 

@@ -1,5 +1,5 @@
 import { TextField, IconButton } from "@material-ui/core"
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams, usePathname } from "next/router";
 import { useState } from "react";
 export default function SearchBox({width, onFocus, onBlur,autoComplete='on', autoFocus=true}) {
     const router = useRouter();
@@ -9,7 +9,9 @@ export default function SearchBox({width, onFocus, onBlur,autoComplete='on', aut
     }
     const onSubmit = (e) => { 
         e.preventDefault()
-        router.push({pathname: '/'+searchTerm})
+        console.log(searchTerm);
+        window.location = '/'+searchTerm;
+        //router.push({pathname: '/'+searchTerm})
     }
     return (
             <form onSubmit={onSubmit} autoComplete={autoComplete} noValidate style={{display: 'flex',width: width?width:600}}> 
