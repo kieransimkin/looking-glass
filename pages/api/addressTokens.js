@@ -5,14 +5,14 @@ import { getTokenData } from "../../utils/formatter";
 import { getWallet } from "../../utils/database.mjs";
 import { getDataURL } from "../../utils/DataStore";
 /**
- * @description Retrieves and processes data for a given address, including tokens
- * and wallet information. It checks for cached data, fetches new data if necessary,
- * slices the result according to page size and offset, and returns the processed
- * data along with pagination information.
+ * @description Retrieves a list of tokens for a specified address from a cache or
+ * by querying IPFS and Arweave gateways if not cached. It also fetches wallet
+ * information, calculates pagination, and returns the results as JSON with pagination
+ * details.
  *
- * @param {object} req - Used to represent an HTTP request.
+ * @param {any} req - Used to hold the HTTP request data.
  *
- * @param {Response} res - Used to send HTTP responses.
+ * @param {Response} res - Responsible for sending the response back to the client.
  */
 export default async function Browse(req, res) {
     const redisClient = await getClient();
@@ -32,6 +32,7 @@ export default async function Browse(req, res) {
         uncached=true;
         tokens = await getTokensFromAny(address);
         await cacheItem('getTokensFromAddress:'+address,tokens)
+        if (!tokens) tokens = [];
     }
     const wallet = await getWallet(address);
     
