@@ -135,7 +135,7 @@ export const getWallet = async (key) => {
             getWalletByStake(stake).then((w)=>{ 
                 resolve(w);
             })
-        } else if (key.substring(0,1)=='$') { 
+        } else if (key && key.length && key.substring(0,1)=='$') { 
                 const punycoded = punycode.toASCII(key.substr(1).trim());
                 // Todo - redis cache this:
                 getTokenHolders('f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex'),0).then((a)=> { 
