@@ -47,7 +47,7 @@ export default async function Browse(req, res) {
             }
         }
     }
-    if (!wallet?.profileUnit && uncached) { 
+    if (wallet && !wallet?.profileUnit && uncached) { 
         wallet.setProfileUnit(presliced);
     }
     res.status(200).json({tokens:result, page, start, end, totalPages, perPage });
