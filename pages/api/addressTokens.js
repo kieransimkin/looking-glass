@@ -4,6 +4,16 @@ import {getClient, checkCacheItem, cacheItem} from "../../utils/redis.mjs";
 import { getTokenData } from "../../utils/formatter";
 import { getWallet } from "../../utils/database.mjs";
 import { getDataURL } from "../../utils/DataStore";
+/**
+ * @description Retrieves and processes data for a given address, including tokens
+ * and wallet information. It checks for cached data, fetches new data if necessary,
+ * slices the result according to page size and offset, and returns the processed
+ * data along with pagination information.
+ *
+ * @param {object} req - Used to represent an HTTP request.
+ *
+ * @param {Response} res - Used to send HTTP responses.
+ */
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
@@ -25,7 +35,7 @@ export default async function Browse(req, res) {
     }
     const wallet = await getWallet(address);
     
-    const totalPages = Math.ceil(tokens.length/perPage);
+    const totalPages = Math.ceil(tokens?.length/perPage);
     const presliced = tokens;
     tokens = tokens.slice(start, end);
     
