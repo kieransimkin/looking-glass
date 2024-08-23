@@ -6,22 +6,19 @@ import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
-import { validAddress as validAddressS } from "../utils/CSL"
-import { validAddress as validAddressB } from "../utils/CSLBrowser.js.old"
+import { validAddress, getStakeFromAny } from "libcip54";
 import { getWallet } from "../utils/database.mjs";
-import { getStakeFromAny } from "../utils/CSLBrowser.js.old";
+
 // Generates `/posts/1` and `/posts/2`
 /**
- * @description Joins a provided relative path with the current working directory's
- * absolute path to form an absolute path. It utilizes Node.js's built-in `path`
- * module and `__dirname` variable, which returns the directory name of the current
- * module.
+ * @description Concatenates a provided `relativePath` with the current working
+ * directory (`__dirname`) to form an absolute file path using the `path.join` method
+ * from the `path` module.
  *
- * @param {string} relativePath - Intended to be used as a relative path.
+ * @param {string} relativePath - Used as part of constructing an absolute file path.
  *
- * @returns {string} A full path to a file or directory, obtained by joining the
- * current working directory (`__dirname`) with the provided relative path using the
- * `path.join()` method.
+ * @returns {string} A fully qualified path name resulting from joining the directory
+ * name obtained through the `__dirname` variable with the provided relative path.
  */
 function calcPath(relativePath) {
     const path = require('path');
@@ -29,15 +26,14 @@ function calcPath(relativePath) {
   }
 
 /**
- * @description Handles server-side rendering for a React application, processing
- * query parameters to determine whether to serve a static file or redirect to a
- * specific URL based on the input string's format and contents.
+ * @description Handles server-side rendering for a Next.js application. It redirects
+ * requests based on query parameters, checks file existence and validity, and serves
+ * static files or redirects to other pages accordingly.
  *
- * @param {object} context - Passed from Next.js.
+ * @param {object} context - Used to access server-side request context.
  *
- * @returns {Promise<Record<string, any>>} Either an object with a "redirect" property
- * that contains a destination URL, or an object with a "props" property containing
- * a filename.
+ * @returns {any} Either an object containing a property named "redirect" with
+ * destination as a string, or an object with a single property named "props".
  */
 export const getServerSideProps = async (context) => { 
     
@@ -57,7 +53,7 @@ export const getServerSideProps = async (context) => {
     } catch (e) { }
     try { 
         
-    if (validAddressS(filename)) { 
+    if (validAddress(filename)) { 
         console.log('valid address');
         return {
             redirect: {
@@ -92,14 +88,14 @@ console.log(e);
 };
 
 /**
- * @description Handles search input, validating and processing it to redirect the
- * user to corresponding wallet or policy pages. It also fetches token holders' data
- * and updates the route accordingly.
+ * @description Checks if a search query has been provided, and based on its format,
+ * redirects the user to either a wallet page, policy page, or retrieves data from
+ * an API and navigates to a corresponding wallet page.
  *
- * @param {any} params - Expected to contain filename data.
+ * @param {object} params - Expected to contain the filename as a property.
  *
- * @returns {ReactNode} A JSX element: `<div> ... </div>` containing an h1 tag and a
- * CircularProgress component.
+ * @returns {JSX.Element} A React element that wraps a div containing an h1 tag and
+ * a circular progress indicator.
  */
 export default function Search(params) {
     
@@ -111,11 +107,11 @@ export default function Search(params) {
         ext = String(search).substr(-4,4);
     }
     useEffect(() => { 
-        // Processes search queries.
+        // Executes when search state changes.
 
         if (!search) return;     
-        console.log(validAddressB(search));
-        if (validAddressB(search)) { 
+        console.log(validAddress(search));
+        if (validAddress(search)) { 
             console.log('got here');
             router.push({pathname:'/wallet/'+search})
         } else if (validatePolicyID(search))  { 
@@ -123,14 +119,14 @@ export default function Search(params) {
         } else if (search.substring(0,1)=='$') { 
             const punycoded = punycode.toASCII(search.substr(1).trim());
             getData('/getTokenHolders?unit=f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex')).then((a)=>{
-                // Retrieves wallet information.
+                // Parses JSON data and navigates to a wallet page if an address exists.
 
                 a.json().then((j) => { 
-                    // Processes JSON data to redirect to wallet page.
+                    // Processes JSON data to navigate to wallet page.
 
                     if (j.length && j[0]?.address) { 
                         getWallet(getStakeFromAny(j[0].address)).then((w) => { 
-                            // Pushes route.
+                            // Pushes a route to the router.
 
                             router.push({pathname:'/wallet/'+w.slug})    
                         })
