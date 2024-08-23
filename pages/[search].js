@@ -6,10 +6,9 @@ import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
-import { validAddress as validAddressS } from "../utils/CSL"
-import { validAddress as validAddressB } from "../utils/CSLBrowser.js.old"
+import { validAddress, getStakeFromAny } from "libcip54";
 import { getWallet } from "../utils/database.mjs";
-import { getStakeFromAny } from "../utils/CSLBrowser.js.old";
+
 // Generates `/posts/1` and `/posts/2`
 function calcPath(relativePath) {
     const path = require('path');
@@ -34,7 +33,7 @@ export const getServerSideProps = async (context) => {
     } catch (e) { }
     try { 
         
-    if (validAddressS(filename)) { 
+    if (validAddress(filename)) { 
         console.log('valid address');
         return {
             redirect: {
@@ -79,8 +78,8 @@ export default function Search(params) {
     }
     useEffect(() => { 
         if (!search) return;     
-        console.log(validAddressB(search));
-        if (validAddressB(search)) { 
+        console.log(validAddress(search));
+        if (validAddress(search)) { 
             console.log('got here');
             router.push({pathname:'/wallet/'+search})
         } else if (validatePolicyID(search))  { 
