@@ -37,7 +37,7 @@
     "@react-three/fiber": "^8.15.10",
     "@types/three": "^0.158.2",
     "@uiw/react-codemirror": "^4.19.16",
-    "axios": "^1.4.0",
+    "axios": "^1.7.4",
     "bech32": "^2.0.0",
     "blake2b": "^2.1.4",
     "buffer": "^6.0.3",
