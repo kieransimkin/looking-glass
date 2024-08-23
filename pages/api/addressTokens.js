@@ -25,7 +25,7 @@ export default async function Browse(req, res) {
     }
     const wallet = await getWallet(address);
     
-    const totalPages = Math.ceil(tokens.length/perPage);
+    const totalPages = Math.ceil(tokens?.length/perPage);
     const presliced = tokens;
     tokens = tokens.slice(start, end);
     
