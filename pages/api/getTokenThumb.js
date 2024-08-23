@@ -7,16 +7,16 @@ import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
 /**
- * @description Generates a thumbnail of an image based on query parameters unit,
- * size, and mode. It fetches metadata, resizes the image according to the specified
- * size and mode, and returns it as a response in the requested format (jpg or png).
+ * @description Retrieves metadata and file data from Redis and IPFS/IPNS, processes
+ * it with Sharp.js to resize images, and sends the result as a response with specific
+ * image types (JPEG or PNG) depending on the mode query parameter.
  *
- * @param {any} req - The request object received by an HTTP server.
+ * @param {object} req - Representing an HTTP request.
  *
  * @param {Response} res - Used to send data back to the client.
  *
- * @returns {Promise<void>} Resolved when the operation is completed successfully and
- * rejected if an error occurs.
+ * @returns {any} Either a response object with an image of type 'jpg' or 'png', or
+ * a failed response with status code 425.
  */
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
@@ -24,7 +24,7 @@ export default async function Browse(req, res) {
   const redisClient = await getClient();
   
   libcip54.init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
-
+  libcip54.setGetTimeout(2000);
   if (!size || size==0) { 
     size=500;
   } else { 
