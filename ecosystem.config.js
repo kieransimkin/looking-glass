@@ -23,7 +23,7 @@ module.exports = {
 	apps: [
 		{
       script: 'node_modules/.bin/next',
-      instances: "max",
+      instances: "16",
       args: "start",
       "exec_mode": "cluster",
       name: 'clg',
