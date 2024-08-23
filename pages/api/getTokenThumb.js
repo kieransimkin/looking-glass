@@ -33,6 +33,7 @@ export default async function Browse(req, res) {
     result = await libcip54.getFile(unit, null, metadata);
   } catch (e) { 
     res.status(425).send('Failed')
+    return;
   }
   const img = sharp(Buffer.from(result.buffer));
   const imd = await img.metadata();
