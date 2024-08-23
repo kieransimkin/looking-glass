@@ -10,6 +10,15 @@ const nextConfig = {
   env: { 
     'SOCKET_PORT':process.env.SOCKET_PORT
   },
+  /**
+   * @description Defines a rewrite rule that matches any URL pattern (`/:path*`) and
+   * maps it to itself, essentially doing nothing with the requested URL. This no-op
+   * rewrite is used to trigger checking all pages and static files before attempting
+   * proxying.
+   *
+   * @returns {object[]} An array containing an object with two properties: `source`
+   * and `destination`.
+   */
   rewrites: () => { return[
     
       // we need to define a no-op rewrite to trigger checking
@@ -20,6 +29,18 @@ const nextConfig = {
       }
     ];},
   //output:'standalone',
+  /**
+   * @description Sets configuration options for the Webpack compiler. It enables
+   * experimental features, disables built-in module resolutions, and filters warnings
+   * from a serialization library by ignoring those related to "emurgo". The modified
+   * configuration is then returned.
+   *
+   * @param {object} config - Used to configure Webpack.
+   *
+   * @param {object} options - Unused.
+   *
+   * @returns {object} A configuration for the Webpack module bundler.
+   */
   webpack: function (config, options) {
     
 		config.experiments = { layers: true,topLevelAwait: true };
@@ -37,6 +58,16 @@ const nextConfig = {
 		return config;
 	},
 }
+/**
+ * @description Modifies a Webpack configuration object to support WebAssembly modules
+ * by enabling experiments, configuring module rules, and setting output file names
+ * for WASM files on server-side and client-side builds.
+ *
+ * @param {object} config - Used to store configuration settings for Webpack.
+ *
+ * @param {boolean} isServer - Used to determine whether it's a server-side or
+ * client-side environment.
+ */
 function patchWasmModuleImport(config, isServer) {
   config.experiments = Object.assign(config.experiments || {}, {
     asyncWebAssembly: true,

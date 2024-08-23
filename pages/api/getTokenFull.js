@@ -5,6 +5,15 @@ import {getClient} from "../../utils/redis.mjs";
 import { getDataURL, saveData } from "../../utils/DataStore";
 import sharp from 'sharp';
 
+/**
+ * @description Retrieves metadata and file contents for a specified unit from Redis,
+ * LibCIP54, and PG client. It initializes LibCIP54 with environment variables, sets
+ * a timeout, and sends the file response to the client with its content type.
+ *
+ * @param {Request} req - Used to retrieve query parameters from the HTTP request.
+ *
+ * @param {Response} res - Responsible for sending response back to the client.
+ */
 export default async function Browse(req, res) {
   let {unit} = req.query;
 

@@ -4,6 +4,15 @@ import {getClient, checkCacheItem, cacheItem} from "../../utils/redis.mjs";
 import { getTokenData } from "../../utils/formatter";
 import { getWallet } from "../../utils/database.mjs";
 import { getDataURL } from "../../utils/DataStore";
+/**
+ * @description Retrieves a list of tokens for a given address from Redis cache or
+ * database, paginates the result, and returns it to the client along with pagination
+ * metadata. It also sets the profile unit for the wallet if necessary.
+ *
+ * @param {object} req - Represents an incoming HTTP request.
+ *
+ * @param {Response} res - Used to send an HTTP response.
+ */
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);

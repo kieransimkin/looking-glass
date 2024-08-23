@@ -6,6 +6,20 @@ import { getDataURL, saveData, sendData, saveSend } from "../../utils/DataStore"
 import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
+/**
+ * @description Generates a resized thumbnail image for a given unit from a metadata
+ * and file retrieval API, using Redis and IPFS/Arweave gateways. It supports three
+ * modes: dark, light, and transparent. The resulting image is sent as a response to
+ * the request.
+ *
+ * @param {Request} req - Intended for handling HTTP requests.
+ *
+ * @param {http.ServerResponse} res - Used to send HTTP responses to clients.
+ *
+ * @returns {Promise<void>} Resolved with a status code and an error message if there
+ * was an error during execution. Otherwise, it sends back an image response to the
+ * client.
+ */
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
 

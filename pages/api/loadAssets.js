@@ -2,6 +2,16 @@
 import { TransactionUnspentOutput } from "@emurgo/cardano-serialization-lib-nodejs";
 import { Buffer } from 'buffer';
 
+/**
+ * @description Processes a JSON array of unspent transaction outputs (`utxos`) from
+ * a request body and aggregates their amounts into `lovelace` (ada) and multi-asset
+ * tokens. It then returns the total `lovelace` amount and a dictionary of token
+ * amounts as a JSON response with status code 200.
+ *
+ * @param {Request} req - Used to represent HTTP request data.
+ *
+ * @param {Response} res - Used for sending HTTP responses.
+ */
 export default function Browse(req, res) {
   
   let tokens = {};

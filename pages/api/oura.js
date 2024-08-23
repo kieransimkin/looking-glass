@@ -3,6 +3,15 @@ import { getStakeFromAny, init } from "libcip54";
 import { getWallet, getPolicy } from "../../utils/database.mjs";
 
 import pgClient from '../../utils/dbsync.mjs'
+/**
+ * @description Handles three types of requests: 'Block', 'Mint' and 'OutputAsset'.
+ * It processes data from these requests, publishes messages to Redis channels, updates
+ * cache items, and increments counter caches.
+ *
+ * @param {Request} req - Used to represent an incoming HTTP request.
+ *
+ * @param {Response} res - Used to send HTTP responses back to the client.
+ */
 export default async function Browse(req, res) {
     const redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
