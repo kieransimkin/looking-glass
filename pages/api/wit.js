@@ -1,5 +1,5 @@
 
-import CardanoWasm from "@emurgo/cardano-serialization-lib-nodejs";
+/*import CardanoWasm from "@emurgo/cardano-serialization-lib-nodejs";
 import { Buffer } from 'buffer';
 import cbor from "cbor";
 
@@ -50,3 +50,4 @@ export default async function Browse(req, res) {
     res.status(200).json(signedTx.to_hex());
   //res.status(200).json(Object.keys(req.query));
 }
+//*/
