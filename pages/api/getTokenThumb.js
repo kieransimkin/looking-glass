@@ -12,7 +12,7 @@ export default async function Browse(req, res) {
   const redisClient = await getClient();
   
   libcip54.init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
-
+  libcip54.setGetTimeout(2000);
   if (!size || size==0) { 
     size=500;
   } else { 
