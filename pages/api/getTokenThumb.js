@@ -6,6 +6,18 @@ import { getDataURL, saveData, sendData, saveSend } from "../../utils/DataStore"
 import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
+/**
+ * @description Generates a thumbnail of an image based on query parameters unit,
+ * size, and mode. It fetches metadata, resizes the image according to the specified
+ * size and mode, and returns it as a response in the requested format (jpg or png).
+ *
+ * @param {any} req - The request object received by an HTTP server.
+ *
+ * @param {Response} res - Used to send data back to the client.
+ *
+ * @returns {Promise<void>} Resolved when the operation is completed successfully and
+ * rejected if an error occurs.
+ */
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
 
@@ -28,7 +40,12 @@ export default async function Browse(req, res) {
   }
   
   const metadata = await libcip54.getMetadata(unit);
-  const result = await libcip54.getFile(unit, null, metadata)
+  let result;
+  try { 
+    result = await libcip54.getFile(unit, null, metadata);
+  } catch (e) { 
+    res.status(425).send('Failed')
+  }
   const img = sharp(Buffer.from(result.buffer));
   const imd = await img.metadata();
   let resizeOpts;
