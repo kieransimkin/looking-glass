@@ -17,7 +17,11 @@ export default async function Browse(req, res) {
         console.log('Token minted: '+req.body.mint.policy+req.body.mint.asset+' quantity: '+req.body.mint.quantity)
         console.error(req.body);
         const policy = await getPolicy(req.body.mint.policy);
-        await policy.setLastMinted(Date.now());
+        if (policy) { 
+            await policy.setLastMinted(Date.now());
+        } else { 
+            throw new Error('Failed to get policy: '+req.body.mint.policy);
+        };
         await clearCacheItem('getTokensFromPolicy:'+req.body.mint.policy);
         await clearCacheItem('getTokenData:'+req.body.mint.policy+req.body.mint.asset);
         await cacheItem('refreshTransaction:'+req.body.context.tx_hash,{message: req.body, timestamp: Date.now()})
