@@ -10,7 +10,7 @@ export default async function Browse(req, res) {
 
   const redisClient = await getClient();
   libcip54.init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
-
+  libcip54.setGetTimeout(10000)
   const metadata = await libcip54.getMetadata(unit);
   const result = await libcip54.getFile(unit, null, metadata)
   console.log(result);
