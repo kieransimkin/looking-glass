@@ -5,13 +5,13 @@ import { getTokenData } from "../../utils/formatter";
 import { getWallet } from "../../utils/database.mjs";
 import { getDataURL } from "../../utils/DataStore";
 /**
- * @description Retrieves tokens from a specified address, checks for cached results,
- * fetches data if not cached, and prepares it for response. It also handles pagination,
- * token thumbnails (in production mode), and updates the wallet profile unit if necessary.
+ * @description Retrieves a list of tokens for a given address from Redis cache or
+ * database, paginates the result, and returns it to the client along with pagination
+ * metadata. It also sets the profile unit for the wallet if necessary.
  *
- * @param {object} req - Used to obtain query parameters from an HTTP request.
+ * @param {object} req - Represents an incoming HTTP request.
  *
- * @param {Response} res - Used to send an HTTP response back to the client.
+ * @param {Response} res - Used to send an HTTP response.
  */
 export default async function Browse(req, res) {
     const redisClient = await getClient();
@@ -56,7 +56,7 @@ export default async function Browse(req, res) {
             }
         }
     }
-    if (!wallet?.profileUnit && uncached) { 
+    if (wallet && !wallet?.profileUnit && uncached) { 
         wallet.setProfileUnit(presliced);
     }
     res.status(200).json({tokens:result, page, start, end, totalPages, perPage });
