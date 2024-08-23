@@ -311,18 +311,20 @@ export const getPolicyByID = async (policyID) => {
             [policyID]
         )
         
-        if (dbSyncResult?.rows && dbSyncResult?.rows.length) { 
+        if (validatePolicyID(policyID) || (dbSyncResult?.rows && dbSyncResult?.rows.length)) { 
             let result = await client.query(
                 `
                 INSERT INTO policy ("policyID", name, slug) VALUES(decode($1::TEXT,'hex'),$2::TEXT,$3::TEXT)
                 `
             ,[policyID,policyID,policyID])
             if (result.rowCount!=1) { 
+                throw new Error('Failed to create new policy');
                 return null;
             } else { 
                 return await getPolicyByID(policyID);
             }
         } else { 
+            throw new Error('Invalid Policy ID')
             return null;   
         }
       } else { 
