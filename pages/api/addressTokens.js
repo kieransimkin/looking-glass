@@ -22,6 +22,7 @@ export default async function Browse(req, res) {
         uncached=true;
         tokens = await getTokensFromAny(address);
         await cacheItem('getTokensFromAddress:'+address,tokens)
+        if (!tokens) tokens = [];
     }
     const wallet = await getWallet(address);
     
