@@ -35,6 +35,10 @@ export default async function Browse(req, res) {
     res.status(425).send('Failed')
     return;
   }
+  if (!result) {
+    res.status(425).send('Failed')
+    return;
+  }
   const img = sharp(Buffer.from(result.buffer));
   const imd = await img.metadata();
   let resizeOpts;
