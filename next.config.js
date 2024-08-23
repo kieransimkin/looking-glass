@@ -22,11 +22,9 @@ const nextConfig = {
   //output:'standalone',
   webpack: function (config, options) {
     
-		config.experiments = { asyncWebAssembly: true, syncWebAssembly: true, layers: true,topLevelAwait: true };
+		config.experiments = { layers: true,topLevelAwait: true };
     config.resolve.fallback = { fs: false, path: false, dns: false, net: false, tls: false };
-    resolve(__dirname, 'node_modules')
-    config.resolve.modules= ["node_modules", resolve(__dirname, 'node_modules'),resolve(__dirname,'../node_modules')],
-    patchWasmModuleImport(config, options.isServer);
+
     // Trying to hide annoying warnings from serialization lib, none of this works, but leaving it here so I know what I've tried:
     config.stats={};
     config.stats.warningsFilter =[/emurgo/i]
