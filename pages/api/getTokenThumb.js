@@ -28,7 +28,12 @@ export default async function Browse(req, res) {
   }
   
   const metadata = await libcip54.getMetadata(unit);
-  const result = await libcip54.getFile(unit, null, metadata)
+  let result;
+  try { 
+    result = await libcip54.getFile(unit, null, metadata);
+  } catch (e) { 
+    res.status(425).send('Failed')
+  }
   const img = sharp(Buffer.from(result.buffer));
   const imd = await img.metadata();
   let resizeOpts;
