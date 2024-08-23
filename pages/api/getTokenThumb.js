@@ -7,16 +7,18 @@ import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
 /**
- * @description Retrieves metadata and a file from Redis using the `libcip54` library,
- * resizes it based on provided size and mode parameters, and returns the resized
- * image as a response to the HTTP request.
+ * @description Generates a resized thumbnail image for a given unit from a metadata
+ * and file retrieval API, using Redis and IPFS/Arweave gateways. It supports three
+ * modes: dark, light, and transparent. The resulting image is sent as a response to
+ * the request.
  *
- * @param {Request} req - Used to extract query parameters.
+ * @param {Request} req - Intended for handling HTTP requests.
  *
- * @param {http.IncomingMessage} res - Used to send data back to the client.
+ * @param {http.ServerResponse} res - Used to send HTTP responses to clients.
  *
- * @returns {void | (Response)} Either a failed response with status code 425 or a
- * successful response with image data.
+ * @returns {Promise<void>} Resolved with a status code and an error message if there
+ * was an error during execution. Otherwise, it sends back an image response to the
+ * client.
  */
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
@@ -44,6 +46,10 @@ export default async function Browse(req, res) {
   try { 
     result = await libcip54.getFile(unit, null, metadata);
   } catch (e) { 
+    res.status(425).send('Failed')
+    return;
+  }
+  if (!result) {
     res.status(425).send('Failed')
     return;
   }
