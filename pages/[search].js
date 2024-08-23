@@ -7,9 +7,9 @@ import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
 import { validAddress as validAddressS } from "../utils/CSL"
-import { validAddress as validAddressB } from "../utils/CSLBrowser"
+import { validAddress as validAddressB } from "../utils/CSLBrowser.js.old"
 import { getWallet } from "../utils/database.mjs";
-import { getStakeFromAny } from "../utils/CSLBrowser";
+import { getStakeFromAny } from "../utils/CSLBrowser.js.old";
 // Generates `/posts/1` and `/posts/2`
 function calcPath(relativePath) {
     const path = require('path');

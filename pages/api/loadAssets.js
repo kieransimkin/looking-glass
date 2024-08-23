@@ -6,6 +6,7 @@ export default function Browse(req, res) {
   
   let tokens = {};
   let ada=0;
+  /*
   const setTokenAmount = (policyID, token, amount) => { 
     let tpolicy=null;
     if (tokens.hasOwnProperty(policyID)) { 
@@ -36,6 +37,7 @@ export default function Browse(req, res) {
         }
      }
   }
+  */
   res.status(200).json({lovelace: ada, tokens: tokens});
   //res.status(200).json(Object.keys(req.query));
 }
