@@ -55,7 +55,6 @@
     "json-tree-viewer": "^0.0.2",
     "jszip": "^3.10.1",
     "libcip54": "file:submodules/libcip54",
-    "lucid-cardano": "^0.10.5",
     "maath": "^0.10.4",
     "mapbox-gl": "^2.10.0",
     "next": "12.3.1",
