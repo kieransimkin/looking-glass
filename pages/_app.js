@@ -14,19 +14,19 @@ let socket;
 import { getData } from '../utils/Api';
 
 /**
- * @description Provides a mechanism for catching and handling JavaScript errors that
- * occur within its subtree, allowing for custom error fallbacks and providing detailed
- * error information to be logged.
+ * @description Catches and handles errors that occur within its child components,
+ * allowing for a custom fallback UI to be rendered instead of crashing the entire application.
  *
  * @extends {React.Component}
  */
 class ErrorBoundary extends React.Component {
   /**
-   * @description Initializes an instance variable `hasError` to false in the component's
-   * state. This is typically done when creating a custom error boundary component that
-   * can catch and handle runtime errors within its child components.
+   * @description Initializes an object with a state property `hasError` set to `false`.
+   * This indicates that no error has occurred. It then calls the superclass (React
+   * Component) constructor using `super(props)` and sets its own state to `{ hasError:
+   * false }`.
    *
-   * @param {object} props - Used to pass properties to components.
+   * @param {object} props - Used to pass properties from the parent component.
    */
   constructor(props) {
     super(props);
@@ -34,40 +34,38 @@ class ErrorBoundary extends React.Component {
   }
 
   /**
-   * @description Returns an object that updates the component's state to indicate
-   * whether an error has occurred. It takes an error as a parameter and sets the
-   * `hasError` property to `true`. This allows the component to handle errors in child
-   * components.
+   * @description Returns a new state object with the `hasError` property set to `true`
+   * when an error occurs during rendering. This indicates that there was an error and
+   * allows the component to handle it accordingly.
    *
-   * @param {Error} error - Passed with an error that occurred in the component's render
-   * method.
+   * @param {Error} error - Used to detect and handle errors.
    *
-   * @returns {object} An immutable object containing a single property named `hasError`,
-   * with its value set to `true`.
+   * @returns {object} Assigned to the state property 'hasError' with a boolean value
+   * set to true.
    */
   static getDerivedStateFromError(error) {
     return { hasError: true };
   }
 
   /**
-   * @description Catches and logs any unhandled errors that occur within its component
-   * subtree. It captures error details and component stack information, then writes
-   * them to the console for debugging purposes.
+   * @description Catches and logs any unhandled errors that occur during the rendering
+   * process of its child components.
    *
-   * @param {Error} error - Used to log the error that occurred during rendering.
+   * @param {Error} error - Used to capture error objects.
    *
-   * @param {object} info - Used to provide additional error information.
+   * @param {ReactErrorInfo} info - Used to contain information about the caught error.
    */
   componentDidCatch(error, info) {
     console.error([error, info.componentStack]);
   }
 
   /**
-   * @description Checks for an error state and renders custom fallback UI if present.
-   * If no error is detected, it passes the rendering responsibility to its child
-   * components by returning their content (`this.props.children`).
+   * @description Overrides React's default rendering behavior and returns either the
+   * error fallback or the wrapped children components depending on whether an error
+   * has occurred.
    *
-   * @returns {ReactNode} Either this.props.fallback if an error occurred or else this.props.children.
+   * @returns {ReactNode} Determined by either `this.props.children` or a custom fallback
+   * UI if `this.state.hasError` is truthy.
    */
   render() {
     //if (this.state.hasError) {
@@ -80,51 +78,51 @@ class ErrorBoundary extends React.Component {
 
 const TIMEOUT = 400;
 /**
- * @description Initializes a React component with loading state management, socket
- * connection, and analytics tracking. It uses React Hooks to manage state and side
- * effects. The function returns a component tree with loading indicators, error
- * handling, and page transitions.
+ * @description Initializes a React component, sets up socket communication, and
+ * handles loading state transitions with animation effects. It also includes error
+ * handling and Google Analytics tracking for page views.
  *
- * @param {object} obj - Likely used to pass down props from the parent component.
- * The keys are `Component` and `pageProps`, indicating that this function is intended
- * for rendering dynamic content with props.
+ * @param {object} obj - Composed of two properties: "Component" and "pageProps". The
+ * "Component" property represents the React component, while the "pageProps" property
+ * is an object containing props for that component.
  *
- * @param {React.ComponentClass} obj.Component - Expected to be rendered as the main
- * content of the page.
+ * @param {React.ComponentType<any>} obj.Component - Required for rendering the component.
  *
- * @param {object} obj.pageProps - Passed from the parent component.
+ * @param {object} obj.pageProps - Passed to the wrapped component.
  *
- * @returns {JSX.Element} A tree-like data structure that represents the UI components
- * to be rendered by React.
+ * @returns {JSX.Element} A React component.
  */
 function CIP54Playground({ Component, pageProps }) {
   
   const router = useRouter();
   
-  const [loadingState, setLoadingState] = useState(true);
+  const [loadingState, setLoadingState] = useState(false);
   /**
-   * @description Closes a loading state by setting its value to false using the
-   * `setLoadingState` method, effectively terminating any ongoing loading operation.
+   * @description Sets the `setLoadingState` variable to `false`, indicating that a
+   * loading state has been closed. This implies that some previously initiated loading
+   * operation has completed, and the application is now ready for further user interaction.
    */
   const handleLoadingClose = () => { 
     setLoadingState(false);
   }
   /**
-   * @description Initializes a WebSocket connection to a server using the Socket.IO
-   * library. It first retrieves data from the '/socket' endpoint, then establishes a
-   * connection and sets up event listeners for 'connect' and 'block' events.
+   * @description Initializes a WebSocket connection with a server and listens for
+   * connections, blocks, and other events. It calls an asynchronous function to retrieve
+   * data from a URL before establishing the connection.
    */
   const socketInitializer = () => {
     /**
-     * @description Initializes a WebSocket connection with the server, establishes event
-     * listeners for 'connect' and 'block' events, and logs the connected status and data
-     * received from the server to the console.
+     * @description Establishes a WebSocket connection to a server using Socket.IO,
+     * allowing for real-time communication. It first fetches data from `/socket`, then
+     * connects to the specified URL or localhost port, and listens for 'connect' and
+     * 'block' events.
      */
     const asy = async () => { 
       await getData('/socket');
       socket = io(process.env.NODE_ENV=='production'?'/':'http://localhost:'+process.env.SOCKET_PORT+'/',{ transports: ["websocket","polling"]})
       socket.on('connect', () => {
-        // Listens for connection events.
+        // Listens for successful connection events on a WebSocket socket and logs a message
+        // to the console when connected.
 
         const engine = socket.io.engine;
   
@@ -132,7 +130,7 @@ function CIP54Playground({ Component, pageProps }) {
       })
   
       socket.on('block',(data)=>{
-        // Listens for 'block' event on WebSocket socket and logs its data to the console.
+        // Listens for events.
 
         console.log(data);
         //alert(data);
@@ -143,18 +141,20 @@ function CIP54Playground({ Component, pageProps }) {
   
 
   /**
-   * @description Adds an event listener to the window object for messages with specific
-   * requests ('showLoading' and 'hideLoading'). It logs these messages to the console
-   * and removes the event listener when not needed.
+   * @description Adds an event listener for `window` messages. It logs any received
+   * messages with requests 'showLoading' or 'hideLoading'. Upon removal, it removes
+   * the event listener.
    *
-   * @returns {() => void} A function that removes an event listener when called.
+   * @returns {() => void} A function that removes an event listener from the "message"
+   * event on the window object when called.
    */
   const loadingListener = ()=>{
     /**
-     * @description Filters out event data with requests 'showLoading' or 'hideLoading',
-     * and if not, logs the event to the console.
+     * @description Handles events by checking if the event's data has a request property
+     * that is either 'showLoading' or 'hideLoading'. If not, it does nothing; otherwise,
+     * it logs the event to the console.
      *
-     * @param {Event} eve - Used to handle events.
+     * @param {Event} eve - Received by the event listener.
      */
     const messageHandler = (eve) => { 
       if (eve.data?.request!=='showLoading' && eve.data?.request!=='hideLoading') { 

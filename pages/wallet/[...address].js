@@ -20,45 +20,36 @@ import Link from 'next/link';
 import { getDataURL } from '../../utils/DataStore';
 import punycode from 'punycode'
 /**
- * @description Retrieves wallet information from a cache or database using Redis and
- * GraphQL APIs. It processes the data, generates redirect responses if necessary,
- * and returns the processed data as props for server-side rendering.
+ * @description Fetches and prepares data for a server-side rendered page. It retrieves
+ * a wallet's information, checks for redirects, and populates page-specific props
+ * based on the wallet's stake, slug, and tokens. The function also updates cache
+ * items and logs user activity.
  *
- * @param {any} context - Used to retrieve data from the request.
+ * @param {object} context - Used to pass server-side data to the page.
  *
- * @returns {object} Assigned to `props`. This object may contain properties such as
- * `wallet`, `token` and `gallery`.
+ * @returns {object} An immutable and serializable object that contains the result
+ * of executing the props calculation.
  */
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let wallet = context.query.address[0];
-    console.log("1111111");
-    console.log('First wallet:'+wallet);
     const segs = wallet.split('.');
     let token = segs.length>1?segs[segs.length-1]:null;
     if (token) { 
         wallet = wallet.substr(0,wallet.length-(token.length+1));
     }
-    console.log(2);
-    console.log("2222");
-    console.log(wallet);
-    console.log('GOT HERE');
-    console.log("33333");
     let result = await getWallet(wallet);
-    console.log(wallet);
-    console.log("5555");
-    console.log(result);
+    
     if (!result && token) { 
         token = null;
         wallet = context.query.address[0];
         result = await getWallet(wallet);
     }
-    console.log('update:');
-    console.log(result);
+    
     let props = {};
     
     if (result) { 
-        /*
+        
         if (result.slug != result.stake && wallet!=result.slug) { 
             return {
                 redirect: {
@@ -74,14 +65,11 @@ export const getServerSideProps = async (context) => {
                     permanent: true
                 }
             }
-        }*/
+        }
         
         props.wallet = JSON.parse(JSON.stringify(result));
         
-        
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
-        console.log('Got tokens here');
-        console.log(tokens);
         await incrementCacheItem('walletHits:'+result.stake);
         await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
         await redisClient.lPush('lg:walletHitLog:'+result.stake, JSON.stringify(Date.now()))
@@ -130,14 +118,14 @@ export const getServerSideProps = async (context) => {
 }
 
 /**
- * @description Renders a media slide component that displays a list of tokens related
- * to a given address or token unit, and allows users to navigate through the tokens
- * and view detailed information about each one.
+ * @description Renders a media slide with token information for a given address. It
+ * fetches data from APIs and updates the state accordingly, allowing users to navigate
+ * through tokens and display detailed information about each token.
  *
- * @param {any} props - Used to pass data from parent component.
+ * @param {object} props - Passed from the parent component.
  *
- * @returns {JSX.Element} A React component that consists of a `<Head>` element and
- * a `<MediaSlide>` element.
+ * @returns {JSX.Element} A React component that renders an array of slide items with
+ * their respective properties and event handlers.
  */
 export default  function CIP54Playground(props) {
     
@@ -151,7 +139,7 @@ export default  function CIP54Playground(props) {
     if (!address) address='';
     
     useEffect(() => { 
-        // Loads tokens data from server API based on provided address.
+        // Handles API calls based on address input.
 
         if (!address || address=='') return;
         if (gallery) return;
@@ -162,7 +150,7 @@ export default  function CIP54Playground(props) {
                 // Processes JSON data.
 
                 a.json().then((j) => { 
-                    // Processes JSON response and navigates to wallet page.
+                    // Handles JSON response and navigates to a specific route.
 
                     if (j.length && j[0]?.address) { 
                         router.push({pathname:'/wallet/'+j[0].address})
@@ -171,10 +159,10 @@ export default  function CIP54Playground(props) {
         } else {
         
             getData('/addressTokens?address='+address).then((d)=>{
-                // Processes JSON data from an API response.
+                // Processes JSON data.
 
                 d.json().then((j) => { 
-                    // Updates state.
+                    // Sets gallery and media slide loading state.
 
                     setGallery(j);
                     setMediaSlideLoading(false);
@@ -186,39 +174,38 @@ export default  function CIP54Playground(props) {
     },[address])
 
     /**
-     * @description Takes an argument `i`, renders a `BigInfoBox` component with `item`
-     * prop set to `i`, and returns the resulting JSX element. This function likely serves
-     * as a wrapper for rendering information about an item in a list or array.
+     * @description Takes an index `i` as input and returns a JSX element, specifically
+     * a `<BigInfoBox>` component with its `item` property set to the value of `i`.
      *
-     * @param {object} i - Passed to `BigInfoBox`.
+     * @param {object} i - Passed to the `BigInfoBox` component.
      *
-     * @returns {JSX.Element} An instance of a React component named `BigInfoBox`.
+     * @returns {ReactElement} An instance of a class representing a UI component.
      */
     const renderBigInfo = (i) => { 
         
         return <BigInfoBox item={i} />
     }
     /**
-     * @description Loads additional data for a media gallery by making an API request
-     * to fetch tokens with a specified page number and offset. It updates the gallery
-     * state with the new tokens, page number, and total pages.
+     * @description Loads additional data from an API and updates the local state by
+     * merging the new data with existing data. It handles pagination, loading indicator,
+     * and sets the total page count.
      *
-     * @param {object} obj - Assigned to the variable `page`. It represents the current
-     * page number being fetched, which is incremented by one unit of `offset` value when
-     * calling this function.
+     * @param {object} obj - Required to be passed when calling this function. It contains
+     * an object with at least one property named 'page', which represents the current
+     * page number.
      *
-     * @param {number} obj.page - Used to specify the current page.
+     * @param {number} obj.page - Used to track the current page of data.
      *
-     * @param {number} offset - Used to specify the direction of data loading.
+     * @param {number} offset - Used to specify the increment for pagination.
      */
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
         getData('/addressTokens?address='+address+'&page='+(parseInt(page)+offset)).then((d)=>{
-            // Fetches and merges JSON data.
+            // Retrieves and updates data for an address token gallery.
 
             d.json().then((j) => { 
-                // Merges two arrays and updates state.
+                // Merges and updates tokens and page data.
 
                 let newArray;
                 if (offset>0) { 
@@ -240,25 +227,25 @@ export default  function CIP54Playground(props) {
     let newGallery = null;
     if (gallery) {
         newGallery=gallery.tokens.map((i)=>{
-        // Manipulates array.
+        // Transforms an array of objects.
 
         i.linkUrl='/policy/'+i.unit.substring(0,56)+'.'+i.unit.substr(56);
         return i;
         })
     }
     /**
-     * @description Generates HTML for a slide item list component, given an item object
-     * and click event handler. It returns a functional component that renders a list
-     * item with an image, title, and link to an external URL, based on the provided item
-     * data and a thumbnail size parameter.
+     * @description Generates a list item (LI) for each item in an array, rendering an
+     * image and title with a link. It takes two parameters: a click handler and a threshold
+     * size (`ts`). The image's height is set to `ts-80`, reserving space for the label
+     * at the top of the slide bar.
      *
-     * @param {(item: object) => void} click - Intended to handle an item click event.
+     * @param {(item: object) => void} click - Used to handle click events.
      *
-     * @param {number} ts - Used for setting image height.
+     * @param {number} ts - Used to determine the height of an image in pixels.
      *
-     * @returns {(item: object) => JSX.Element} A higher-order function returning an
-     * element that represents a list item (`<li>`) with properties like key, data-id,
-     * onClick event handler and child elements such as link, image, and text.
+     * @returns {(item: object) => JSX.Element} A higher-order function that takes an
+     * item as input and returns a JSX element representing an HTML list item (`<li>`)
+     * with nested elements such as image, link, and text.
      */
     const slideItemHTML = (click,ts) => {
          
@@ -279,11 +266,11 @@ export default  function CIP54Playground(props) {
         initialSelection=props.token;
     }
     /**
-     * @description Handles a selection event by logging the selected item to the console,
-     * sending a message to the window to show loading indicator, and then navigates to
-     * a new URL using the router library while preserving the current route's state.
+     * @description Logs an item to the console, sends a message to the window with a
+     * request to show loading, and then navigates to a new URL using React Router's
+     * `push` method, passing the address and selected unit as parameters.
      *
-     * @param {object} item - Used to determine the URL path of navigation.
+     * @param {object} item - Not clearly defined.
      */
     const selectionChange = (item) => { 
         console.log(item);
