@@ -13,3 +13,6 @@
 [submodule "submodules/react-mediaslide"]
 	path = submodules/react-mediaslide
 	url = https://github.com/kieransimkin/react-mediaslide
+[submodule "submodules/cardano-ledger-ts"]
+	path = submodules/cardano-ledger-ts
+	url = https://github.com/kieransimkin/cardano-ledger-ts.git

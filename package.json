@@ -24,7 +24,7 @@
     "@codemirror/lang-javascript": "^6.1.7",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@harmoniclabs/cardano-ledger-ts": "^0.2.3-dev0",
+    "@harmoniclabs/cardano-ledger-ts": "file:submodules/cardano-ledger-ts",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.61",
