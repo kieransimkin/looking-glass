@@ -130,6 +130,10 @@ export const getWallet = async (key) => {
     await dbinit();
     return new Promise((resolve, reject) => { 
         let stake;
+        console.log('Getwallet');
+        console.log(validAddress(key));
+        console.log(key);
+        console.log(getStakeFromAny(key));
         if (validAddress(key) && (stake=getStakeFromAny(key))) {
             getWalletByStake(stake).then((w)=>{ 
                 resolve(w);

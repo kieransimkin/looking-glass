@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import App from "next/app";
 import { PageTransition } from "next-page-transitions";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Backdrop } from '@material-ui/core';
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useEffect, useState } from 'react'
@@ -39,31 +40,58 @@ const TIMEOUT = 400;
 function CIP54Playground({ Component, pageProps }) {
   
   const router = useRouter();
-  useEffect(() => socketInitializer(), [])
-
-  const socketInitializer = async () => {
-    await getData('/socket');
-    socket = io(process.env.NODE_ENV=='production'?'/':'http://localhost:'+process.env.SOCKET_PORT+'/',{ transports: ["websocket","polling"]})
-    socket.on('connect', () => {
-      const engine = socket.io.engine;
-
-      console.log('connected')
-    })
-
-    socket.on('block',(data)=>{
-      console.log(data);
-      //alert(data);
-    })
-    
-
   
+  const [loadingState, setLoadingState] = useState(true);
+  const handleLoadingClose = () => { 
+    setLoadingState(false);
   }
+  const socketInitializer = () => {
+    const asy = async () => { 
+      await getData('/socket');
+      socket = io(process.env.NODE_ENV=='production'?'/':'http://localhost:'+process.env.SOCKET_PORT+'/',{ transports: ["websocket","polling"]})
+      socket.on('connect', () => {
+        const engine = socket.io.engine;
+  
+        console.log('connected')
+      })
+  
+      socket.on('block',(data)=>{
+        console.log(data);
+        //alert(data);
+      })
+    }
+    asy();
+  }
+  
+
+  const loadingListener = ()=>{
+    const messageHandler = (eve) => { 
+      if (eve.data?.request!=='showLoading' && eve.data?.request!=='hideLoading') { 
+        return;
+      }
+      console.log(eve);
+
+    }
+    window.addEventListener("message", messageHandler);
+    return ()=>{
+      window.removeEventListener("message",messageHandler);
+    }
+  }
+  useEffect(socketInitializer, []);
+  useEffect(loadingListener, []);
   //console.log("%c Ignore cardano serialization lib errors, it likes to throw them. ","background: lightgreen; color: black;")
   return (
     <>
+    
       <GoogleAnalytics trackPageViews />
       <ErrorBoundary>
+      <Backdrop open={loadingState} onClick={handleLoadingClose}>
+  <CircularProgress color="inherit" />
+  
+</Backdrop>
         <Layout>
+          
+
           <PageTransition
             timeout={TIMEOUT}
             classNames="page-transition"
@@ -80,6 +108,7 @@ function CIP54Playground({ Component, pageProps }) {
           </PageTransition>
         </Layout>
       </ErrorBoundary>
+
         <style>{`
           .page-transition-enter {
             opacity: 0;

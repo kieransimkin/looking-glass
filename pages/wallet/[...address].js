@@ -22,20 +22,33 @@ import punycode from 'punycode'
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let wallet = context.query.address[0];
+    console.log("1111111");
+    console.log('First wallet:'+wallet);
     const segs = wallet.split('.');
     let token = segs.length>1?segs[segs.length-1]:null;
     if (token) { 
         wallet = wallet.substr(0,wallet.length-(token.length+1));
     }
+    console.log(2);
+    console.log("2222");
+    console.log(wallet);
+    console.log('GOT HERE');
+    console.log("33333");
     let result = await getWallet(wallet);
+    console.log(wallet);
+    console.log("5555");
+    console.log(result);
     if (!result && token) { 
         token = null;
         wallet = context.query.address[0];
-        let result = await getWallet(wallet);
+        result = await getWallet(wallet);
     }
+    console.log('update:');
+    console.log(result);
     let props = {};
     
     if (result) { 
+        /*
         if (result.slug != result.stake && wallet!=result.slug) { 
             return {
                 redirect: {
@@ -51,16 +64,18 @@ export const getServerSideProps = async (context) => {
                     permanent: true
                 }
             }
-        }
+        }*/
         
         props.wallet = JSON.parse(JSON.stringify(result));
         
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
+        console.log('Got tokens here');
+        console.log(tokens);
         await incrementCacheItem('walletHits:'+result.stake);
         await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
         await redisClient.lPush('lg:walletHitLog:'+result.stake, JSON.stringify(Date.now()))
-        if (tokens) { 
+        if (tokens && tokens.length>0) { 
             const perPage = 10;
             let page = 0;
             let start=0,end=perPage;
@@ -193,6 +208,7 @@ export default  function CIP54Playground(props) {
     }
     const selectionChange = (item) => { 
         console.log(item);
+        window.postMessage({request:'showLoading'},'*',false);
         router.push({
             pathname: '/wallet/'+address+'.'+item.unit,
             query: {  }
