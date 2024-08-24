@@ -41,7 +41,7 @@ function CIP54Playground({ Component, pageProps }) {
   
   const router = useRouter();
   
-  const [loadingState, setLoadingState] = useState(true);
+  const [loadingState, setLoadingState] = useState(false);
   const handleLoadingClose = () => { 
     setLoadingState(false);
   }
