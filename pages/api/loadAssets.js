@@ -1,12 +1,11 @@
 
-import { TransactionUnspentOutput } from "@emurgo/cardano-serialization-lib-nodejs";
-import { Buffer } from 'buffer';
 
+import {TxOut} from '@harmoniclabs/cardano-ledger-ts'
 export default function Browse(req, res) {
   
   let tokens = {};
   let ada=0;
-  /*
+  
   const setTokenAmount = (policyID, token, amount) => { 
     let tpolicy=null;
     if (tokens.hasOwnProperty(policyID)) { 
@@ -20,8 +19,35 @@ export default function Browse(req, res) {
         tpolicy[token]=parseInt(amount);
     }
   }
-  for (var c=0; c<req.body.utxos.length; c++) { 
-     var output = JSON.parse(TransactionUnspentOutput.from_bytes( Buffer.from(req.body.utxos[c], 'hex')).output().to_json());
+  
+  for (var c=0; c<req.body.utxos?.length; c++) { 
+    var output = TxOut.fromCbor(Buffer.from(req.body.utxos[c], 'hex'));
+
+    const valueMap = output.value.map;
+
+    
+
+
+
+
+
+
+    for(const { policy, assets } of valueMap)
+    {
+        if( policy === "" ) continue;
+
+        for(const { name, quantity } of assets)
+        {
+            setTokenAmount(policy.toString(), name.toHex(), quantity);
+        }
+    }
+
+    //valueStr = valueStr.slice( 0, valueStr.length - 1 ) + '"';
+    //console.log(output.value.toUnits());
+    console.log(valueStr);
+
+     //var output = JSON.parse(TransactionUnspentOutput.from_bytes( Buffer.from(req.body.utxos[c], 'hex')).output().to_json());
+     /*
      ada+=parseInt(output.amount.coin);
      if (output.amount.multiasset) { 
         var policies = Object.keys(output.amount.multiasset);
@@ -35,9 +61,9 @@ export default function Browse(req, res) {
                 setTokenAmount(policies[d],tassets[e],tpolicy[tassets[e]]);
             }
         }
-     }
-  }
-  */
+     }*/
+  
+}
   res.status(200).json({lovelace: ada, tokens: tokens});
   //res.status(200).json(Object.keys(req.query));
 }
