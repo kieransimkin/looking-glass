@@ -7,7 +7,7 @@ import { getCachedTokenThumb } from './Helpers.mjs'
 import sharp from 'sharp';
 
 export const generate = async (unit,size,mode) => {
-    console.log('Generate called'+unit+size+mode);
+    console.log('Generate called for token: '+unit+' '+size+' '+mode);
     const redisClient = getClient();
     if (!size || size==0) { 
         size=500;
@@ -39,7 +39,13 @@ export const generate = async (unit,size,mode) => {
         
       
       }
-      const img = sharp(Buffer.from(result.buffer));
+      let img;
+      try { 
+        img = sharp(Buffer.from(result.buffer));
+      } catch (e) { 
+        console.log('Exception while parsing image: '+e);
+        return null;
+      }
       const imd = await img.metadata();
       let resizeOpts;
       if (imd.width>imd.height) { 
@@ -47,13 +53,19 @@ export const generate = async (unit,size,mode) => {
       } else { 
         resizeOpts = {height:size};
       }
-      if (mode!='transparent') { 
-            
-            return saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#040302':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
-          } else { 
-        
-            return saveData(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()),res,'image/png');
-            //return res.end();
+      try { 
+        if (mode!='transparent') { 
+              
+              return saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#040302':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
+            } else { 
+          
+              return saveData(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()),res,'image/png');
+              //return res.end();
+        }
+      } catch (e) { 
+        console.log('Exception while generating image: '+e);
+        return null;
+
       }
 }
 
