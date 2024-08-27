@@ -6,6 +6,7 @@ import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
+import { getPolicyByID } from "../utils/database.mjs";
 import { isValidAddress, getStakeFromAny } from "libcip54";
 import { getWallet } from "../utils/database.mjs";
 
@@ -33,6 +34,19 @@ export const getServerSideProps = async (context) => {
     } catch (e) { }
     try { 
         
+    if (validatePolicyID(filename)) { 
+        let policy = null;
+        try { 
+            policy = await getPolicyByID(filename);
+        } catch (e) {}
+        if (policy) {
+            return {
+                redirect: { 
+                    destination: '/policy/'+policy.slug
+                }
+            }
+        }
+    }
     if (isValidAddress(filename)) { 
         console.log('valid address');
         return {
@@ -40,12 +54,7 @@ export const getServerSideProps = async (context) => {
                 destination: '/wallet/'+filename
             }
         }
-    } else if (validatePolicyID(filename)) { 
-        return {
-            redirect: { 
-                destination: '/policy/'+filename
-            }
-        }
+        
     } else if (filename.substring(0,1)=='$') { 
         return {
             redirect: { 
