@@ -25,7 +25,12 @@ export default async function Browse(req, res) {
   
   if (getDataURL(name,mode=='transparent'?'png':'jpg')) { 
     return sendData(name, mode=='transparent'?'png':'jpg', res, mode=='transparent'?'image/png':'image/jpg');
+  } else { 
+    redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
+    res.status(425).send('Failed')
+    return;
   }
+  /*
   
   const metadata = await libcip54.getMetadata(unit);
   let result;
@@ -60,4 +65,5 @@ export default async function Browse(req, res) {
         return saveSend(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()),res,'image/png');
         //return res.end();
   }
+        */
 }
