@@ -14,10 +14,12 @@ async function doIt() {
     console.log("Found "+keys.length+" wallets in need of refresh");
     for (const key of keys) { 
         const stake = key.substr(17)
-        console.log('Doing key: '+key);
+        
         const item = JSON.parse(await redisClient.get(key));
-        await helpers.sleep(50);
+        
         if (item.timestamp<(Date.now()-600000)) { 
+            console.log('Doing key: '+key);
+            await helpers.sleep(50);
             let tokens = await redis.checkCacheItem('getTokensFromAddress:'+stake);
             if (!tokens) {   
                 try { 
