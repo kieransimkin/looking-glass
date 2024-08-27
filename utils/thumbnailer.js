@@ -41,7 +41,7 @@ export const generate = async (unit,size,mode) => {
       }
       let img;
       try { 
-        img = sharp(Buffer.from(result.buffer));
+        img = sharp(Buffer.from(result.buffer), {failOn:'none'});
       } catch (e) { 
         console.log('Exception while parsing image: '+e);
         return null;
