@@ -7,18 +7,17 @@ import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
 /**
- * @description Generates a resized thumbnail image for a given unit from a metadata
- * and file retrieval API, using Redis and IPFS/Arweave gateways. It supports three
- * modes: dark, light, and transparent. The resulting image is sent as a response to
- * the request.
+ * @description Retrieves and serves a thumbnail image for a given unit based on query
+ * parameters such as size, mode (dark/light/transparent), and utilizes Redis, IPFS,
+ * and Arweave gateways to fetch the image data. If the image is not available, it
+ * publishes a request to Redis to retrieve it.
  *
- * @param {Request} req - Intended for handling HTTP requests.
+ * @param {object} req - An HTTP request object.
  *
- * @param {http.ServerResponse} res - Used to send HTTP responses to clients.
+ * @param {http.IncomingMessage} res - Used to send HTTP response back to client.
  *
- * @returns {Promise<void>} Resolved with a status code and an error message if there
- * was an error during execution. Otherwise, it sends back an image response to the
- * client.
+ * @returns {void | (Buffer | string)} Either a response object containing an image
+ * buffer or sends a failed response with status code 425.
  */
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
@@ -50,6 +49,8 @@ export default async function Browse(req, res) {
     return;
   }
   if (!result) {
+    redisClient.publish('requestThumb',{unit,size,mode});
+    console.log('published redis error');
     res.status(425).send('Failed')
     return;
   }
