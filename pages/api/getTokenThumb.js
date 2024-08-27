@@ -7,17 +7,18 @@ import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
 /**
- * @description Retrieves and serves a thumbnail image for a given unit based on query
- * parameters such as size, mode (dark/light/transparent), and utilizes Redis, IPFS,
- * and Arweave gateways to fetch the image data. If the image is not available, it
- * publishes a request to Redis to retrieve it.
+ * @description Retrieves and serves token thumbnails based on user input (unit, size,
+ * mode). It initializes redis client, sets timeouts, and checks for valid input. If
+ * a thumbnail is found, it sends the image; otherwise, it publishes the request to
+ * redis and returns an error message.
  *
- * @param {object} req - An HTTP request object.
+ * @param {Request} req - Used to receive data from the client-side request.
  *
- * @param {http.IncomingMessage} res - Used to send HTTP response back to client.
+ * @param {http.ServerResponse} res - Used to send data back to the client.
  *
- * @returns {void | (Buffer | string)} Either a response object containing an image
- * buffer or sends a failed response with status code 425.
+ * @returns {Promise<void>} Resolved when the request is successfully handled. In
+ * case of failure, it sends a status code 425 and a message 'Failed' to the response
+ * object.
  */
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
@@ -38,19 +39,28 @@ export default async function Browse(req, res) {
   
   if (getDataURL(name,mode=='transparent'?'png':'jpg')) { 
     return sendData(name, mode=='transparent'?'png':'jpg', res, mode=='transparent'?'image/png':'image/jpg');
+  } else { 
+    redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
+    res.status(425).send('Failed')
+    return;
   }
+  /*
   
   const metadata = await libcip54.getMetadata(unit);
   let result;
   try { 
+    
     result = await libcip54.getFile(unit, null, metadata);
   } catch (e) { 
+    
+    redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
     res.status(425).send('Failed')
+    
     return;
   }
   if (!result) {
-    redisClient.publish('requestThumb',{unit,size,mode});
-    console.log('published redis error');
+    redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
+    
     res.status(425).send('Failed')
     return;
   }
@@ -69,4 +79,5 @@ export default async function Browse(req, res) {
         return saveSend(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()),res,'image/png');
         //return res.end();
   }
+        */
 }
