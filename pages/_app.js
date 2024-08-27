@@ -61,7 +61,7 @@ function CIP54Playground({ Component, pageProps }) {
       })
       socket.on('newThumb',(data) => { 
         window.postMessage({request:'newThumb',...data},'*');
-        console.log(data);
+        
       })
     }
     asy();
