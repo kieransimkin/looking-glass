@@ -35,7 +35,7 @@ export const getServerSideProps = async (context) => {
         result = await getWallet(wallet);
     }
     
-    let props = {};
+    let props = {address:wallet};
     
     if (result) { 
         
@@ -111,7 +111,8 @@ export default  function CIP54Playground(props) {
     console.log(props);
     let dbStake = props.wallet?.stake;
     const router = useRouter();
-    let address = router.query.address[0];
+    //let address = router.query.address[0];
+    let address = props.address;
     
     const [gallery, setGallery] = useState(props.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
