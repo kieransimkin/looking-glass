@@ -7,23 +7,24 @@ import { getCachedTokenThumb } from './Helpers.mjs'
 import sharp from 'sharp';
 
 /**
- * @description Generates a thumbnail for an image unit based on provided parameters
- * (unit, size, and mode). It retrieves metadata from the specified unit, checks if
- * a previously generated thumbnail exists, and then resizes the image to the desired
- * size while applying a background color according to the specified mode.
+ * @description Generates a thumbnail for a given unit with specified size and mode
+ * (dark, light, or transparent). It retrieves metadata from Redis, downloads the
+ * file, resizes it according to the provided size, and saves it as a JPEG or PNG
+ * image depending on the mode.
  *
- * @param {string} unit - Used to identify a specific unit.
+ * @param {string} unit - Used to identify a specific token.
  *
- * @param {number|string} size - 500 by default.
+ * @param {number|string} size - Used to set the output image size.
  *
  * @param {string | 'dark' | 'light' | 'transparent'} mode - Used to determine the
- * image format based on its value.
+ * format of output image (jpg, png).
  *
- * @returns {boolean | Buffer} Either a false value indicating that the thumbnail
- * generation failed or a buffer containing the generated thumbnail image.
+ * @returns {boolean | null | Buffer} Either false if an error occurs, null if there's
+ * an exception while parsing image or saving data, or a buffer containing the generated
+ * thumbnail in png or jpg format depending on the mode parameter.
  */
 export const generate = async (unit,size,mode) => {
-    console.log('Generate called'+unit+size+mode);
+    console.log('Generate called for token: '+unit+' '+size+' '+mode);
     const redisClient = getClient();
     if (!size || size==0) { 
         size=500;
@@ -55,7 +56,13 @@ export const generate = async (unit,size,mode) => {
         
       
       }
-      const img = sharp(Buffer.from(result.buffer));
+      let img;
+      try { 
+        img = sharp(Buffer.from(result.buffer));
+      } catch (e) { 
+        console.log('Exception while parsing image: '+e);
+        return null;
+      }
       const imd = await img.metadata();
       let resizeOpts;
       if (imd.width>imd.height) { 
@@ -63,13 +70,19 @@ export const generate = async (unit,size,mode) => {
       } else { 
         resizeOpts = {height:size};
       }
-      if (mode!='transparent') { 
-            
-            return saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#040302':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
-          } else { 
-        
-            return saveData(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()),res,'image/png');
-            //return res.end();
+      try { 
+        if (mode!='transparent') { 
+              
+              return saveData(name,'jpg',await (img.resize(resizeOpts).flatten({background:mode=='dark'?'#040302':'#ffffff'}).jpeg({quality: 70, progressive:true, force: true}).toBuffer()));
+            } else { 
+          
+              return saveData(name,'png',await (img.resize(resizeOpts).png({progressive:true, compressionLevel: 9, palette: true, quality:70, effort: 10, force: true}).toBuffer()),res,'image/png');
+              //return res.end();
+        }
+      } catch (e) { 
+        console.log('Exception while generating image: '+e);
+        return null;
+
       }
 }
 
