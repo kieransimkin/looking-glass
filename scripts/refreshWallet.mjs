@@ -38,12 +38,13 @@ async function doIt() {
                 }
                 
                 const result = await Promise.all(promises)
+                console.log(result);
             }
             let page =0;
             const totalPages = Math.ceil(tokens.length/perPage);
             
             while (totalPages>page) {
-                console.log('Page '+page+' of '+totalPages)
+                console.log('Page '+page+' of '+totalPages+" for stake: "+stake)
                 await doPage(tokens, page);
                 page++;
                 //sleep(2000);
