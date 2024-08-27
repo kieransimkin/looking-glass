@@ -168,6 +168,7 @@ export default  function CIP54Playground(props) {
                 e.target.src=mes.src;
                 console.log(mes);
             } else { 
+                console.log(mes);
                 console.log([mes.originalUrl, origSrc]);
             }
         })
