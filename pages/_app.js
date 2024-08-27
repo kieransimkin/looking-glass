@@ -65,16 +65,25 @@ function CIP54Playground({ Component, pageProps }) {
   
 
   const loadingListener = ()=>{
-    const messageHandler = (eve) => { 
-      if (eve.data?.request!=='showLoading' && eve.data?.request!=='hideLoading') { 
-        return;
-      }
-      console.log(eve);
+  
 
+    const finish = (url) => { 
+      setLoadingState(false);
     }
-    window.addEventListener("message", messageHandler);
+    const start = (url) => { 
+      console.log(url);
+      if (url.slice(-1)!='#') { 
+        setLoadingState(true);
+      } else {
+        console.log('Not showing loading');
+      }
+    }
+    router.events.on('routeChangeComplete', finish);
+    router.events.on('routeChangeStart', start);
+
     return ()=>{
-      window.removeEventListener("message",messageHandler);
+      router.events.off('routeChangeComplete', finish);
+      router.events.off('routeChangeStart',start);
     }
   }
   useEffect(socketInitializer, []);
@@ -86,7 +95,7 @@ function CIP54Playground({ Component, pageProps }) {
       <GoogleAnalytics trackPageViews />
       <ErrorBoundary>
       <Backdrop open={loadingState} onClick={handleLoadingClose}>
-  <CircularProgress color="inherit" />
+  <CircularProgress color="primary" size="25%" />
   
 </Backdrop>
         <Layout>

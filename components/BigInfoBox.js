@@ -81,7 +81,6 @@ transition:'opacity 2s, box-shadow 1s',
 export default function BigInfoBox ({item,onClose,goFullscreen}) { 
     const theme = useTheme();
     const styles=useStyles();
-    console.log(onClose);
     const [ownerList, setOwnerList] = useState([]);
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);

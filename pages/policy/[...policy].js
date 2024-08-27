@@ -189,10 +189,11 @@ export default  function CIP54Playground(props) {
     }
 
     const selectionChange = (item) => { 
-        
+        //window.postMessage({request:'showLoading'},'*');
         router.push({
             pathname: '/policy/'+props.policy.slug+'.'+item.unit.substr(56),
-            query: {  }
+            query: {  },
+            hash:' '
         }, undefined, {shallow:true})
     }
     return (

@@ -195,10 +195,11 @@ export default  function CIP54Playground(props) {
     }
     const selectionChange = (item) => { 
         console.log(item);
-        window.postMessage({request:'showLoading'},'*');
+        
         router.push({
             pathname: '/wallet/'+address+'.'+item.unit,
-            query: {  }
+            query: {  },
+            hash: ' '
         }, undefined, {shallow:true})
     }
     /*
