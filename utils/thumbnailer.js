@@ -7,19 +7,18 @@ import { getCachedTokenThumb } from './Helpers.mjs'
 import sharp from 'sharp';
 
 /**
- * @description Generates a thumbnail for a given unit, with optional size and mode
- * (dark, light, or transparent). It checks if the image exists, retrieves metadata,
- * resizes the image, and saves it to Redis with a specified format and quality.
+ * @description Generates a thumbnail for a given unit with specified size and mode
+ * from Redis cache or by processing the original file using Sharp library, then saves
+ * it to Redis and returns the data URL.
  *
- * @param {string} unit - Used to identify a specific entity or object.
+ * @param {string} unit - Used to identify a unique token.
  *
- * @param {number | string} size - Used to set the size of the generated image.
+ * @param {number|string} size - The desired width or height of the image.
  *
- * @param {string | 'dark' | 'light' | 'transparent'} mode - Used to specify the
- * output image format.
+ * @param {string | 'dark' | 'light' | 'transparent'} mode - Used to set image mode.
  *
- * @returns {boolean | null | Buffer} Either false (indicating failure), null (indicating
- * error), or a Buffer representing the generated image data.
+ * @returns {boolean | null | Buffer | string} Either `false`, a generated image as
+ * a Buffer or string (with MIME type 'image/jpeg' or 'image/png'), or null.
  */
 export const generate = async (unit,size,mode) => {
     console.log('Generate called for token: '+unit+' '+size+' '+mode);
@@ -61,7 +60,12 @@ export const generate = async (unit,size,mode) => {
         console.log('Exception while parsing image: '+e);
         return null;
       }
-      const imd = await img.metadata();
+      let imd;
+      try { 
+        imd = await img.metadata();
+      } catch (e) { 
+        console.log('Exception while getting image metadata: '+e);
+      }
       let resizeOpts;
       if (imd.width>imd.height) { 
         resizeOpts = {width:size};
