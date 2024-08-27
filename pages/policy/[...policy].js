@@ -159,28 +159,44 @@ export default  function CIP54Playground(props) {
         
     }
     const imgError = (e) => { 
-        console.log(e.target.src);
         const origSrc = e.target.src;
         e.target.src='/img-loading.gif'
-        window.addEventListener('message',(mes) => { 
+        const messageHandler = (mes) => { 
             if (mes.data.request=='newThumb' && mes.data.originalUrl==origSrc.replace(mes.origin,'')) { 
-                console.log('new thumb found');
                 e.target.src=mes.data.url;
-                
-            } else { 
-                console.log(mes);
-                console.log([mes.data.originalUrl, origSrc.replace(mes.origin, '')]);
+                window.removeEventListener('message',messageHandler);
             }
-        })
+        };
+        window.addEventListener('message',messageHandler)
         
     }
     const slideItemHTML = (click,ts, thumbSpacing) => { 
  
         return (item) => { 
             // The 60 below is the number of pixels we reserve in the slide bar for the label
-            return <li style={{paddingLeft:thumbSpacing,paddingBottom:thumbSpacing,paddingRight:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError.bind(this)} src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+            return <li style={{paddingLeft:thumbSpacing,paddingBottom:thumbSpacing,paddingRight:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
         }
     }
+    const listItemHTML = (click,ts, thumbSpacing) => { 
+        return (item,s,thumbSpacing) => { 
+            return <li  style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+        }
+    }
+    
+
+    const detailsItemHTML=(click,ts, thumbSpacing) => { 
+        return (item) => { 
+            return <li style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+        }
+    }
+
+
+    const thumbnailsItemHTML = (click,ts, thumbSpacing) => { 
+        return (item) => { 
+            return <li style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+        }
+    }
+    
     /*
     
     */
@@ -232,7 +248,7 @@ export default  function CIP54Playground(props) {
                 <meta name="twitter:card" content="summary_large_image" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide initialSelection={initialSelection} slideItemHTML={slideItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide initialSelection={initialSelection} slideItemHTML={slideItemHTML} listItemHTML={listItemHTML} thumbnailsItemHTML={thumbnailsItemHTML} detailsItemHTML={detailsItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
