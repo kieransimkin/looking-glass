@@ -6,11 +6,12 @@ import * as libcip from "libcip54"
 import * as helpers from '../utils/Helpers.mjs';
 dotenv.config()
 async function doIt() {
-	console.log(libcip);
+	
     const redisClient = await redis.getClient();
     libcip.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
 
     const keys = await redisClient.keys("lg:refreshWallet:*");
+    console.log("Found "+keys.length+" wallets in need of refresh");
     for (const key of keys) { 
         const stake = key.substr(17)
         const item = JSON.parse(await redisClient.get(key));
