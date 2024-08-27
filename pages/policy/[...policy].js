@@ -163,13 +163,13 @@ export default  function CIP54Playground(props) {
         const origSrc = e.target.src;
         e.target.src='/img-loading.gif'
         window.addEventListener('message',(mes) => { 
-            if (mes.request=='newThumb' && mes.originalUrl==origSrc) { 
+            if (mes.data.request=='newThumb' && mes.data.originalUrl==origSrc.replace(mes.origin,'')) { 
                 console.log('new thumb found');
-                e.target.src=mes.src;
-                console.log(mes);
+                e.target.src=mes.data.url;
+                
             } else { 
                 console.log(mes);
-                console.log([mes.originalUrl, origSrc]);
+                console.log([mes.data.originalUrl, origSrc.replace(mes.origin, '')]);
             }
         })
         
