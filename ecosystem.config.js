@@ -57,14 +57,15 @@ module.exports = {
             name:'runHits'
         },
         //*/
-        /*
+        
         {
             script:'npm run generateThumbnails',
             instances:'1',
             args:'scripts/generateThumbnails.mjs',
-            name:'generateThumbnails'
+            name:'generateThumbnails',
+            env: getEnvVariables()
         },
-        //*/
+        
         {
           script:'npm run socket',
           instances:'1',

@@ -20,10 +20,8 @@ async function doIt() {
     const client = redisClient.duplicate();
     
     libcip.setGetTimeout(200000000);
-    console.log(client);
-    client.on('ready', () => {
-        console.log('Websocket connection id# ');
-    });
+    
+    
     client.on('error', (err) => console.log('Redis Client Error', err));
     await client.connect();
         console.log('Redis ready');
@@ -31,16 +29,16 @@ async function doIt() {
         client.subscribe('requestThumb', (message) => {
             
             message=JSON.parse(message);
-            console.log(message);
+           
             generate(message.unit,message.size,message.mode).then((res) => { 
-                redisClient.publish('newThumb',JSON.stringify({unit: message.unit,size: message.size,mode: message.mode,url:res, originalUrl: message.url}));
-                console.log('got new image: '+res)
+                if (res) { 
+                    redisClient.publish('newThumb',JSON.stringify({unit: message.unit,size: message.size,mode: message.mode,url:res, originalUrl: message.url}));
+                    console.log('got new image: '+res)
+                }
+                
             });
-            console.log(message);
+           
         });
-        client.subscribe('block',()=>{ 
-            console.log('block');
-        })
     
     return;
     //console.log(syncClient.default.query);
