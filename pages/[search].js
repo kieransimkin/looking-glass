@@ -6,19 +6,20 @@ import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
-import { validAddress, getStakeFromAny } from "libcip54";
+import { isValidAddress, getStakeFromAny } from "libcip54";
 import { getWallet } from "../utils/database.mjs";
 
 // Generates `/posts/1` and `/posts/2`
 /**
- * @description Concatenates a provided `relativePath` with the current working
- * directory (`__dirname`) to form an absolute file path using the `path.join` method
- * from the `path` module.
+ * @description Concatenates a provided `relativePath` with the directory name
+ * (`__dirname`) using the `path.join()` method from the `path` module, returning an
+ * absolute path as a string.
  *
- * @param {string} relativePath - Used as part of constructing an absolute file path.
+ * @param {string} relativePath - Used to construct a full path.
  *
- * @returns {string} A fully qualified path name resulting from joining the directory
- * name obtained through the `__dirname` variable with the provided relative path.
+ * @returns {string} A complete absolute path derived from the current working directory
+ * (`__dirname`) and the provided relative path, separated by a delimiter specified
+ * in the operating system.
  */
 function calcPath(relativePath) {
     const path = require('path');
@@ -26,14 +27,14 @@ function calcPath(relativePath) {
   }
 
 /**
- * @description Handles server-side rendering for a Next.js application. It redirects
- * requests based on query parameters, checks file existence and validity, and serves
- * static files or redirects to other pages accordingly.
+ * @description Reads a file from the server-side and redirects the request to different
+ * routes based on the file name. If the file is not found, it returns an empty props
+ * object with the original filename.
  *
- * @param {object} context - Used to access server-side request context.
+ * @param {object} context - Used to access server-side request information.
  *
- * @returns {any} Either an object containing a property named "redirect" with
- * destination as a string, or an object with a single property named "props".
+ * @returns {object} Either a redirect with a destination URL property or an object
+ * containing props with filename as a key.
  */
 export const getServerSideProps = async (context) => { 
     
@@ -53,7 +54,7 @@ export const getServerSideProps = async (context) => {
     } catch (e) { }
     try { 
         
-    if (validAddress(filename)) { 
+    if (isValidAddress(filename)) { 
         console.log('valid address');
         return {
             redirect: {
@@ -88,14 +89,15 @@ console.log(e);
 };
 
 /**
- * @description Checks if a search query has been provided, and based on its format,
- * redirects the user to either a wallet page, policy page, or retrieves data from
- * an API and navigates to a corresponding wallet page.
+ * @description Retrieves a search query from its parameters, extracts file extensions
+ * and performs various checks to determine whether the query is a valid wallet
+ * address, policy ID or an Ethereum token holder's address. It then navigates the
+ * user to the corresponding page accordingly.
  *
- * @param {object} params - Expected to contain the filename as a property.
+ * @param {object} params - Used to pass data for searching.
  *
- * @returns {JSX.Element} A React element that wraps a div containing an h1 tag and
- * a circular progress indicator.
+ * @returns {ReactNode} A JSX element containing an h1 element and a CircularProgress
+ * component.
  */
 export default function Search(params) {
     
@@ -107,11 +109,11 @@ export default function Search(params) {
         ext = String(search).substr(-4,4);
     }
     useEffect(() => { 
-        // Executes when search state changes.
+        // Handles search bar input validation and redirects user accordingly.
 
         if (!search) return;     
-        console.log(validAddress(search));
-        if (validAddress(search)) { 
+        console.log(isValidAddress(search));
+        if (isValidAddress(search)) { 
             console.log('got here');
             router.push({pathname:'/wallet/'+search})
         } else if (validatePolicyID(search))  { 
@@ -119,14 +121,14 @@ export default function Search(params) {
         } else if (search.substring(0,1)=='$') { 
             const punycoded = punycode.toASCII(search.substr(1).trim());
             getData('/getTokenHolders?unit=f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex')).then((a)=>{
-                // Parses JSON data and navigates to a wallet page if an address exists.
+                // Processes JSON data and navigates to a wallet page based on the address.
 
                 a.json().then((j) => { 
-                    // Processes JSON data to navigate to wallet page.
+                    // Handles JSON data and navigates to a wallet page.
 
                     if (j.length && j[0]?.address) { 
                         getWallet(getStakeFromAny(j[0].address)).then((w) => { 
-                            // Pushes a route to the router.
+                            // Navigates to a new route.
 
                             router.push({pathname:'/wallet/'+w.slug})    
                         })
