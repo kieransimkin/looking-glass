@@ -90,7 +90,11 @@ export const getServerSideProps = async (context) => {
                     let thumbURL;
                     if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                         tokResult[c].thumb = thumbURL;
-                    }   
+                    } else { 
+                        // The dynamic image loading for the first pagefull of results isn't working at the momment, so let's just make sure 
+                        failed=true;
+                        //redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
+                    }
                 }
                 if (token && tokResult[c].unit==token) { 
                     props.token=tokResult[c];
@@ -108,10 +112,9 @@ export const getServerSideProps = async (context) => {
 
 export default  function CIP54Playground(props) {
     
-    console.log(props);
+    
     let dbStake = props.wallet?.stake;
     const router = useRouter();
-    //let address = router.query.address[0];
     let address = props.address;
     
     const [gallery, setGallery] = useState(props.gallery);
@@ -229,10 +232,7 @@ export default  function CIP54Playground(props) {
             hash: ' '
         }, undefined, {shallow:true})
     }
-    /*
     
-    */
-   console.log(props);
     return (
         <>
             <Head>
