@@ -159,9 +159,14 @@ export default  function CIP54Playground(props) {
         
     }
     const slideItemHTML = (click,ts, thumbSpacing) => { 
+        const imgError = (e) => { 
+            console.log(e.target.src);
+            e.target.src='/img-loading.gif'
+            
+        }
         return (item) => { 
             // The 60 below is the number of pixels we reserve in the slide bar for the label
-            return <li style={{paddingLeft:thumbSpacing,paddingBottom:thumbSpacing,paddingRight:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+            return <li style={{paddingLeft:thumbSpacing,paddingBottom:thumbSpacing,paddingRight:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError.bind(this)} src={item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
         }
     }
     /*

@@ -47,6 +47,7 @@ console.log('got connection');
             message = JSON.parse(message);
             socket.emit('mint', message);
         });
+     
 
 
     })

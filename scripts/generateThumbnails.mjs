@@ -11,7 +11,21 @@ import {default as datastore} from '../utils/DataStore.js'
 dotenv.config()
 let donePolicies=0;
 async function doIt() {
-    const redisClient = await redis.getClient();
+    
+    const client = await redis.getClient();
+    console.log(client);
+    client.on('error', (err) => console.log('Redis Client Error', err));
+    
+        console.log('Redis ready');
+
+        client.subscribe('requestThumb', (message) => {
+            console.log(message);
+        });
+        client.subscribe('block',()=>{ 
+            console.log('block');
+        })
+    
+    return;
     //console.log(syncClient.default.query);
     libcip.default.init('mainnet',syncClient.default, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient)
     const results = await database.default.query(`

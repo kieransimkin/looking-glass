@@ -36,6 +36,8 @@ export default async function Browse(req, res) {
     return;
   }
   if (!result) {
+    redisClient.publish('requestThumb',{unit,size,mode});
+    console.log('published redis error');
     res.status(425).send('Failed')
     return;
   }
