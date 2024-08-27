@@ -27,17 +27,19 @@ async function doIt() {
         console.log('Redis ready');
 
         client.subscribe('requestThumb', (message) => {
-            
-            message=JSON.parse(message);
-           
-            generate(message.unit,message.size,message.mode).then((res) => { 
-                if (res) { 
-                    redisClient.publish('newThumb',JSON.stringify({unit: message.unit,size: message.size,mode: message.mode,url:res, originalUrl: message.url}));
-                    console.log('got new image: '+res)
-                }
+            try { 
+                message=JSON.parse(message);
                 
-            });
-           
+                generate(message.unit,message.size,message.mode).then((res) => { 
+                    if (res) { 
+                        redisClient.publish('newThumb',JSON.stringify({unit: message.unit,size: message.size,mode: message.mode,url:res, originalUrl: message.url}));
+                        console.log('got new image: '+res)
+                    }
+                    
+                });
+            } catch (e) { 
+                console.log('Failed to generate image for '+message.unit+', got error: '+e)
+            }
         });
     
     return;
