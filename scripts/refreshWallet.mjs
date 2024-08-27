@@ -53,6 +53,7 @@ async function doIt() {
                 //sleep(2000);
                 
             }
+            console.log('Removing key: '+key);
             await redisClient.del(key);
             
         }
