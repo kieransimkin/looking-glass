@@ -30,14 +30,18 @@ export default async function Browse(req, res) {
   const metadata = await libcip54.getMetadata(unit);
   let result;
   try { 
+    
     result = await libcip54.getFile(unit, null, metadata);
   } catch (e) { 
+    
+    redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
     res.status(425).send('Failed')
+    
     return;
   }
   if (!result) {
-    redisClient.publish('requestThumb',{unit,size,mode});
-    console.log('published redis error');
+    redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
+    
     res.status(425).send('Failed')
     return;
   }

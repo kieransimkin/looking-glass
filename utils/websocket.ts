@@ -47,7 +47,10 @@ console.log('got connection');
             message = JSON.parse(message);
             socket.emit('mint', message);
         });
-     
+        client.subscribe('newThumb', (message: any) => { 
+            message = JSON.parse(message);
+            socket.emit('newThumb', message);
+        });
 
 
     })
