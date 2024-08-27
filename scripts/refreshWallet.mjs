@@ -19,11 +19,13 @@ async function doIt() {
         if (item.timestamp<(Date.now()-600000)) { 
             let tokens = await redis.checkCacheItem('getTokensFromAddress:'+stake);
             if (!tokens) {   
-                
+                try { 
                 tokens = await libcip.getTokensFromAny(stake);
-                
-                console.log('Cached tokens for '+stake)
-                await redis.cacheItem('getTokensFromAddress:'+stake,tokens)
+                    console.log('Cached tokens for '+stake)
+                    await redis.cacheItem('getTokensFromAddress:'+stake,tokens)
+                } catch (e) { 
+                    continue;
+                }
             }
             const perPage = 10;
             const doPage = async (tokens, page=0) => { 
