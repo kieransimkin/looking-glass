@@ -20,6 +20,16 @@ import { getTokenData } from '../../utils/formatter';
 import LoadingTicker from '../../components/LoadingTicker';
 import { getDataURL } from '../../utils/DataStore';
 
+/**
+ * @description Retrieves a policy from Redis and checks if it matches the URL query
+ * parameter. If a token is present, it redirects to a new URL or updates the policy
+ * object with token data, and returns the updated props for server-side rendering.
+ *
+ * @param {object} context - Used to pass data from the server to the client.
+ *
+ * @returns {object} A single property named "props" containing the returned data
+ * from getPolicy and other dependent functions.
+ */
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let policy = context.query.policy[0];
@@ -107,6 +117,17 @@ export const getServerSideProps = async (context) => {
     }
 }
 
+/**
+ * @description Renders a media slide component with policy tokens from an API,
+ * allowing users to navigate through the tokens and view details. It fetches data
+ * based on a provided policy ID and displays token information, including title,
+ * description, image, and link.
+ *
+ * @param {any} props - Used to pass data from a parent component.
+ *
+ * @returns {ReactElement} A JSX element that includes a Head component and a MediaSlide
+ * component along with some event handlers.
+ */
 export default  function CIP54Playground(props) {
     const dbPolicy = props.policy;
     
@@ -118,11 +139,17 @@ export default  function CIP54Playground(props) {
     if (!policy) policy='';
     
     useEffect(() => { 
+        // Fetches and sets gallery data.
+
         if (!policy || policy=='') return;
         if (gallery) return;
         
         getData('/policyTokens?policy='+policy).then((d)=>{
+            // Converts JSON data to JavaScript object and updates gallery.
+
             d.json().then((j) => { 
+                // Sets gallery state.
+
                 setGallery(j);
         
             });
@@ -133,15 +160,46 @@ export default  function CIP54Playground(props) {
     if (!dbPolicy) { 
         return <h1>Policy Not Found</h1>
     }
+    /**
+     * @description Renders a `BigInfoBox` component with three props: `onClose`,
+     * `goFullscreen`, and `item`. It is called with an index `i`, an `onClose` callback,
+     * and a `goFullscreen` callback. The `BigInfoBox` component is likely used to display
+     * information about the item at index `i`.
+     *
+     * @param {object} i - Likely an item of data.
+     *
+     * @param {Function} onClose - Used to close something.
+     *
+     * @param {Function} goFullscreen - Used to toggle full screen mode.
+     *
+     * @returns {JSX.Element} A React component named `BigInfoBox`.
+     */
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen} item={i} />
     }
+    /**
+     * @description Loads additional policy tokens from a server API, merging them with
+     * existing data. It handles pagination by incrementing the page number and updates
+     * the local state with new tokens, page, and total pages information.
+     *
+     * @param {object} obj - Destructured to extract its property named 'page'. The default
+     * value of this property is undefined if not provided, but it can be overridden by
+     * passing an object with a 'page' property while calling the function.
+     *
+     * @param {number} obj.page - Used to track the current page.
+     *
+     * @param {number} offset - Used to determine which direction to load more data.
+     */
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         
         getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+offset)).then((d)=>{
+            // Updates data based on page offset and loads it into the gallery.
+
             d.json().then((j) => { 
+                // Merges JSON data into an existing array and updates the state.
+
                 let newArray;
                 if (offset>0) { 
                     newArray = [...gallery.tokens];
@@ -158,6 +216,21 @@ export default  function CIP54Playground(props) {
         console.log('Called outer load more data function');
         
     }
+    /**
+     * @description Generates a list item (LI) element for each item in an array, formatting
+     * it with padding and an image. The function takes three parameters: a click handler,
+     * thumbnail spacing, and total slide height. It returns a function that accepts an
+     * item object and generates the HTML content.
+     *
+     * @param {(item: object) => void} click - Intended for handling click events.
+     *
+     * @param {number} ts - Used to set the height of the image tag.
+     *
+     * @param {number} thumbSpacing - Used to set padding around images in the slide item.
+     *
+     * @returns {(item: object) => JSX.Element} A higher-order function that takes an
+     * item as an argument and returns a JSX element representing a list item.
+     */
     const slideItemHTML = (click,ts, thumbSpacing) => { 
         return (item) => { 
             // The 60 below is the number of pixels we reserve in the slide bar for the label
@@ -183,16 +256,27 @@ export default  function CIP54Playground(props) {
     let newGallery = null;
     if (gallery) {
         newGallery=gallery.tokens.map((i)=>{
+            // Maps through an array, modifying each object and returns new array.
+
             i.linkUrl='/policy/'+props.policy.slug+'.'+i.unit.substr(56);
             return i;
         })
     }
 
+    /**
+     * @description Updates the URL by pushing a new route to the router, navigating to
+     * a specific policy page with a slug and unit parameter, while preserving the current
+     * query and hash values. The navigation is done in a shallow manner, meaning it does
+     * not trigger a full page reload.
+     *
+     * @param {object} item - Not explicitly defined within this code snippet.
+     */
     const selectionChange = (item) => { 
-        
+        //window.postMessage({request:'showLoading'},'*');
         router.push({
             pathname: '/policy/'+props.policy.slug+'.'+item.unit.substr(56),
-            query: {  }
+            query: {  },
+            hash:' '
         }, undefined, {shallow:true})
     }
     return (
