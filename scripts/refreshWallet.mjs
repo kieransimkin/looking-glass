@@ -15,7 +15,7 @@ async function doIt() {
     for (const key of keys) { 
         const stake = key.substr(17)
         const item = JSON.parse(await redisClient.get(key));
-        await helpers.sleep(1000);
+        await helpers.sleep(50);
         if (item.timestamp<(Date.now()-600000)) { 
             let tokens = await redis.checkCacheItem('getTokensFromAddress:'+stake);
             if (!tokens) {   
