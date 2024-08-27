@@ -1,6 +1,18 @@
-import { getMetadata, getSmartImports } from "libcip54"
+import { getMetadata, getSmartImports, hexToAscii } from "libcip54"
 import { checkCacheItem, cacheItem } from "./redis.mjs";
 import { getDataURL } from "./DataStore";
+/**
+ * @description Retrieves token data from cache or fetches it from metadata API when
+ * cache misses. It populates token data with default values and performs additional
+ * processing for title, thumbnail URL, and other fields before caching the result.
+ *
+ * @param {object} token - Required for the function to work.
+ *
+ * @param {boolean} throwOnCacheMiss - Used to decide how to handle cache misses.
+ *
+ * @returns {object} A set of data related to a given token unit, including its
+ * metadata, title, thumbnail URL, and other file URLs.
+ */
 export const getTokenData = async function (token, throwOnCacheMiss=false) { 
     
     let tokenData = await checkCacheItem('getTokenData:'+token.unit);
@@ -14,7 +26,9 @@ export const getTokenData = async function (token, throwOnCacheMiss=false) {
         if (tokenData.metadata?.title) { 
             tokenData.title = tokenData.metadata?.title;
         }
-        
+        if (!tokenData.title || tokenData.title.length<1) { 
+            tokenData.title=hexToAscii(token.unit.slice(56))
+        }
         const thumbName = 'tokenThumb:'+token.unit+':500:dark';
         let thumbURL;
         if ((thumbURL = getDataURL(thumbName,'jpg'))) {
