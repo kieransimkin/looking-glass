@@ -25,6 +25,8 @@ async function doIt() {
                     console.log('Cached tokens for '+stake)
                     await redis.cacheItem('getTokensFromAddress:'+stake,tokens)
                 } catch (e) { 
+                    console.log('Got an error fetching tokens:');
+                    console.log(e);
                     continue;
                 }
             }
