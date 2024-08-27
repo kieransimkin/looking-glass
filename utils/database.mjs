@@ -4,7 +4,7 @@ import pgCon from 'pg';
 import dbSyncClient from './dbsync.mjs'
 import { validatePolicyID } from './Helpers.mjs';
 let client = new pgCon.Pool({connectionString: process.env.DATABASE_URI});
-import { validAddress, getStakeFromAny } from 'libcip54';
+import { isValidAddress, getStakeFromAny } from 'libcip54';
 import * as walletMethods from "../models/wallet"
 import * as policyMethods from "../models/policy"
 import { getTokenHolders, init } from 'libcip54';
@@ -130,7 +130,7 @@ export const getWallet = async (key) => {
     await dbinit();
     return new Promise((resolve, reject) => { 
         let stake;
-        if (validAddress(key) && (stake=getStakeFromAny(key))) {
+        if (isValidAddress(key) && (stake=getStakeFromAny(key))) {
             getWalletByStake(stake).then((w)=>{ 
                 resolve(w);
             })
