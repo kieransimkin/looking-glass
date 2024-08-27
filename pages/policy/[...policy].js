@@ -21,15 +21,14 @@ import LoadingTicker from '../../components/LoadingTicker';
 import { getDataURL } from '../../utils/DataStore';
 
 /**
- * @description Retrieves policy data from a backend service and generates server-side
- * rendered (SSR) page for it. It handles tokenized URLs, redirects, caching, and
- * retrieving related tokens and their thumbnails.
+ * @description Retrieves a policy from the server, handles redirects, and populates
+ * a response object with policy data, including tokens and their thumbnails. It also
+ * updates cache items and increment hit counters for the policy.
  *
- * @param {object} context - Used to provide data for server-side rendering.
+ * @param {object} context - Provided by Next.js for server-side rendering purposes.
  *
- * @returns {object} Assigned to a variable named `props`. The object `props` can
- * contain several properties such as `policy`, `policyProfile`, `policyProfileThumb`,
- * `gallery`, and possibly others, depending on the execution path.
+ * @returns {object} A property bag (`props`) containing policy and gallery information,
+ * possibly including redirects.
  */
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
@@ -119,14 +118,16 @@ export const getServerSideProps = async (context) => {
 }
 
 /**
- * @description Renders a media slide component with data fetched from an API based
- * on a policy ID provided as a prop. It handles loading and error states, allows for
- * navigation to specific items, and provides basic metadata for SEO purposes.
+ * @description Renders a media slide component that displays a list of items (e.g.,
+ * images) from a Cardano policy, allowing users to navigate through the items and
+ * select one for further information or download.
  *
- * @param {any} props - Used to pass data from parent component.
+ * @param {any} props - Expected to contain a policy object.
  *
- * @returns {JSX.Element} A React component that renders a media slide with an initial
- * selection, allowing for navigation and loading more data.
+ * @returns {JSX.Element} A React component that represents a media slide with images
+ * and information about the policy tokens. The component includes features such as
+ * loading indicators, pagination, and event handlers for selection changes and load
+ * more data.
  */
 export default  function CIP54Playground(props) {
     const dbPolicy = props.policy;
@@ -139,16 +140,16 @@ export default  function CIP54Playground(props) {
     if (!policy) policy='';
     
     useEffect(() => { 
-        // Fetches and updates policy tokens.
+        // Fetches policy tokens and updates gallery state when policy changes.
 
         if (!policy || policy=='') return;
         if (gallery) return;
         
         getData('/policyTokens?policy='+policy).then((d)=>{
-            // Converts JSON data to JavaScript object and sets it to Gallery.
+            // Converts JSON to gallery data.
 
             d.json().then((j) => { 
-                // Sets a gallery.
+                // Sets gallery state.
 
                 setGallery(j);
         
@@ -161,43 +162,44 @@ export default  function CIP54Playground(props) {
         return <h1>Policy Not Found</h1>
     }
     /**
-     * @description Renders a BigInfoBox component with props: `onClose`, `goFullscreen`,
-     * and `item`. It takes three arguments: an index `i`, a callback function `onClose`,
-     * and another callback function `goFullscreen`. The function returns the rendered BigInfoBox.
+     * @description Renders a component named `BigInfoBox`, passing three props: `onClose`,
+     * `goFullscreen`, and `item`. The function takes an index `i`, a callback function
+     * `onClose`, and another callback function `goFullscreen` as arguments, and returns
+     * the rendered component.
      *
-     * @param {object} i - Used as data for rendering the `BigInfoBox`.
+     * @param {object} i - Intended to be used as an item.
      *
-     * @param {Function} onClose - Used to close the component when called.
+     * @param {Function} onClose - Intended to handle closing events.
      *
-     * @param {Function} goFullscreen - Used to trigger fullscreen mode.
+     * @param {Function} goFullscreen - Used to toggle full screen mode.
      *
-     * @returns {JSX.Element} `<BigInfoBox />`.
+     * @returns {JSX.Element} `<BigInfoBox onClose={onClose} goFullscreen={goFullscreen}
+     * item={i} />`.
      */
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen} item={i} />
     }
     /**
-     * @description Loads additional policy tokens from an API, appending them to the
-     * existing array of tokens in the `gallery` object or prepending if `offset` is
-     * greater than zero. It also updates the page and total pages count in the `gallery`
-     * object.
+     * @description Loads additional data from the `/policyTokens` API endpoint, merging
+     * it with existing data in the `gallery.tokens` array. It updates the `gallery` state
+     * and sets `mediaSlideLoading` to false when the operation is complete.
      *
-     * @param {object} obj - Required. It seems to contain an integer value for 'page'
-     * which appears to be related to pagination, and it also includes default values.
+     * @param {object} obj - Implicitly destructured from an object. The key 'page' has
+     * a value that is incremented by the offset to get the next page data.
      *
-     * @param {number} obj.page - Used to track pagination.
+     * @param {number} obj.page - Used to specify the page number for retrieving data.
      *
-     * @param {number} offset - Used to specify the position for adding new data.
+     * @param {number} offset - Used for paginating data.
      */
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         
         getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+offset)).then((d)=>{
-            // Fetches JSON data.
+            // Handles data fetch and updates state.
 
             d.json().then((j) => { 
-                // Concatenates tokens and updates state.
+                // Merges and updates data.
 
                 let newArray;
                 if (offset>0) { 
@@ -216,46 +218,44 @@ export default  function CIP54Playground(props) {
         
     }
     /**
-     * @description Handles an error when loading an image and swaps it with a temporary
-     * placeholder ('/img-loading.gif'). It also sets up a listener for messages from a
-     * child window or iframe, which may provide a new thumbnail URL to replace the
-     * original image if available.
+     * @description Logs an image's source URL to the console when an error occurs while
+     * loading the image, then replaces it with a loading GIF until a new thumbnail is
+     * received through a window message from another script.
      *
-     * @param {Event} e - Triggered when an error occurs while loading an image.
+     * @param {Event} e - Related to an error event on an image tag.
      */
     const imgError = (e) => { 
         console.log(e.target.src);
         const origSrc = e.target.src;
         e.target.src='/img-loading.gif'
         window.addEventListener('message',(mes) => { 
-            // Handles messages from a parent window.
+            // Handles messages.
 
-            if (mes.request=='newThumb' && mes.originalUrl==origSrc) { 
+            if (mes.data.request=='newThumb' && mes.data.originalUrl==origSrc.replace(mes.origin,'')) { 
                 console.log('new thumb found');
-                e.target.src=mes.src;
-                console.log(mes);
+                e.target.src=mes.data.url;
+                
             } else { 
                 console.log(mes);
-                console.log([mes.originalUrl, origSrc]);
+                console.log([mes.data.originalUrl, origSrc.replace(mes.origin, '')]);
             }
         })
         
     }
     /**
-     * @description Generates an HTML list item for a slideshow, given an item object and
-     * three parameters: click handler, thumbnail spacing, and thumb height. It returns
-     * a JSX element with an image, title, and link, and applies the provided styles and
-     * event handlers.
+     * @description Generates a list item (LI) for a slide bar, including an image and
+     * title. It takes three arguments: `click`, `ts`, and `thumbSpacing`. The `click`
+     * function is called when the LI is clicked, and it uses these arguments to create
+     * a dynamic list of items.
      *
-     * @param {(item: object) => void} click - Used to handle click events on slide items.
+     * @param {(item: any) => void} click - Used for handling click events on slide items.
      *
-     * @param {number} ts - Used for determining image height.
+     * @param {number} ts - Used to set image height.
      *
-     * @param {number} thumbSpacing - Used to set the padding for the slide items.
+     * @param {number} thumbSpacing - Used to set the padding for thumbnail items.
      *
-     * @returns {(item: object) => JSX.Element} A higher-order function that takes an
-     * item as an argument and returns a JSX element representing an HTML list item
-     * (`<li>`) for that item.
+     * @returns {(item: object) => JSX.Element} A higher-order function that generates
+     * an HTML list item (`<li>`) element for each given item object.
      */
     const slideItemHTML = (click,ts, thumbSpacing) => { 
  
@@ -283,7 +283,7 @@ export default  function CIP54Playground(props) {
     let newGallery = null;
     if (gallery) {
         newGallery=gallery.tokens.map((i)=>{
-            // Transforms an array.
+            // Maps an array.
 
             i.linkUrl='/policy/'+props.policy.slug+'.'+i.unit.substr(56);
             return i;
@@ -291,12 +291,12 @@ export default  function CIP54Playground(props) {
     }
 
     /**
-     * @description Updates the browser's URL by pushing a new route to the router. The
-     * new route includes the policy slug and unit substring from an item, with optional
-     * query parameters and a hash value. This navigation is done shallowly without
-     * re-rendering the entire component.
+     * @description Navigates to a new URL when an item is selected. It constructs a URL
+     * by appending the slug and unit of the policy, and optionally adds query parameters
+     * and a hash fragment. The navigation occurs without full page reload due to the
+     * `{shallow: true}` option.
      *
-     * @param {object} item - Used to determine route changes.
+     * @param {object} item - Used to determine routing changes.
      */
     const selectionChange = (item) => { 
         //window.postMessage({request:'showLoading'},'*');
