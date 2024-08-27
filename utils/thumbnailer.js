@@ -46,7 +46,12 @@ export const generate = async (unit,size,mode) => {
         console.log('Exception while parsing image: '+e);
         return null;
       }
-      const imd = await img.metadata();
+      let imd;
+      try { 
+        imd = await img.metadata();
+      } catch (e) { 
+        console.log('Exception while getting image metadata: '+e);
+      }
       let resizeOpts;
       if (imd.width>imd.height) { 
         resizeOpts = {width:size};
