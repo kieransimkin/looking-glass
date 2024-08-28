@@ -73,6 +73,13 @@ module.exports = {
           name:'queryAdaHandles',
           env: getEnvVariables()
       },
+      {
+        script:'npm run queryTokenHolders',
+        instances:'1',
+        args:'scripts/queryTokenHolders.mjs',
+        name:'queryTokenHolders',
+        env: getEnvVariables()
+    },
         {
           script:'npm run socket',
           instances:'1',

@@ -54,7 +54,7 @@ function CIP54Playground({ Component, pageProps }) {
   
         console.log('connected')
       })
-  
+      // probably be best if we only subscribed to the ones we neded
       socket.on('block',(data)=>{
         console.log(data);
         //alert(data);
@@ -66,6 +66,9 @@ function CIP54Playground({ Component, pageProps }) {
         console.log(data);
         window.postMessage({request:'newAdaHandle',...data},'*');
       })
+      socket.on('newOwnerList',(data) => { 
+        window.postMessage({request:'newOwnerList',...data},'*');
+      });
     }
     asy();
   }

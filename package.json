@@ -17,6 +17,7 @@
     "runHits": "tsx scripts/runHits.mjs",
     "generateThumbnails": "tsx scripts/generateThumbnails.mjs",
     "queryAdaHandles": "tsx scripts/queryAdaHandles.mjs",
+    "queryTokenHolders": "tsx scripts/queryTokenHolders.mjs",
     "socket": "tsx scripts/websocket.mjs"
   },
   "dependencies": {

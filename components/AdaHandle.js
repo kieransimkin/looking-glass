@@ -6,12 +6,9 @@ export default function AdaHandle({stake}) {
         if (!handle) { 
             getData('/getAdaHandle?address='+stake).then((h) => { 
                 if (h.status==425) { 
-                    
                     const messageHandler = (mes) => { 
-                        console.log(mes);
                         if (mes.data.request=='newAdaHandle' && mes.data.address == stake) { 
                             setHandle(mes.data.handle);
-                            console.log('Set handle');
                             window.removeEventListener('message',messageHandler);
                         }
                     };

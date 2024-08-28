@@ -6,11 +6,22 @@ export default function OwnerList({unit, lazy}) {
     const ref=useRef();
     useEffect(() => { 
         getData('/getTokenHolders?unit='+unit).then((data) => { 
-            data.json().then((o) => { 
-                
-                setOwnerList(o);
-                
-            })
+            if (data.status==425) { 
+                const messageHandler = (mes) => { 
+                    if (mes.data.request=='newOwnerList' && mes.data.unit == unit) { 
+                        
+                        setOwnerList(mes.data.holders);
+                        window.removeEventListener('message',messageHandler);
+                    }
+                };
+                window.addEventListener('message',messageHandler);
+            } else { 
+                data.json().then((o) => { 
+                    
+                    setOwnerList(o);
+                    
+                })
+            }
         })
     },[unit]);
     return <ul ref={ref} style={{display: 'inline'}} className="owner-list">{ownerList.map((i) => <li key={i.stake}><AdaHandle stake={i.stake} /> </li>)}</ul>

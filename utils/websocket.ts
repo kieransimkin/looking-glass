@@ -52,11 +52,14 @@ console.log('got connection');
             socket.emit('newThumb', message);
         });
         client.subscribe('newAdaHandle', (message: any) => { 
-            
             message = JSON.parse(message);
-            console.log(message);
             socket.emit('newAdaHandle', message);
         });
+        client.subscribe('newOwnerList', (message: any) => { 
+            message = JSON.parse(message);
+            socket.emit('newOwnerList', message);
+        });
+
 
 
     })

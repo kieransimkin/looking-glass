@@ -8,10 +8,17 @@ export default async function Browse(req, res) {
     const {unit, page} = req.query;
     
     let ret = await checkCacheItem('getTokenHolders:'+unit);
+    if (ret) {
+      res.status(200).json(ret);
+    } else { 
+      redisClient.publish('requestTokenHolders',unit);
+      res.status(425).send('Please wait');
+    }
+    /*
     if (!ret) { 
       ret = await getTokenHolders(unit,page);
       await cacheItem('getTokenHolders:'+unit,ret)
-    }
+    }*/
 
     res.status(200).json(ret);
 }
