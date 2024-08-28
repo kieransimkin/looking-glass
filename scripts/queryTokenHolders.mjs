@@ -32,8 +32,8 @@ async function doIt() {
             try { 
                 console.log(unit);
        
-    
-                getTokenHolders(unit,page).then((ret)=>{ 
+                // Todo - support paging
+                getTokenHolders(unit,0).then((ret)=>{ 
                     if (ret) { 
                         cacheItem('getTokenHolders:'+unit,ret)
                         redisClient.publish('newTokenHolders',JSON.stringify({unit, holders:ret, request:'newTokenHolders'}));
