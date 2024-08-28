@@ -9,7 +9,7 @@ export default function OwnerList({unit, lazy}) {
             if (data.status==425) { 
                 const messageHandler = (mes) => { 
                     if (mes.data.request=='newTokenHolders' && mes.data.unit == unit) { 
-                        
+                        console.log('Updated token holders');
                         setOwnerList(mes.data.holders);
                         window.removeEventListener('message',messageHandler);
                     }
