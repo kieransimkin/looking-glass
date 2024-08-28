@@ -11,8 +11,6 @@ import { red } from '@material-ui/core/colors';
 import IconRoundall from './IconRoundall';
 
 const useStyles = makeStyles(theme => { 
-    // Returns CSS styles.
-
     let bgi = '';
     if (theme.palette.type=='dark') { 
       bgi='';
@@ -81,25 +79,24 @@ transition:'opacity 2s, box-shadow 1s',
     };
   });
 /**
- * @description Renders a complex information box for a specific item, including an
- * image, metadata, owner list, and buttons for closing and going full-screen. It
- * uses React Hooks to manage state and side effects, such as loading images and
- * fetching data.
+ * @description Renders a modal window with various components, including an image,
+ * metadata information, and policy details. It also provides options to close or go
+ * fullscreen. The modal window is loaded dynamically based on the provided item data.
  *
- * @param {object} obj - 3 elements long:
+ * @param {object} obj - 3 key-value pairs:
+ * - 'item': expected to be an object with metadata information,
+ * - 'onClose': expected to be a callback function for handling close icon click event,
+ * - 'goFullscreen': expected to be a callback function for handling go fullscreen
+ * button click event.
  *
- * - `item`: represents metadata information about an item.
- * - `onClose`: a callback function for closing the box.
- * - `goFullscreen`: a callback function for going full screen.
+ * @param {object} obj.item - Used to display detailed information about an item.
  *
- * @param {object} obj.item - Used to represent metadata about an item.
+ * @param {() => void} obj.onClose - Used to close the box when called.
  *
- * @param {Function} obj.onClose - Used to close the box.
+ * @param {() => void} obj.goFullscreen - Called when the user clicks on the fullscreen
+ * button, triggering a full-screen mode for the component.
  *
- * @param {Function} obj.goFullscreen - Used to toggle full-screen mode when invoked.
- *
- * @returns {JSX.Element} A React component that contains various elements such as
- * divs, img, icons, buttons and other HTML elements.
+ * @returns {JSX.Element} A React element that can be rendered to the DOM.
  */
 export default function BigInfoBox ({item,onClose,goFullscreen}) { 
     const theme = useTheme();
@@ -108,8 +105,8 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [portalOpacity, setPortalOpacity] = useState(0);
-    const [width, setWidth] = useState(null);
-    const [height, setHeight] = useState(null);
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
     const [closeIconVisible, setCloseIconVisible] = useState(false);
     const [overlaysVisible, setOverlaysVisible] = useState(false);
     const [metadataContent, setMetadataContent] = useState(<pre>{JSON.stringify(item.metadata,null,'  ')}</pre>)
@@ -119,6 +116,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     const containerBottomRef = useRef();
     const floatingDiv = useRef();
     const floatingBottomDiv = useRef();
+    const floatingFullscreenButton = useRef();
     const floatingBottomHoverDiv = useRef();
     const topButtonDiv = useRef();
     const bottomButtonDiv = useRef();
@@ -126,36 +124,42 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     let fadeTimer = null;
     
     /**
-     * @description Sets the portal opacity to 1 when called, indicating that a resource
-     * or operation is ready for use. This change in opacity may be visually represented
-     * as a transition from invisible to fully visible.
+     * @description Sets the value of the `portalOpacity` state variable to 1 when called,
+     * allowing for the adjustment of the opacity of a portal element or component in a
+     * React application.
      */
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
     /**
-     * @description Executes a callback after a timeout of 0 milliseconds, updating the
-     * `height`, `width`, and `loaded` states by retrieving the properties from an image
-     * reference (`imgRef`) when it is loaded.
+     * @description Initializes a timer to set the dimensions and loaded state of an image
+     * after zero milliseconds, then calls the `tokenPortal` function with the item, ready
+     * callback, image width, and height as arguments, setting the portal HTML based on
+     * the response.
      *
      * @param {Event} e - Not used within the function.
      */
     const load = (e) => {
         setTimeout(() => { 
-            // Initializes values and state after image load.
-
+            // Loads dynamic content.
             setHeight(imgRef.current.offsetHeight);
             setWidth(imgRef.current.offsetWidth)
             setLoaded(true);
+            tokenPortal(item,readyCallback, imgRef.current.offsetWidth, imgRef.current.offsetHeight).then((h) => { 
+                // Sets HTML and performs further actions.
+                setPortalHTML(h);
+                // Todo - dim the static image so that it doesnt' peek out from behind the portal
+            })
         },0) 
         
     }
     /**
-     * @description Sets a state variable named `closeIconVisible` to `true` when called,
-     * typically in response to a mouseover event on an element. This likely enables the
-     * display of a close icon associated with the element.
+     * @description Triggers when a mouse pointer hovers over an element. It sets the
+     * visibility of the `closeIcon` to true, indicating that the icon is now visible and
+     * can be interacted with. This likely controls the display of a close or cancel
+     * button in a UI component.
      *
-     * @param {Event} e - Unused in the provided code.
+     * @param {Event} e - Ignored.
      */
     const mouseOver =(e) => { 
      
@@ -169,11 +173,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
 
     }
     /**
-     * @description Sets a state variable `closeIconVisible` to `false` when the mouse
-     * leaves an element, indicating that the close icon should be hidden or removed from
-     * view. This action is logged to the console for debugging purposes.
+     * @description Logs a message to the console and sets the visibility of a close icon
+     * to false when the mouse leaves an element or its descendants.
      *
-     * @param {Event} e - Optional.
+     * @param {Event} e - Typically used to access event information.
      */
     const mouseOut = (e) => { 
             console.log()
@@ -181,37 +184,40 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         
     }
     /**
-     * @description Sets a state variable `setOverlaysVisible` to true when called, making
-     * overlays visible and logging a message 'overlays on' to the console upon mouse
-     * hover event triggering.
+     * @description Sets the state of overlays to be visible when a mouse event occurs,
+     * and logs a message to the console indicating that the overlays are now visible.
      *
-     * @param {Event} e - Unused.
+     * @param {Event} e - Passed to the function when invoked.
      */
     const mouseOverMain = (e) => { 
         setOverlaysVisible(true);
+        e.bu
         console.log('overlays on');
     }
     /**
-     * @description Logs 'overlays off' to the console and sets the visibility of overlays
-     * to false when the mouse leaves the main area.
+     * @description Triggers when a user's pointer moves out of an element or area, logging
+     * 'overlays off' to the console and setting the `overlaysVisible` state to `false`.
      *
-     * @param {Event} e - Not used within the function.
+     * @param {Event} e - Optional.
      */
     const mouseOutMain = (e) => { 
         console.log('overlays offf');
         setOverlaysVisible(false);
     }
     useEffect(() => { 
-            // Sets and clears event listeners for div elements on mount and unmount.
-
+            // Adds and removes event listeners for hover and mouseleave events on various HTML
+            // elements.
             if (floatingBottomHoverDiv.current) { 
-                floatingBottomHoverDiv.current.addEventListener("mouseenter",mouseOverMain);
+                floatingBottomHoverDiv.current.addEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.addEventListener("mouseleave",mouseOutMain);
+            
             }
-            if (bodyDiv.current) { 
-                bodyDiv.current.addEventListener("mouseenter",mouseOverMain);
-                bodyDiv.current.addEventListener("mouseleave",mouseOutMain);
-            }
+            if (floatingFullscreenButton.current) { 
+                                floatingFullscreenButton.current.addEventListener("mouseenter",mouseOverMain);
+                                floatingFullscreenButton.current.addEventListener("mouseleave",mouseOutMain);
+            }        
+
+
             //window.addEventListener("mousemove",mouseMove);
             if (floatingDiv.current){ 
                 floatingDiv.current.addEventListener("mouseenter",mouseOver);
@@ -231,9 +237,12 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
                 floatingBottomDiv.current.addEventListener("mouseenter",mouseOver);
                 floatingBottomDiv.current.addEventListener("mouseleave",mouseOut);
             }
+    
+
+        
         
         return () => { 
-
+/*
             if (floatingBottomHoverDiv.current) { 
                 floatingBottomHoverDiv.current.removeEventListener("mouseenter",mouseOverMain);
                 floatingBottomHoverDiv.current.removeEventListener("mouseleave",mouseOutMain);
@@ -261,17 +270,16 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
                 topButtonDiv.current.removeEventListener("mouseenter,",mouseOver);
                 topButtonDiv.current.removeEventListener("mouseleave",mouseOut);
             }
+                */
             //window.removeEventListener("mousemove",mouseMove);
         }
     },[])
     useEffect(()=> { 
-        // Logs when a new sidebar item is added.
-
+        // Logs a message when `item` changes.
         console.log('new sidebar item');
     },[item])
     useEffect(() => { 
-        // Initializes and updates UI components for rendering metadata related to an item.
-
+        // Initializes and updates UI components when item or dimensions change.
         if (imgRef.current) { 
             if (imgRef.current.complete) { 
                 setTimeout(()=>{load();},100);
@@ -288,21 +296,12 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         metadataRef.current.querySelectorAll('.jsontree_value_null').forEach((div)=>div.style.color='#ff0000')
         setOwnerList([])
         setPortalOpacity(0);
-        if (loaded) {
-            tokenPortal(item,readyCallback, width, height).then((h) => { 
-                // Sets HTML content.
-
-                setPortalHTML(h);
-            })
-        }
-
+    
         getData('/getTokenHolders?unit='+item.unit).then((data) => { 
-            // Converts and handles JSON response data.
-
+            // Converts JSON response to object.
             data.json().then((o) => { 
                 
                 // Sets owner list.
-
                 setOwnerList(o);
                 
             })
@@ -313,11 +312,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             }
             if (metadataRef.current)  metadataRef.current.innerHTML='';
         }
-    },[item,loaded, width, height])
+    },[item, width, height])
     /**
-     * @description Triggers the `goFullscreen()` action, entering a full-screen mode.
-     * Additionally, it logs 'on fullscreen' to the console, indicating that the function
-     * has been called successfully.
+     * @description Triggers a full-screen mode by calling the `goFullscreen()` function,
+     * and then logs 'on fullscreen' to the console. This indicates that the element has
+     * entered full-screen mode successfully.
      */
     const onFullscreen = () => { 
         goFullscreen();
@@ -325,7 +324,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     }
     // Todo format the initial metadata JSON better for SEO reasons
     return <>
-        <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'300px', height:'300px'}}>&nbsp;</div>
+        <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
         <div ref={containerRef} style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.0'}}>
             <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -334,7 +333,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             </div>
         </div>
 
-        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',top:'75vh', right:'0', width:'200px', height:'200px'}}>&nbsp;</div>
+        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',top:'75vh', right:'0', width:'50px', height:'200px'}}>&nbsp;</div>
         <div ref={containerBottomRef} style={{position:'relative', bottom: '8vh', marginLeft: '1.1em'}}>
         <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.0'}}>
         <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -342,27 +341,28 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             </div>
             </div>
         </div>
-        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
+        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'100%'}}>
     
-        <img ref={imgRef} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible'}} />
-        <div style={{position:'relative'}}> 
-        <div ref={floatingBottomHoverDiv} onClick={onFullscreen} style={{zIndex: '1000',position: 'absolute',top:'-200px', width:'300px', height:'300px',backgroundColor:'transparent'}}>&nbsp;</div>
-        </div>
-        <div>
+        
         <TokenRoundall overlaysVisible={overlaysVisible} quantity={item.quantity} />
+        <img ref={imgRef} onLoad={load} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible', display:'inline-block'}} /><br style={{clear:'both'}}/>
+        <div style={{position:'relative',top:'-30px'}}> 
+        <div ref={floatingBottomHoverDiv} onClick={onFullscreen} style={{zIndex: '10000',position: 'absolute',left:width/2, top:0-height/3, width:width/2, height:height/3,backgroundColor:'transparent'}}>&nbsp;</div>
+        
+        <div style={{position:'relative',top:'-80px', right:'0px', height:'0px', width:width}}>
+        
+        <div style={{position:'absolute', zIndex:2000000, right: '0px'}} ref={floatingFullscreenButton}>
+        <IconRoundall onClick={onFullscreen} overlaysVisible={overlaysVisible}>
+            <img style={{position:'relative',left:'7px', top:'4px'}}  width="59" height="59" src='data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg version="1.1" id="svg2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns%23" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns%23" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="fullscreen.svg" inkscape:version="0.48.4 r9939" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 1200 1200" enable-background="new 0 0 1200 1200" xml:space="preserve"><sodipodi:namedview inkscape:cy="445.30147" inkscape:cx="453.66298" inkscape:zoom="0.37249375" showgrid="false" id="namedview30" guidetolerance="10" gridtolerance="10" objecttolerance="10" borderopacity="1" bordercolor="%23666666" pagecolor="%23ffffff" inkscape:current-layer="svg2" inkscape:window-maximized="1" inkscape:window-y="24" inkscape:window-height="876" inkscape:window-width="1535" inkscape:pageshadow="2" inkscape:pageopacity="0" inkscape:window-x="65"></sodipodi:namedview><path id="path9678" inkscape:connector-curvature="0" d="M0,0v413.818l144.141-145.386L475.708,600L143.555,932.153L0,789.844V1200h413.818l-145.386-144.141L600,724.292l332.153,332.153L789.844,1200H1200V786.182l-144.141,145.386L724.292,600l332.153-332.153L1200,410.156V0H786.182l145.386,144.141L600,475.708L267.847,143.555L410.156,0H0z"/></svg>' />
+            </IconRoundall>
         </div>
-   
+        </div>
+        </div>
         
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}
         </div>
-        <div onClick={onClose} style={{position:'relative',top:'-80px', right:'0px', height:'0px', width:'100%'}}>
-        <div style={{position:'absolute', right:'5em', top:'-2em', zIndex:2000000}}>
-        <IconRoundall onClick={onFullscreen} overlaysVisible={overlaysVisible}>
-            <img style={{position:'relative',left:'7px', top:'4px'}} width="59" height="59" src='data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg version="1.1" id="svg2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns%23" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns%23" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="fullscreen.svg" inkscape:version="0.48.4 r9939" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 1200 1200" enable-background="new 0 0 1200 1200" xml:space="preserve"><sodipodi:namedview inkscape:cy="445.30147" inkscape:cx="453.66298" inkscape:zoom="0.37249375" showgrid="false" id="namedview30" guidetolerance="10" gridtolerance="10" objecttolerance="10" borderopacity="1" bordercolor="%23666666" pagecolor="%23ffffff" inkscape:current-layer="svg2" inkscape:window-maximized="1" inkscape:window-y="24" inkscape:window-height="876" inkscape:window-width="1535" inkscape:pageshadow="2" inkscape:pageopacity="0" inkscape:window-x="65"></sodipodi:namedview><path id="path9678" inkscape:connector-curvature="0" d="M0,0v413.818l144.141-145.386L475.708,600L143.555,932.153L0,789.844V1200h413.818l-145.386-144.141L600,724.292l332.153,332.153L789.844,1200H1200V786.182l-144.141,145.386L724.292,600l332.153-332.153L1200,410.156V0H786.182l145.386,144.141L600,475.708L267.847,143.555L410.156,0H0z"/></svg>' />
-            </IconRoundall>
-        </div>
-        </div>
+
         <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
         
         
