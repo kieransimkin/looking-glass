@@ -62,6 +62,9 @@ function CIP54Playground({ Component, pageProps }) {
       socket.on('newThumb',(data) => { 
         window.postMessage({request:'newThumb',...data},'*');
       })
+      socket.on('newAdaHandle',(data) => { 
+        window.postMessage({request:'newAdaHandle',...data},'*');
+      })
     }
     asy();
   }
