@@ -20,7 +20,7 @@ import { getTokenData } from '../../utils/formatter';
 import LoadingTicker from '../../components/LoadingTicker';
 import { getDataURL } from '../../utils/DataStore';
 import OwnerList from '../../components/OwnerList';
-
+import {ProfileObject, WithContext} from 'schema-dts'
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let policy = context.query.policy[0];
@@ -208,6 +208,7 @@ export default  function CIP54Playground(props) {
     let description = props.policy.description;
     let url = "https://clg.wtf/policy/"+props.policy.slug;
     let image = "https://clg.wtf/"+props.policyProfileThumb;
+    let policyProfileImage = image;
     let initialSelection = gallery?gallery[0]:null;
     if (props.token) { 
         title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
@@ -232,6 +233,42 @@ export default  function CIP54Playground(props) {
             hash:' '
         }, undefined, {shallow:true})
     }
+    let profileStructuredData =
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "dateCreated": policy.createdAt,
+        "dateModified": policy.lastMinted || policy.lastMoved,
+        "mainEntity": {
+          "@type": "Organization",
+          "name": policy.name,
+          "alternateName": policy.slug,
+          "identifier": policy.policyID,
+          "interactionStatistic": [{
+            "@type": "InteractionCounter",
+            "interactionType": "https://schema.org/LikeAction",
+            "userInteractionCount": policy.totalHits
+          }],
+          
+            "agentInteractionStatistic": [{
+                "@type": "InteractionCounter",
+                "interactionType": "https://schema.org/WriteAction",
+                "userInteractionCount": policy.assetCount
+              },
+              {
+                "@type": "InteractionCounter",
+                "interactionType": "https://schema.org/ShareAction",
+                "userInteractionCount": policy.totalActivity
+              },
+            ],
+          
+          "description": policy.description,
+          "image": [
+            policyProfileImage,
+            image
+          ]
+        }
+    }
     return (
         <>
             <Head>
@@ -249,6 +286,15 @@ export default  function CIP54Playground(props) {
                 <meta name="twitter:title" content={title} />
                 <meta name="twitter:description" content={description} />
                 <meta name="twitter:card" content="summary_large_image" />
+                {profileStructuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(profileStructuredData),
+          }}
+        />
+      )}
+    
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <MediaSlide initialSelection={initialSelection} slideItemHTML={slideItemHTML} listItemHTML={listItemHTML} thumbnailsItemHTML={thumbnailsItemHTML} detailsItemHTML={detailsItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
