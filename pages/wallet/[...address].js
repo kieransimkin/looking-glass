@@ -148,7 +148,7 @@ export default  function CIP54Playground(props) {
 
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
-        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen} item={i} />
+        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} />
     }
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
