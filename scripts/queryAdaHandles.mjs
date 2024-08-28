@@ -29,13 +29,14 @@ async function doIt() {
 
         client.subscribe('requestAdaHandle', (address) => {
             try { 
-                console.log(address);
+                
                 libcip.getAdaHandleFromAddress(address,true).then((handle) => { 
                     if (handle && handle.length > 0) { 
                         redisClient.publish('newAdaHandle',JSON.stringify({address, handle, request:'newAdaHandle'}));
-                        console.log('got new ada handle: '+handle)
+                        console.log('got new ada handle: '+handle+' for '+address)
                     } else { 
                         redisClient.publish('newAdaHandle',JSON.stringify({address, handle: '', request:'newAdaHandle'}));
+                        console.log('I need a handle, man. I don\'t have an identity until I have a handle '+address)
                     }
                 })
              
