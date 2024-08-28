@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as libcip54 from "libcip54"
 import pgClient from "./dbsync.mjs";
-import {getClient} from "./redis.mjs";
+import {cacheItem, getClient} from "./redis.mjs";
 import { getDataURL, saveData, sendData, saveSend } from "./DataStore";
 import { getCachedTokenThumb } from './Helpers.mjs'
 import sharp from 'sharp';
@@ -53,6 +53,7 @@ export const generate = async (unit,size,mode) => {
         console.log('Exception while getting image metadata: '+e);
         return null;
       }
+      await cacheItem('getMediaMetadata:'+unit,imd);
       let resizeOpts;
       if (imd.width>imd.height) { 
         resizeOpts = {width:size};
