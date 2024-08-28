@@ -4,13 +4,13 @@ import { checkCache } from "../../utils/redis.mjs";
 import {getClient} from "../../utils/redis.mjs";
 
 /**
- * @description Retrieves a user's Ada Handle from Redis for the provided address,
- * and if it exists, returns the result as JSON. If not, it publishes a request to
- * Redis and sends a response asking the client to wait.
+ * @description Retrieves a user's Ada handle from Redis and returns it as JSON if
+ * available. If not, it requests the handle through Redis publishing and responds
+ * with a "Please wait" message until the handle is retrieved.
  *
- * @param {any} req - Used to receive HTTP request data.
+ * @param {Request} req - Used to hold request data.
  *
- * @param {Response} res - Used for sending HTTP responses to the client.
+ * @param {Response} res - Used to send HTTP responses back to the client.
  */
 export default async function Browse(req, res) {
   const redisClient = await getClient();
@@ -21,7 +21,7 @@ export default async function Browse(req, res) {
     if (ret) {
       res.status(200).json(JSON.parse(ret));
     } else { 
-      redisClient.publish('requestAdaHandle',{address:JSON.stringify({address})});
+      redisClient.publish('requestAdaHandle',address);
       res.status(425).send('Please wait');
     }
     

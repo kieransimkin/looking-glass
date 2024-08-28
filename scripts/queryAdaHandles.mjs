@@ -15,10 +15,10 @@ const generate=thumbnailer.generate;
 dotenv.config()
 let donePolicies=0;
 /**
- * @description Initializes a Redis client, sets up event listeners, and subscribes
- * to a specific topic (`requestAdaHandle`). When messages are received, it parses
- * JSON data, retrieves an ADA handle from an address using the `libcip` library, and
- * publishes the result back to Redis.
+ * @description Connects to a Redis client, sets up event listeners and timeouts,
+ * then subscribes to a 'requestAdaHandle' channel. When an address is received, it
+ * retrieves an ADA handle from the IPFS gateway and publishes the result on a
+ * 'newAdaHandle' channel if successful.
  */
 async function doIt() {
     
@@ -33,20 +33,20 @@ async function doIt() {
     await client.connect();
         console.log('Redis ready');
 
-        client.subscribe('requestAdaHandle', (message) => {
-            // Processes new Ada handles.
+        client.subscribe('requestAdaHandle', (address) => {
+            // Subscribes and processes Ada handles from requests.
             try { 
-                message=JSON.parse(message);
+                console.log(address);
                 libcip.getAdaHandleFromAddress(address).then((handle) => { 
-                    // Handles and logs new Ada handle.
+                    // Publishes new Ada Handle to Redis and logs it.
                     if (handle) { 
-                        redisClient.publish('newAdaHandle',JSON.stringify({address: message.address, handle: handle}));
+                        redisClient.publish('newAdaHandle',JSON.stringify({address, handle}));
                         console.log('got new ada handle: '+handle)
                     }
                 })
              
             } catch (e) { 
-                console.log('Failed to get ada handle for address: '+message.address+', error was: '+e)
+                console.log('Failed to get ada handle for address: '+address+', error was: '+e)
             }
         });
     
