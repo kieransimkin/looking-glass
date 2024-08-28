@@ -9,6 +9,7 @@ import {tokenPortal} from '../utils/tokenPortal';
 import PolicyInfo from './PolicyInfo';
 import { red } from '@material-ui/core/colors';
 import IconRoundall from './IconRoundall';
+import OwnerList from './OwnerList';
 
 const useStyles = makeStyles(theme => { 
     let bgi = '';
@@ -81,7 +82,6 @@ transition:'opacity 2s, box-shadow 1s',
 export default function BigInfoBox ({item,onClose,goFullscreen}) { 
     const theme = useTheme();
     const styles=useStyles();
-    const [ownerList, setOwnerList] = useState([]);
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [portalOpacity, setPortalOpacity] = useState(0);
@@ -228,16 +228,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         metadataRef.current.querySelectorAll('.jsontree_value_number').forEach((div)=>div.style.color='#ff0000')
         metadataRef.current.querySelectorAll('.jsontree_value_boolean').forEach((div)=>div.style.color='#ff0000')
         metadataRef.current.querySelectorAll('.jsontree_value_null').forEach((div)=>div.style.color='#ff0000')
-        setOwnerList([])
+        
         setPortalOpacity(0);
     
-        getData('/getTokenHolders?unit='+item.unit).then((data) => { 
-            data.json().then((o) => { 
-                
-                setOwnerList(o);
-                
-            })
-        })
+     
         return ()=> { 
             if (imgRef.current) { 
                 imgRef.current.removeEventListener('load',load);
@@ -297,7 +291,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         <PolicyInfo policyID={item.unit.substring(0,56)} />
         </div>
         <div style={{position: 'relative', marginBottom: '1em'}}>
-        <b>{ownerList.length>1?'Owners':'Owner'}</b>: <ul  style={{display: 'inline'}} className="owner-list">{ownerList.map((i) => <li key={i.stake}><AdaHandle stake={i.stake} /> </li>)}</ul>
+        <b>Owner</b>:<OwnerList unit={item.unit} />
         </div>
     
         <div style={{width:'93%',marginTop:'10px'}}>

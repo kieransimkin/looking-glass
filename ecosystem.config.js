@@ -67,6 +67,13 @@ module.exports = {
         },
         
         {
+          script:'npm run queryAdaHandles',
+          instances:'1',
+          args:'scripts/queryAdaHandles.mjs',
+          name:'queryAdaHandles',
+          env: getEnvVariables()
+      },
+        {
           script:'npm run socket',
           instances:'1',
           args:'scripts/socket.mjs',

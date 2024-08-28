@@ -5,9 +5,20 @@ export default function AdaHandle({stake}) {
     useEffect(() => { 
         if (!handle) { 
             getData('/getAdaHandle?address='+stake).then((h) => { 
-                h.json().then((j)=> {
-                    setHandle(j)
-                })
+                if (h.status==425) { 
+                    
+                    const messageHandler = (mes) => { 
+                        if (mes.data.request=='newAdaHandle' && mes.data.address == stake) { 
+                            setHandle(mes.data.adaHandle);
+                            window.removeEventListener('message',messageHandler);
+                        }
+                    };
+                    window.addEventListener('message',messageHandler)
+                } else { 
+                    h.json().then((j)=> {
+                        setHandle(j)
+                    })
+                }
                 
                 
             });
