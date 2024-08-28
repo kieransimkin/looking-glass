@@ -52,7 +52,9 @@ console.log('got connection');
             socket.emit('newThumb', message);
         });
         client.subscribe('newAdaHandle', (message: any) => { 
+            
             message = JSON.parse(message);
+            console.log(message);
             socket.emit('newAdaHandle', message);
         });
 

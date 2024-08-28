@@ -178,36 +178,35 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         
         
         return () => { 
-/*
+
             if (floatingBottomHoverDiv.current) { 
-                floatingBottomHoverDiv.current.removeEventListener("mouseenter",mouseOverMain);
+                floatingBottomHoverDiv.current.removeEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.removeEventListener("mouseleave",mouseOutMain);
+            
             }
-            if (bodyDiv.current) { 
-                bodyDiv.current.removeEventListener("mouseenter",mouseOverMain);
-                bodyDiv.current.removeEventListener("mouseleave",mouseOutMain);
-            }
-            if (floatingDiv.current) { 
-                
+            if (floatingFullscreenButton.current) { 
+                                floatingFullscreenButton.current.removeEventListener("mouseenter",mouseOverMain);
+                                floatingFullscreenButton.current.removeEventListener("mouseleave",mouseOutMain);
+            }        
+            if (floatingDiv.current){ 
                 floatingDiv.current.removeEventListener("mouseenter",mouseOver);
                 floatingDiv.current.removeEventListener("mouseleave",mouseOut);
             }
-            if (floatingBottomDiv.current) { 
-                                
-                floatingBottomDiv.current.removeEventListener("mouseenter",mouseOver);
-                floatingBottomDiv.current.removeEventListener("mouseleave",mouseOut);
+            if (topButtonDiv.current) { 
+                topButtonDiv.current.removeEventListener("mouseenter",mouseOver);
+                topButtonDiv.current.removeEventListener("mouseleave",mouseOut);
+                
             }
             if (bottomButtonDiv.current) { 
                 bottomButtonDiv.current.removeEventListener("mouseenter",mouseOver);
                 bottomButtonDiv.current.removeEventListener("mouseleave",mouseOut);
-
             }
-            if (topButtonDiv.current) { 
-                topButtonDiv.current.removeEventListener("mouseenter,",mouseOver);
-                topButtonDiv.current.removeEventListener("mouseleave",mouseOut);
+            
+            if (floatingBottomDiv.current) { 
+                floatingBottomDiv.current.removeEventListener("mouseenter",mouseOver);
+                floatingBottomDiv.current.removeEventListener("mouseleave",mouseOut);
             }
-                */
-            //window.removeEventListener("mousemove",mouseMove);
+    
         }
     },[])
     useEffect(()=> { 
