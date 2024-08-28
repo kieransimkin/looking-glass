@@ -10,6 +10,7 @@ import pgClient from "../utils/dbsync.mjs";
 import * as helpers from '../utils/Helpers.mjs';
 import {default as datastore} from '../utils/DataStore.js'
 import thumbnailer from '../utils/thumbnailer.js';
+import { init, getAdaHandleFromAddress } from "libcip54"
 const generate=thumbnailer.generate;
 dotenv.config()
 let donePolicies=0;
