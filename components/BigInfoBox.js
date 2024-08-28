@@ -136,7 +136,6 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     }
     const mouseOverMain = (e) => { 
         setOverlaysVisible(true);
-        e.bu
         console.log('overlays on');
     }
     const mouseOutMain = (e) => { 
@@ -254,7 +253,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     return <>
         <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
         <div ref={containerRef} style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}>
-            <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.0'}}>
+            <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
             ➺
             </div>
@@ -263,7 +262,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
 
         <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',top:'75vh', right:'0', width:'50px', height:'200px'}}>&nbsp;</div>
         <div ref={containerBottomRef} style={{position:'relative', bottom: '8vh', marginLeft: '1.1em'}}>
-        <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.0'}}>
+        <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
         <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
         ➺
             </div>
@@ -294,18 +293,18 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
         
         
-        <div style={{position: 'relative', marginBottom: '0.3em', marginTop:'0em', paddingTop:'0em'}}>
+        <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em'}}>
         <PolicyInfo policyID={item.unit.substring(0,56)} />
         </div>
-        
-        <div style={{position: 'relative', marginBottom: '0.5em'}}>
-        <ul className="owner-list">{ownerList.map((i) => <li key={i.stake}><AdaHandle stake={i.stake} /> </li>)}</ul>
+        <div style={{position: 'relative', marginBottom: '1em'}}>
+        <b>{ownerList.length>1?'Owners':'Owner'}</b>: <ul  style={{display: 'inline'}} className="owner-list">{ownerList.map((i) => <li key={i.stake}><AdaHandle stake={i.stake} /> </li>)}</ul>
         </div>
     
-        
+        <div style={{width:'93%',marginTop:'10px'}}>
         <h2 style={{margin:0}}>Metadata:</h2>
         <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
         {metadataContent}
+        </div>
         </div>
         </>
 }
