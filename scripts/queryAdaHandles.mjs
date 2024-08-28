@@ -10,7 +10,7 @@ import pgClient from "../utils/dbsync.mjs";
 import * as helpers from '../utils/Helpers.mjs';
 import {default as datastore} from '../utils/DataStore.js'
 import thumbnailer from '../utils/thumbnailer.js';
-import { init, getAdaHandleFromAddress } from "libcip54"
+
 const generate=thumbnailer.generate;
 dotenv.config()
 let donePolicies=0;
@@ -30,7 +30,7 @@ async function doIt() {
         client.subscribe('requestAdaHandle', (message) => {
             try { 
                 message=JSON.parse(message);
-                getAdaHandleFromAddress(address).then((handle) => { 
+                libcip.getAdaHandleFromAddress(address).then((handle) => { 
                     if (handle) { 
                         redisClient.publish('newAdaHandle',JSON.stringify({address: message.address, handle: handle}));
                         console.log('got new ada handle: '+handle)
