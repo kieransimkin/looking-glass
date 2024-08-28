@@ -32,7 +32,7 @@ async function doIt() {
                 console.log(address);
                 libcip.getAdaHandleFromAddress(address).then((handle) => { 
                     if (handle) { 
-                        redisClient.publish('newAdaHandle',JSON.stringify({address, handle}));
+                        redisClient.publish('newAdaHandle',JSON.stringify({address, handle, request:'newAdaHandle'}));
                         console.log('got new ada handle: '+handle)
                     }
                 })
