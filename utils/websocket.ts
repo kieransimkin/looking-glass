@@ -5,18 +5,17 @@ import { createClient } from 'redis';
 
 let usersConnected=0;
 setInterval(() => { 
-    // Prints the number of connected WebSocket users every minute to the console.
-
+    // Logs user connections.
     console.log(usersConnected + ' web socket users currently connected');
 }, 60000);
 
 /**
- * @description Establishes a WebSocket connection and creates a Redis client for
- * each connected user. It handles errors, disconnects users, unsubscribes from Redis
- * channels, and emits events when receiving messages from Redis channels such as
- * 'block' and 'mint'.
+ * @description Establishes a WebSocket connection and creates a Redis client connection
+ * for each user to subscribe to specific channels, sending emitted messages from
+ * these channels to connected clients. It also handles disconnections, unsubscribing
+ * from channels and closing the Redis and WebSocket connections.
  *
- * @param {any} socket - Intended for handling WebSocket connections.
+ * @param {any} socket - The WebSocket connection being established.
  */
 export const onConnection = (socket: any) => {
 console.log('got connection');
@@ -34,10 +33,9 @@ console.log('got connection');
         console.error(e);
     }
     /**
-     * @description Logs a message indicating a WebSocket disconnection, decrements the
-     * count of connected users, closes the WebSocket connection, unsubscribes from any
-     * topics, and quits the client. This function is called when the WebSocket connection
-     * is terminated or lost.
+     * @description Logs a message to the console, decrements the `usersConnected` counter,
+     * closes the WebSocket connection, unsubscribes from any topic, and quits the client
+     * upon disconnection.
      */
     const disconnect = () => { 
         console.log('Websocket disconnect id# '+socket.id);
@@ -48,9 +46,10 @@ console.log('got connection');
         client.quit();
     }
     /**
-     * @description Disconnects a WebSocket connection established by the `socket` object.
-     * This indicates that the client is ending its session, and any further communication
-     * with the server will be terminated.
+     * @description Disconnects a WebSocket connection using the `socket.disconnect()`
+     * method, effectively ending communication between the client and server. This
+     * function provides a mechanism for terminating a session or closing a dialogue when
+     * necessary.
      */
     const hangup = () => { 
         socket.disconnect();
@@ -58,24 +57,29 @@ console.log('got connection');
     socket.on('disconnect', disconnect);
     client.on('error', (err: any) => console.log('Redis Client Error', err));
     client.on('ready', () => {
-        // Subscribes to two WebSocket channels and forwards received messages to other sockets.
-
+        // Subscribes to multiple WebSocket events.
         console.log('Websocket connection id# '+socket.id);
 
         client.subscribe('block', (message: any) => {
-            // Subscribes to 'block' topic, parses received JSON data and broadcasts it to all
-            // clients connected to the server via websockets.
-
+            // Subscribes to 'block' messages and parses them before emitting an event.
             message = JSON.parse(message);
             socket.emit('block', message);
         });
         client.subscribe('mint', (message: any) => { 
-            // Subscribes to the 'mint' topic and handles received messages.
-
+            // Subscribes to a server-side event and forwards it to clients via WebSocket.
             message = JSON.parse(message);
             socket.emit('mint', message);
         });
-     
+        client.subscribe('newThumb', (message: any) => { 
+            // Subscribes to a topic, parses incoming JSON data and broadcasts it over WebSocket.
+            message = JSON.parse(message);
+            socket.emit('newThumb', message);
+        });
+        client.subscribe('newAdaHandle', (message: any) => { 
+            // Subscribes to an MQTT topic, processes incoming messages and emits them via Socket.IO.
+            message = JSON.parse(message);
+            socket.emit('newAdaHandle', message);
+        });
 
 
     })
@@ -86,19 +90,6 @@ console.log('got connection');
 // Authorization web socket middleware
 // This will create a property called 'user' on the socket object, if we got a valid user
 // if we got an invalid user, the property will not be set, and the connection will be closed after 1 sec
-/**
- * @description Accepts a `data` object and an `accept` function as parameters,
- * retrieves an access token from various headers or cookies, checks its validity
- * using the `checkToken` function, and updates the `data` object with the user
- * information if valid; otherwise, disconnects the connection.
- *
- * @param {any} data - Used to hold handshake data and request data.
- *
- * @param {any} accept - Expected to be a callback function or handler.
- *
- * @returns {Promise<void>} Resolved by calling the `accept` function with no arguments
- * when authentication is successful, and does nothing when authentication fails.
- */
 export const authorization = async (data: any, accept: any) => { 
     
     return accept(data);
