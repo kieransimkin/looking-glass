@@ -187,7 +187,7 @@ export default  function CIP54Playground(props) {
     const detailsItemHTML=(click,ts, thumbSpacing) => { 
         return (item) => { 
             return <li style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}>
-                <td><Link passHref href={item.linkUrl}><a><img onError={imgError} src={item.thumb} width={64} /><br />{item.title}</a></Link></td>
+                <td><Link passHref href={item.linkUrl}><a><img onError={imgError} src={item.thumb} width={64} />{item.title}</a></Link></td>
                 <td><OwnerList unit={item.unit} /></td>
                 </li>
         }

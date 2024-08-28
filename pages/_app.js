@@ -67,7 +67,7 @@ function CIP54Playground({ Component, pageProps }) {
         window.postMessage({request:'newAdaHandle',...data},'*');
       })
       socket.on('newOwnerList',(data) => { 
-        window.postMessage({request:'newOwnerList',...data},'*');
+        window.postMessage({request:'newTokenHolders',...data},'*');
       });
     }
     asy();
