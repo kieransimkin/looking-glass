@@ -15,7 +15,7 @@ export default function AdaHandle({stake}) {
                         }
                     };
                     window.addEventListener('message',messageHandler)
-                } else if (h.status==200) { 
+                } else if (h.status!=204) { 
                     h.json().then((j)=> {
                         setHandle(j)
                     })
