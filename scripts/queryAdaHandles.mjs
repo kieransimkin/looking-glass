@@ -27,18 +27,18 @@ async function doIt() {
     await client.connect();
         console.log('Redis ready');
 
-        client.subscribe('requestAdaHandle', (message) => {
+        client.subscribe('requestAdaHandle', (address) => {
             try { 
-                message=JSON.parse(message);
+                console.log(address);
                 libcip.getAdaHandleFromAddress(address).then((handle) => { 
                     if (handle) { 
-                        redisClient.publish('newAdaHandle',JSON.stringify({address: message.address, handle: handle}));
+                        redisClient.publish('newAdaHandle',JSON.stringify({address, handle}));
                         console.log('got new ada handle: '+handle)
                     }
                 })
              
             } catch (e) { 
-                console.log('Failed to get ada handle for address: '+message.address+', error was: '+e)
+                console.log('Failed to get ada handle for address: '+address+', error was: '+e)
             }
         });
     

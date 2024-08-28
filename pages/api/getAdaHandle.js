@@ -12,7 +12,7 @@ export default async function Browse(req, res) {
     if (ret) {
       res.status(200).json(JSON.parse(ret));
     } else { 
-      redisClient.publish('requestAdaHandle',{address:JSON.stringify({address})});
+      redisClient.publish('requestAdaHandle',address);
       res.status(425).send('Please wait');
     }
     
