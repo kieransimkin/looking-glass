@@ -34,7 +34,9 @@ async function doIt() {
                     if (handle && handle.length > 0) { 
                         redisClient.publish('newAdaHandle',JSON.stringify({address, handle, request:'newAdaHandle'}));
                         console.log('got new ada handle: '+handle)
-                    } 
+                    } else { 
+                        redisClient.publish('newAdaHandle',JSON.stringify({address, handle: '', request:'newAdaHandle'}));
+                    }
                 })
              
             } catch (e) { 

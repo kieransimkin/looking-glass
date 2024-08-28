@@ -8,7 +8,9 @@ export default function AdaHandle({stake}) {
                 if (h.status==425) { 
                     const messageHandler = (mes) => { 
                         if (mes.data.request=='newAdaHandle' && mes.data.address == stake) { 
-                            setHandle(mes.data.handle);
+                            if (mes.data.handle && mes.data.handle!='') { 
+                                setHandle(mes.data.handle);
+                            }
                             window.removeEventListener('message',messageHandler);
                         }
                     };
