@@ -13,7 +13,7 @@ export default function AdaHandle({stake}) {
                         }
                     };
                     window.addEventListener('message',messageHandler)
-                } else { 
+                } else if (h.status==200) { 
                     h.json().then((j)=> {
                         setHandle(j)
                     })

@@ -17,7 +17,7 @@ let donePolicies=0;
 async function doIt() {
     
     const redisClient = await redis.getClient();
-    libcip.init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
+    libcip.init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient,'cip54:',86400);
     const client = redisClient.duplicate();
     
     libcip.setGetTimeout(200000000);
@@ -30,11 +30,11 @@ async function doIt() {
         client.subscribe('requestAdaHandle', (address) => {
             try { 
                 console.log(address);
-                libcip.getAdaHandleFromAddress(address).then((handle) => { 
-                    if (handle) { 
+                libcip.getAdaHandleFromAddress(address,true).then((handle) => { 
+                    if (handle && handle.length > 0) { 
                         redisClient.publish('newAdaHandle',JSON.stringify({address, handle, request:'newAdaHandle'}));
                         console.log('got new ada handle: '+handle)
-                    }
+                    } 
                 })
              
             } catch (e) { 

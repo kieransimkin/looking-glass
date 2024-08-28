@@ -9,8 +9,10 @@ export default async function Browse(req, res) {
     const {address} = req.query;
     let ret = await redisClient.get('cip54::getAdaHandleFromAddress:'+address);
     
-    if (ret) {
+    if (ret && ret.length>0 && ret!='\'\'') {
       res.status(200).json(JSON.parse(ret));
+    } else if (ret) { 
+      res.status(404).json(null);
     } else { 
       redisClient.publish('requestAdaHandle',address);
       res.status(425).send('Please wait');
