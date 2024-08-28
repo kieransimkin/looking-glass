@@ -237,32 +237,32 @@ export default  function CIP54Playground(props) {
     {
         "@context": "https://schema.org",
         "@type": "ProfilePage",
-        "dateCreated": policy.createdAt,
-        "dateModified": policy.lastMinted || policy.lastMoved,
+        "dateCreated": dbPolicy.createdAt,
+        "dateModified": dbPolicy.lastMinted || dbPolicy.lastMoved,
         "mainEntity": {
           "@type": "Organization",
-          "name": policy.name,
-          "alternateName": policy.slug,
-          "identifier": policy.policyID,
+          "name": dbPolicy.name,
+          "alternateName": dbPolicy.slug,
+          "identifier": dbPolicy.policyID,
           "interactionStatistic": [{
             "@type": "InteractionCounter",
             "interactionType": "https://schema.org/LikeAction",
-            "userInteractionCount": policy.totalHits
+            "userInteractionCount": dbPolicy.totalHits
           }],
           
             "agentInteractionStatistic": [{
                 "@type": "InteractionCounter",
                 "interactionType": "https://schema.org/WriteAction",
-                "userInteractionCount": policy.assetCount
+                "userInteractionCount": dbPolicy.assetCount
               },
               {
                 "@type": "InteractionCounter",
                 "interactionType": "https://schema.org/ShareAction",
-                "userInteractionCount": policy.totalActivity
+                "userInteractionCount": dbPolicy.totalActivity
               },
             ],
           
-          "description": policy.description,
+          "description": dbPolicy.description,
           "image": [
             policyProfileImage,
             image
