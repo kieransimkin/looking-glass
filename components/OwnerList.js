@@ -8,7 +8,7 @@ export default function OwnerList({unit, lazy}) {
         getData('/getTokenHolders?unit='+unit).then((data) => { 
             if (data.status==425) { 
                 const messageHandler = (mes) => { 
-                    if (mes.data.request=='newOwnerList' && mes.data.unit == unit) { 
+                    if (mes.data.request=='newTokenHolders' && mes.data.unit == unit) { 
                         
                         setOwnerList(mes.data.holders);
                         window.removeEventListener('message',messageHandler);

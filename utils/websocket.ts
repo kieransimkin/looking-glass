@@ -55,9 +55,9 @@ console.log('got connection');
             message = JSON.parse(message);
             socket.emit('newAdaHandle', message);
         });
-        client.subscribe('newOwnerList', (message: any) => { 
+        client.subscribe('newTokenHolders', (message: any) => { 
             message = JSON.parse(message);
-            socket.emit('newOwnerList', message);
+            socket.emit('newTokenHolders', message);
         });
 
 
