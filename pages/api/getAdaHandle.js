@@ -9,7 +9,7 @@ export default async function Browse(req, res) {
     const {address} = req.query;
     let ret = await redisClient.get('cip54::getAdaHandleFromAddress:'+address);
     console.log(ret);
-    if (ret && ret.length>0 && ret!='\'\'') {
+    if (ret && ret.length>0 && JSON.parse(ret)!='') {
       res.status(200).json(JSON.parse(ret));
     } else if (ret) { 
       res.status(404).json(null);
