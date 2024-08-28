@@ -85,8 +85,8 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [portalOpacity, setPortalOpacity] = useState(0);
-    const [width, setWidth] = useState(null);
-    const [height, setHeight] = useState(null);
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
     const [closeIconVisible, setCloseIconVisible] = useState(false);
     const [overlaysVisible, setOverlaysVisible] = useState(false);
     const [metadataContent, setMetadataContent] = useState(<pre>{JSON.stringify(item.metadata,null,'  ')}</pre>)
@@ -96,6 +96,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     const containerBottomRef = useRef();
     const floatingDiv = useRef();
     const floatingBottomDiv = useRef();
+    const floatingFullscreenButton = useRef();
     const floatingBottomHoverDiv = useRef();
     const topButtonDiv = useRef();
     const bottomButtonDiv = useRef();
@@ -110,6 +111,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             setHeight(imgRef.current.offsetHeight);
             setWidth(imgRef.current.offsetWidth)
             setLoaded(true);
+            tokenPortal(item,readyCallback, imgRef.current.offsetWidth, imgRef.current.offsetHeight).then((h) => { 
+                setPortalHTML(h);
+                // Todo - dim the static image so that it doesnt' peek out from behind the portal
+            })
         },0) 
         
     }
@@ -131,6 +136,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     }
     const mouseOverMain = (e) => { 
         setOverlaysVisible(true);
+        e.bu
         console.log('overlays on');
     }
     const mouseOutMain = (e) => { 
@@ -139,13 +145,16 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     }
     useEffect(() => { 
             if (floatingBottomHoverDiv.current) { 
-                floatingBottomHoverDiv.current.addEventListener("mouseenter",mouseOverMain);
+                floatingBottomHoverDiv.current.addEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.addEventListener("mouseleave",mouseOutMain);
+            
             }
-            if (bodyDiv.current) { 
-                bodyDiv.current.addEventListener("mouseenter",mouseOverMain);
-                bodyDiv.current.addEventListener("mouseleave",mouseOutMain);
-            }
+            if (floatingFullscreenButton.current) { 
+                                floatingFullscreenButton.current.addEventListener("mouseenter",mouseOverMain);
+                                floatingFullscreenButton.current.addEventListener("mouseleave",mouseOutMain);
+            }        
+
+
             //window.addEventListener("mousemove",mouseMove);
             if (floatingDiv.current){ 
                 floatingDiv.current.addEventListener("mouseenter",mouseOver);
@@ -165,9 +174,12 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
                 floatingBottomDiv.current.addEventListener("mouseenter",mouseOver);
                 floatingBottomDiv.current.addEventListener("mouseleave",mouseOut);
             }
+    
+
+        
         
         return () => { 
-
+/*
             if (floatingBottomHoverDiv.current) { 
                 floatingBottomHoverDiv.current.removeEventListener("mouseenter",mouseOverMain);
                 floatingBottomHoverDiv.current.removeEventListener("mouseleave",mouseOutMain);
@@ -195,6 +207,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
                 topButtonDiv.current.removeEventListener("mouseenter,",mouseOver);
                 topButtonDiv.current.removeEventListener("mouseleave",mouseOut);
             }
+                */
             //window.removeEventListener("mousemove",mouseMove);
         }
     },[])
@@ -218,12 +231,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         metadataRef.current.querySelectorAll('.jsontree_value_null').forEach((div)=>div.style.color='#ff0000')
         setOwnerList([])
         setPortalOpacity(0);
-        if (loaded) {
-            tokenPortal(item,readyCallback, width, height).then((h) => { 
-                setPortalHTML(h);
-            })
-        }
-
+    
         getData('/getTokenHolders?unit='+item.unit).then((data) => { 
             data.json().then((o) => { 
                 
@@ -237,14 +245,14 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             }
             if (metadataRef.current)  metadataRef.current.innerHTML='';
         }
-    },[item,loaded, width, height])
+    },[item, width, height])
     const onFullscreen = () => { 
         goFullscreen();
         console.log('on fullscreen');
     }
     // Todo format the initial metadata JSON better for SEO reasons
     return <>
-        <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'300px', height:'300px'}}>&nbsp;</div>
+        <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
         <div ref={containerRef} style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.0'}}>
             <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -253,7 +261,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             </div>
         </div>
 
-        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',top:'75vh', right:'0', width:'200px', height:'200px'}}>&nbsp;</div>
+        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',top:'75vh', right:'0', width:'50px', height:'200px'}}>&nbsp;</div>
         <div ref={containerBottomRef} style={{position:'relative', bottom: '8vh', marginLeft: '1.1em'}}>
         <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.0'}}>
         <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -261,27 +269,28 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             </div>
             </div>
         </div>
-        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', alignItems: 'center', height:'100%'}}>
+        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'100%'}}>
     
-        <img ref={imgRef} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible'}} />
-        <div style={{position:'relative'}}> 
-        <div ref={floatingBottomHoverDiv} onClick={onFullscreen} style={{zIndex: '1000',position: 'absolute',top:'-200px', width:'300px', height:'300px',backgroundColor:'transparent'}}>&nbsp;</div>
-        </div>
-        <div>
+        
         <TokenRoundall overlaysVisible={overlaysVisible} quantity={item.quantity} />
+        <img ref={imgRef} onLoad={load} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible', display:'inline-block'}} /><br style={{clear:'both'}}/>
+        <div style={{position:'relative',top:'-30px'}}> 
+        <div ref={floatingBottomHoverDiv} onClick={onFullscreen} style={{zIndex: '10000',position: 'absolute',left:width/2, top:0-height/3, width:width/2, height:height/3,backgroundColor:'transparent'}}>&nbsp;</div>
+        
+        <div style={{position:'relative',top:'-80px', right:'0px', height:'0px', width:width}}>
+        
+        <div style={{position:'absolute', zIndex:2000000, right: '0px'}} ref={floatingFullscreenButton}>
+        <IconRoundall onClick={onFullscreen} overlaysVisible={overlaysVisible}>
+            <img style={{position:'relative',left:'7px', top:'4px'}}  width="59" height="59" src='data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg version="1.1" id="svg2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns%23" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns%23" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="fullscreen.svg" inkscape:version="0.48.4 r9939" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 1200 1200" enable-background="new 0 0 1200 1200" xml:space="preserve"><sodipodi:namedview inkscape:cy="445.30147" inkscape:cx="453.66298" inkscape:zoom="0.37249375" showgrid="false" id="namedview30" guidetolerance="10" gridtolerance="10" objecttolerance="10" borderopacity="1" bordercolor="%23666666" pagecolor="%23ffffff" inkscape:current-layer="svg2" inkscape:window-maximized="1" inkscape:window-y="24" inkscape:window-height="876" inkscape:window-width="1535" inkscape:pageshadow="2" inkscape:pageopacity="0" inkscape:window-x="65"></sodipodi:namedview><path id="path9678" inkscape:connector-curvature="0" d="M0,0v413.818l144.141-145.386L475.708,600L143.555,932.153L0,789.844V1200h413.818l-145.386-144.141L600,724.292l332.153,332.153L789.844,1200H1200V786.182l-144.141,145.386L724.292,600l332.153-332.153L1200,410.156V0H786.182l145.386,144.141L600,475.708L267.847,143.555L410.156,0H0z"/></svg>' />
+            </IconRoundall>
         </div>
-   
+        </div>
+        </div>
         
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}
         </div>
-        <div onClick={onClose} style={{position:'relative',top:'-80px', right:'0px', height:'0px', width:'100%'}}>
-        <div style={{position:'absolute', right:'5em', top:'-2em', zIndex:2000000}}>
-        <IconRoundall onClick={onFullscreen} overlaysVisible={overlaysVisible}>
-            <img style={{position:'relative',left:'7px', top:'4px'}} width="59" height="59" src='data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg version="1.1" id="svg2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns%23" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns%23" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="fullscreen.svg" inkscape:version="0.48.4 r9939" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 1200 1200" enable-background="new 0 0 1200 1200" xml:space="preserve"><sodipodi:namedview inkscape:cy="445.30147" inkscape:cx="453.66298" inkscape:zoom="0.37249375" showgrid="false" id="namedview30" guidetolerance="10" gridtolerance="10" objecttolerance="10" borderopacity="1" bordercolor="%23666666" pagecolor="%23ffffff" inkscape:current-layer="svg2" inkscape:window-maximized="1" inkscape:window-y="24" inkscape:window-height="876" inkscape:window-width="1535" inkscape:pageshadow="2" inkscape:pageopacity="0" inkscape:window-x="65"></sodipodi:namedview><path id="path9678" inkscape:connector-curvature="0" d="M0,0v413.818l144.141-145.386L475.708,600L143.555,932.153L0,789.844V1200h413.818l-145.386-144.141L600,724.292l332.153,332.153L789.844,1200H1200V786.182l-144.141,145.386L724.292,600l332.153-332.153L1200,410.156V0H786.182l145.386,144.141L600,475.708L267.847,143.555L410.156,0H0z"/></svg>' />
-            </IconRoundall>
-        </div>
-        </div>
+
         <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
         
         
