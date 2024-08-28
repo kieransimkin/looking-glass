@@ -216,7 +216,7 @@ export default  function CIP54Playground(props) {
     
     let description = "";
     let url = "https://clg.wtf/policy/"+props.token?.unit?.substr(0,56);
-    let image = props.walletProfileThumb;
+    let image = "https://clg.wtf/"+props.walletProfileThumb;
     let initialSelection = gallery?gallery[0]:null;
     if (props.token) { 
         title = props.token.title + ' - ' + props.wallet.name+" - Cardano Looking Glass - clg.wtf";
