@@ -263,7 +263,7 @@ const Header = (props) => {
         window.addEventListener('touchstart', onMouseMove);
         window.addEventListener('touchmove', onMouseMove);
         //window.addEventListener('keyup', onMouseMove);
-        window.addEventListener('scroll', onMouseMove);
+        window.addEventListener('scroll', onMouseMove, true);
         const ZingTouch = require('zingtouch');
         var myRegion = new ZingTouch.Region(document.body);
         myRegion.bind(document.body,'swipe', onSwipe)
@@ -273,7 +273,7 @@ const Header = (props) => {
           window.removeEventListener('touchstart', onMouseMove);
           window.removeEventListener('touchmove', onMouseMove);
           //window.removeEventListener('keyup', onMouseMove);
-          window.removeEventListener('scroll', onMouseMove);
+          window.removeEventListener('scroll', onMouseMove,true);
           myRegion.unbind(document.body, 'swipe');
         };
     }, [onMouseMove]);
