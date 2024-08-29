@@ -468,7 +468,7 @@ export default function Home(props) {
   </Canvas>
       
     
-    <Card style={{ cursor: 'pointer', top: '50%', transform:'translateY(-50%)', position:'relative', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black'}}>
+    <Card style={{ cursor: 'pointer', top: '50%', transform:'translateY(-50%)', position:'relative', width:'fit-content', marginLeft:'auto', marginRight:'auto', padding:'1em', boxShadow:'2px 2px 15px 5px rgba(0,0,0,0.5)', border: '1px solid black',maxWidth:'90vw',}}>
     <Typography variant="h4">
         <>
         <div style={{display: 'flex', flexDirection:'row', alignItems:'center'}}>

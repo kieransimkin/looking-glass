@@ -33,6 +33,8 @@ import {Popper} from '@material-ui/core';
 import { NextCookies } from 'next/dist/server/web/spec-extension/cookies';
 import AboutDialog from './dialogs/AboutDialog';
 import Image from 'next/image';
+import ZingTouch from 'zingtouch';
+var myRegion = new ZingTouch.Region(document.body);
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -223,7 +225,7 @@ const Header = (props) => {
     const toggleVisibility = useCallback((hide, cursor) => {
       setHide(hide);
     }, []);
-    
+
     const onMouseMove = useCallback(() => {
         clearTimeout(timer);
     
@@ -237,9 +239,23 @@ const Header = (props) => {
             setAnchorEl(null);
           }
         }, 5000);
-      }, [hide, hover, setHide, anchorEl]);
+      }, [hide, hover, setHide, anchorEl]);onMouseMove
     
-   
+      const onSwipe = useCallback(() => {
+        clearTimeout(timer);
+    
+        if (hide) {
+          toggleVisibility(!hide, 'default');
+          
+        }
+    
+        timer = setTimeout(() => {
+          if (!hover && !launchpadDialogIsOpen && !anchorEl) {
+            toggleVisibility(true, 'none');
+            setAnchorEl(null);
+          }
+        }, 5000);
+      }, [hide, hover, setHide, anchorEl]);onMouseMove
     // Events:
     useEffect(() => {
         window.addEventListener('mousemove', onMouseMove);
@@ -248,7 +264,7 @@ const Header = (props) => {
         window.addEventListener('touchmove', onMouseMove);
         //window.addEventListener('keyup', onMouseMove);
         window.addEventListener('scroll', onMouseMove);
-
+        myRegion.bind(document.body,'swipe', onSwipe)
         return () => {
           window.removeEventListener('mousemove', onMouseMove);
           window.removeEventListener('click', onMouseMove);
@@ -256,6 +272,7 @@ const Header = (props) => {
           window.removeEventListener('touchmove', onMouseMove);
           //window.removeEventListener('keyup', onMouseMove);
           window.removeEventListener('scroll', onMouseMove);
+          myRegion.unbind(document.body, 'swipe');
         };
     }, [onMouseMove]);
     const handleWalletClickOpen = () => {
