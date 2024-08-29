@@ -99,14 +99,14 @@ const Layout = ({children}) => {
     }
     let thisTheme = themeState==='light' ? lightTheme : darkTheme;
     return (
-        <div id={theme.palette.type} style={{height: '100vh', fontFamily: "'MuseoModerno', cursive", backgroundColor:thisTheme.palette.background.default, color: thisTheme.palette.text.primary}}>
+        <div id={state} style={{height: '100vh', fontFamily: "'MuseoModerno', cursive", backgroundColor:thisTheme.palette.background.default, color: thisTheme.palette.text.primary}}>
         <ThemeProvider theme={thisTheme}>
-            <WalletContext.Provider value={walletState}>
+            
                     <Header onThemeChange={onThemeChange} onWalletChange={onWalletChange} />
                     <Main open={true}>
                     {children}
                     </Main>
-            </WalletContext.Provider>
+            
         </ThemeProvider>
         </div>
     )
