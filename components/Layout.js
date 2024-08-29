@@ -99,7 +99,7 @@ const Layout = ({children}) => {
     }
     let thisTheme = themeState==='light' ? lightTheme : darkTheme;
     return (
-        <div id={state} style={{height: '100vh', fontFamily: "'MuseoModerno', cursive", backgroundColor:thisTheme.palette.background.default, color: thisTheme.palette.text.primary}}>
+        <div id={themeState} style={{height: '100vh', fontFamily: "'MuseoModerno', cursive", backgroundColor:thisTheme.palette.background.default, color: thisTheme.palette.text.primary}}>
         <ThemeProvider theme={thisTheme}>
             
                     <Header onThemeChange={onThemeChange} onWalletChange={onWalletChange} />
