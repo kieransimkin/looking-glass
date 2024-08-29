@@ -33,8 +33,8 @@ import {Popper} from '@material-ui/core';
 import { NextCookies } from 'next/dist/server/web/spec-extension/cookies';
 import AboutDialog from './dialogs/AboutDialog';
 import Image from 'next/image';
-import ZingTouch from 'zingtouch';
-var myRegion = new ZingTouch.Region(document.body);
+
+
 const useStyles = makeStyles(theme => { 
     const first = alpha(theme.palette.background.default, 0.85);
     const second = alpha(theme.palette.background.paper, 0.85);
@@ -264,6 +264,8 @@ const Header = (props) => {
         window.addEventListener('touchmove', onMouseMove);
         //window.addEventListener('keyup', onMouseMove);
         window.addEventListener('scroll', onMouseMove);
+        const ZingTouch = require('zingtouch');
+        var myRegion = new ZingTouch.Region(document.body);
         myRegion.bind(document.body,'swipe', onSwipe)
         return () => {
           window.removeEventListener('mousemove', onMouseMove);
