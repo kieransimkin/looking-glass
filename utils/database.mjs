@@ -168,7 +168,7 @@ const bindPolicyMethods = (policy) => {
 export const getPolicyKeyList = async () => { 
     await dbinit();
     let list = await client.query(
-        `select distinct slug from policy where slug!=encode("policyID",'hex')`,[]
+        `select distinct slug from policy where slug!=encode("policyID",'hex') and "assetCount">0`,[]
     );
 
     if (list && list.rows && list.rows.length) { 
@@ -176,14 +176,7 @@ export const getPolicyKeyList = async () => {
     } else { 
         list = [];
     }
-    let list2 = await client.query( 
-        `select distinct encode("policyID",'hex') as "policyID" from policy where encode("policyID",'hex')=slug`,[]
-    );
-    if (list2 && list2.rows && list2.rows.length) { 
-        list2.rows.forEach(element => {
-            list.push(element.policyID);
-        });
-    }
+
     
     return list;
 }
@@ -197,14 +190,6 @@ export const getWalletKeyList = async () => {
         list = list.rows.map((d)=>d.slug);
     } else { 
         list = [];
-    }
-    let list2 = await client.query(
-        `select distinct stake from wallet where stake=slug`,[]
-    )
-    if (list2 && list2.rows && list2.rows.length) { 
-        list2.rows.forEach(element=> {
-            list.push(element.stake);
-        });
     }
     return list;
 }
