@@ -146,6 +146,7 @@ const Header = (props) => {
     // 🔌
     const buttonsize='medium';
     const buttonclass='nomwbtn';
+    var isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
     const doOnWalletChange=(props)=>{
         localStorage.setItem('cip54-wallet',JSON.stringify(props))
         return onWalletChange(props);
@@ -426,7 +427,7 @@ const Header = (props) => {
                 
                 
                         <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} >
-                            <Link href="/" passHref><a>
+                            <Link href={isTouch ? "#" : "/"} passHref><a>
                                 <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true">
                                 
                                     <img src="/favicon-default.png" width="32" height="32" title="Menu" alt="Menu" />

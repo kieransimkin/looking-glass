@@ -7,7 +7,7 @@
   "license": "BSD-3-Clause-Attribution",
   "scripts": {
     "dev": "rm -rfv node_modules/.cache/* && next dev",
-    "build": "npm install --legacy-peer-deps && bash -c \"rm -rfv node_modules/.cache/* && pushd submodules/libcip54 && npm run build && pushd .. && pushd SmartNFTPortal && npm run build && pushd ../.. && next build\"",
+    "build": "bash -c \"rm -rfv node_modules/.cache/* && pushd submodules/libcip54 && npm run build && pushd .. && pushd SmartNFTPortal && npm run build && pushd ../.. && npm install --legacy-peer-deps && next build\"",
     "export": "next export",
     "start": "next start",
     "lint": "next lint ",
