@@ -57,5 +57,5 @@ export default async function Browse(req, res) {
         
     
     }
-    res.status(200).json({ok:'ok'});
+    res.json({ok:'ok'});
 }
