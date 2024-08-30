@@ -258,23 +258,21 @@ const Header = (props) => {
       }, [hide, hover, setHide, anchorEl]);onMouseMove
     // Events:
     useEffect(() => {
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('click', onMouseMove);
-        window.addEventListener('touchstart', onMouseMove);
-        window.addEventListener('touchmove', onMouseMove);
-        //window.addEventListener('keyup', onMouseMove);
+        window.addEventListener('mousemove', onMouseMove, true);
+        window.addEventListener('click', onMouseMove, true);
+        window.addEventListener('touchmove', onMouseMove, true);
         window.addEventListener('scroll', onMouseMove, true);
-        const ZingTouch = require('zingtouch');
-        var myRegion = new ZingTouch.Region(document.body);
-        myRegion.bind(document.body,'swipe', onSwipe)
+        //const ZingTouch = require('zingtouch');
+        //var myRegion = new ZingTouch.Region(document.body);
+        //myRegion.bind(document.body,'swipe', onSwipe)
         return () => {
-          window.removeEventListener('mousemove', onMouseMove);
-          window.removeEventListener('click', onMouseMove);
-          window.removeEventListener('touchstart', onMouseMove);
-          window.removeEventListener('touchmove', onMouseMove);
-          //window.removeEventListener('keyup', onMouseMove);
+          window.removeEventListener('mousemove', onMouseMove, true);
+          window.removeEventListener('click', onMouseMove, true);
+          
+          window.removeEventListener('touchmove', onMouseMove, true);
+          
           window.removeEventListener('scroll', onMouseMove,true);
-          myRegion.unbind(document.body, 'swipe');
+          
         };
     }, [onMouseMove]);
     const handleWalletClickOpen = () => {
