@@ -13,3 +13,11 @@ argument = ["Block", "OutputAsset", "Mint"]
 [sink]
 type = "Webhook"
 url = "https://clg.wtf/api/oura"
+
+
+[retries]
+max_retries = 3
+backoff_unit_sec = 10
+backoff_factor = 3
+max_backoff_sec = 10
+dismissible = true
