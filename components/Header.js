@@ -425,6 +425,16 @@ const Header = (props) => {
     const exportHtml = () => { 
         eventBus.dispatch("saveHtml", {message: 'saving html'});
     }
+    const showHideMenu = (e) => {
+        if (Boolean(anchorEl)) { 
+            handleClose();
+        } else {
+            handleClick(e);
+        }
+    }
+    const handleItemClick = () => { 
+        handleClose();
+    }
     return (
         <>
             <Drawer id="drawer"  classes={{
@@ -436,7 +446,7 @@ const Header = (props) => {
                 
                         <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} >
                             <Link href={isTouch ? "#" : "/"} passHref><a>
-                                <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true">
+                                <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={isTouch ? showHideMenu : null} >
                                 
                                     <img src="/favicon-default.png" width="32" height="32" title="Menu" alt="Menu" />
                                 </IconButton>
@@ -465,6 +475,7 @@ const Header = (props) => {
                             >
                              <Paper id="menupaper" className={darkMode==='dark'?'menupaper':'menupaper-light'} style={{borderTopRightRadius:'0px !important'}}>
                                 <MenuList>
+                                <Link href="/" passHref><MenuItem onClick={handleItemClick}>📇 Home</MenuItem></Link>
                             <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-searchbox" direction="left" label="🔎 Search..." parentMenuOpen={Boolean(anchorEl)}>
                                 <MenuItem><SearchBox width={300} autoComplete='off' autoFocus={false} onFocus={()=>setSearchFocused(true)} onBlur={()=>{
             clearTimeout(menuCloseTimer);
@@ -479,14 +490,14 @@ const Header = (props) => {
                                          
                             <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-collect" direction="left" parentMenuOpen={Boolean(anchorEl)} label="👥 Collect">
                                 {walletApi &&
-                                    <Link href={"/wallet/"+stakeAddr} ><MenuItem>💸 My Wallet</MenuItem></Link>
+                                    <Link href={"/wallet/"+stakeAddr} ><MenuItem onClick={handleItemClick}>💸 My Wallet</MenuItem></Link>
                                 }   
-                                <Link href="/stats" passHref><a><MenuItem>📈 Stats</MenuItem></a></Link>
-                                <MenuItem>⚡ Live Feed</MenuItem>
+                                <Link href="/stats" passHref><a><MenuItem onClick={handleItemClick}>📈 Stats</MenuItem></a></Link>
+                                <MenuItem onClick={handleItemClick}>⚡ Live Feed</MenuItem>
 
                             </NestedMenuItem>
                             <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-collect" direction="left" parentMenuOpen={Boolean(anchorEl)} label="📂 Create">
-                            <a target="_blank" href="https://nft-playground.dev/"><MenuItem><img width="32" src="/nft-playground-small.png" style={{paddingRight:'5px'}} />NFT Playground</MenuItem></a>
+                            <a target="_blank" href="https://nft-playground.dev/"><MenuItem onClick={handleItemClick}><img width="32" src="/nft-playground-small.png" style={{paddingRight:'5px'}} />NFT Playground</MenuItem></a>
                             </NestedMenuItem>
                                 <MenuItem onClick={toggleDarkMode}>{darkMode==='dark' ? '🌃 Dark Mode':'🔦 Light Mode'}
                                 <div style={{position: 'relative', top:'0px', width:'75px'}}>
@@ -509,7 +520,7 @@ const Header = (props) => {
                                 </MenuItem>
                                 <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-help" direction="left" parentMenuOpen={Boolean(anchorEl)} label="🩺 Help">
                                 
-                                    <MenuItem onClick={()=>setAboutOpen(true)}>📇 About Info</MenuItem>
+                                    <MenuItem onClick={()=>{ setAboutOpen(true); handleItemClick()}}>📇 About Info</MenuItem>
 
                                 </NestedMenuItem>
                                 

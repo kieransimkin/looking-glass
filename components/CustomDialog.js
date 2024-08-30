@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => {
         backgroundSize: 'cover',
         backgroundColor:'inherit !important',
         outline: '1px solid black',
+        zIndex: 1000,
         boxShadow: (theme.palette.type=='dark') ? `1px 1px 10px 5px inset rgba(0,0,0,0.4), 0px 0px 35px 10px rgba(0,0,0,0.3)` : '',
         
     }
@@ -27,7 +28,6 @@ const CustomDialog = (props) => {
     const classes=useStyles();
     return (
         <Dialog 
-        
         classes={{ paper: classes.paper }}
         {...props}>{children}</Dialog>
     );
