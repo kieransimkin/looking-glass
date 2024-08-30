@@ -146,15 +146,15 @@ const Header = (props) => {
     // 🔌
     const buttonsize='medium';
     const buttonclass='nomwbtn';
-    var isTouch = () => { 
-        if (window && 'ontouchstart' in window) { 
+    var isTouch = (() => { 
+        if (typeof window !== 'undefined' && 'ontouchstart' in window) { 
             return true;
         }
-        if (navigator?.msMaxTouchPoints > 0) { 
+        if (typeof navigator !== 'undefined' && navigator?.msMaxTouchPoints > 0) { 
             return true;
         }
         return false;
-    }
+    })();
     const doOnWalletChange=(props)=>{
         localStorage.setItem('cip54-wallet',JSON.stringify(props))
         return onWalletChange(props);
