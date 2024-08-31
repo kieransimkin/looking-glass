@@ -4,9 +4,10 @@ import { getWallet, getPolicy } from "../../utils/database.mjs";
 
 import pgClient from '../../utils/dbsync.mjs'
 export default async function Browse(req, res) {
-    const redisClient = await getClient();
-    init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
+    console.error(req.body);
     try { 
+        const redisClient = await getClient();
+        init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
         if (req.body.variant == 'Block') { 
             const rClient = await getClient();
             rClient.publish('block',JSON.stringify(req.body));
@@ -58,7 +59,9 @@ export default async function Browse(req, res) {
         
         }
     } catch (e) { 
-        return res.status(500).json('Error processing');
+        return res.status(200).json('Error processing');
+        console.error('OURA ERROR');
+        console.error(e);
     }
     res.json({ok:'ok'});
 }
