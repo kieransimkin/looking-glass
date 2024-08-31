@@ -20,7 +20,7 @@ export default async function Browse(req, res) {
       await cacheItem('getTokenHolders:'+unit,ret)
     }*/
 
-    res.status(200).json(ret);
+    //res.status(200).json(ret);
 }
 
 export const config = {
