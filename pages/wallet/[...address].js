@@ -11,7 +11,7 @@ import {SmartNFTPortal} from 'smartnftportal'
 import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
-import { getWallet } from '../../utils/database.mjs';
+import { getPolicy, getWallet } from '../../utils/database.mjs';
 import { checkCacheItem, getClient, incrementCacheItem } from '../../utils/redis.mjs';
 import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
@@ -59,6 +59,10 @@ export const getServerSideProps = async (context) => {
         props.wallet = JSON.parse(JSON.stringify(result));
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
+        if (token) { 
+            props.policy = JSON.parse(JSON.stringify(await getPolicy(token.substr(0,56))));
+        }
+        
         if (result.profileUnit) { 
             props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+result.profileUnit;
         } else if (tokens && tokens.length>0) { 
@@ -125,7 +129,6 @@ export const getServerSideProps = async (context) => {
 }
 
 export default  function CIP54Playground(props) {
-    
     
     let dbStake = props.wallet?.stake;
     const router = useRouter();
@@ -230,7 +233,7 @@ export default  function CIP54Playground(props) {
     
     let description = props.wallet?.name+' is a wallet on Cardano';
     if (props.token){ 
-        description=props.token.title+' is a token which is found in the wallet '+props.wallet.name+' on Cardano';
+        description=props.token.title+' is a token from the '+props.policy.name+' NFT collection, minted on Cardano. Here it is found in the wallet '+props.wallet.name;
     }
     let url = "https://clg.wtf/wallet/"+props.wallet?.stake;
     let image = props.walletProfileThumb;

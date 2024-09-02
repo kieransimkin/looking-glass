@@ -31,10 +31,10 @@ export const saveSend = (key, type, data, res, contentType='image/jpg') => {
 
 }
 
-export const sendData = (key, type, res, contentType='image/jpg') => { 
+export const sendData = (key, type, res, contentType='image/jpg', status=200) => { 
     const loc = getDataLocation(key, type);
     const data = fs.readFileSync(process.cwd()+loc);
-    res.setHeader('Content-type',contentType).status(200).send(data);
+    res.setHeader('Content-type',contentType).status(status).send(data);
 }
 
 export const writeFile = (key, type, data) => { 

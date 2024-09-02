@@ -22,9 +22,10 @@ export default async function Browse(req, res) {
     mode='dark';
   }
   const name = 'tokenThumb:'+unit+':'+size+':'+mode;
-  
-  if (getDataURL(name,mode=='transparent'?'png':'jpg')) { 
-    return sendData(name, mode=='transparent'?'png':'jpg', res, mode=='transparent'?'image/png':'image/jpg');
+  let thumbUrl;
+  if ((thumbUrl = getDataURL(name,mode=='transparent'?'png':'jpg'))) { 
+    res.status(301).setHeader('location',thumbUrl);
+    return sendData(name, mode=='transparent'?'png':'jpg', res, mode=='transparent'?'image/png':'image/jpg', 301);
   } else { 
     redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
     res.status(425).send('Failed')
