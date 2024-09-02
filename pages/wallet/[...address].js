@@ -62,11 +62,11 @@ export const getServerSideProps = async (context) => {
         if (result.profileUnit) { 
             props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+result.profileUnit;
         } else if (tokens && tokens.length>0) { 
-            props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+tokens[0]?.unit;
+            props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+tokens[tokens.length-2]?.unit;
         }
         
         if (process.env.NODE_ENV=='production') { 
-            const thumbName = result.profileUnit ? 'tokenThumb:'+result.profileUnit+':500:dark': 'tokenThumb:'+tokens[0]?.unit+':500:dark';
+            const thumbName = result.profileUnit ? 'tokenThumb:'+result.profileUnit+':500:dark': 'tokenThumb:'+tokens[tokens.length-2]?.unit+':500:dark';
             let thumbURL;
             if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                 props.walletProfileThumb = 'https://clg.wtf'+thumbURL;
@@ -239,7 +239,7 @@ export default  function CIP54Playground(props) {
         title = props.token.title + ' - ' + props.wallet.name+" - Cardano Looking Glass - clg.wtf";
         url = "https://clg.wtf/wallet/"+props.wallet?.stake+"."+props.token.unit;
         initialSelection=props.token;
-        image = props.token.thumb;
+        image = "https://clg.wtf"+props.token.thumb;
     }
     const selectionChange = (item) => { 
         console.log(item);
