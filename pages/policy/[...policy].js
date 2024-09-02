@@ -269,7 +269,7 @@ export default  function CIP54Playground(props) {
               },
             ],
           
-          "description": dbPolicy.description,
+          "description": description,
           "image": [
             policyProfileImage,
             image

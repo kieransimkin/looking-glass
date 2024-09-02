@@ -242,9 +242,9 @@ export default  function CIP54Playground(props) {
         "dateCreated": props.wallet?.createdAt,
         "dateModified": props.wallet?.lastMoved,
         "mainEntity": {
-          "@type": "Organization",
+          "@type": "Person",
           "name": props.wallet.name,
-          "alternateName": props.wallet.slug,
+          "additionalName": props.wallet.slug,
           "identifier": props.wallet.stake,
           "interactionStatistic": [{
             "@type": "InteractionCounter",
@@ -255,7 +255,7 @@ export default  function CIP54Playground(props) {
             "agentInteractionStatistic": [{
                 "@type": "InteractionCounter",
                 "interactionType": "https://schema.org/WriteAction",
-                "userInteractionCount": props.gallery.totalTokens
+                "userInteractionCount": props.gallery?.totalTokens
               },
               {
                 "@type": "InteractionCounter",
