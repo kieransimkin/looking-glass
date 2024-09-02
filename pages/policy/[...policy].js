@@ -113,7 +113,7 @@ export default  function CIP54Playground(props) {
     
     const router = useRouter();
     //let {policy} = router.query;  
-    let policy = dbPolicy.policyID;
+    let policy = dbPolicy?.policyID;
     const [gallery, setGallery] = useState(props?.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
     if (!policy) policy='';
