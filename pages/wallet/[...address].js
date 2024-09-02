@@ -11,7 +11,7 @@ import {SmartNFTPortal} from 'smartnftportal'
 import BigInfoBox from '../../components/BigInfoBox';
 import {tokenPortal} from '../../utils/tokenPortal';
 import { CircularProgress } from '@material-ui/core';
-import { getWallet } from '../../utils/database.mjs';
+import { getPolicy, getWallet } from '../../utils/database.mjs';
 import { checkCacheItem, getClient, incrementCacheItem } from '../../utils/redis.mjs';
 import { getTokenData } from '../../utils/formatter';
 import Head from 'next/head'
@@ -20,15 +20,15 @@ import Link from 'next/link';
 import { getDataURL } from '../../utils/DataStore';
 import punycode from 'punycode'
 /**
- * @description Retrieves and prepares data for a server-side rendered page, involving
- * wallet retrieval from Redis, token identification, and caching to optimize performance
- * in various environments.
+ * @description Retrieves and processes data for a wallet page on a server-side
+ * rendered application. It fetches data from Redis, verifies user authentication,
+ * and populates props with wallet information, policies, and token gallery.
  *
- * @param {object} context - Provided by Next.js to access server-side request data.
+ * @param {any} context - An object that represents server-side rendering context.
  *
- * @returns {object} Assigned to `props`. This object contains various properties
- * such as address, wallet, token, and gallery, among others, that will be used in
- * the Next.js page.
+ * @returns {object} Assigned to a variable named "props". This object can contain
+ * various properties such as 'address', 'wallet', 'policy', 'gallery' among others
+ * depending on the conditions in the code.
  */
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
@@ -70,6 +70,10 @@ export const getServerSideProps = async (context) => {
         props.wallet = JSON.parse(JSON.stringify(result));
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
+        if (token) { 
+            props.policy = JSON.parse(JSON.stringify(await getPolicy(token.substr(0,56))));
+        }
+        
         if (result.profileUnit) { 
             props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+result.profileUnit;
         } else if (tokens && tokens.length>0) { 
@@ -136,18 +140,17 @@ export const getServerSideProps = async (context) => {
 }
 
 /**
- * @description Renders a Cardano wallet profile page with media slides, displaying
- * tokens and associated metadata fetched from an API. It handles loading indicators,
- * pagination, and selection changes, while also providing structured data for search
- * engine optimization (SEO).
+ * @description Displays a media slide showcasing token holdings for a given wallet
+ * or token address on the Cardano blockchain, with features such as loading more
+ * data and rendering large information boxes.
  *
- * @param {object} props - Used to receive data from parent components.
+ * @param {object} props - Used to pass properties from parent components.
  *
- * @returns {JSX.Element} A React component that renders a page containing a media
- * slide with wallet information and token details.
+ * @returns {JSX.Element} Rendered as a web page with various components such as
+ * MediaSlide and BigInfoBox. The returned value is a React component tree that can
+ * be mounted to the DOM.
  */
 export default  function CIP54Playground(props) {
-    
     
     let dbStake = props.wallet?.stake;
     const router = useRouter();
@@ -158,16 +161,16 @@ export default  function CIP54Playground(props) {
     if (!address) address='';
     
     useEffect(() => { 
-        // Fetches and displays media content.
+        // Fetches data from an API based on the 'address' variable.
         if (!address || address=='') return;
         if (gallery) return;
         setMediaSlideLoading(true);
         if (address.substring(0,1)=='$') { 
             const punycoded = punycode.toASCII(address.substr(1).trim());
             getData('/getTokenHolders?unit=f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex')).then((a)=>{
-                // Parses JSON and navigates to a new route.
+                // Processes response data.
                 a.json().then((j) => { 
-                    // Navigates to a specific route based on data.
+                    // Checks and navigates to a wallet page.
                     if (j.length && j[0]?.address) { 
                         router.push({pathname:'/wallet/'+j[0].address})
 
@@ -175,9 +178,9 @@ export default  function CIP54Playground(props) {
         } else {
         
             getData('/addressTokens?address='+address).then((d)=>{
-                // Handles JSON data from an API request and updates UI state.
+                // Processes JSON data.
                 d.json().then((j) => { 
-                    // Handles response data.
+                    // Processes JSON response data.
                     setGallery(j);
                     setMediaSlideLoading(false);
                 });
@@ -188,44 +191,43 @@ export default  function CIP54Playground(props) {
     },[address])
 
     /**
-     * @description Returns JSX that renders a BigInfoBox component with specific properties:
-     * `onClose`, `goFullscreen` (which is called with argument `i`), and `item` set to
-     * the input parameter `i`. The `goFullscreen` function appears to have side effects.
+     * @description Generates a JSX element representing a big information box. It takes
+     * three arguments: an item index `i`, an `onClose` callback, and a `goFullscreen`
+     * callback that is called with the item index as an argument. The function returns
+     * an instance of the `BigInfoBox` component.
      *
-     * @param {object} i - Used as an item to be rendered.
+     * @param {object} i - Referenced as an item for display.
      *
-     * @param {Function} onClose - Used to close something.
+     * @param {Function} onClose - Used to close an element.
      *
-     * @param {Function} goFullscreen - Used to enable full-screen functionality.
+     * @param {any} goFullscreen - Likely a callback that handles fullscreen functionality.
      *
-     * @returns {object} JSX element. This element has a specific structure with properties
-     * and children elements that represent a "BigInfoBox" component. The JSX object
-     * contains references to its props and child components.
+     * @returns {BigInfoBox} JSX element representing a big information box component.
      */
     const renderBigInfo = (i, onClose, goFullscreen) => { 
         
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} />
     }
     /**
-     * @description Loads additional data into the `gallery` state when a user requests
-     * to see more items. It fetches data from an API, merges it with existing data, and
-     * updates the state accordingly.
+     * @description Loads additional address tokens when the user scrolls down, updating
+     * the gallery with new tokens and metadata. It prevents unnecessary requests when
+     * scrolling back up by checking the `mediaSlideLoading` state.
      *
-     * @param {object} obj - Assigned the value of a variable named "page". It has a
-     * default value when not provided to the function, which is also assigned from another
-     * variable named "offset", with a default value of 1.
+     * @param {object} obj - Required, containing a single property named 'page'. The
+     * value of this property must be obtained from the calling context.
      *
-     * @param {number} obj.page - An offset for fetching additional data.
+     * @param {number} obj.page - Used to track current page number.
      *
-     * @param {number} offset - Used to track pagination progress.
+     * @param {number} offset - Used to calculate the new page number.
      */
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
         getData('/addressTokens?address='+address+'&page='+(parseInt(page)+offset)).then((d)=>{
-            // Processes API data asynchronously.
+            // Processes JSON data.
             d.json().then((j) => { 
-                // Concatenates and updates gallery data.
+                // Assembles a new gallery array by combining existing tokens with newly received
+                // ones from an API response.
                 let newArray;
                 if (offset>0) { 
                     newArray = [...gallery.tokens];
@@ -251,21 +253,20 @@ export default  function CIP54Playground(props) {
         })
     }
     /**
-     * @description Handles image loading errors by displaying a placeholder GIF and
-     * sending a message to the parent window when a new thumbnail is received. It updates
-     * the image source with the received URL when a valid thumbnail response is detected.
+     * @description Detects when an image fails to load, temporarily replaces it with a
+     * loading GIF, and then re-retrieves the original image from a different source via
+     * an IPC (Inter-Process Communication) message event listener.
      *
-     * @param {Event} e - Associated with an image loading error.
+     * @param {Event} e - The error event triggered when an image fails to load.
      */
     const imgError = (e) => { 
         const origSrc = e.target.src;
         e.target.src='/img-loading.gif'
         /**
-         * @description Listens for messages and updates an image's source if the message is
-         * a "newThumb" request from the same origin as the original image URL. It then removes
-         * itself from the event listener once triggered.
+         * @description Listens for messages from other windows or iframes and updates an
+         * image's source attribute to a new thumbnail URL if it matches specific conditions.
          *
-         * @param {object} mes - Intended to handle incoming messages.
+         * @param {MessageEvent} mes - An event that contains data sent by another context.
          */
         const messageHandler = (mes) => { 
             if (mes.data.request=='newThumb' && mes.data.originalUrl==origSrc.replace(mes.origin,'')) { 
@@ -277,20 +278,20 @@ export default  function CIP54Playground(props) {
         
     }
     /**
-     * @description Generates a reusable HTML template for slide items, including image,
-     * title, and link. It takes a click handler, thumbnail spacing, and timestamp as
-     * arguments, and returns a function that creates a list item with the specified
-     * styles and event handlers when called with an item object.
+     * @description Generates an HTML list item for a slide, rendering an image with title
+     * and link, along with event listeners for clicking and error handling on image
+     * loading. It returns a function that takes an item object as input to generate the
+     * list item HTML dynamically.
      *
-     * @param {Function} click - Used to handle click event on slide item.
+     * @param {Function} click - Called when an item is clicked.
      *
-     * @param {number} ts - Used to specify thumbnail size.
+     * @param {number} ts - Used for thumb height calculation.
      *
-     * @param {number} thumbSpacing - Used to set padding for list items.
+     * @param {number} thumbSpacing - Used to set horizontal padding.
      *
-     * @returns {Function} A factory function returning JSX elements representing individual
-     * slide items. These elements are HTML list items with an image, title and link
-     * inside an anchor tag.
+     * @returns {React.ReactNode} A reference to a DOM node that can be rendered. It is
+     * an anonymous function expression that generates JSX elements representing slide
+     * items in a list.
      */
     const slideItemHTML = (click,ts, thumbSpacing) => { 
         return (item) => { 
@@ -299,18 +300,19 @@ export default  function CIP54Playground(props) {
         }
     }
     /**
-     * @description Returns a function that generates an HTML list item element based on
-     * input parameters, including a click event handler, thumbnail spacing, and an object
-     * with properties for id, link URL, thumbnail image, title, and error handling.
+     * @description Generates a factory function that produces an HTML list item element
+     * for each data object. It creates a reusable component with customizable styles and
+     * event handlers, such as click handling and image error detection.
      *
-     * @param {Function} click - Intended to be an item-specific click handler.
+     * @param {Function} click - Used to handle clicks on list items.
      *
-     * @param {number} ts - 0 by default.
+     * @param {number} ts - Omitted in the outer scope.
      *
      * @param {number} thumbSpacing - Used to set padding for list items.
      *
-     * @returns {Function} A factory function that generates JSX elements representing
-     * individual list items with specific styles and event handlers.
+     * @returns {any} A function that generates HTML for an unordered list item element
+     * (`<li>`). This function takes several parameters and returns the rendered HTML as
+     * a JSX element.
      */
     const listItemHTML = (click,ts, thumbSpacing) => { 
         return (item,s,thumbSpacing) => { 
@@ -318,18 +320,20 @@ export default  function CIP54Playground(props) {
         }
     }
     /**
-     * @description Generates a reusable HTML table row component for displaying item details.
-     * It takes three arguments: a click handler, timestamp, and thumb spacing. The
-     * generated component includes an image, title, and onClick event.
+     * @description Generates a reusable HTML template for a table row item. It takes
+     * three arguments: click handler, timestamp, and thumb spacing. The function returns
+     * a higher-order function that, when called with an item object, produces the HTML
+     * representation of that item in the table.
      *
-     * @param {Function} click - Expected to return another function.
+     * @param {Function} click - Used to handle clicks on table cells.
      *
-     * @param {number} ts - Unused.
+     * @param {number} ts - 0 by default.
      *
-     * @param {number} thumbSpacing - Used to set the padding around the thumbnail image.
+     * @param {number} thumbSpacing - Used to set table cell padding.
      *
-     * @returns {Function} A callback function that returns a JSX element representing
-     * an HTML table row containing a link to an image and its title.
+     * @returns {any} A function that can be used to generate HTML table rows. The returned
+     * function takes an item object as an argument and returns the corresponding table
+     * row HTML structure.
      */
     const detailsItemHTML=(click,ts, thumbSpacing) => { 
         return (item) => { 
@@ -337,20 +341,18 @@ export default  function CIP54Playground(props) {
         }
     }
     /**
-     * @description Generates a reusable HTML fragment for an item in a list, wrapping
-     * it with an event handler and styles. It creates a callback function that returns
-     * the actual HTML when called, using input parameters to set image size, spacing,
-     * link, title, and error handling.
+     * @description Returns a factory function that generates a list item (LI) element
+     * based on an object with specific properties and event handlers, including a click
+     * handler and image error handling.
      *
-     * @param {Function} click - Likely expected to return an event handler for click events.
+     * @param {Function} click - Used to handle item click events.
      *
-     * @param {number} ts - Used for setting image width.
+     * @param {number} ts - Used for thumbnail width.
      *
-     * @param {number} thumbSpacing - Used for padding thumbnails.
+     * @param {number} thumbSpacing - Used to set padding for thumbnails.
      *
-     * @returns {any} A factory that generates JSX elements representing list items
-     * containing images and text, with dynamic styles, props, and event handlers based
-     * on input data.
+     * @returns {(liElementWithEventHandlers)} A function that generates an HTML list
+     * item element with attributes and event handlers.
      */
     const thumbnailsItemHTML = (click,ts, thumbSpacing) => { 
         return (item) => { 
@@ -361,7 +363,7 @@ export default  function CIP54Playground(props) {
     
     let description = props.wallet?.name+' is a wallet on Cardano';
     if (props.token){ 
-        description=props.token.title+' is a token which is found in the wallet '+props.wallet.name+' on Cardano';
+        description=props.token.title+' is a token from the '+props.policy.name+' NFT collection, minted on Cardano. Here it is found in the wallet '+props.wallet.name;
     }
     let url = "https://clg.wtf/wallet/"+props.wallet?.stake;
     let image = props.walletProfileThumb;
@@ -373,11 +375,12 @@ export default  function CIP54Playground(props) {
         image = "https://clg.wtf"+props.token.thumb;
     }
     /**
-     * @description Logs an item to the console and redirects the user's browser to a new
-     * URL using the `router.push` method, updating the current path with the selected
-     * item's details.
+     * @description Logs the selected item to the console and navigates to a new route
+     * using the `router.push` method, updating the URL with the address and selected
+     * unit as parameters, while keeping the current view intact due to the `shallow:
+     * true` option.
      *
-     * @param {string | object} item - Used to pass a unit or item value.
+     * @param {object} item - Used to log data and navigate routes.
      */
     const selectionChange = (item) => { 
         console.log(item);

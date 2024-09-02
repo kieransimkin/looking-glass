@@ -7,18 +7,16 @@ import { getCachedTokenThumb } from '../../utils/Helpers.mjs'
 import sharp from 'sharp';
 
 /**
- * @description Retrieves and serves token thumbnails based on user input (unit, size,
- * mode). It initializes redis client, sets timeouts, and checks for valid input. If
- * a thumbnail is found, it sends the image; otherwise, it publishes the request to
- * redis and returns an error message.
+ * @description Handles HTTP requests for token thumbnails by checking query parameters,
+ * initializing external clients and APIs, and either returning a cached thumbnail
+ * or requesting it from an IPFS/Gateway service.
  *
- * @param {Request} req - Used to receive data from the client-side request.
+ * @param {any} req - An object representing the HTTP request sent to the server.
  *
- * @param {http.ServerResponse} res - Used to send data back to the client.
+ * @param {Response} res - Used to send HTTP responses.
  *
- * @returns {Promise<void>} Resolved when the request is successfully handled. In
- * case of failure, it sends a status code 425 and a message 'Failed' to the response
- * object.
+ * @returns {void | undefined} 301 redirect with the location set to a thumbnail URL
+ * when thumbUrl is truthy, and an empty string ('Failed') otherwise in case of error.
  */
 export default async function Browse(req, res) {
   let {unit, size, mode} = req.query;
@@ -36,9 +34,10 @@ export default async function Browse(req, res) {
     mode='dark';
   }
   const name = 'tokenThumb:'+unit+':'+size+':'+mode;
-  
-  if (getDataURL(name,mode=='transparent'?'png':'jpg')) { 
-    return sendData(name, mode=='transparent'?'png':'jpg', res, mode=='transparent'?'image/png':'image/jpg');
+  let thumbUrl;
+  if ((thumbUrl = getDataURL(name,mode=='transparent'?'png':'jpg'))) { 
+    res.status(301).setHeader('location',thumbUrl);
+    return sendData(name, mode=='transparent'?'png':'jpg', res, mode=='transparent'?'image/png':'image/jpg', 301);
   } else { 
     redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
     res.status(425).send('Failed')
