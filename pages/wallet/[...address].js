@@ -59,6 +59,19 @@ export const getServerSideProps = async (context) => {
         props.wallet = JSON.parse(JSON.stringify(result));
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
+        if (result.profileUnit) { 
+            props.walletProfileThumb = '/api/getTokenThumb?unit='+result.profileUnit;
+        } else if (tokens && tokens.length>0) { 
+            props.walletProfileThumb = '/api/getTokenThumb?unit='+tokens[0]?.unit;
+        }
+        
+        if (process.env.NODE_ENV=='production') { 
+            const thumbName = result.profileUnit ? 'tokenThumb:'+result.profileUnit+':500:dark': 'tokenThumb:'+tokens[0]?.unit+':500:dark';
+            let thumbURL;
+            if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+                props.walletProfileThumb = thumbURL;
+            }
+        }
         await incrementCacheItem('walletHits:'+result.stake);
         await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
         await redisClient.lPush('lg:walletHitLog:'+result.stake, JSON.stringify(Date.now()))
@@ -73,6 +86,7 @@ export const getServerSideProps = async (context) => {
                 end = (page+1)*perPage;
             }
             const totalPages = Math.ceil(tokens.length/perPage);
+            const totalTokens = tokens.length;
             tokens = tokens.slice(start, end);
             const promises = [];
             for (const token of tokens) { 
@@ -101,7 +115,7 @@ export const getServerSideProps = async (context) => {
                 }
             }
             if (!failed) { 
-                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: totalPages, perPage: perPage, totalTokens: tokens.length};
+                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: totalPages, perPage: perPage, totalTokens: totalTokens};
             }
         }
     }
@@ -163,7 +177,7 @@ export default  function CIP54Playground(props) {
                     newArray = [...j.tokens];
                     newArray.push(...gallery.tokens);
                 }
-                setGallery({tokens:newArray,page:j.page, totalPages: j.totalPages});
+                setGallery({tokens:newArray,page:j.page, totalPages: j.totalPages, totalTokens: props.gallery?.totalTokens});
                 setMediaSlideLoading(false);   
             });
             
@@ -218,13 +232,14 @@ export default  function CIP54Playground(props) {
     if (props.token){ 
         description=props.token.title+' is a token which is found in the wallet '+props.wallet.name+' on Cardano';
     }
-    let url = "https://clg.wtf/policy/"+props.token?.unit?.substr(0,56);
-    let image = "https://clg.wtf/"+props.walletProfileThumb;
+    let url = "https://clg.wtf/wallet/"+props.wallet?.stake;
+    let image = props.walletProfileThumb;
     let initialSelection = gallery?gallery[0]:null;
     if (props.token) { 
         title = props.token.title + ' - ' + props.wallet.name+" - Cardano Looking Glass - clg.wtf";
-        url = "https://clg.wtf/policy/"+props.token.unit.substr(0,56)+"."+props.token.unit.substr(56);
+        url = "https://clg.wtf/wallet/"+props.wallet?.stake+"."+props.token.unit;
         initialSelection=props.token;
+        image = props.token.thumb;
     }
     const selectionChange = (item) => { 
         console.log(item);
