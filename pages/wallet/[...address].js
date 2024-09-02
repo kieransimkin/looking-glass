@@ -60,16 +60,16 @@ export const getServerSideProps = async (context) => {
         
         let tokens = await checkCacheItem('getTokensFromAddress:'+result.stake);
         if (result.profileUnit) { 
-            props.walletProfileThumb = '/api/getTokenThumb?unit='+result.profileUnit;
+            props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+result.profileUnit;
         } else if (tokens && tokens.length>0) { 
-            props.walletProfileThumb = '/api/getTokenThumb?unit='+tokens[0]?.unit;
+            props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+tokens[0]?.unit;
         }
         
         if (process.env.NODE_ENV=='production') { 
             const thumbName = result.profileUnit ? 'tokenThumb:'+result.profileUnit+':500:dark': 'tokenThumb:'+tokens[0]?.unit+':500:dark';
             let thumbURL;
             if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-                props.walletProfileThumb = thumbURL;
+                props.walletProfileThumb = 'https://clg.wtf'+thumbURL;
             }
         }
         await incrementCacheItem('walletHits:'+result.stake);
