@@ -4,7 +4,7 @@ import { getWallet, getPolicy } from "../../utils/database.mjs";
 
 import pgClient from '../../utils/dbsync.mjs'
 export default async function Browse(req, res) {
-    console.error(req.body);
+    
     try { 
         const redisClient = await getClient();
         init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
@@ -16,7 +16,7 @@ export default async function Browse(req, res) {
         
         if (req.body.variant == 'Mint') { 
             console.log('Token minted: '+req.body.mint.policy+req.body.mint.asset+' quantity: '+req.body.mint.quantity)
-            console.error(req.body);
+        
             const policy = await getPolicy(req.body.mint.policy);
             if (policy) { 
                 await policy.setLastMinted(Date.now());

@@ -265,10 +265,8 @@ export default  function CIP54Playground(props) {
             ],
           
           "description": description,
-          "image": [
-            policyProfileImage,
-            image
-          ]
+          "image": image
+          
         }
     }
     return (
