@@ -210,6 +210,13 @@ export default  function CIP54Playground(props) {
     let image = "https://clg.wtf/"+props.policyProfileThumb;
     let policyProfileImage = image;
     let initialSelection = gallery?gallery[0]:null;
+    if (!description || description.length<1) { 
+        if (props.token) { 
+            description = props.token.title+' is a token, part of an NFT collection called '+props.policy.name+', minted on Cardano';
+        } else { 
+            description=props.policy.name+' is an NFT collection, minted on Cardano'
+        }
+    }
     if (props.token) { 
         title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
         url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);

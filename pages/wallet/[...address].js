@@ -101,7 +101,7 @@ export const getServerSideProps = async (context) => {
                 }
             }
             if (!failed) { 
-                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: totalPages, perPage: perPage};
+                props.gallery={tokens:tokResult, page:page, start:start, end:end, totalPages: totalPages, perPage: perPage, totalTokens: tokens.length};
             }
         }
     }
@@ -214,7 +214,10 @@ export default  function CIP54Playground(props) {
     }
     let title = props.wallet?.name+" - Cardano Looking Glass - clg.wtf"
     
-    let description = "";
+    let description = props.wallet?.name+' is a wallet on Cardano';
+    if (props.token){ 
+        description=props.token.title+' is a token which is found in the wallet '+props.wallet.name+' on Cardano';
+    }
     let url = "https://clg.wtf/policy/"+props.token?.unit?.substr(0,56);
     let image = "https://clg.wtf/"+props.walletProfileThumb;
     let initialSelection = gallery?gallery[0]:null;
@@ -232,7 +235,42 @@ export default  function CIP54Playground(props) {
             hash: ' '
         }, undefined, {shallow:true})
     }
-    
+    let profileStructuredData =
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "dateCreated": props.wallet?.createdAt,
+        "dateModified": props.wallet?.lastMoved,
+        "mainEntity": {
+          "@type": "Organization",
+          "name": props.wallet.name,
+          "alternateName": props.wallet.slug,
+          "identifier": props.wallet.stake,
+          "interactionStatistic": [{
+            "@type": "InteractionCounter",
+            "interactionType": "https://schema.org/LikeAction",
+            "userInteractionCount": props.wallet.totalHits
+          }],
+          
+            "agentInteractionStatistic": [{
+                "@type": "InteractionCounter",
+                "interactionType": "https://schema.org/WriteAction",
+                "userInteractionCount": props.gallery.totalTokens
+              },
+              {
+                "@type": "InteractionCounter",
+                "interactionType": "https://schema.org/ShareAction",
+                "userInteractionCount": props.wallet.totalActivity
+              },
+            ],
+          
+          "description": description,
+          "image": [
+            policyProfileImage,
+            image
+          ]
+        }
+    }
     return (
         <>
             <Head>
@@ -250,6 +288,14 @@ export default  function CIP54Playground(props) {
                 <meta name="twitter:title" content={title} />
                 <meta name="twitter:description" content={description} />
                 <meta name="twitter:card" content="summary_large_image" />
+                {profileStructuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(profileStructuredData),
+          }}
+        />
+      )}
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <MediaSlide initialSelection={initialSelection} slideItemHTML={slideItemHTML} detailsItemHTML={detailsItemHTML} thumbnailsItemHTML={thumbnailsItemHTML} listItemHTML={listItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
