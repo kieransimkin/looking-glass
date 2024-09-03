@@ -31,10 +31,11 @@ const useStyles = makeStyles(theme => {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
 
-position:'absolute', right: 0, top: '9vh',
+position:'fixed', top: '0',
 borderRadius:'16px',
 cursor: 'pointer',
 zIndex:'20000',
+right:'1em',
 width:'32px',
 height:'32px',
 transition:'opacity 2s, box-shadow 1s',
@@ -51,8 +52,9 @@ transition:'opacity 2s, box-shadow 1s',
       'mediaslideBottomCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
-position:'absolute', right: 0, top: '89vh',
+position:'fixed', bottom: 0,
 borderRadius:'16px',
+right:'1em',
 zIndex:'20000',
 cursor: 'pointer',
 width:'32px',
@@ -245,24 +247,6 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     // Todo format the initial metadata JSON better for SEO reasons
     return <>
         
-        <div ref={containerRef} style={{position:'relative', top: '0', marginTop: '1em', marginLeft: '1em'}}>
-            <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
-            <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
-            <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
-            ➺
-            </div>
-            </div>
-        </div>
-
-        
-        <div ref={containerBottomRef} style={{position:'relative', bottom: '0', marginLeft: '1.1em'}}>
-        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',bottom:'0', right:'0', width:'50px', height:'200px'}}>&nbsp;</div>
-        <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
-        <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
-        ➺
-            </div>
-            </div>
-        </div>
         <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'100%'}}>
     
         
@@ -301,5 +285,25 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         {metadataContent}
         </div>
         </div>
+        
+        <div ref={containerRef} style={{position:'absolute',contain: 'content', top: '0', marginTop: '0', marginLeft: '1em', width:'100%', height:'100vh', zIndex:'2'}}>
+            <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
+            <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
+            <div style={{position:'relative',right:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
+            ➺
+            </div>
+            </div>
+            
+        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',top:'-200px', right:'0', width:'50px', height:'200px'}}>&nbsp;</div>
+        <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
+        <div style={{position:'relative',right:'-0.2em',bottom:'1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
+        ➺
+            </div>
+            </div>
+        </div>
+
+        
+       
+       
         </>
 }
