@@ -65,12 +65,12 @@ export const getServerSideProps = async (context) => {
         
         if (result.profileUnit) { 
             props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+result.profileUnit;
-        } else if (tokens && tokens.length>0) { 
-            props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+tokens[tokens.length-2]?.unit;
+        } else if (tokens && tokens?.length>0) { 
+            props.walletProfileThumb = 'https://clg.wtf/api/getTokenThumb?unit='+tokens[tokens?.length-2]?.unit;
         }
         
         if (process.env.NODE_ENV=='production') { 
-            const thumbName = result.profileUnit ? 'tokenThumb:'+result.profileUnit+':500:dark': 'tokenThumb:'+tokens[tokens.length-2]?.unit+':500:dark';
+            const thumbName = result.profileUnit ? 'tokenThumb:'+result.profileUnit+':500:dark': 'tokenThumb:'+tokens[tokens?.length-2]?.unit+':500:dark';
             let thumbURL;
             if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                 props.walletProfileThumb = 'https://clg.wtf'+thumbURL;
@@ -79,7 +79,7 @@ export const getServerSideProps = async (context) => {
         await incrementCacheItem('walletHits:'+result.stake);
         await incrementCacheItem('walletRecentHits:'+result.stake, 3600);
         await redisClient.lPush('lg:walletHitLog:'+result.stake, JSON.stringify(Date.now()))
-        if (tokens && tokens.length>0) { 
+        if (tokens && tokens?.length>0) { 
             const perPage = 10;
             let page = 0;
             let start=0,end=perPage;
@@ -98,7 +98,7 @@ export const getServerSideProps = async (context) => {
             }
             const tokResult = await Promise.all(promises)
             let failed = false;
-            for (let c=0;c<tokResult.length;c++ ) { 
+            for (let c=0;c<tokResult?.length;c++ ) { 
                 if (!tokResult[c]) { 
                     failed=true;
                     break;
