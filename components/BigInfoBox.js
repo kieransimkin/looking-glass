@@ -80,24 +80,23 @@ transition:'opacity 2s, box-shadow 1s',
     };
   });
 /**
- * @description Renders a large information box for an item, displaying its metadata,
- * title, and owner information. It also includes features like full-screen mode,
- * closing icon, and overlays. The box is dynamically sized based on the item's
- * thumbnail image.
+ * @description Renders a large info box for displaying item details, including
+ * metadata, image, and policy information. It handles mouse hover effects, fullscreen
+ * button, and portal rendering. It also manages state changes for loading, opacity,
+ * and overlays visibility.
  *
- * @param {object} obj - Named as an argument, with three properties: 'item', 'onClose'
- * and 'goFullscreen'. These properties seem to represent item metadata, close event
- * handler, and full screen toggle respectively.
+ * @param {object} obj - Composed of three properties: `item`, `onClose`, and
+ * `goFullscreen`. Each property appears to represent a unique entity or action, but
+ * their specific roles are not immediately clear from this code snippet alone.
  *
- * @param {object} obj.item - Used to display item metadata.
+ * @param {object} obj.item - Used to display information about an item.
  *
- * @param {Function} obj.onClose - Called when a close button is clicked.
+ * @param {Function} obj.onClose - Called when the user closes the box.
  *
- * @param {Function} obj.goFullscreen - Used to go into full screen mode.
+ * @param {Function} obj.goFullscreen - Intended to enable fullscreen mode.
  *
- * @returns {JSX.Element} A React element containing various HTML elements and
- * components such as images, buttons, text, and other UI elements displayed in an
- * overlay on top of another component.
+ * @returns {JSX.Element} A React element that represents a UI component consisting
+ * of multiple nested HTML elements with various styles and event handlers.
  */
 export default function BigInfoBox ({item,onClose,goFullscreen}) { 
     const theme = useTheme();
@@ -124,28 +123,27 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     let fadeTimer = null;
     
     /**
-     * @description Sets the portal's opacity to 1, making it fully visible. It is likely
-     * a callback triggered when a certain condition or operation is completed, allowing
-     * the portal to be rendered properly.
+     * @description Sets the portal's opacity to 1, likely indicating its visibility or
+     * readiness for use when called.
      */
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
     /**
-     * @description Executes a sequence of actions after a short delay, simulating
-     * asynchronous behavior for setting image height and width, loading state, and
-     * requesting portal HTML content from an external service based on image dimensions.
+     * @description Executes a series of operations after a short delay, including setting
+     * height and width attributes based on an image's current offset dimensions, loading
+     * portal content through a token Portal API, and updating the DOM with the portal HTML.
      *
-     * @param {Event} e - Unused.
+     * @param {Event} e - Not used within this function.
      */
     const load = (e) => {
         setTimeout(() => { 
-            // Runs after a short delay.
+            // Executes after a short delay.
             setHeight(imgRef.current.offsetHeight);
             setWidth(imgRef.current.offsetWidth)
             setLoaded(true);
             tokenPortal(item,readyCallback, imgRef.current.offsetWidth, imgRef.current.offsetHeight).then((h) => { 
-                // Updates portal HTML.
+                // Sets HTML content.
                 setPortalHTML(h);
                 // Todo - dim the static image so that it doesnt' peek out from behind the portal
             })
@@ -153,11 +151,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         
     }
     /**
-     * @description Sets a variable called `closeIconVisible` to true when the mouse
-     * hovers over an element, indicating that a close icon should be visible. The exact
-     * context depends on where this function is being used.
+     * @description Sets a boolean property named `closeIconVisible` to true when the
+     * user's mouse cursor hovers over an element, likely triggering an effect such as
+     * displaying or enabling a close icon.
      *
-     * @param {MouseEvent} e - Event object.
+     * @param {Event} e - Used to access event details.
      */
     const mouseOver =(e) => { 
      
@@ -171,10 +169,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
 
     }
     /**
-     * @description Sets the visibility of a close icon to false when the mouse leaves
-     * its associated element or context, logging a message to the console upon invocation.
+     * @description Logs an empty string to the console and sets a component's close icon
+     * visibility to `false` when the mouse pointer leaves its hover area or target element.
      *
-     * @param {Event} e - Ignored in this implementation.
+     * @param {Event} e - Used to represent an event.
      */
     const mouseOut = (e) => { 
             console.log()
@@ -182,27 +180,29 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         
     }
     /**
-     * @description Sets overlays to be visible when a main element is hovered over and
-     * logs 'overlays on' to the console.
+     * @description Sets a boolean variable `overlaysVisible` to true, indicating that
+     * overlays are now visible. It also logs 'overlays on' to the console for debugging
+     * purposes. This function appears to be triggered by a mouse-over event.
      *
-     * @param {Event} e - Not used within this specific code snippet.
+     * @param {Event} e - Unused in this code snippet.
      */
     const mouseOverMain = (e) => { 
         setOverlaysVisible(true);
         console.log('overlays on');
     }
     /**
-     * @description Sets the state to false when the mouse leaves an element, making
-     * overlays invisible and logging a message 'overlays off' to the console.
+     * @description Logs a message to the console and sets the overlays visibility to
+     * false when the mouse moves out of the main area.
      *
-     * @param {Event} e - Implicitly defined by JavaScript.
+     * @param {Event} e - Not used in the provided code.
      */
     const mouseOutMain = (e) => { 
         console.log('overlays offf');
         setOverlaysVisible(false);
     }
     useEffect(() => { 
-            // Sets up and cleans up mouse event listeners for various HTML elements.
+            // Attaches and detaches event listeners to DOM elements during component lifecycle
+            // changes.
             if (floatingBottomHoverDiv.current) { 
                 floatingBottomHoverDiv.current.addEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.addEventListener("mouseleave",mouseOutMain);
@@ -270,11 +270,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         }
     },[item,onClose, goFullscreen])
     useEffect(()=> { 
-        // Memoizes and re-runs on state change.
+        // Memoizes .
         console.log('new sidebar item');
     },[item])
     useEffect(() => { 
-        // Handles image and metadata loading on component update.
+        // Manages image and metadata loading.
         if (imgRef.current) { 
             if (imgRef.current.complete) { 
                 setTimeout(()=>{load();},100);
@@ -301,9 +301,9 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         }
     },[item, width, height])
     /**
-     * @description Triggers the `goFullscreen` action and logs a message to the console
-     * upon entering fullscreen mode. The exact behavior depends on the implementation
-     * of `goFullscreen`, which is not shown here.
+     * @description Executes when a full-screen state is entered. It calls another function,
+     * `goFullscreen`, to activate full-screen mode and logs a message to the console,
+     * indicating that the application has entered fullscreen mode.
      */
     const onFullscreen = () => { 
         goFullscreen();
@@ -311,8 +311,9 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     }
     // Todo format the initial metadata JSON better for SEO reasons
     return <>
-        <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
-        <div ref={containerRef} style={{position:'relative', marginTop: '1em', marginLeft: '1em'}}>
+        
+        <div ref={containerRef} style={{position:'relative', top: '0', marginTop: '1em', marginLeft: '1em'}}>
+            <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
             ➺
@@ -320,8 +321,9 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             </div>
         </div>
 
-        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',top:'75vh', right:'0', width:'50px', height:'200px'}}>&nbsp;</div>
-        <div ref={containerBottomRef} style={{position:'relative', bottom: '8vh', marginLeft: '1.1em'}}>
+        
+        <div ref={containerBottomRef} style={{position:'relative', bottom: '0', marginLeft: '1.1em'}}>
+        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'absolute',bottom:'0', right:'0', width:'50px', height:'200px'}}>&nbsp;</div>
         <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
         <div style={{position:'relative',left:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
         ➺
