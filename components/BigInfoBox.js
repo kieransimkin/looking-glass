@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
 
-position:'fixed', top: '0',
+position:'static', top: '0',
 borderRadius:'16px',
 cursor: 'pointer',
 zIndex:'20000',
@@ -286,7 +286,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         </div>
         </div>
         
-        <div ref={containerRef} style={{position:'absolute',contain: 'content', top: '0', marginTop: '0', marginLeft: '1em', width:'100%', height:'100vh', zIndex:'2'}}>
+        <div ref={containerRef} style={{position:'absolute',contain: 'content', top: '0', marginTop: '0', marginLeft: '1em', width:'100%', height:'100%', zIndex:'2'}}>
             <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',right:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
