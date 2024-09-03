@@ -9,6 +9,7 @@ import {tokenPortal} from '../utils/tokenPortal';
 import PolicyInfo from './PolicyInfo';
 import { red } from '@material-ui/core/colors';
 import IconRoundall from './IconRoundall';
+import OwnerList from './OwnerList';
 
 const useStyles = makeStyles(theme => { 
     let bgi = '';
@@ -79,27 +80,28 @@ transition:'opacity 2s, box-shadow 1s',
     };
   });
 /**
- * @description Renders a large information box with various details about an item,
- * including metadata, owners, and a thumbnail image. It also provides controls to
- * toggle full-screen mode and close the box.
+ * @description Renders a large information box for an item, displaying its metadata,
+ * title, and owner information. It also includes features like full-screen mode,
+ * closing icon, and overlays. The box is dynamically sized based on the item's
+ * thumbnail image.
  *
- * @param {object} obj - 3-element array consisting of an item, onClose callback
- * function, and goFullscreen callback function.
+ * @param {object} obj - Named as an argument, with three properties: 'item', 'onClose'
+ * and 'goFullscreen'. These properties seem to represent item metadata, close event
+ * handler, and full screen toggle respectively.
  *
- * @param {object} obj.item - Used to represent metadata for a specific item or asset.
+ * @param {object} obj.item - Used to display item metadata.
  *
- * @param {() => void} obj.onClose - Called when the box is closed.
+ * @param {Function} obj.onClose - Called when a close button is clicked.
  *
- * @param {Function} obj.goFullscreen - Used to toggle the full screen mode when the
- * button is clicked.
+ * @param {Function} obj.goFullscreen - Used to go into full screen mode.
  *
- * @returns {JSX.Element} A React component that represents a big information box
- * with various properties such as title, metadata, and owner list.
+ * @returns {JSX.Element} A React element containing various HTML elements and
+ * components such as images, buttons, text, and other UI elements displayed in an
+ * overlay on top of another component.
  */
 export default function BigInfoBox ({item,onClose,goFullscreen}) { 
     const theme = useTheme();
     const styles=useStyles();
-    const [ownerList, setOwnerList] = useState([]);
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [portalOpacity, setPortalOpacity] = useState(0);
@@ -122,28 +124,28 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     let fadeTimer = null;
     
     /**
-     * @description Sets the portal opacity to 1, indicating that a portal is fully loaded
-     * and ready for use. This function is likely called when a portal's loading process
-     * is complete, and its opacity is updated accordingly.
+     * @description Sets the portal's opacity to 1, making it fully visible. It is likely
+     * a callback triggered when a certain condition or operation is completed, allowing
+     * the portal to be rendered properly.
      */
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
     /**
-     * @description Sets the height, width, and loaded state of an image after a short
-     * delay. It then calls `tokenPortal` with the item, callback, and image dimensions
-     * to retrieve portal HTML and updates the component's state with the result.
+     * @description Executes a sequence of actions after a short delay, simulating
+     * asynchronous behavior for setting image height and width, loading state, and
+     * requesting portal HTML content from an external service based on image dimensions.
      *
-     * @param {Event} e - Unused in this code.
+     * @param {Event} e - Unused.
      */
     const load = (e) => {
         setTimeout(() => { 
-            // Executes after a delay.
+            // Runs after a short delay.
             setHeight(imgRef.current.offsetHeight);
             setWidth(imgRef.current.offsetWidth)
             setLoaded(true);
             tokenPortal(item,readyCallback, imgRef.current.offsetWidth, imgRef.current.offsetHeight).then((h) => { 
-                // Sets HTML content.
+                // Updates portal HTML.
                 setPortalHTML(h);
                 // Todo - dim the static image so that it doesnt' peek out from behind the portal
             })
@@ -151,12 +153,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         
     }
     /**
-     * @description Sets a variable `closeIconVisible` to `true` when invoked, indicating
-     * that an icon related to closing should be displayed. This function is likely used
-     * in a user interface context to toggle the visibility of a close button or similar
-     * element based on mouse events.
+     * @description Sets a variable called `closeIconVisible` to true when the mouse
+     * hovers over an element, indicating that a close icon should be visible. The exact
+     * context depends on where this function is being used.
      *
-     * @param {Event} e - Ignored.
+     * @param {MouseEvent} e - Event object.
      */
     const mouseOver =(e) => { 
      
@@ -170,10 +171,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
 
     }
     /**
-     * @description Logs a message to the console and sets the visibility of the close
-     * icon to false when the mouse leaves an element.
+     * @description Sets the visibility of a close icon to false when the mouse leaves
+     * its associated element or context, logging a message to the console upon invocation.
      *
-     * @param {Event} e - Used to handle an event occurrence.
+     * @param {Event} e - Ignored in this implementation.
      */
     const mouseOut = (e) => { 
             console.log()
@@ -181,28 +182,27 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         
     }
     /**
-     * @description Triggers when a mouse event occurs, sets the `setOverlaysVisible`
-     * state to `true`, and logs 'overlays on' to the console, indicating that overlays
-     * become visible upon mouse over event.
+     * @description Sets overlays to be visible when a main element is hovered over and
+     * logs 'overlays on' to the console.
      *
-     * @param {Event} e - Unused.
+     * @param {Event} e - Not used within this specific code snippet.
      */
     const mouseOverMain = (e) => { 
         setOverlaysVisible(true);
         console.log('overlays on');
     }
     /**
-     * @description Logs a message to the console and sets the visibility of overlays to
-     * false when called, indicating that the mouse has exited the main area.
+     * @description Sets the state to false when the mouse leaves an element, making
+     * overlays invisible and logging a message 'overlays off' to the console.
      *
-     * @param {Event} e - Ignored.
+     * @param {Event} e - Implicitly defined by JavaScript.
      */
     const mouseOutMain = (e) => { 
         console.log('overlays offf');
         setOverlaysVisible(false);
     }
     useEffect(() => { 
-            // Adds and removes event listeners for hovering and mouseout on various div elements.
+            // Sets up and cleans up mouse event listeners for various HTML elements.
             if (floatingBottomHoverDiv.current) { 
                 floatingBottomHoverDiv.current.addEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.addEventListener("mouseleave",mouseOutMain);
@@ -238,44 +238,43 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         
         
         return () => { 
-/*
+
             if (floatingBottomHoverDiv.current) { 
-                floatingBottomHoverDiv.current.removeEventListener("mouseenter",mouseOverMain);
+                floatingBottomHoverDiv.current.removeEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.removeEventListener("mouseleave",mouseOutMain);
+            
             }
-            if (bodyDiv.current) { 
-                bodyDiv.current.removeEventListener("mouseenter",mouseOverMain);
-                bodyDiv.current.removeEventListener("mouseleave",mouseOutMain);
-            }
-            if (floatingDiv.current) { 
-                
+            if (floatingFullscreenButton.current) { 
+                                floatingFullscreenButton.current.removeEventListener("mouseenter",mouseOverMain);
+                                floatingFullscreenButton.current.removeEventListener("mouseleave",mouseOutMain);
+            }        
+            if (floatingDiv.current){ 
                 floatingDiv.current.removeEventListener("mouseenter",mouseOver);
                 floatingDiv.current.removeEventListener("mouseleave",mouseOut);
             }
-            if (floatingBottomDiv.current) { 
-                                
-                floatingBottomDiv.current.removeEventListener("mouseenter",mouseOver);
-                floatingBottomDiv.current.removeEventListener("mouseleave",mouseOut);
+            if (topButtonDiv.current) { 
+                topButtonDiv.current.removeEventListener("mouseenter",mouseOver);
+                topButtonDiv.current.removeEventListener("mouseleave",mouseOut);
+                
             }
             if (bottomButtonDiv.current) { 
                 bottomButtonDiv.current.removeEventListener("mouseenter",mouseOver);
                 bottomButtonDiv.current.removeEventListener("mouseleave",mouseOut);
-
             }
-            if (topButtonDiv.current) { 
-                topButtonDiv.current.removeEventListener("mouseenter,",mouseOver);
-                topButtonDiv.current.removeEventListener("mouseleave",mouseOut);
+            
+            if (floatingBottomDiv.current) { 
+                floatingBottomDiv.current.removeEventListener("mouseenter",mouseOver);
+                floatingBottomDiv.current.removeEventListener("mouseleave",mouseOut);
             }
-                */
-            //window.removeEventListener("mousemove",mouseMove);
+    
         }
-    },[])
+    },[item,onClose, goFullscreen])
     useEffect(()=> { 
-        // Executes upon the change of `item`.
+        // Memoizes and re-runs on state change.
         console.log('new sidebar item');
     },[item])
     useEffect(() => { 
-        // Initializes UI elements on component mount.
+        // Handles image and metadata loading on component update.
         if (imgRef.current) { 
             if (imgRef.current.complete) { 
                 setTimeout(()=>{load();},100);
@@ -290,18 +289,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         metadataRef.current.querySelectorAll('.jsontree_value_number').forEach((div)=>div.style.color='#ff0000')
         metadataRef.current.querySelectorAll('.jsontree_value_boolean').forEach((div)=>div.style.color='#ff0000')
         metadataRef.current.querySelectorAll('.jsontree_value_null').forEach((div)=>div.style.color='#ff0000')
-        setOwnerList([])
+        
         setPortalOpacity(0);
     
-        getData('/getTokenHolders?unit='+item.unit).then((data) => { 
-            // Converts JSON and sets owner list.
-            data.json().then((o) => { 
-                
-                // Sets owner list.
-                setOwnerList(o);
-                
-            })
-        })
+     
         return ()=> { 
             if (imgRef.current) { 
                 imgRef.current.removeEventListener('load',load);
@@ -310,8 +301,9 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         }
     },[item, width, height])
     /**
-     * @description Activates the full-screen mode and logs a message to the console when
-     * called.
+     * @description Triggers the `goFullscreen` action and logs a message to the console
+     * upon entering fullscreen mode. The exact behavior depends on the implementation
+     * of `goFullscreen`, which is not shown here.
      */
     const onFullscreen = () => { 
         goFullscreen();
@@ -365,7 +357,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         <PolicyInfo policyID={item.unit.substring(0,56)} />
         </div>
         <div style={{position: 'relative', marginBottom: '1em'}}>
-        <b>{ownerList.length>1?'Owners':'Owner'}</b>: <ul  style={{display: 'inline'}} className="owner-list">{ownerList.map((i) => <li key={i.stake}><AdaHandle stake={i.stake} /> </li>)}</ul>
+        <b>Owner</b>:<OwnerList unit={item.unit} />
         </div>
     
         <div style={{width:'93%',marginTop:'10px'}}>
