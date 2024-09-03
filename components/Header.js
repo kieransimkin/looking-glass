@@ -104,14 +104,14 @@ const useStyles = makeStyles(theme => {
 let timer = null;
 
 /**
- * @description Renders a header component for a web application, featuring navigation
- * menus, wallet management, and theme control. It also handles events such as mouse
- * movements, clicks, and scroll to toggle menu visibility.
+ * @description Renders a responsive navigation menu with various options, including
+ * wallet management, theme switching, and help resources. It uses React hooks for
+ * state management and event handling, as well as context API and local storage to
+ * store user data.
  *
- * @param {object} props - Used to pass state from parent components.
+ * @param {object} props - Used to receive data from parent components.
  *
- * @returns {JSX.Element} A React component that represents a UI element with various
- * interactive features such as buttons, menus, and dialogs.
+ * @returns {JSX.Element} A React component rendered as HTML.
  */
 const Header = (props) => {
     // Props: 
@@ -141,9 +141,10 @@ const Header = (props) => {
     }
     
     /**
-     * @description Sets a boolean state variable named `aboutOpen` to false, indicating
-     * that the about section is no longer open or visible to the user. This typically
-     * occurs when an "about" dialog box or panel is closed by the user.
+     * @description Closes an about section by updating a state variable, setAboutOpen,
+     * to false when called. This typically occurs in response to a user action, such as
+     * clicking on a close button. The updated state triggers a re-render of the component
+     * with the about section closed.
      */
     const onAboutClose = () => { 
         setAboutOpen(false);
@@ -172,14 +173,14 @@ const Header = (props) => {
         return false;
     })();
     /**
-     * @description Stores wallet data to local storage and then calls the `onWalletChange`
-     * function, passing it the stored wallet data. The stored data is a JSON string that
-     * contains wallet properties provided as an argument to the function.
+     * @description Stores a given wallet object in local storage, converting it to JSON
+     * format first, and then calls another function `onWalletChange` with the same wallet
+     * object as an argument.
      *
-     * @param {object} props - Expected to contain wallet data.
+     * @param {object} props - Intended to be used as data.
      *
-     * @returns {boolean} Determined by the execution of the `onWalletChange` function
-     * called within it.
+     * @returns {boolean} A result of calling the `onWalletChange(props)` function,
+     * indicating whether the wallet change operation was successful or not.
      */
     const doOnWalletChange=(props)=>{
         localStorage.setItem('cip54-wallet',JSON.stringify(props))
@@ -196,7 +197,7 @@ const Header = (props) => {
     });
     
     useEffect( () => { 
-        // Initializes wallet state from local storage.
+        // Restores wallet information and theme settings.
         if (!walletCtx) {  
             let wallet = null
             try { 
@@ -205,10 +206,10 @@ const Header = (props) => {
             if (wallet && wallet?.wallet) { 
                 try { 
                     window.cardano[wallet.wallet].isEnabled().then((enabled)=> { 
-                        // Enables a wallet API if it's enabled on the server, and updates wallet state accordingly.
+                        // Enables a wallet.
                         if (enabled){
                             window.cardano[wallet.wallet].enable().catch((error) => { 
-                                // Handles errors.
+                                // Handles an error case.
                                 let terror = error;
                                 if (typeof terror === 'object' && terror.info) { 
                                     terror=terror.info;
@@ -268,8 +269,8 @@ const Header = (props) => {
     const onMouseMove = useCallback((e) => {
         //console.log(e); e.target 
         
-        let inHeader=false, elem=e.target.parentElement;
-        while(elem = elem.parentElement) { // go up till <html>
+        let inHeader=false, elem=e.target?.parentElement;
+        while(elem = elem?.parentElement) { // go up till <html>
             
             if (elem?.id=='header' || elem?.getAttribute('role')=='tooltip') {
                 inHeader=true;
@@ -316,83 +317,88 @@ const Header = (props) => {
       }, [hide, hover, setHide, anchorEl]);
 
     /**
-     * @description Sets a callback object with two functions, `fn` and `fail`, both
-     * returning nothing. It also sets the state `walletOpen` to true, likely toggling
-     * the visibility of a wallet component. The function appears to handle a button click
-     * event to open a wallet.
+     * @description Updates the state by setting the `walletOpen` property to `true` and
+     * the `callbackFn` property with two empty functions: one for success and another
+     * for failure. This prepares the application for a wallet opening operation.
      */
     const handleWalletClickOpen = () => {
       setCallbackFn({fn: () => { return; }, fail: () => { return; } });
       setWalletOpen(true);
     };
     /**
-     * @description Sets a state variable `saveAsOpen` to `true`, indicating that the
-     * "Save As" feature is now open and available for user interaction. This is likely
-     * part of a UI component's event handling mechanism.
+     * @description Toggles a state variable `saveAsOpen` to true when invoked, likely
+     * triggering an action to open or display the save as dialog box for user interaction.
      */
     const handleSaveAsClick = () => { 
         setSaveAsOpen(true);
     }
     /**
-     * @description Sets a boolean flag `importBlockchainOpen` to true when called, likely
-     * used for managing the visibility or state of an import blockchain feature.
+     * @description Sets the `importBlockchainOpen` state to `true`, likely controlling
+     * the visibility or enablement of a component associated with importing blockchain
+     * data. This suggests a toggle-like behavior, enabling users to import blockchain
+     * information upon clicking the corresponding button.
      */
     const handleImportBlockchainClick = () => { 
         setImportBlockchainOpen(true);
     }
     /**
-     * @description Sets a state variable `importZipOpen` to true when invoked, likely
-     * triggering a side effect such as opening an import zip dialog or showing related
-     * UI elements on the screen.
+     * @description Sets a state variable named `importZipOpen` to true when invoked,
+     * likely indicating that a ZIP file import operation should be initiated or displayed.
+     * This is typically used in user interface event handling for button clicks or similar
+     * interactions.
      */
     const handleImportZipClick = () => { 
         setImportZipOpen(true);
     }
     /**
-     * @description Closes a new panel when called, effectively setting its visibility
-     * to false.
+     * @description Closes a new item or panel by setting a state variable `newOpen` to
+     * false. This function is likely used in an event-driven UI, such as when a button
+     * is clicked to close a newly opened component. It updates the component's visibility
+     * accordingly.
      *
-     * @param {boolean} value - Unused.
+     * @param {boolean} value - Not used within the function, considered unnecessary.
      */
     const handleNewClose = (value) => { 
         setNewOpen(false)
     }
     /**
-     * @description Takes a value as an argument but does not use it. It sets the state
-     * variable `saveAsOpen` to `false`, closing the save-as dialog box and preventing
-     * further modifications.
+     * @description Closes the "save as" dialog when called, effectively toggling the
+     * `saveAsOpen` state to `false`. It is a callback function likely used within a user
+     * interface component to manage the visibility of the save-as dialog box.
      *
-     * @param {boolean} value - Not used in this context.
+     * @param {boolean} value - Unused.
      */
     const handleSaveAsClose = (value) => { 
         setSaveAsOpen(false);
     }
     /**
-     * @description Sets a state variable `importBlockchainOpen` to `false`, effectively
-     * closing or hiding an import blockchain modal or interface.
+     * @description Sets the state of `importBlockchainOpen` to `false`, indicating that
+     * the import blockchain modal is being closed or dismissed when called with a value.
      *
-     * @param {boolean} value - Always `true`. It is not used anywhere in this snippet.
+     * @param {boolean} value - Not used within the function.
      */
     const handleImportBlockchainClose = (value) => { 
         setImportBlockchainOpen(false);
     }
     /**
-     * @description Updates the state by setting `importZipOpen` to false, effectively
-     * closing a zip import dialog or interface.
+     * @description Sets the state of a component to close the import zip dialog when
+     * invoked with no parameters.
      *
-     * @param {undefined} value - Not used within the function.
+     * @param {boolean} value - Ignored.
      */
     const handleImportZipClose = (value) => { 
         setImportZipOpen(false);
     }
     /**
-     * @description Enables a wallet by calling `window.cardano[value].enable()` and
-     * handles errors, updating the wallet state and triggering callbacks accordingly.
-     * It also retrieves reward addresses and change address from the enabled API.
+     * @description Enables or disables a wallet, enabling it only if the value is defined
+     * and not null or undefined. It then sets up reward addresses, change address, and
+     * stake key using Cardano's API, triggering subsequent actions when these are
+     * successfully retrieved.
      *
      * @param {string | undefined} value - Wallet identifier.
      *
-     * @returns {boolean} False when an error occurs, and undefined otherwise.
+     * @returns {boolean} False if an error occurs and true otherwise. Additionally it
+     * can call callbackFn.fail() which implies a failure in some operation.
      */
     const handleWalletClose = (value) => {
         setWalletOpen(false);
@@ -405,7 +411,7 @@ const Header = (props) => {
         };
         try {
             window.cardano[value].isEnabled().then((enabled) => {
-                // Enables a Cardano wallet and retrieves reward addresses.
+                // Enables a cardano wallet.
                 window.cardano[value].enable().catch((error) => { 
                         // Handles an error.
                         console.error(error);
@@ -417,10 +423,10 @@ const Header = (props) => {
                         callbackFn.fail();            
                         return false;
                     }).then((api) => { 
-                    // Retrieves wallet data.
+                    // Executes after wallet connection.
                     if (!api) return;
                     api.getRewardAddresses().then((addresses) => {
-                        // Handles wallet change event.
+                        // Handles wallet change events.
                         api.getChangeAddress().then((change) => {
                             // Handles wallet change events.
                             doOnWalletChange({
@@ -444,10 +450,11 @@ const Header = (props) => {
     };
 
     /**
-     * @description Closes a menu by calling `doClose`, logs 'closed' to the console, and
-     * clears any pending timeout set by `menuCloseTimer`.
+     * @description Logs a message to the console, clears a timer, and calls the `doClose`
+     * function. It does not currently set any focused state or anchor element due to
+     * commented-out lines. The purpose is likely to close an interface or menu when called.
      *
-     * @param {undefined} value - Not being used within the function.
+     * @param {unknown} value - Not used anywhere in the code.
      */
     const handleClose = (value) => {
         //setSearchFocused(false);
@@ -459,9 +466,8 @@ const Header = (props) => {
     }
     let menuCloseTimer = null;
     /**
-     * @description Updates a state variable (`searchFocused`) to false and resets another
-     * state variable (`anchorEl`) to null, indicating that the search focus is lost and
-     * the anchor element is no longer set. This change triggers a re-render of the component.
+     * @description Logs the current focus state, resets the search focused state to
+     * false, and clears the anchor element reference.
      */
     const doClose = () => { 
         console.log(searchFocused)
@@ -469,9 +475,8 @@ const Header = (props) => {
         setAnchorEl(null);
     };
     /**
-     * @description Clears a timer set by `menuCloseTimer`. This is typically used to
-     * prevent an event from being triggered when the user navigates away from an element,
-     * often in conjunction with hover or focus events.
+     * @description Clears a previously set timer and logs 'leave' to the console,
+     * indicating that the mouse has left an element or hovered state is being released.
      */
     const handleLeave = () => { 
         clearTimeout(menuCloseTimer);
@@ -481,9 +486,8 @@ const Header = (props) => {
         console.log('leave');
     }
     /**
-     * @description Logs a message to the console, then clears any ongoing timer that
-     * would close the menu. This occurs only when the search field does not currently
-     * have focus.
+     * @description Clears a timer when the mouse enters a certain area, indicating that
+     * the search input has not received focus and preventing an automatically closing menu.
      */
     const mouseEnter = () => {
         if (!searchFocused) { 
@@ -495,9 +499,9 @@ const Header = (props) => {
     }
 
     /**
-     * @description Prevents a menu from losing focus, as indicated by a log message
-     * 'keeping menu focus'. It appears to cancel or reset a timer set for closing the
-     * menu when it is triggered. The actual timer is not shown in this snippet.
+     * @description Logs a message to the console, indicating that it maintains focus on
+     * a menu item. The commented-out line suggests it was initially intended to clear a
+     * timer related to closing the menu, but its current implementation lacks this functionality.
      */
     const keepMenuFocus = () => {
         console.log('keeping menu focus'); 
@@ -505,13 +509,12 @@ const Header = (props) => {
     }
 
     /**
-     * @description Clears two timers when a click event is triggered, sets an anchor
-     * element, and resets search focus to false, allowing a menu to be opened or updated
-     * upon clicking a specific element.
+     * @description Resets search focus and clears timers on menu close and search timer,
+     * then sets anchor element for dropdown menu to the clicked item's current target element.
      *
-     * @param {HTMLElement} a - An event target, specifically a DOM element.
+     * @param {React.MouseEvent<HTMLAnchorElement>} a - Not used directly.
      *
-     * @param {Event} e - Not used within the function.
+     * @param {Event} e - Typically used for event handling.
      */
     const handleClick = (a,e) => { 
         if (!searchFocused) { 
@@ -523,11 +526,11 @@ const Header = (props) => {
     }
 
     /**
-     * @description Determines a new mode, 'dark' or 'light', based on the current state
-     * of `darkMode`. It then stores the change in local storage and triggers updates to
-     * `setDarkMode` and `onThemeChange` accordingly.
+     * @description Toggles between light and dark mode by updating the local storage and
+     * state variables, triggering a theme change event to notify other components of the
+     * new theme.
      *
-     * @param {Event} e - Used to capture event data but not referenced within the function.
+     * @param {Event} e - Ignored within this function.
      */
     const toggleDarkMode = (e) => { 
         const newMode = darkMode==='light'?'dark':'light';
@@ -537,9 +540,9 @@ const Header = (props) => {
     }
 
     /**
-     * @description Resets various application state variables to null when a logout event
-     * occurs, including wallet API connection and local wallet instance, while also
-     * notifying listeners of a wallet change through the `doOnWalletChange` method.
+     * @description Resets several state variables: it calls `doOnWalletChange` with a
+     * null argument, sets `walletAPI`, `wallet`, and `anchorEl` to null, effectively
+     * logging out the user.
      */
     const handleLogout = () => { 
         doOnWalletChange(null);
@@ -548,51 +551,52 @@ const Header = (props) => {
         setAnchorEl(null);
     }
     /**
-     * @description Opens a dialog by setting the state variable `launchpadDialogIsOpen`
-     * to `true`. This indicates that the launchpad dialog is now visible and can be
-     * interacted with by the user or other parts of the application.
+     * @description Sets a state variable `launchpadDialogIsOpen` to `true`, indicating
+     * that the launchpad dialog is open and visible. This change typically triggers a
+     * re-rendering of the component tree, making the dialog accessible to the user.
      */
     const launchpadDialogOpen = () => { 
         setLaunchpadDialogIsOpen(true);
     } 
     /**
-     * @description Closes a dialog box by setting the `launchpadDialogIsOpen` state to
-     * false, effectively hiding it from view and disabling any associated interactive
-     * elements or functionality related to the dialog.
+     * @description Closes a dialog box associated with the "launchpad" by setting its
+     * state to `false`. This likely renders the dialog non-visible or disables it,
+     * depending on the application's UI logic and implementation details.
      */
     const launchpadDialogClose = () => { 
         setLaunchpadDialogIsOpen(false);
     }
     /**
-     * @description Defines an empty function that can be used to create a new dialog
-     * window when called, typically by adding event listeners or other necessary logic
-     * within its implementation.
+     * @description Initializes a new dialog box by defining its structure and behavior
+     * but does not specify any actions to be taken when invoked.
      */
     const openNewDialog = () => { 
 
     }
     /**
-     * @description Dispatches an event named "saveZip" to an event bus, passing a payload
-     * object with a message indicating that a zip file is being saved.
+     * @description Dispatches an event to an event bus with a type of `"saveZip"` and a
+     * payload containing a string message indicating that the action is saving a zip
+     * file. This likely triggers subsequent actions or updates within the application.
      */
     const exportZip = () => { 
         eventBus.dispatch("saveZip", { message: "saving zip" });
     }
     /**
-     * @description Dispatches a custom event named "saveHtml" to an event bus, passing
-     * a message indicating that HTML is being saved. This allows other parts of the
-     * application to listen for and respond to this event as needed.
+     * @description Dispatches an event to an event bus with a message indicating that
+     * HTML is being saved, by calling the `dispatch` method and passing in a string
+     * identifier `"saveHtml"` along with an object containing the message `'saving html'`.
      */
     const exportHtml = () => { 
         eventBus.dispatch("saveHtml", {message: 'saving html'});
     }
 
     /**
-     * @description Toggles between opening and closing a menu by checking the existence
-     * of an anchor element (`anchorEl`). If present, it calls the `handleClose` function
-     * to close the menu; otherwise, it calls `handleClick` to open it.
+     * @description Determines whether to close or open a menu based on the presence of
+     * an existing anchor element (`anchorEl`). If present, it calls the `handleClose`
+     * function; otherwise, it calls the `handleClick` function, passing in the event
+     * object `e`.
      *
-     * @param {Event} e - Used for event handling.
+     * @param {Event} e - Not used in the function.
      */
     const showHideMenu = (e) => {
         if (Boolean(anchorEl)) { 
@@ -602,17 +606,16 @@ const Header = (props) => {
         }
     }
     /**
-     * @description Handles an item click event by calling another function `handleClose`.
-     * This implies a relationship between an item and its closure or dismissal, suggesting
-     * a context where items can be clicked to close them.
+     * @description Closes a previously opened menu or list when an item is clicked. It
+     * calls another function, `handleClose`, which is assumed to be defined elsewhere
+     * in the codebase. The exact behavior depends on the implementation of `handleClose`.
      */
     const handleItemClick = () => { 
         handleClose();
     }
             // Events:
             useEffect(() => {
-                // Adds and removes event listeners for mouse, click, touchmove, and scroll events
-                // on the window object.
+                // Adds and removes event listeners.
                 window.addEventListener('mousemove', onMouseMove, true);
                 window.addEventListener('click', onMouseMove, true);
                 window.addEventListener('touchmove', onMouseMove, true);
