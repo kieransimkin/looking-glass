@@ -239,8 +239,8 @@ const Header = (props) => {
     const onMouseMove = useCallback((e) => {
         //console.log(e); e.target 
         
-        let inHeader=false, elem=e.target.parentElement;
-        while(elem = elem.parentElement) { // go up till <html>
+        let inHeader=false, elem=e.target?.parentElement;
+        while(elem = elem?.parentElement) { // go up till <html>
             
             if (elem?.id=='header' || elem?.getAttribute('role')=='tooltip') {
                 inHeader=true;
