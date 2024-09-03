@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
 
-position:'static', top: '0',
+position:'fixed', top: '0px',
 borderRadius:'16px',
 cursor: 'pointer',
 zIndex:'20000',
