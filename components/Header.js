@@ -123,6 +123,7 @@ const Header = (props) => {
     const [tanchorEl, setAnchorEl] = React.useState(null);
     const [prevAnchor, setPrevAnchor]=React.useState();
     const [aboutOpen, setAboutOpen] =React.useState(false);
+    const drawRef = React.useRef();
     const anchorRef = React.useRef();
     let anchorEl = tanchorEl;
     if (searchFocused && anchorRef?.current) {
@@ -234,21 +235,40 @@ const Header = (props) => {
     const toggleVisibility = useCallback((hide, cursor) => {
       setHide(hide);
     }, []);
+    
+    const onMouseMove = useCallback((e) => {
+        //console.log(e); e.target 
+        
+        let inHeader=false, elem=e.target.parentElement;
+        while(elem = elem.parentElement) { // go up till <html>
+            
+            if (elem?.id=='header' || elem?.getAttribute('role')=='tooltip') {
+                inHeader=true;
+                break;
+            }
 
-    const onMouseMove = useCallback(() => {
-        clearTimeout(timer);
-    
-        if (hide) {
-          toggleVisibility(!hide, 'default');
         }
-    
-        timer = setTimeout(() => {
-          if (!hover && !launchpadDialogIsOpen && !anchorEl) {
-            toggleVisibility(true, 'none');
-            setAnchorEl(null);
-          }
-        }, 5000);
-      }, [hide, hover, setHide, anchorEl]);onMouseMove
+        if (inHeader) { 
+            clearTimeout(timer)
+            return;
+        
+        
+        } else { 
+
+            clearTimeout(timer);
+        
+            if (hide) {
+                // if it's hidden, set the hidden status to false
+            
+              toggleVisibility(false, 'default');
+            }
+        
+            timer = setTimeout(() => {
+                toggleVisibility(true, 'none');
+                setAnchorEl(null);
+            }, 1000);
+        }
+      }, [hide, hover, setHide, anchorEl, drawRef.current]);
     
       const onSwipe = useCallback(() => {
         clearTimeout(timer);
@@ -264,26 +284,8 @@ const Header = (props) => {
             setAnchorEl(null);
           }
         }, 5000);
-      }, [hide, hover, setHide, anchorEl]);onMouseMove
-    // Events:
-    useEffect(() => {
-        window.addEventListener('mousemove', onMouseMove, true);
-        window.addEventListener('click', onMouseMove, true);
-        window.addEventListener('touchmove', onMouseMove, true);
-        window.addEventListener('scroll', onMouseMove, true);
-        //const ZingTouch = require('zingtouch');
-        //var myRegion = new ZingTouch.Region(document.body);
-        //myRegion.bind(document.body,'swipe', onSwipe)
-        return () => {
-          window.removeEventListener('mousemove', onMouseMove, true);
-          window.removeEventListener('click', onMouseMove, true);
-          
-          window.removeEventListener('touchmove', onMouseMove, true);
-          
-          window.removeEventListener('scroll', onMouseMove,true);
-          
-        };
-    }, [onMouseMove]);
+      }, [hide, hover, setHide, anchorEl]);
+
     const handleWalletClickOpen = () => {
       setCallbackFn({fn: () => { return; }, fail: () => { return; } });
       setWalletOpen(true);
@@ -425,6 +427,7 @@ const Header = (props) => {
     const exportHtml = () => { 
         eventBus.dispatch("saveHtml", {message: 'saving html'});
     }
+
     const showHideMenu = (e) => {
         if (Boolean(anchorEl)) { 
             handleClose();
@@ -435,16 +438,36 @@ const Header = (props) => {
     const handleItemClick = () => { 
         handleClose();
     }
+            // Events:
+            useEffect(() => {
+                window.addEventListener('mousemove', onMouseMove, true);
+                window.addEventListener('click', onMouseMove, true);
+                window.addEventListener('touchmove', onMouseMove, true);
+                window.addEventListener('scroll', onMouseMove, true);
+                //const ZingTouch = require('zingtouch');
+                //var myRegion = new ZingTouch.Region(document.body);
+                //myRegion.bind(document.body,'swipe', onSwipe)
+                return () => {
+                  window.removeEventListener('mousemove', onMouseMove, true);
+                  window.removeEventListener('click', onMouseMove, true);
+                  
+                  window.removeEventListener('touchmove', onMouseMove, true);
+                  
+                  window.removeEventListener('scroll', onMouseMove,true);
+                  
+                };
+            }, [onMouseMove]);
+
     return (
-        <>
-            <Drawer id="drawer"  classes={{
+        <header ref={drawRef}  id="header">
+            <Drawer id="drawer" classes={{
                 paper: anchorEl?classes.drawerPaperOpen:classes.drawerPaper,
               }}
                     
              variant="persistent" anchor='right' open={!hide} className={className}>
                 
                 
-                        <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseMove={keepMenuFocus}  onMouseEnter={handleClick} >
+                        <div style={{marginLeft:'auto', marginRight: 'auto'}} onMouseEnter={handleClick} >
                             <Link href={isTouch ? "#" : "/"} passHref><a>
                                 <IconButton style={{cursor: 'pointer'}} className={buttonclass} size={buttonsize} aria-controls="simple-menu" aria-haspopup="true" onClick={isTouch ? showHideMenu : null} >
                                 
@@ -547,7 +570,7 @@ const Header = (props) => {
 
             </Drawer>
             <AboutDialog  open={aboutOpen} onClose={onAboutClose} />
-            </>
+            </header>
     )
 }
 Header.propTypes = {
