@@ -208,7 +208,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
             }
     
         }
-    },[])
+    },[item,onClose, goFullscreen])
     useEffect(()=> { 
         console.log('new sidebar item');
     },[item])
