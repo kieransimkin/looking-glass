@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => {
         flex: '1',
         overflowY:'scroll',
         minWidth:'75%',
-        maxWidth:'100%'
+        maxWidth:'100%',
+        marginLeft:'1em'
       },
       'mediaslideCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
