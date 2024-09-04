@@ -268,7 +268,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
             }
             if (metadataRef.current)  metadataRef.current.innerHTML='';
         }
-    },[item, width, height])
+    },[item, width, height, theme])
     const onFullscreen = () => { 
         goFullscreen();
         console.log('on fullscreen');

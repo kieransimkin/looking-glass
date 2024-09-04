@@ -138,13 +138,14 @@ export default  function CIP54Playground(props) {
             
         });
         
-    },[policy])
-    if (!dbPolicy) { 
-        return <h1>Policy Not Found</h1>
-    }
+    },[policy]);
     const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight) => { 
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
     },[bigInfoOpen]);
+    if (!dbPolicy) { 
+        return <h1>Policy Not Found</h1>
+    }
+    
 
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
