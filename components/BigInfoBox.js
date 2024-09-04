@@ -296,7 +296,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
     return <>
 
   <Popper open={true} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} >
-            <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:'-15px', right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
+            <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:navbarHeight-15, right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',right:'0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
             ➺
