@@ -57,6 +57,22 @@ transition:'opacity 2s, box-shadow 1s',
 
 
       },
+
+    'mediaslide-leftbar': { 
+        transition: 'left 0.4s, width 0.4s',
+        overflowX: 'hidden',
+        overflowY: 'scroll',
+        height: '100%',
+        position: 'absolute',
+        MsOverflowStyle: 'none',
+        scrollbarWidth: 'none'
+    },
+    'mediaslide-leftbar::-webkit-scrollbar': {
+        display: 'none'
+    },
+    'mediaslide-leftbar-opened': { 
+        transition: 'left 0.4s, width 0.4s'
+    },
       'mediaslideBottomCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
