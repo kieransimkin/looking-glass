@@ -7,7 +7,7 @@
   "license": "BSD-3-Clause-Attribution",
   "scripts": {
     "dev": "rm -rfv node_modules/.cache/* && next dev",
-    "build": "bash -c \"rm -rfv node_modules/.cache/* && pushd submodules/libcip54 && npm run build && pushd .. && npm install libcip54 --legacy-peer-deps && pushd SmartNFTPortal && npm run build && pushd .. && npm install SmartNFTPortal --legacy-peer-deps && pushd react-mediaslide && npm run build && pushd ../.. && npm install react-mediaslide --legacy-peer-deps &&  npm install --legacy-peer-deps && next build\"",
+    "build": "bash -c \"rm -rfv node_modules/.cache/* && pushd submodules/libcip54 && npm run build && pushd .. && npm install libcip54 --legacy-peer-deps && pushd SmartNFTPortal && npm run build && pushd .. && npm install smartnftportal --legacy-peer-deps && pushd react-mediaslide && npm run build && pushd ../.. && npm install react-mediaslide --legacy-peer-deps &&  npm install --legacy-peer-deps && next build\"",
     "export": "next export",
     "start": "next start",
     "lint": "next lint ",
