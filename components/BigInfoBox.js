@@ -1,5 +1,5 @@
 import * as JsonTree from 'json-tree-viewer'
-import { useTheme } from '@material-ui/core';
+import { Popper, useTheme } from '@material-ui/core';
 import { getData, postData } from '../utils/Api';
 import AdaHandle from './AdaHandle';
 import TokenRoundall from '../components/TokenRoundall';
@@ -10,6 +10,7 @@ import PolicyInfo from './PolicyInfo';
 import { red } from '@material-ui/core/colors';
 import IconRoundall from './IconRoundall';
 import OwnerList from './OwnerList';
+
 
 const useStyles = makeStyles(theme => { 
     let bgi = '';
@@ -31,11 +32,12 @@ const useStyles = makeStyles(theme => {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
 
-position:'fixed', top: '0px',
+position:'absolute', top: '0px',
 borderRadius:'16px',
+color: theme.palette.text.primary,
 cursor: 'pointer',
 zIndex:'20000',
-right:'1em',
+right:'0.1em',
 width:'32px',
 height:'32px',
 transition:'opacity 2s, box-shadow 1s',
@@ -52,10 +54,12 @@ transition:'opacity 2s, box-shadow 1s',
       'mediaslideBottomCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
-position:'fixed', bottom: '0px',
+color: theme.palette.text.primary,
+position:'absolute',
 borderRadius:'16px',
-right:'1em',
+right:'0.1em',
 zIndex:'20000',
+bottom:'25px',
 cursor: 'pointer',
 width:'32px',
 height:'32px',
@@ -86,11 +90,14 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     const styles=useStyles();
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);
+    const [minArrows, setMinArrows] = useState(null);
     const [portalOpacity, setPortalOpacity] = useState(0);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
     const [closeIconVisible, setCloseIconVisible] = useState(false);
     const [overlaysVisible, setOverlaysVisible] = useState(false);
+    const [viewportWidth, setViewportWidth] = useState(0);
+    const [viewportHeight, setViewportHeight] = useState(0);
     const [metadataContent, setMetadataContent] = useState(<pre>{JSON.stringify(item.metadata,null,'  ')}</pre>)
     const metadataRef = useRef();
     const imgRef = useRef();
@@ -102,6 +109,8 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     const floatingBottomHoverDiv = useRef();
     const topButtonDiv = useRef();
     const bottomButtonDiv = useRef();
+    const topAbsButton = useRef();
+    const bottomAbsButton = useRef();
     const bodyDiv = useRef();
     let fadeTimer = null;
     
@@ -244,9 +253,24 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         goFullscreen();
         console.log('on fullscreen');
     }
-    // Todo format the initial metadata JSON better for SEO reasons
-    return <>
-         
+    useEffect(() => {
+		const resizeObserver = new ResizeObserver((event) => {
+            console.log('Got resize event');
+            console.log(event);
+			setViewportWidth(event[0].contentBoxSize[0].inlineSize);
+			setViewportHeight(event[0].contentBoxSize[0].blockSize);
+			
+		});
+		resizeObserver.observe(bodyDiv.current);
+
+		return () => {
+			resizeObserver.disconnect();
+		};
+	}, []);
+    /*
+    useEffect(() => {
+        const minArrows=((<>
+            <div ref={containerRef} style={{position:'absolute',contain: 'content', top: '0', marginTop: '0', marginLeft: '1em', width:'100%', height:'100%', zIndex:'2'}}>
             <div ref={floatingDiv} style={{zIndex: '1000',position: 'absolute',top:'0', right:'0', width:'50px', height:'300px'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',right:'-0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -260,10 +284,33 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
         ➺
             </div>
             </div>
-        
-        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'100%'}}>
+        </div>
+        </> as import('react').ReactDOM).render());
+        window.document.body.appendChild(minArrows);
+    },[item]);
+    */
+    // Todo format the initial metadata JSON better for SEO reasons
+    return <>
+  <Popper open={true} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} >
+            <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:'0', right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
+            <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
+            <div style={{position:'relative',right:'0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
+            ➺
+            </div>
+            </div>
+  </Popper>
+  <Popper open={true} id="biginfo-box-bottombutton" placement='bottom-end' anchorEl={bottomAbsButton.current}>
+        <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'relative',bottom:'-25px', right:'0', width:'50px', height:'200px', cursor: 'pointer'}}>&nbsp;</div>
+        <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
+        <div style={{position:'relative',right:'0.2em',bottom:'0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
+        ➺
+            </div>
+            </div>
+  </Popper>
+        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'inherit'}}>
     
-        
+        <div ref={bottomAbsButton} style={{position:'absolute',bottom:'0', right: '0'}}>&nbsp;</div>
+        <div ref={topAbsButton} style={{position:'absolute',top:'0', right: '0'}}>&nbsp;</div>
         <TokenRoundall overlaysVisible={overlaysVisible} quantity={item.quantity} />
         <img ref={imgRef} onLoad={load} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible', display:'inline-block'}} /><br style={{clear:'both'}}/>
         <div style={{position:'relative',top:'-30px'}}> 
