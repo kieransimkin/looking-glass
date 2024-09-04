@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import {useState, useRef} from 'react';
+import {useState, useRef, useCallback} from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import path from 'path';
@@ -175,7 +175,7 @@ export default  function CIP54Playground(props) {
     const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight) => { 
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
     },[bigInfoOpen]);
-    
+
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         setMediaSlideLoading(true);
