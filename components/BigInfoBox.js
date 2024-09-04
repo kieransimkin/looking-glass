@@ -62,8 +62,6 @@ transition:'opacity 2s, box-shadow 1s',
         transition: 'left 0.4s, width 0.4s',
         overflowX: 'hidden',
         overflowY: 'scroll',
-        height: '100%',
-        position: 'absolute',
         MsOverflowStyle: 'none',
         scrollbarWidth: 'none'
     },
