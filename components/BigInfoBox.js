@@ -85,7 +85,7 @@ transition:'opacity 2s, box-shadow 1s',
       },
     };
   });
-export default function BigInfoBox ({item,onClose,goFullscreen}) { 
+export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) { 
     const theme = useTheme();
     const styles=useStyles();
     const [portalHTML, setPortalHTML] = useState(null);
@@ -291,6 +291,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen}) {
     */
     // Todo format the initial metadata JSON better for SEO reasons
     return <>
+
   <Popper open={true} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} >
             <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:'0', right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>

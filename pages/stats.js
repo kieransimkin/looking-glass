@@ -200,9 +200,9 @@ Common3d.StartTime();
         setOVolume(OceanVolume);
         */
     },[])
-    const renderBigInfo = (i, onClose, goFullscreen) => { 
+    const renderBigInfo = (i, onClose, goFullscreen, navbarHeight) => { 
         
-        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} />
+        return <BigInfoBox navbarHeight={navbarHeight} onClose={onClose} goFullscreen={goFullscreen(i)} item={i} />
     }
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
