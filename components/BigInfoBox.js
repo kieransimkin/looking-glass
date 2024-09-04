@@ -13,7 +13,7 @@ import OwnerList from './OwnerList';
 
 
 const useStyles = makeStyles(theme => { 
-    // Generates CSS styles based on theme properties.
+    // Returns styles.
     let bgi = '';
     if (theme.palette.type=='dark') { 
       bgi='';
@@ -32,7 +32,8 @@ const useStyles = makeStyles(theme => {
         flex: '1',
         overflowY:'scroll',
         minWidth:'75%',
-        maxWidth:'100%'
+        maxWidth:'100%',
+        marginLeft:'1em'
       },
       'mediaslideCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
@@ -92,25 +93,28 @@ transition:'opacity 2s, box-shadow 1s',
     };
   });
 /**
- * @description Renders a pop-up window displaying information about an item, including
- * metadata, policy details, and owner lists. It includes buttons for closing and
- * full-screen viewing, as well as dynamic resizing based on the viewport size.
+ * @description Renders a component displaying detailed information about an item,
+ * including metadata, images, and overlays. It handles mouse events, layout adjustments,
+ * and image loading, providing a dynamic and interactive user interface.
  *
- * @param {object} obj - Named as `item`, `onClose`, `goFullscreen`, `navbarHeight`.
- * It includes several properties that are passed down to child components or used
- * within the component itself.
+ * @param {object} obj - Required for its execution.
+ * Its attributes are:
+ * - item: an object with metadata
+ * - onClose: a callback function to close the info box
+ * - goFullscreen: a callback function to enter fullscreen mode
+ * - navbarHeight: the height of the navigation bar.
  *
- * @param {object} obj.item - Used to display details about an item, likely an image
- * or media content.
+ * @param {object} obj.item - A media item with metadata properties.
  *
- * @param {Function} obj.onClose - Intended to handle closing the Big Info Box.
+ * @param {Function} obj.onClose - Used to close the info box when called.
  *
- * @param {Function} obj.goFullscreen - Called when full-screen mode is activated.
+ * @param {Function} obj.goFullscreen - Used to enable full screen mode.
  *
- * @param {number} obj.navbarHeight - Used to determine the height of an HTML element.
+ * @param {number} obj.navbarHeight - Used to determine the position of floating elements.
  *
- * @returns {JSX.Element} A React component with various elements including buttons,
- * images, and information panels that are displayed as a big info box.
+ * @returns {JSX.Element} A React component that renders a complex layout containing
+ * various UI elements such as buttons, images, metadata panels, and a portal for
+ * displaying additional content.
  */
 export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) { 
     const theme = useTheme();
@@ -142,29 +146,27 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
     let fadeTimer = null;
     
     /**
-     * @description Sets the opacity of a portal to 1, making it fully visible. It is
-     * likely a callback function triggered when an application or component is ready to
-     * display its content. The exact context depends on the surrounding code and the
-     * `setPortalOpacity` function's implementation.
+     * @description Sets the portal opacity to a value of 1 when invoked, likely making
+     * the portal visible or fully opaque.
      */
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
     /**
-     * @description Sets up a delayed task to load and prepare an image for tokenization,
-     * including setting its height and width, loading a portal HTML element, and invoking
-     * a callback with dimensions and portal HTML as arguments.
+     * @description Executes immediately after page load and sets up a task to be executed
+     * asynchronously. It loads image dimensions, triggers loading of a token portal, and
+     * then updates DOM with the portal's HTML content once it is loaded.
      *
-     * @param {Event} e - Unused.
+     * @param {Event} e - Unused in the code.
      */
     const load = (e) => {
         setTimeout(() => { 
-            // Executes asynchronously after a delay of 0 milliseconds.
+            // Executes immediately or nearly immediately after loading.
             setHeight(imgRef.current.offsetHeight);
             setWidth(imgRef.current.offsetWidth)
             setLoaded(true);
             tokenPortal(item,readyCallback, imgRef.current.offsetWidth, imgRef.current.offsetHeight).then((h) => { 
-                // Sets Portal HTML content.
+                // Returns a React state update.
                 setPortalHTML(h);
                 // Todo - dim the static image so that it doesnt' peek out from behind the portal
             })
@@ -172,10 +174,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         
     }
     /**
-     * @description Sets a state variable to true when the mouse is over an element,
-     * making the close icon visible.
+     * @description Sets a variable to make a close icon visible when triggered by a
+     * mouse-over event, possibly on an element or component. The specific context and
+     * use case for this function are not provided in the given code snippet.
      *
-     * @param {Event} e - Related to mouse events.
+     * @param {Event} e - Unnecessary.
      */
     const mouseOver =(e) => { 
      
@@ -189,10 +192,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
 
     }
     /**
-     * @description Logs an empty string to the console and sets the visibility of a close
-     * icon to false when the mouse leaves a specific area or element.
+     * @description Logs a message to the console and sets the visibility of an element
+     * identified as `closeIconVisible` to false, typically when the mouse pointer moves
+     * away from it.
      *
-     * @param {Event} e - Not used in this code snippet.
+     * @param {Event} e - Not used within the function.
      */
     const mouseOut = (e) => { 
             console.log()
@@ -200,29 +204,28 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         
     }
     /**
-     * @description Triggers when a mouse hovers over a main element, setting overlays
-     * to be visible and logging a message to the console indicating that overlays are
-     * being displayed.
+     * @description Sets a flag to indicate that overlays are visible and logs a message
+     * to the console when the main element is hovered over. It updates state, likely
+     * used for rendering purposes, based on user interaction.
      *
-     * @param {Event} e - Unused in this context.
+     * @param {Event} e - Not used within the function.
      */
     const mouseOverMain = (e) => { 
         setOverlaysVisible(true);
         console.log('overlays on');
     }
     /**
-     * @description Sets overlays to be invisible when the mouse moves out of a main
-     * element. It logs a message 'overlays off' to the console and calls the
-     * `setOverlaysVisible` function with an argument of false, likely updating the UI accordingly.
+     * @description Logs a message to the console and sets the overlays visible state to
+     * false when the user moves their mouse out of the main area.
      *
-     * @param {Event} e - Ignored in this context.
+     * @param {Event} e - Not used.
      */
     const mouseOutMain = (e) => { 
         console.log('overlays offf');
         setOverlaysVisible(false);
     }
     useEffect(() => { 
-            // Adds and removes event listeners from HTML elements.
+            // Attaches and removes event listeners on various DOM elements.
             if (floatingBottomHoverDiv.current) { 
                 floatingBottomHoverDiv.current.addEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.addEventListener("mouseleave",mouseOutMain);
@@ -290,11 +293,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         }
     },[item,onClose, goFullscreen])
     useEffect(()=> { 
-        // Logs a message to the console when the dependency changes.
+        // Runs on re-render.
         console.log('new sidebar item');
     },[item])
     useEffect(() => { 
-        // Executes UI updates and event listeners on mount or update.
+        // Updates UI elements after image load.
         if (imgRef.current) { 
             if (imgRef.current.complete) { 
                 setTimeout(()=>{load();},100);
@@ -321,15 +324,16 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         }
     },[item, width, height])
     /**
-     * @description Initiates a transition to full-screen mode by calling the `goFullscreen`
-     * function, indicating that it has been activated through a console log message.
+     * @description Calls another function `goFullscreen()` to initiate full-screen mode
+     * and then logs a message `'on fullscreen'` to the console, indicating that full-screen
+     * mode has been activated.
      */
     const onFullscreen = () => { 
         goFullscreen();
         console.log('on fullscreen');
     }
     useEffect(() => {
-		// Observes and handles HTML element resize events.
+		// Observes DOM size changes.
 		const resizeObserver = new ResizeObserver((event) => {
             console.log('Got resize event');
             console.log(event);
