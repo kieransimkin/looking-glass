@@ -27,7 +27,9 @@ const useStyles = makeStyles(theme => {
         width: '100%'
       },
 
-
+      'art-scroll': { 
+        flex: '1'
+      },
       'mediaslideCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
@@ -310,8 +312,8 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
   </Popper>
         <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'inherit'}}>
     
-        <div ref={bottomAbsButton} style={{position:'absolute',bottom:'0', right: '0'}}>&nbsp;</div>
-        <div ref={topAbsButton} style={{position:'absolute',top:'0', right: '0'}}>&nbsp;</div>
+        <div ref={bottomAbsButton} style={{position:'absolute',bottom:'0', right: '0', width: '100%',height:'1px'}}>&nbsp;</div>
+        <div ref={topAbsButton} style={{position:'absolute',top:'0', right: '0', width:'100%',height:'1px'}}>&nbsp;</div>
         <TokenRoundall overlaysVisible={overlaysVisible} quantity={item.quantity} />
         <img ref={imgRef} onLoad={load} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible', display:'inline-block'}} /><br style={{clear:'both'}}/>
         <div style={{position:'relative',top:'-30px'}}> 
@@ -330,23 +332,25 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}
         </div>
-
-        <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
+        <article class="art-scroll">
+            <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
+            
+            
+            <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em'}}>
+            <PolicyInfo policyID={item.unit.substring(0,56)} />
+            </div>
+            <div style={{position: 'relative', marginBottom: '1em'}}>
+            <b>Owner</b>:<OwnerList unit={item.unit} />
+            </div>
         
+            <div style={{width:'93%',marginTop:'10px'}}>
+            <h2 style={{margin:0}}>Metadata:</h2>
+            <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
+            {metadataContent}
+            </div>
+        </article>
+        </div>
         
-        <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em'}}>
-        <PolicyInfo policyID={item.unit.substring(0,56)} />
-        </div>
-        <div style={{position: 'relative', marginBottom: '1em'}}>
-        <b>Owner</b>:<OwnerList unit={item.unit} />
-        </div>
-    
-        <div style={{width:'93%',marginTop:'10px'}}>
-        <h2 style={{margin:0}}>Metadata:</h2>
-        <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
-        {metadataContent}
-        </div>
-        </div>
         
        
 
