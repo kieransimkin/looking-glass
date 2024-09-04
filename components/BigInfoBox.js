@@ -29,7 +29,9 @@ const useStyles = makeStyles(theme => {
 
       'art-scroll': { 
         flex: '1',
-        overflowY:'scroll'
+        overflowY:'scroll',
+        minWidth:'75%',
+        maxWidth:'100%'
       },
       'mediaslideCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
@@ -295,7 +297,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
     // Todo format the initial metadata JSON better for SEO reasons
     return <>
 
-  <Popper open={true} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} >
+  <Popper open={true} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
             <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:navbarHeight-15, right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',right:'0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -303,7 +305,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
             </div>
             </div>
   </Popper>
-  <Popper open={true} id="biginfo-box-bottombutton" placement='bottom-end' anchorEl={bottomAbsButton.current}>
+  <Popper open={true} id="biginfo-box-bottombutton" placement='bottom-end' anchorEl={bottomAbsButton.current} keepMounted>
         <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'relative',bottom:'-50px', right:'0', width:'50px', height:'200px', cursor: 'pointer'}}>&nbsp;</div>
         <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
         <div style={{position:'relative',right:'0.2em',bottom:'0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -333,7 +335,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}
         </div>
-        <article className={styles["art-scroll"]}>
+        <article className={styles["art-scroll"]+' mediaslide-leftbar'}>
             <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
             
             
