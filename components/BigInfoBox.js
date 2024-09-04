@@ -105,7 +105,7 @@ transition:'opacity 2s, box-shadow 1s',
       },
     };
   });
-export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) { 
+export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, bigInfoOpen=false}) { 
     const theme = useTheme();
     const styles=useStyles();
     const [portalHTML, setPortalHTML] = useState(null);
@@ -312,7 +312,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
     // Todo format the initial metadata JSON better for SEO reasons
     return <>
 
-  <Popper open={true} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
+  <Popper open={bigInfoOpen} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
             <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:navbarHeight-15, right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',right:'0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -320,7 +320,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
             </div>
             </div>
   </Popper>
-  <Popper open={true} id="biginfo-box-bottombutton" placement='bottom-end' anchorEl={bottomAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
+  <Popper open={bigInfoOpen} id="biginfo-box-bottombutton" placement='bottom-end' anchorEl={bottomAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
         <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'relative',bottom:'-50px', right:'0', width:'50px', height:'200px', cursor: 'pointer'}}>&nbsp;</div>
         <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
         <div style={{position:'relative',right:'0.2em',bottom:'0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>

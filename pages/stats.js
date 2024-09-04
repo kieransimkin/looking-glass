@@ -174,8 +174,15 @@ export default  function CIP54Playground(props) {
     const [oSurface, setOSurface] = useState(null);
     const [oVolume, setOVolume] = useState(null);
     const canvasRef = useRef();
-    
-    
+
+    const [bigInfoOpen, setBigInfoOpen] = useState(false);
+ 
+    const openBigInfo = (item) => { 
+        setBigInfoOpen(true);
+    }
+    const closeBigInfo = (item) => { 
+        setBigInfoOpen(false);
+    }   
     /*
     useFrame((state, delta) => {
         dampE(cubeRef.current.rotation, [0, Math.PI*3, 0], 0.1, delta)
@@ -200,10 +207,11 @@ Common3d.StartTime();
         setOVolume(OceanVolume);
         */
     },[])
-    const renderBigInfo = (i, onClose, goFullscreen, navbarHeight) => { 
-        
-        return <BigInfoBox navbarHeight={navbarHeight} onClose={onClose} goFullscreen={goFullscreen(i)} item={i} />
-    }
+    
+    const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight) => { 
+        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
+    },[bigInfoOpen]);
+    
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         

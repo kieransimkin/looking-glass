@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import {useState, useRef} from 'react';
+import {useState, useRef, useCallback} from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -116,6 +116,14 @@ export default  function CIP54Playground(props) {
     let policy = dbPolicy?.policyID;
     const [gallery, setGallery] = useState(props?.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
+    const [bigInfoOpen, setBigInfoOpen] = useState(false);
+ 
+    const openBigInfo = (item) => { 
+        setBigInfoOpen(true);
+    }
+    const closeBigInfo = (item) => { 
+        setBigInfoOpen(false);
+    }   
     if (!policy) policy='';
     
     useEffect(() => { 
@@ -134,9 +142,10 @@ export default  function CIP54Playground(props) {
     if (!dbPolicy) { 
         return <h1>Policy Not Found</h1>
     }
-    const renderBigInfo = (i, onClose, goFullscreen, navbarHeight) => { 
-        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} />
-    }
+    const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight) => { 
+        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
+    },[bigInfoOpen]);
+
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         
@@ -304,7 +313,7 @@ export default  function CIP54Playground(props) {
     
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <MediaSlide initialSelection={initialSelection} slideItemHTML={slideItemHTML} listItemHTML={listItemHTML} thumbnailsItemHTML={thumbnailsItemHTML} detailsItemHTML={detailsItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
+            <MediaSlide onOpenBigInfo={openBigInfo} onCloseBigInfo={closeBigInfo} initialSelection={initialSelection} slideItemHTML={slideItemHTML} listItemHTML={listItemHTML} thumbnailsItemHTML={thumbnailsItemHTML} detailsItemHTML={detailsItemHTML} selectionChange={selectionChange} renderBigInfo={renderBigInfo} renderFile={tokenPortal} onLoadMoreData={loadMoreData} loading={mediaSlideLoading} gallery={newGallery} loadingIndicator=<LoadingTicker /> pagination={{page: gallery?.page, totalPages: gallery?.totalPages }} />
         </>
     );
 }
