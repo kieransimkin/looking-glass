@@ -13,7 +13,7 @@ import OwnerList from './OwnerList';
 
 
 const useStyles = makeStyles(theme => { 
-    // Defines CSS styles.
+    // Generates CSS styles based on theme parameters.
     let bgi = '';
     if (theme.palette.type=='dark') { 
       bgi='';
@@ -28,7 +28,9 @@ const useStyles = makeStyles(theme => {
         width: '100%'
       },
 
-
+      'art-scroll': { 
+        flex: '1'
+      },
       'mediaslideCloseIcon': {
         outline:'1px solid rgba(240,200,100,1.0)',
 backgroundColor:'rgba(255,200,60,1),',
@@ -87,25 +89,24 @@ transition:'opacity 2s, box-shadow 1s',
     };
   });
 /**
- * @description Renders a full-screen popup box displaying metadata and an image for
- * a given item, with interactive elements such as close buttons, overlays, and
- * fullscreen mode. It also loads a portal HTML element through an API call.
+ * @description Renders a large information box for an item, displaying its metadata,
+ * title, owner list, and policy information. It also includes a close button,
+ * fullscreen button, and a portal that overlays the image when fully loaded.
  *
- * @param {object} obj - Composed of four properties: item, onClose, goFullscreen,
- * and navbarHeight. Each property is used to customize the behavior of the big info
- * box component.
+ * @param {object} obj - Composed of four properties: `item`, `onClose`, `goFullscreen`,
+ * and `navbarHeight`. These parameters seem to be related to an item's details, close
+ * functionality, fullscreen toggle, and navigation bar height.
  *
- * @param {object} obj.item - An object with metadata for display in the info box.
+ * @param {object} obj.item - Assumed to contain metadata about an item.
  *
- * @param {Function} obj.onClose - Intended to handle the closing event.
+ * @param {Function} obj.onClose - Used to close the box.
  *
  * @param {Function} obj.goFullscreen - Used to toggle full screen mode.
  *
- * @param {number} obj.navbarHeight - Used to determine the height of the overlay
- * above the navigation bar.
+ * @param {number} obj.navbarHeight - Used to set vertical offset of portal element.
  *
- * @returns {JSX.Element} A React component represented as an HTML element and its
- * child elements.
+ * @returns {JSX.Element} A React element that represents a complex visual component
+ * with multiple interactive elements and nested components.
  */
 export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) { 
     const theme = useTheme();
@@ -137,28 +138,27 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
     let fadeTimer = null;
     
     /**
-     * @description Sets the portal opacity to 1, effectively making it fully visible
-     * when invoked. This suggests that the portal is initially invisible or has some
-     * form of fade-in animation and is ready for display.
+     * @description Sets the portal's opacity to its maximum value (1) when invoked,
+     * likely to make it fully visible or enabled after a certain condition is met.
      */
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
     /**
-     * @description Simulates a delay before setting image dimensions and loading a portal
-     * component based on those dimensions. It then sets HTML content for the portal using
-     * data retrieved from an asynchronous tokenPortal function call.
+     * @description Loads the dimensions and content of an image after a short delay. It
+     * retrieves the height, width, and loads a token portal from a server using an API
+     * call with these dimensions as parameters. The portal HTML is then updated locally.
      *
-     * @param {Event} e - Unused.
+     * @param {Event} e - Ignored within the function.
      */
     const load = (e) => {
         setTimeout(() => { 
-            // Loads an asynchronous operation.
+            // Executes after an initial delay.
             setHeight(imgRef.current.offsetHeight);
             setWidth(imgRef.current.offsetWidth)
             setLoaded(true);
             tokenPortal(item,readyCallback, imgRef.current.offsetWidth, imgRef.current.offsetHeight).then((h) => { 
-                // Sets portal HTML state.
+                // Sets HTML content.
                 setPortalHTML(h);
                 // Todo - dim the static image so that it doesnt' peek out from behind the portal
             })
@@ -166,12 +166,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         
     }
     /**
-     * @description Sets a state variable `closeIconVisible` to true, indicating that the
-     * close icon is visible when the mouse hovers over an element. The event parameter
-     * `e` suggests that this function is likely called as a result of a mouseover event
-     * being triggered on an HTML element.
+     * @description Sets a state variable named `closeIconVisible` to `true`, presumably
+     * indicating that the close icon is now visible, likely as part of a UI component's
+     * behavior when the mouse hovers over it.
      *
-     * @param {Event} e - Unused in this code snippet.
+     * @param {Event} e - Not used explicitly.
      */
     const mouseOver =(e) => { 
      
@@ -185,10 +184,12 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
 
     }
     /**
-     * @description Logs a message to the console and hides a close icon by setting its
-     * visibility to false when the mouse pointer moves out of an element or container.
+     * @description Sets a close icon to be invisible when the user's cursor is no longer
+     * hovering over an element. It does this by calling the `setCloseIconVisible` function
+     * with the argument `false`. The function also logs an empty line to the console
+     * when called.
      *
-     * @param {object} e - Not used explicitly.
+     * @param {Event} e - Unused.
      */
     const mouseOut = (e) => { 
             console.log()
@@ -196,30 +197,29 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         
     }
     /**
-     * @description Logs a message to the console indicating that overlays are visible
-     * and sets a state variable `overlaysVisible` to true when triggered by a mouse over
-     * event.
+     * @description Sets the state to display overlays by calling `setOverlaysVisible`
+     * with a value of `true`. It also logs a message 'overlays on' to the console when
+     * invoked, typically in response to a mouse hover event over an element or area.
      *
-     * @param {Event} e - Unused.
+     * @param {Event} e - Unused within this function.
      */
     const mouseOverMain = (e) => { 
         setOverlaysVisible(true);
         console.log('overlays on');
     }
     /**
-     * @description Logs a message to the console and sets the overlays visibility to
-     * false when the user's mouse leaves the main element or its children. The exact
-     * behavior depends on the event parameter, likely generated by an event listener on
-     * the DOM tree.
+     * @description Logs a message to the console indicating that overlays are off and
+     * sets the `overlaysVisible` state to false. This likely occurs when the mouse leaves
+     * the main area, triggering an event handler or other UI change.
      *
-     * @param {object} e - Not used.
+     * @param {object} e - Not used within the function.
      */
     const mouseOutMain = (e) => { 
         console.log('overlays offf');
         setOverlaysVisible(false);
     }
     useEffect(() => { 
-            // Sets and removes event listeners on DOM elements.
+            // Handles event listeners for hover effects on UI elements.
             if (floatingBottomHoverDiv.current) { 
                 floatingBottomHoverDiv.current.addEventListener("mouseover",mouseOverMain);
                 floatingBottomHoverDiv.current.addEventListener("mouseleave",mouseOutMain);
@@ -287,11 +287,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         }
     },[item,onClose, goFullscreen])
     useEffect(()=> { 
-        // Executes immediately.
+        // Logs to the console when triggered.
         console.log('new sidebar item');
     },[item])
     useEffect(() => { 
-        // Runs on every render of a component due to changes in item, width or height variables.
+        // Renders JSON content and handles image loading.
         if (imgRef.current) { 
             if (imgRef.current.complete) { 
                 setTimeout(()=>{load();},100);
@@ -318,16 +318,16 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         }
     },[item, width, height])
     /**
-     * @description Enables full-screen mode for an application and logs a message to the
-     * console upon entering full-screen mode, indicating that the function has been
-     * triggered successfully.
+     * @description Triggers a transition to full screen mode via the `goFullscreen`
+     * function and logs a message to the console indicating that the application has
+     * entered full screen mode.
      */
     const onFullscreen = () => { 
         goFullscreen();
         console.log('on fullscreen');
     }
     useEffect(() => {
-		// Initializes and disconnects a ResizeObserver.
+		// Sets up event handling for resize observer.
 		const resizeObserver = new ResizeObserver((event) => {
             console.log('Got resize event');
             console.log(event);
@@ -384,8 +384,8 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
   </Popper>
         <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'inherit'}}>
     
-        <div ref={bottomAbsButton} style={{position:'absolute',bottom:'0', right: '0'}}>&nbsp;</div>
-        <div ref={topAbsButton} style={{position:'absolute',top:'0', right: '0'}}>&nbsp;</div>
+        <div ref={bottomAbsButton} style={{position:'absolute',bottom:'0', right: '0', width: '100%',height:'1px'}}>&nbsp;</div>
+        <div ref={topAbsButton} style={{position:'absolute',top:'0', right: '0', width:'100%',height:'1px'}}>&nbsp;</div>
         <TokenRoundall overlaysVisible={overlaysVisible} quantity={item.quantity} />
         <img ref={imgRef} onLoad={load} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible', display:'inline-block'}} /><br style={{clear:'both'}}/>
         <div style={{position:'relative',top:'-30px'}}> 
@@ -404,23 +404,25 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight}) {
         <div style={{position: 'absolute', top: '0px', opacity:portalOpacity, transition: portalOpacity==1?'opacity 1s':""}}>
         {portalHTML}
         </div>
-
-        <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
+        <article class="art-scroll">
+            <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
+            
+            
+            <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em'}}>
+            <PolicyInfo policyID={item.unit.substring(0,56)} />
+            </div>
+            <div style={{position: 'relative', marginBottom: '1em'}}>
+            <b>Owner</b>:<OwnerList unit={item.unit} />
+            </div>
         
+            <div style={{width:'93%',marginTop:'10px'}}>
+            <h2 style={{margin:0}}>Metadata:</h2>
+            <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
+            {metadataContent}
+            </div>
+        </article>
+        </div>
         
-        <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em'}}>
-        <PolicyInfo policyID={item.unit.substring(0,56)} />
-        </div>
-        <div style={{position: 'relative', marginBottom: '1em'}}>
-        <b>Owner</b>:<OwnerList unit={item.unit} />
-        </div>
-    
-        <div style={{width:'93%',marginTop:'10px'}}>
-        <h2 style={{margin:0}}>Metadata:</h2>
-        <div ref={metadataRef} style={{width:'100%', overflowX: 'auto', overflowY: 'auto'}} />
-        {metadataContent}
-        </div>
-        </div>
         
        
 
