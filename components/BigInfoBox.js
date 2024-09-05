@@ -308,6 +308,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
 			resizeObserver.disconnect();
 		};
 	}, []);
+    useEffect(() => { 
+        console.log('got new navbar height:'+navbarHeight);
+        window.dispatchEvent(new Event('resize'));
+    },[navbarHeight])
     /*
     useEffect(() => {
         const minArrows=((<>
