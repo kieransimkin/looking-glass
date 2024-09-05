@@ -133,7 +133,8 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
     const bottomAbsButton = useRef();
     const bodyDiv = useRef();
     let fadeTimer = null;
-    
+    console.log('Biginfo:');
+    console.log(bigInfoOpen);
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
