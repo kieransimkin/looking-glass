@@ -145,9 +145,7 @@ export default  function CIP54Playground(props) {
         setBigInfoOpen(newBigInfoOpen);
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={newBigInfoOpen} />
     },[bigInfoOpen]);
-    if (!dbPolicy) { 
-        return <h1>Policy Not Found</h1>
-    }
+
     useEffect(()=> { 
         const msgHandler = (e) => { 
             if (e.data.request=='mediaslide-open-leftbar') { 
@@ -164,7 +162,9 @@ export default  function CIP54Playground(props) {
         }
     },[])
     
-
+    if (!dbPolicy) { 
+        return <h1>Policy Not Found</h1>
+    }
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         
