@@ -119,9 +119,11 @@ export default  function CIP54Playground(props) {
     const [bigInfoOpen, setBigInfoOpen] = useState(false);
  
     const openBigInfo = (item) => { 
+        console.log('Biginfo open');
         setBigInfoOpen(true);
     }
     const closeBigInfo = (item) => { 
+        console.log('Biginfo closed');
         setBigInfoOpen(false);
     }   
     if (!policy) policy='';
@@ -143,7 +145,7 @@ export default  function CIP54Playground(props) {
         console.log('Render biginfo');
         console.log(i);
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
-    },[bigInfoOpen,navbarHeight]);
+    },[bigInfoOpen]);
     if (!dbPolicy) { 
         return <h1>Policy Not Found</h1>
     }
