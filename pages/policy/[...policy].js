@@ -150,8 +150,10 @@ export default  function CIP54Playground(props) {
         const msgHandler = (e) => { 
             if (e.data.request=='mediaslide-open-leftbar') { 
                 console.log('Got open leftbar message');
+                setBigInfoOpen(true);
             } else if (e.data.request=='mediaslide-close-leftbar') { 
                 console.log('Got close leftbar message');
+                setBigInfoOpen(false);
             }
         } 
         if (window) {
