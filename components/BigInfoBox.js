@@ -105,7 +105,7 @@ transition:'opacity 2s, box-shadow 1s',
       },
     };
   });
-export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, bigInfoOpen:nbInfoOpen=false}) { 
+export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNavbarHeight, bigInfoOpen:nbInfoOpen=false}) { 
     const theme = useTheme();
     const styles=useStyles();
     const [portalHTML, setPortalHTML] = useState(null);
@@ -118,6 +118,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
     const [overlaysVisible, setOverlaysVisible] = useState(false);
     const [viewportWidth, setViewportWidth] = useState(0);
     const [bigInfoOpen, setBigInfoOpen] = useState(nbInfoOpen);
+    const [navbarHeight, setNavbarHeight] = useState(nbNavbarHeight);
     const [viewportHeight, setViewportHeight] = useState(0);
     const [metadataContent, setMetadataContent] = useState(<pre>{JSON.stringify(item.metadata,null,'  ')}</pre>)
     const metadataRef = useRef();
@@ -148,8 +149,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
                 if (window)window.dispatchEvent(new Event('resize'));
             } else if (e.data.request=='mediaslide-open-navbar') { 
                 if (window)window.dispatchEvent(new Event('resize'));
+                setNavbarHeight(e?.data?.navbarHeight || 60);
             } else if (e.data.request=='mediaslide-close-navbar') { 
                 if (window)window.dispatchEvent(new Event('resize'));
+                setNavbarHeight(e?.data?.navbarHeight || 0);
             }
         } 
         if (window) {
