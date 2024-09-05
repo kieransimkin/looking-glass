@@ -142,12 +142,27 @@ export default  function CIP54Playground(props) {
         
     },[policy]);
     const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight, newBigInfoOpen) => { 
-        
+        setBigInfoOpen(newBigInfoOpen);
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={newBigInfoOpen} />
     },[bigInfoOpen]);
     if (!dbPolicy) { 
         return <h1>Policy Not Found</h1>
     }
+    useEffect(()=> { 
+        const msgHandler = (e) => { 
+            if (e.data.request=='mediaslide-open-leftbar') { 
+                console.log('Got open leftbar message');
+            } else if (e.data.request=='mediaslide-close-leftbar') { 
+                console.log('Got close leftbar message');
+            }
+        } 
+        if (window) {
+            window.addEventListener('message',msgHandler, true);
+        }
+        return ()=> { 
+            window.removeEventListener('message',msgHandler, true);
+        }
+    },[])
     
 
     const loadMoreData = ({page},offset=1) => { 
