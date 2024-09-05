@@ -354,7 +354,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
             </div>
             </div>
   </Popper>
-        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'inherit'}}>
+        <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'inherit', alignItems:'stretch'}}>
     
         <div ref={bottomAbsButton} style={{position:'absolute',bottom:'0', right: '0', width: '100%',height:'1px'}}>&nbsp;</div>
         <div ref={topAbsButton} style={{position:'absolute',top:'0', right: '0', width:'100%',height:'1px'}}>&nbsp;</div>
