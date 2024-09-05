@@ -311,6 +311,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
     },[item]);
     */
     // Todo format the initial metadata JSON better for SEO reasons
+    console.log('Biginfo inside:'+bigInfoOpen);
     return <>
 
   <Popper open={bigInfoOpen} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
