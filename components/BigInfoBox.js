@@ -140,9 +140,16 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
             if (e.data.request=='mediaslide-open-leftbar') { 
                 console.log('Got open leftbar message');
                 setBigInfoOpen(true);
+                if (window)window.dispatchEvent(new Event('resize'));
             } else if (e.data.request=='mediaslide-close-leftbar') { 
                 console.log('Got close leftbar message');
+                
                 setBigInfoOpen(false);
+                if (window)window.dispatchEvent(new Event('resize'));
+            } else if (e.data.request=='mediaslide-open-navbar') { 
+                if (window)window.dispatchEvent(new Event('resize'));
+            } else if (e.data.request=='mediaslide-close-navbar') { 
+                if (window)window.dispatchEvent(new Event('resize'));
             }
         } 
         if (window) {
@@ -356,7 +363,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
   </Popper>
         <div ref={bodyDiv} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'inherit', alignItems:'stretch'}}>
     
-        <div ref={bottomAbsButton} style={{position:'absolute',bottom:'0', right: '0', width: '100%',height:'1px'}}>&nbsp;</div>
+        <div ref={bottomAbsButton} style={{position:'absolute',bottom:'2em', right: '0', width: '100%',height:'1px'}}>&nbsp;</div>
         <div ref={topAbsButton} style={{position:'absolute',top:'0', right: '0', width:'100%',height:'1px'}}>&nbsp;</div>
         <TokenRoundall overlaysVisible={overlaysVisible} quantity={item.quantity} />
         <img ref={imgRef} onLoad={load} src={item.thumb} style={{maxWidth:'100%', transition: 'none', overflow: 'visible', display:'inline-block'}} /><br style={{clear:'both'}}/>
