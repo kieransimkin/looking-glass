@@ -150,9 +150,11 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
             } else if (e.data.request=='mediaslide-open-navbar') { 
                 if (window)window.dispatchEvent(new Event('resize'));
                 setNavbarHeight(e?.data?.navbarHeight || 60);
+                console.log('open navbar event');
             } else if (e.data.request=='mediaslide-close-navbar') { 
                 if (window)window.dispatchEvent(new Event('resize'));
                 setNavbarHeight(e?.data?.navbarHeight || 0);
+                console.log('Close navbar event');
             }
         } 
         if (window) {
@@ -162,8 +164,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
             window.removeEventListener('message',msgHandler, true);
         }
     },[])
-    console.log('Biginfo:');
-    console.log(bigInfoOpen);
+    
 
     const readyCallback = () => { 
         setPortalOpacity(1);
@@ -345,7 +346,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
     },[item]);
     */
     // Todo format the initial metadata JSON better for SEO reasons
-    console.log('Biginfo inside:'+bigInfoOpen);
+    
     return <>
 
   <Popper open={bigInfoOpen} id="biginfo-box-topbutton" placement='top-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
@@ -387,13 +388,13 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
         {portalHTML}
         </div>
         <article className={styles["art-scroll"]+' '+styles['mediaslide-leftbar']}>
-            <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginLeft:'0.4em', marginBlock: 0}}>{item.title}</h1>
+            <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginBlock: 0, textAlign: 'center'}}>{item.title}</h1>
             
             
-            <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em'}}>
+            <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em', textAlign: 'center'}}>
             <PolicyInfo policyID={item.unit.substring(0,56)} />
             </div>
-            <div style={{position: 'relative', marginBottom: '1em'}}>
+            <div style={{position: 'relative', marginBottom: '1em', textAlign:'center'}}>
             <b>Owner</b>:<OwnerList unit={item.unit} />
             </div>
         
