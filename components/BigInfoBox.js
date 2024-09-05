@@ -153,7 +153,13 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
                 console.log('open navbar event');
             } else if (e.data.request=='mediaslide-close-navbar') { 
                 if (window)window.dispatchEvent(new Event('resize'));
-                setNavbarHeight(e?.data?.navbarHeight || 0);
+                if ( typeof e.data.navbarHeight != 'undefined' ) { 
+                    
+                    setNavbarHeight(e?.data?.navbarHeight);
+                } else { 
+                    setNavbarHeight(0);
+                }
+
                 console.log('Close navbar event');
             }
         } 
