@@ -141,10 +141,11 @@ export default  function CIP54Playground(props) {
         });
         
     },[policy]);
-    const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight) => { 
+    const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight, newBigInfoOpen) => { 
         console.log('Render biginfo');
         console.log(i);
-        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
+        console.log([newBigInfoOpen,bigInfoOpen])
+        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={newBigInfoOpen} />
     },[bigInfoOpen]);
     if (!dbPolicy) { 
         return <h1>Policy Not Found</h1>
