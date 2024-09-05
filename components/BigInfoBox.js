@@ -105,7 +105,7 @@ transition:'opacity 2s, box-shadow 1s',
       },
     };
   });
-export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, bigInfoOpen=false}) { 
+export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, bigInfoOpen:nbInfoOpen=false}) { 
     const theme = useTheme();
     const styles=useStyles();
     const [portalHTML, setPortalHTML] = useState(null);
@@ -117,6 +117,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
     const [closeIconVisible, setCloseIconVisible] = useState(false);
     const [overlaysVisible, setOverlaysVisible] = useState(false);
     const [viewportWidth, setViewportWidth] = useState(0);
+    const [bigInfoOpen, setBigInfoOpen] = useState(nbInfoOpen);
     const [viewportHeight, setViewportHeight] = useState(0);
     const [metadataContent, setMetadataContent] = useState(<pre>{JSON.stringify(item.metadata,null,'  ')}</pre>)
     const metadataRef = useRef();
@@ -133,8 +134,27 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight, big
     const bottomAbsButton = useRef();
     const bodyDiv = useRef();
     let fadeTimer = null;
+    
+    useEffect(()=> { 
+        const msgHandler = (e) => { 
+            if (e.data.request=='mediaslide-open-leftbar') { 
+                console.log('Got open leftbar message');
+                setBigInfoOpen(true);
+            } else if (e.data.request=='mediaslide-close-leftbar') { 
+                console.log('Got close leftbar message');
+                setBigInfoOpen(false);
+            }
+        } 
+        if (window) {
+            window.addEventListener('message',msgHandler, true);
+        }
+        return ()=> { 
+            window.removeEventListener('message',msgHandler, true);
+        }
+    },[])
     console.log('Biginfo:');
     console.log(bigInfoOpen);
+
     const readyCallback = () => { 
         setPortalOpacity(1);
     }       
