@@ -525,3 +525,7 @@ h3 {
   display: inline-block;
   margin-block-start: 0.5em;
 }
+#biginfo-box-topbutton,
+#biginfo-box-bottombutton { 
+  transition: transform 1s;
+}

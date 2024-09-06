@@ -172,9 +172,29 @@ export default  function CIP54Playground(props) {
         
     },[address])
 
-    const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight) => { 
-        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
-    },[bigInfoOpen]);
+    
+    const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight, newBigInfoOpen) => { 
+        setBigInfoOpen(newBigInfoOpen);
+        return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={newBigInfoOpen} />
+    },[]);
+
+    useEffect(()=> { 
+        const msgHandler = (e) => { 
+            if (e.data.request=='mediaslide-open-leftbar') { 
+                console.log('Got open leftbar message');
+                setBigInfoOpen(true);
+            } else if (e.data.request=='mediaslide-close-leftbar') { 
+                console.log('Got close leftbar message');
+                setBigInfoOpen(false);
+            }
+        } 
+        if (window) {
+            window.addEventListener('message',msgHandler, true);
+        }
+        return ()=> { 
+            window.removeEventListener('message',msgHandler, true);
+        }
+    },[])
 
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
