@@ -181,7 +181,7 @@ export default  function CIP54Playground(props) {
         getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+offset)).then((d)=>{
             d.json().then((j) => { 
                 j.tokens = j.tokens.filter((t) => { 
-                    if (!t?.metadata?.image && !t.metadata.files) return false;
+                    if (!t?.metadata?.image && !t?.metadata?.files) return false;
                     return t;
                 })
                 let newArray;
