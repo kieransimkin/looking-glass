@@ -63,8 +63,8 @@ export const getServerSideProps = async (context) => {
         await redisClient.lPush('lg:policyHitLog:'+result.policyID, JSON.stringify(Date.now()))
         if (tokens) { 
             tokens = tokens.filter((t) => { 
-                if (!t?.metadata?.image && !t?.metadata?.files) return false;
-                return t;
+                if (i?.unit.length==56) return false;
+                return true;
             })
             if (!result.assetCount) { 
                 await setPolicyAssetCount(result.policyID, tokens.length);
@@ -139,8 +139,9 @@ export default  function CIP54Playground(props) {
         getData('/policyTokens?policy='+policy).then((d)=>{
             d.json().then((j) => { 
                 j.tokens = j.tokens.filter((t)=> { 
+                    if (t?.unit.length==56) return false;
                     if (!t?.metadata?.image && !t?.metadata?.files) return false;
-                    return t;
+                    return true;
                 })
                 setGallery(j);
         
@@ -181,8 +182,9 @@ export default  function CIP54Playground(props) {
         getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+offset)).then((d)=>{
             d.json().then((j) => { 
                 j.tokens = j.tokens.filter((t) => { 
+                    if (t?.unit.length==56) return false;
                     if (!t?.metadata?.image && !t?.metadata?.files) return false;
-                    return t;
+                    return true;
                 })
                 let newArray;
                 if (offset>0) { 
