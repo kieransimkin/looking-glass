@@ -62,6 +62,10 @@ export const getServerSideProps = async (context) => {
         await incrementCacheItem('policyRecentHits:'+result.policyID, 3600);
         await redisClient.lPush('lg:policyHitLog:'+result.policyID, JSON.stringify(Date.now()))
         if (tokens) { 
+            tokens = tokens.filter((t) => { 
+                if (!t?.metadata?.image && !t.metadata.files) return false;
+                return t;
+            })
             if (!result.assetCount) { 
                 await setPolicyAssetCount(result.policyID, tokens.length);
             }
@@ -134,6 +138,10 @@ export default  function CIP54Playground(props) {
         
         getData('/policyTokens?policy='+policy).then((d)=>{
             d.json().then((j) => { 
+                j.tokens = j.tokens.filter((t)=> { 
+                    if (!t?.metadata?.image && !t.metadata.files) return false;
+                    return t;
+                })
                 setGallery(j);
         
             });
@@ -172,6 +180,10 @@ export default  function CIP54Playground(props) {
         
         getData('/policyTokens?policy='+policy+'&page='+(parseInt(page)+offset)).then((d)=>{
             d.json().then((j) => { 
+                j.tokens = j.tokens.filter((t) => { 
+                    if (!t?.metadata?.image && !t.metadata.files) return false;
+                    return t;
+                })
                 let newArray;
                 if (offset>0) { 
                     newArray = [...gallery.tokens];
@@ -240,18 +252,33 @@ export default  function CIP54Playground(props) {
     let image = "https://clg.wtf"+props.policyProfileThumb;
     let policyProfileImage = image;
     let initialSelection = gallery?gallery[0]:null;
+    
+    
+    if (props.token) { 
+        title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
+        url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);
+        image = "https://clg.wtf"+props.token.thumb;
+        initialSelection=props.token;
+    }
+    if (!description && Array.isArray(initialSelection?.metadata?.description)) { 
+        description = initialSelection?.metadata?.description.join('');
+    }
+    if (!description && typeof initialSelection?.metadata?.description == 'string') { 
+        description = initialSelection?.metadata?.description
+    }
+    if (!description && Array.isArray(initialSelection?.metadata['Description'])) { 
+        description = initialSelection?.metadata['Description'].join('');
+    }
+    if (!description && typeof initialSelection?.metadata['Description'] == 'string') { 
+        description = initialSelection?.metadata['Description']
+    }
+    
     if (!description || description.length<1) { 
         if (props.token) { 
             description = props.token.title+' is a token, part of an NFT collection called '+props.policy.name+', minted on Cardano';
         } else { 
             description=props.policy.name+' is an NFT collection, minted on Cardano'
         }
-    }
-    if (props.token) { 
-        title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
-        url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);
-        image = "https://clg.wtf"+props.token.thumb;
-        initialSelection=props.token;
     }
     
     let newGallery = null;
