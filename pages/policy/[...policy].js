@@ -63,7 +63,7 @@ export const getServerSideProps = async (context) => {
         await redisClient.lPush('lg:policyHitLog:'+result.policyID, JSON.stringify(Date.now()))
         if (tokens) { 
             tokens = tokens.filter((t) => { 
-                if (i?.unit.length==56) return false;
+                if (t?.unit.length==56) return false;
                 return true;
             })
             if (!result.assetCount) { 
