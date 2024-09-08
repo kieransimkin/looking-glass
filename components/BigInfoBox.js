@@ -400,7 +400,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
         {portalHTML}
         </div>
         <article className={styles["art-scroll"]+' '+styles['mediaslide-leftbar']}>
-            <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginBlock: 0, textAlign: 'center'}}>{item.title}</h1>
+            <h1 style={{wordBreak: 'break-word', display: 'inline-block', marginBlock: 0, textAlign: 'center', width:'100%'}}>{item.title}</h1>
             
             
             <div style={{position: 'relative', marginBottom: '0em', marginTop:'0em', paddingTop:'0em', textAlign: 'center'}}>
