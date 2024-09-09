@@ -29,7 +29,7 @@ const getTokenLinkUrl = (slug, t) => {
         return  '/policy/'+slug;
     }
     if (isHexadecimal(t)) { 
-        if (Utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(t)))) == t && !isHexadecimal(hexToUtf8(token))) { 
+        if (utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(t)))) == t && !isHexadecimal(hexToUtf8(token))) { 
             return '/policy/'+slug+'.'+encodeURIComponent(hexToUtf8(t));
         } else { 
             return '/policy/'+slug+'.'+t;
@@ -60,7 +60,7 @@ export const getServerSideProps = async (context) => {
     let props = {};
     if (result) { 
         if (token && token.length>0 && !isHexadecimal(token)) { 
-            token=Utf8ToHex(token);
+            token=utf8ToHex(token);
         } else if (token && token.length>0 && utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(token)))) == token && !isHexadecimal(hexToUtf8(token))) { 
             return {
                 redirect: {
