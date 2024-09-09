@@ -282,7 +282,7 @@ export default  function CIP54Playground(props) {
         console.log(item);
         
         router.push({
-            pathname: '/wallet/'+address+'.'+item.unit,
+            pathname: '/wallet/'+props.wallet.slug+'.'+item.unit,
             query: {  },
             hash: ' '
         }, undefined, {shallow:true})

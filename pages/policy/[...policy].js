@@ -160,6 +160,7 @@ export default  function CIP54Playground(props) {
     const [gallery, setGallery] = useState(props?.gallery);
     const [mediaSlideLoading, setMediaSlideLoading]=useState(false);
     const [bigInfoOpen, setBigInfoOpen] = useState(false);
+    const [currentSelection, setCurrentSelection] = useState(props.token);
  
     const openBigInfo = (item) => { 
         console.log('Biginfo open');
@@ -192,7 +193,7 @@ export default  function CIP54Playground(props) {
     const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight, newBigInfoOpen) => { 
         setBigInfoOpen(newBigInfoOpen);
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={newBigInfoOpen} />
-    },[]);
+    },[bigInfoOpen, currentSelection]);
 
     useEffect(()=> { 
         const msgHandler = (e) => { 
@@ -333,6 +334,7 @@ export default  function CIP54Playground(props) {
 
     const selectionChange = (item) => { 
         //window.postMessage({request:'showLoading'},'*');
+        setCurrentSelection(item);
         router.push({
             pathname: getTokenLinkUrl(props.policy.slug, item.unit.substr(56)),
             query: {  },
