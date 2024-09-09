@@ -6,9 +6,8 @@ import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
-import { getPolicy, getPolicyByID } from "../utils/database.mjs";
 import { isValidAddress, getStakeFromAny } from "libcip54";
-import { getWallet, getPolicy } from "../utils/database.mjs";
+import { getWallet, getPolicy, getPolicyByID } from "../utils/database.mjs";
 
 // Generates `/posts/1` and `/posts/2`
 function calcPath(relativePath) {
