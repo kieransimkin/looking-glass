@@ -378,6 +378,7 @@ export default  function CIP54Playground(props) {
           ]
         }
     }
+    console.log('Redrawing policy page');
     return (
         <>
             <Head>
