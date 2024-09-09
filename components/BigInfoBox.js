@@ -156,6 +156,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
                 }
                 
                 console.log('open navbar event');
+                console.log(e);
             } else if (e.data.request=='mediaslide-close-navbar') { 
                 if (window)window.dispatchEvent(new Event('scroll'));
                 if ( typeof e.data.navbarHeight != 'undefined' ) { 
