@@ -247,11 +247,9 @@ export {
 	dataURItoString,
 	ucfirst,
 	ApiResponse,
-    hexToAscii,
 	getPOSTBody,
 	containsSpecialPolicy,
   unicodeToBase64,
   base64ToUnicode,
-  validatePolicyID,
-  asciiToHex
+  validatePolicyID
 }
