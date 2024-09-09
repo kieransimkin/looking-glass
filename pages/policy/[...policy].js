@@ -29,7 +29,7 @@ const getTokenLinkUrl = (slug, t) => {
         return  '/policy/'+slug;
     }
     if (isHexadecimal(t)) { 
-        if (utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(t)))) == t && !isHexadecimal(hexToUtf8(token))) { 
+        if (utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(t)))) == t && !isHexadecimal(hexToUtf8(t))) { 
             return '/policy/'+slug+'.'+encodeURIComponent(hexToUtf8(t));
         } else { 
             return '/policy/'+slug+'.'+t;
