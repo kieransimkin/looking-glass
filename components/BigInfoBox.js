@@ -1,5 +1,6 @@
 import * as JsonTree from 'json-tree-viewer'
-import { Popper, useTheme } from '@material-ui/core';
+import { useTheme } from '@material-ui/core';
+import { Popper } from '@mui/material';
 import { getData, postData } from '../utils/Api';
 import AdaHandle from './AdaHandle';
 import TokenRoundall from '../components/TokenRoundall';
@@ -10,6 +11,7 @@ import PolicyInfo from './PolicyInfo';
 import { red } from '@material-ui/core/colors';
 import IconRoundall from './IconRoundall';
 import OwnerList from './OwnerList';
+
 
 
 const useStyles = makeStyles(theme => { 
@@ -105,18 +107,21 @@ transition:'opacity 2s, box-shadow 1s',
       },
     };
   });
+
 export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNavbarHeight, bigInfoOpen:nbInfoOpen=false}) { 
     const theme = useTheme();
     const styles=useStyles();
     const [portalHTML, setPortalHTML] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [minArrows, setMinArrows] = useState(null);
+    const [popperRef, setPopperRef] = useState(null);
     const [portalOpacity, setPortalOpacity] = useState(0);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
     const [closeIconVisible, setCloseIconVisible] = useState(false);
     const [overlaysVisible, setOverlaysVisible] = useState(false);
     const [viewportWidth, setViewportWidth] = useState(0);
+    const [anchorEl, setAnchorEl] = useState(null);
     const [bigInfoOpen, setBigInfoOpen] = useState(nbInfoOpen);
     const [navbarHeight, setNavbarHeight] = useState(nbNavbarHeight);
     const [viewportHeight, setViewportHeight] = useState(0);
@@ -130,15 +135,15 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
     const floatingFullscreenButton = useRef();
     const floatingBottomHoverDiv = useRef();
     const topButtonDiv = useRef();
-    const bottomButtonDiv = useRef();
-    const topAbsButton = useRef();
-    const bottomAbsButton = useRef();
+    const bottomButtonDiv = useRef(null);
+    const topAbsButton = useRef(null);
+    const bottomAbsButton = useRef(null);
     const bodyDiv = useRef();
     let fadeTimer = null;
-    
+ 
     useEffect(()=> { 
         const msgHandler = (e) => { 
-            console.log(containerBottomRef, containerRef);
+
             if (e.data.request=='mediaslide-open-leftbar') { 
                 console.log('Got open leftbar message');
                 setBigInfoOpen(true);
@@ -206,7 +211,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
 
     }
     const mouseOut = (e) => { 
-            console.log()
+
             setCloseIconVisible(false);
         
     }
@@ -320,13 +325,15 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
     }
     useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
-            console.log('Got resize event');
-            console.log(event);
+   
 			setViewportWidth(event[0].contentBoxSize[0].inlineSize);
 			setViewportHeight(event[0].contentBoxSize[0].blockSize);
 			
 		});
 		resizeObserver.observe(bodyDiv.current);
+        if (!anchorEl && topAbsButton.current) { 
+            setAnchorEl(topAbsButton.current);
+        }
 
 		return () => {
 			resizeObserver.disconnect();
@@ -359,10 +366,10 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
     },[item]);
     */
     // Todo format the initial metadata JSON better for SEO reasons
-    
-    return <>
 
-  <Popper foo={navbarHeight} ref={containerRef} popperRef={containerBottomRef} itemRefopen={bigInfoOpen} id="biginfo-box-topbutton" placement='bottom-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
+    return <>
+    
+  <Popper foo={navbarHeight} ref={containerRef} open={bigInfoOpen} id="biginfo-box-topbutton" placement='bottom-end' anchorEl={topAbsButton?.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
             <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:navbarHeight-15, right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',right:'0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
@@ -370,7 +377,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
             </div>
             </div>
   </Popper>
-  <Popper foo={navbarHeight} open={bigInfoOpen} id="biginfo-box-bottombutton" placement='bottom-end' anchorEl={bottomAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
+  <Popper foo={navbarHeight} open={bigInfoOpen} id="biginfo-box-bottombutton" placement='bottom-end' anchorEl={bottomAbsButton?.current || null} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
         <div ref={floatingBottomDiv} style={{zIndex: '1000',position: 'relative',bottom:'-50px', right:'0', width:'50px', height:'200px', cursor: 'pointer'}}>&nbsp;</div>
         <div ref={bottomButtonDiv} onClick={onClose} className={styles['mediaslideBottomCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
         <div style={{position:'relative',right:'0.2em',bottom:'0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
