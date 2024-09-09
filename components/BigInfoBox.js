@@ -138,6 +138,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
     
     useEffect(()=> { 
         const msgHandler = (e) => { 
+            console.log(containerBottomRef, containerRef);
             if (e.data.request=='mediaslide-open-leftbar') { 
                 console.log('Got open leftbar message');
                 setBigInfoOpen(true);
@@ -361,7 +362,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
     
     return <>
 
-  <Popper foo={navbarHeight} open={bigInfoOpen} id="biginfo-box-topbutton" placement='bottom-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
+  <Popper foo={navbarHeight} ref={containerRef} popperRef={containerBottomRef} itemRefopen={bigInfoOpen} id="biginfo-box-topbutton" placement='bottom-end' anchorEl={topAbsButton.current} keepMounted modifiers={[{name:'eventListeners',options:{scroll: true, resize: true}}]}>
             <div ref={floatingDiv} style={{zIndex: '1000',position: 'relative',top:navbarHeight-15, right:'0', width:'50px', height:'300px', cursor: 'pointer'}}>&nbsp;</div>
             <div ref={topButtonDiv} onClick={onClose} className={styles['mediaslideCloseIcon']} style={{ opacity:closeIconVisible?'1.0':'0.2'}}>
             <div style={{position:'relative',right:'0.2em',top:'-0.1em', fontSize:'1.5em' , webkitTransform: 'scaleX(-1)', transform: 'scaleX(-1)'}}>
