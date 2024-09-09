@@ -113,6 +113,11 @@ export const getServerSideProps = async (context) => {
                         failed=true;
                         //redisClient.publish('requestThumb',JSON.stringify({unit,size,mode, url: req.url}));
                     }
+                    const tinyName = 'tokenThumb:'+tokResult[c].unit+':64:dark';
+                    let tinyURL;
+                    if ((tinyURL = getDataURL(tinyName,'jpg'))) {
+                        tokResult[c].tiny = tinyURL;
+                    }
                 }
                 if (token && tokResult[c].unit==token) { 
                     props.token=tokResult[c];

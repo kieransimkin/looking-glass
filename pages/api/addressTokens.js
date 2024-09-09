@@ -45,6 +45,11 @@ export default async function Browse(req, res) {
             if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                 r.thumb = thumbURL;
             }
+            const tinyName = 'tokenThumb:'+r.unit+':64:dark';
+            let tinyURL;
+            if ((tinyURL = getDataURL(tinyName,'jpg'))) {
+                r.tiny = tinyURL;
+            }
         }
     }
     if (wallet && !wallet?.profileUnit && uncached) { 

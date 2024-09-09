@@ -206,6 +206,11 @@ export const getServerSideProps = async (context) => {
     if ((thumbURL = getDataURL(thumbName,'jpg'))) {
         tokenData.thumb = thumbURL;
     }   
+    const tinyName = 'tokenThumb:'+tokenData.unit+':64:dark';
+    let tinyURL;
+    if ((tinyURL = getDataURL(tinyName,'jpg'))) {
+      tokenData.tiny = tinyURL;
+    }
     policy.policyProfile=tokenData;
   }
   

@@ -1,7 +1,8 @@
 /* eslint-disable react/display-name */
-import { useRouter } from 'next/router';
+import { useRouter} from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head'
+
 import { getData, postData } from '../utils/Api';
 import BigInfoBox from '../components/BigInfoBox';
 import { getDataURL } from '../utils/DataStore';
@@ -13,7 +14,7 @@ import PolicyQuickBrowse from '../components/PolicyQuickBrowse';
 import { Card } from '@material-ui/core';
 import { Canvas, extend, useFrame, useLoader, useThree } from '@react-three/fiber'
 import { DoubleSide, FrontSide } from 'three';
-import {forwardRef} from 'react'
+import {forwardRef, useCallback} from 'react'
 import Ocean from '../3d/ocean'
 import { Stars } from '@react-three/drei';
 import { Html } from '@react-three/drei'
@@ -72,6 +73,11 @@ export const getServerSideProps = async (context) => {
       if ((thumbURL = getDataURL(thumbName,'jpg')) && (process.env.NODE_ENV=='production')) {
           tokenData.thumb = thumbURL;
       }   
+      const tinyName = 'tokenThumb:'+policyProfile+':64:dark';
+      let tinyURL;
+      if ((tinyURL = getDataURL(tinyName,'jpg')) && (process.env.NODE_ENV=='production')) {
+        tokenData.tiny = tinyURL;
+      }
       policy.policyProfile=tokenData;
     }
     
@@ -211,7 +217,7 @@ Common3d.StartTime();
     const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight) => { 
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={bigInfoOpen} />
     },[bigInfoOpen]);
-    
+
     const loadMoreData = ({page},offset=1) => { 
         if (mediaSlideLoading) return;
         

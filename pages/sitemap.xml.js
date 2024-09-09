@@ -13,12 +13,15 @@ export const getServerSideProps = async ({res}) => {
         </url>
         `);   
     }
+    pushURL(`https://clg.wtf/`);
     policyKeys.forEach(element => {
         pushURL(`https://clg.wtf/policy/${element}`)
     });
     walletKeys.forEach(element => { 
         pushURL(`https://clg.wtf/wallet/${element}`);
     })
+    pushURL(`https://clg.wtf/stats`);
+    pushURL(`https://clg.wtf/live`);
     let xml_content = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',

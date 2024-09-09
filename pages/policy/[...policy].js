@@ -21,6 +21,24 @@ import LoadingTicker from '../../components/LoadingTicker';
 import { getDataURL } from '../../utils/DataStore';
 import OwnerList from '../../components/OwnerList';
 import {ProfileObject, WithContext} from 'schema-dts'
+import validator from 'validator';
+import { asciiToHex, hexToAscii } from '../../utils/Helpers.mjs';
+const { isIn, isHexadecimal } = validator.default;
+const getTokenLinkUrl = (slug, t) => { 
+    if (!t || t.length<1) { 
+        return  '/policy/'+slug;
+    }
+    if (isHexadecimal(t)) { 
+        if (asciiToHex(decodeURIComponent(encodeURIComponent(hexToAscii(t)))) == t) { 
+            return '/policy/'+slug+'.'+encodeURIComponent(hexToAscii(t));
+        } else { 
+            return '/policy/'+slug+'.'+t;
+        }
+    } else { 
+        return '/policy/'+slug+'.'+encodeURIComponent(t);
+    }
+    
+}
 export const getServerSideProps = async (context) => { 
     const redisClient = await getClient();
     let policy = context.query.policy[0];
@@ -38,13 +56,24 @@ export const getServerSideProps = async (context) => {
         result = await getPolicy(policy);
     }
     console.log(result);
+
     let props = {};
     if (result) { 
+        if (token && token.length>0 && !isHexadecimal(token)) { 
+            token=asciiToHex(token);
+        } else if (token && token.length>0 && asciiToHex(decodeURIComponent(encodeURIComponent(hexToAscii(token)))) == token) { 
+            return {
+                redirect: {
+                    destination: getTokenLinkUrl(result.slug,token),
+                    statusCode: 301
+                }
+            }
+        }
         if (result.slug != policy && context.query.policy[0]!=result.slug) { 
             return {
                 redirect: {
-                    destination: '/policy/'+result.slug+(token?'.'+token:''),
-                    permanent: true
+                    destination: getTokenLinkUrl(result.slug,token),
+                    statusCode: 301
                 }
             }
         }
@@ -55,7 +84,12 @@ export const getServerSideProps = async (context) => {
             let thumbURL;
             if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                 props.policyProfileThumb = thumbURL;
-            }   
+            }
+            const tinyName = 'tokenThumb:'+props.policyProfile+':64:dark';
+            let tinyURL;
+            if ((tinyURL = getDataURL(tinyName,'jpg'))) {
+                props.policyProfileTiny = tinyURL;
+            }
         }
         let tokens = await checkCacheItem('getTokensFromPolicy:'+result.policyID);
         await incrementCacheItem('policyHits:'+result.policyID);
@@ -96,7 +130,12 @@ export const getServerSideProps = async (context) => {
                     let thumbURL;
                     if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                         tokResult[c].thumb = thumbURL;
-                    }   
+                    }
+                    const tinyName = 'tokenThumb:'+tokResult[c].unit+':64:dark';
+                    let tinyURL;
+                    if ((tinyURL = getDataURL(tinyName,'jpg'))) {   
+                        tokResult[c].tiny = tinyURL;
+                    }
                 }
                 if (token && tokResult[c].unit==props.policy.policyID+token) { 
                     props.token=tokResult[c];
@@ -243,6 +282,7 @@ export default  function CIP54Playground(props) {
             return <li style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={item.thumb} width={ts} /><br />{item.title}</a></Link></li>
         }
     }
+  
     
     /*
     
@@ -258,7 +298,7 @@ export default  function CIP54Playground(props) {
     
     if (props.token) { 
         title = props.token.title + ' - ' + props.policy.name + ' -  Cardano Looking Glass - clg.wtf';
-        url = "https://clg.wtf/policy/"+props.policy.slug+'.'+props.token.unit.substr(56);
+        url = "https://clg.wtf"+getTokenLinkUrl(props.policy.slug,props.token.unit.substr(56));
         image = "https://clg.wtf"+props.token.thumb;
         initialSelection=props.token;
     }
@@ -286,7 +326,7 @@ export default  function CIP54Playground(props) {
     let newGallery = null;
     if (gallery) {
         newGallery=gallery.tokens.map((i)=>{
-            i.linkUrl='/policy/'+props.policy.slug+'.'+i.unit.substr(56);
+            i.linkUrl=getTokenLinkUrl(props.policy.slug,i.unit.substr(56));
             return i;
         })
     }
@@ -294,7 +334,7 @@ export default  function CIP54Playground(props) {
     const selectionChange = (item) => { 
         //window.postMessage({request:'showLoading'},'*');
         router.push({
-            pathname: '/policy/'+props.policy.slug+'.'+item.unit.substr(56),
+            pathname: getTokenLinkUrl(props.policy.slug, item.unit.substr(56)),
             query: {  },
             hash:' '
         }, undefined, {shallow:true})

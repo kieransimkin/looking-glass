@@ -6,9 +6,9 @@ import { getData} from '../utils/Api'
 import { CircularProgress } from "@material-ui/core";
 import punycode from 'punycode'
 import { validatePolicyID, asciiToHex } from "../utils/Helpers.mjs";
-import { getPolicyByID } from "../utils/database.mjs";
+import { getPolicy, getPolicyByID } from "../utils/database.mjs";
 import { isValidAddress, getStakeFromAny } from "libcip54";
-import { getWallet } from "../utils/database.mjs";
+import { getWallet, getPolicy } from "../utils/database.mjs";
 
 // Generates `/posts/1` and `/posts/2`
 function calcPath(relativePath) {
@@ -33,7 +33,7 @@ export const getServerSideProps = async (context) => {
     }
     } catch (e) { }
     try { 
-        
+    
     if (validatePolicyID(filename)) { 
         let policy = null;
         try { 
@@ -61,6 +61,24 @@ export const getServerSideProps = async (context) => {
                 destination: '/wallet/'+encodeURIComponent(filename)
             }
         }
+    } else { 
+        const wallet = await getWallet(filename);
+        if (wallet) { 
+            return {
+                redirect: {
+                    destination: '/wallet/'+wallet.slug
+                }
+            }   
+        }
+        const project = await getPolicy(filename);
+        if (project) { 
+            return {
+                redirect: { 
+                    destination: '/policy/'+project.slug
+                }
+            }
+        }
+
     }
     } catch (e) { 
 console.log(e);
@@ -98,6 +116,7 @@ export default function Search(params) {
             getData('/getTokenHolders?unit=f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a'+Buffer.from(punycoded).toString('hex')).then((a)=>{
                 a.json().then((j) => { 
                     if (j.length && j[0]?.address) { 
+                        console.log('Got adahandle search which is being handled in browser')
                         getWallet(getStakeFromAny(j[0].address)).then((w) => { 
                             router.push({pathname:'/wallet/'+w.slug})    
                         })
@@ -105,11 +124,23 @@ export default function Search(params) {
                     }
                 });
             });
+        } else { 
+            getData('/getWallet?id='+search).then((a) => { 
+                a.json().then((j)=>{ 
+                    console.log(j);
+                    getData('/getWallet?id='+search).then((a) => { 
+                        a.json().then((j)=>{ 
+
+                        });
+                    });
+                });
+            });
+
         }
         
     },[search])
     return <div style={{textAlign:'center', position:'absolute', left:'50%', transform:'translateX(-50%)'}}>
 
-                <h1>Loading...</h1><CircularProgress /> 
+                <h3>Loading...</h3><CircularProgress /> 
                 </div>
 }

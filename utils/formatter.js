@@ -25,7 +25,14 @@ export const getTokenData = async function (token, throwOnCacheMiss=false) {
         } else { 
             tokenData.thumb = '/api/getTokenThumb?unit='+token.unit;
         }
-        tokenData.tiny = '/api/getTokenThumb?unit='+token.unit+'&size=64';
+        const tinyName = 'tokenThumb:'+token.unit+':64:dark';
+        let tinyURL;
+        if ((tinyURL = getDataURL(tinyName,'jpg'))) {
+            tokenData.tiny = tinyURL;
+        } else { 
+            tokenData.tiny = '/api/getTokenThumb?unit='+token.unit+'&size=64';
+        }
+        
         tokenData.full = '/api/getTokenFull?unit='+token.unit;
         tokenData.video = '/api/getTokenVideo?unit='+token.unit;
         tokenData.files = token.metadata?.files;

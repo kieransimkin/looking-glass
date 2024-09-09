@@ -38,6 +38,11 @@ export default async function Browse(req, res) {
             if ((thumbURL = getDataURL(thumbName,'jpg'))) {
                 r.thumb = thumbURL;
             }
+            const tinyName = 'tokenThumb:'+r.unit+':64:dark';
+            let tinyURL;
+            if ((tinyURL = getDataURL(tinyName,'jpg'))) {
+                r.tiny = tinyURL;
+            }
         }
     }
     res.status(200).json({tokens:result, page, start, end, totalPages, perPage });
