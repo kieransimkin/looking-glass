@@ -194,7 +194,7 @@ export default  function CIP54Playground(props) {
         setBigInfoOpen(newBigInfoOpen);
         console.log('Called render biginfo');
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={newBigInfoOpen} />
-    },[true]);
+    },[bigInfoOpen, currentSelection]);
 
     useEffect(()=> { 
         const msgHandler = (e) => { 
