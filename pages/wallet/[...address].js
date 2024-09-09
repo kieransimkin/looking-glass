@@ -35,7 +35,7 @@ export const getServerSideProps = async (context) => {
         result = await getWallet(wallet);
     }
     
-    let props = {address:wallet};
+    let props = {address:result.stake};
     
     if (result) { 
         
@@ -269,12 +269,12 @@ export default  function CIP54Playground(props) {
     if (props.token){ 
         description=props.token.title+' is a token from the '+props.policy.name+' NFT collection, minted on Cardano. Here it is found in the wallet '+props.wallet.name;
     }
-    let url = "https://clg.wtf/wallet/"+props.wallet?.stake;
+    let url = "https://clg.wtf/wallet/"+props.wallet?.slug;
     let image = props.walletProfileThumb;
     let initialSelection = gallery?gallery[0]:null;
     if (props.token) { 
         title = props.token.title + ' - ' + props.wallet.name+" - Cardano Looking Glass - clg.wtf";
-        url = "https://clg.wtf/wallet/"+props.wallet?.stake+"."+props.token.unit;
+        url = "https://clg.wtf/wallet/"+props.wallet?.slug+"."+props.token.unit;
         initialSelection=props.token;
         image = "https://clg.wtf"+props.token.thumb;
     }
