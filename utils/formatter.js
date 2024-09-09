@@ -1,4 +1,4 @@
-import { getMetadata, getSmartImports, hexToAscii } from "libcip54"
+import { getMetadata, getSmartImports, hexToUtf8 } from "libcip54"
 import { checkCacheItem, cacheItem } from "./redis.mjs";
 import { getDataURL } from "./DataStore";
 export const getTokenData = async function (token, throwOnCacheMiss=false) { 
@@ -15,7 +15,7 @@ export const getTokenData = async function (token, throwOnCacheMiss=false) {
             tokenData.title = tokenData.metadata?.title;
         }
         if (!tokenData.title || tokenData.title.length<1) { 
-            tokenData.title=hexToAscii(token.unit.slice(56))
+            tokenData.title=hexToUtf8(token.unit.slice(56))
         }
         const thumbName = 'tokenThumb:'+token.unit+':500:dark';
         let thumbURL;

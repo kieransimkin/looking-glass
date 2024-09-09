@@ -22,15 +22,15 @@ import { getDataURL } from '../../utils/DataStore';
 import OwnerList from '../../components/OwnerList';
 import {ProfileObject, WithContext} from 'schema-dts'
 import validator from 'validator';
-import { asciiToHex, hexToAscii } from '../../utils/Helpers.mjs';
+import { utf8ToHex, hexToUtf8 } from '../../utils/Helpers.mjs';
 const { isIn, isHexadecimal } = validator.default;
 const getTokenLinkUrl = (slug, t) => { 
     if (!t || t.length<1) { 
         return  '/policy/'+slug;
     }
     if (isHexadecimal(t)) { 
-        if (asciiToHex(decodeURIComponent(encodeURIComponent(hexToAscii(t)))) == t) { 
-            return '/policy/'+slug+'.'+encodeURIComponent(hexToAscii(t));
+        if (Utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(t)))) == t && !isHexadecimal(hexToUtf8(token))) { 
+            return '/policy/'+slug+'.'+encodeURIComponent(hexToUtf8(t));
         } else { 
             return '/policy/'+slug+'.'+t;
         }
@@ -60,8 +60,8 @@ export const getServerSideProps = async (context) => {
     let props = {};
     if (result) { 
         if (token && token.length>0 && !isHexadecimal(token)) { 
-            token=asciiToHex(token);
-        } else if (token && token.length>0 && asciiToHex(decodeURIComponent(encodeURIComponent(hexToAscii(token)))) == token) { 
+            token=Utf8ToHex(token);
+        } else if (token && token.length>0 && utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(token)))) == token && !isHexadecimal(hexToUtf8(token))) { 
             return {
                 redirect: {
                     destination: getTokenLinkUrl(result.slug,token),
