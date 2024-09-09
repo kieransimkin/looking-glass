@@ -141,14 +141,14 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
             if (e.data.request=='mediaslide-open-leftbar') { 
                 console.log('Got open leftbar message');
                 setBigInfoOpen(true);
-                //if (window)window.dispatchEvent(new Event('resize'));
+                if (window)window.dispatchEvent(new Event('scroll'));
             } else if (e.data.request=='mediaslide-close-leftbar') { 
                 console.log('Got close leftbar message');
                 
                 setBigInfoOpen(false);
-                //if (window)window.dispatchEvent(new Event('resize'));
+                if (window)window.dispatchEvent(new Event('scroll'));
             } else if (e.data.request=='mediaslide-open-navbar') { 
-                //if (window)window.dispatchEvent(new Event('resize'));
+                if (window)window.dispatchEvent(new Event('scroll'));
                 if (typeof e.data.navbarHeight != 'undefined') { 
                     setNavbarHeight(e.data.navbarHeight);
                 } else { 
@@ -157,7 +157,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
                 
                 console.log('open navbar event');
             } else if (e.data.request=='mediaslide-close-navbar') { 
-                //if (window)window.dispatchEvent(new Event('resize'));
+                if (window)window.dispatchEvent(new Event('scroll'));
                 if ( typeof e.data.navbarHeight != 'undefined' ) { 
                     
                     setNavbarHeight(e?.data?.navbarHeight);
@@ -332,7 +332,7 @@ export default function BigInfoBox ({item,onClose,goFullscreen,navbarHeight:nbNa
 	}, []);
     useEffect(() => { 
         console.log('got new navbar height:'+navbarHeight);
-        //window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event('scroll'));
     },[navbarHeight])
     /*
     useEffect(() => {
