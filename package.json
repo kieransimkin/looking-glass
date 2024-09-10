@@ -18,6 +18,7 @@
     "generateThumbnails": "tsx scripts/generateThumbnails.mjs",
     "queryAdaHandles": "tsx scripts/queryAdaHandles.mjs",
     "queryTokenHolders": "tsx scripts/queryTokenHolders.mjs",
+    "aiDescribe": "tsx scripts/aiDescribe.mjs",
     "socket": "tsx scripts/websocket.mjs"
   },
   "dependencies": {
@@ -57,6 +58,7 @@
     "json-tree-viewer": "^0.0.2",
     "jszip": "^3.10.1",
     "libcip54": "file:submodules/libcip54",
+    "llamaindex": "^0.5.22",
     "maath": "^0.10.4",
     "mapbox-gl": "^2.10.0",
     "next": "12.3.1",
@@ -92,6 +94,7 @@
     "sass": "^1.55.0",
     "schema-dts": "^1.1.2",
     "sharp": "^0.32.6",
+    "slug": "^9.1.0",
     "smartnftportal": "file:submodules/SmartNFTPortal",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",

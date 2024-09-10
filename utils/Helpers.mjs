@@ -2,7 +2,7 @@
 
 import {Buffer} from 'buffer';
 import validator from 'validator';
-const { isIn, isHexadecimal } = validator.default;
+const { isIn, isHexadecimal, isSlug } = validator.default;
 
 export function sleep(ms) {
   return new Promise((resolve) => {
