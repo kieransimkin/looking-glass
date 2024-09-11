@@ -29,7 +29,7 @@ import {
  const llm = new Ollama({
     model: "llama3.1:8b",
     config:{    "request_timeout": 1200},
-        options: {   "request_timeout": 1200},a
+        options: {   "request_timeout": 1200},
 
   });  
   const embedModel = new HuggingFaceEmbedding({
