@@ -28,7 +28,7 @@ import {
  Settings.chunkSize = 3072;
  const llm = new Ollama({
     model: "llama3.1:8b",
-    config:{    "request_timeout": 1200},
+    config:{    "request_timeout": 1200, host: process.env.OLLAMA_HOST},
         options: {   "request_timeout": 1200},
 
   });  
