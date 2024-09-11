@@ -142,7 +142,7 @@ export const mysteryPolicies = async() => {
             and name=slug 
             and "notFeatured"=false 
             and description is null 
-                ORDER BY "assetCount" desc
+                ORDER BY random()
                 LIMIT $1
     `,[perPage])
     return policies.rows;
@@ -155,7 +155,7 @@ export const indeterminantPolicies = async() => {
             where encode("policyID",'hex')!=name 
             and "notFeatured"=false 
             and description is null 
-                ORDER BY "assetCount" desc
+                ORDER BY random()
                 LIMIT $1
     `,[perPage])
     return policies.rows;
