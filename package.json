@@ -60,6 +60,7 @@
     "json-tree-viewer": "^0.0.2",
     "jszip": "^3.10.1",
     "libcip54": "file:submodules/libcip54",
+    "llamaindex": "^0.5.23",
     "maath": "^0.10.4",
     "mapbox-gl": "^2.10.0",
     "next": "12.3.1",
