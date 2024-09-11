@@ -18,7 +18,8 @@
     "generateThumbnails": "tsx scripts/generateThumbnails.mjs",
     "queryAdaHandles": "tsx scripts/queryAdaHandles.mjs",
     "queryTokenHolders": "tsx scripts/queryTokenHolders.mjs",
-    "aiDescribe": "tsx scripts/aiDescribe.mjs",
+    "aiDesignateTitles": "tsx scripts/aiDesignateTitles.mjs",
+    "aiDescribePolicies": "tsx scripts/aiDescribePolicies.mjs",
     "socket": "tsx scripts/websocket.mjs"
   },
   "dependencies": {

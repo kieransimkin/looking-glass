@@ -20,6 +20,19 @@ export const dbinit = async() => {
     redisClient = await getClient();
     init(process.env.NETWORK?.toLowerCase(), pgClient, process.env.IPFS_GATEWAY, process.env.ARWEAVE_GATEWAY, redisClient);
 }
+export const setPolicyAiTitle = async(policyID, title, slug) => { 
+    await dbinit();
+    return await client.query(
+        `update policy set "name"=$1, "slug"=$2, "aiDefault"=true where encode("policyID",'hex')=$3`, [title, slug, policyID]
+    )
+}
+
+export const setPolicyAiDesc = async(policyID, desc) => { 
+    await dbinit();
+    return await client.query(
+        `update policy set "description"=$2, "aiDefault"=true where encode("policyID",'hex')=$3`, [desc, policyID]
+    )
+}
 export const setPolicyAssetCount = async (policy, count) => { 
     await dbinit();
     return await client.query(
@@ -115,6 +128,36 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
         "totalHits" from policy where "assetCount">100 and "notFeatured"=false ${whereString} ORDER BY ${sortString} LIMIT $1
         OFFSET $2 
     `,[perPage, perPage * page])
+    return policies.rows;
+}
+export const mysteryPolicies = async() => { 
+    await dbinit();
+    
+    const perPage = 50;
+    
+    
+    const policies = await client.query(`
+        select slug from policy 
+            where encode("policyID",'hex')=name 
+            and name=slug 
+            and "notFeatured"=false 
+            and description is null 
+                ORDER BY "assetCount" desc
+                LIMIT $1
+    `,[perPage])
+    return policies.rows;
+}
+export const indeterminantPolicies = async() => { 
+    await dbinit();
+    const perPage = 50;
+    const policies = await client.query(`
+        select slug from policy 
+            where encode("policyID",'hex')!=name 
+            and "notFeatured"=false 
+            and description is null 
+                ORDER BY "assetCount" desc
+                LIMIT $1
+    `,[perPage])
     return policies.rows;
 }
 export const getPolicy = async (key) => { 

@@ -67,6 +67,14 @@ module.exports = {
         },
         
         {
+          script:'npm run aiDesignateTitles',
+          instances:'1',
+          args:'scripts/aiDesignateTitles.mjs',
+          name:'aiDesignateTitles',
+          env: getEnvVariables()
+      },
+      //*/
+        {
           script:'npm run queryAdaHandles',
           instances:'1',
           args:'scripts/queryAdaHandles.mjs',
