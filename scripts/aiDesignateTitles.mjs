@@ -62,7 +62,7 @@ const start = async () => {
         }
     }
 }
-start().then(()=>{ console.log('Main app ended')});
+start().then(()=>{ console.log('Main app ended'); process.exit()});
 async function doIt(policyID) {
     let sampleSet=[];
     process.stdout.write('\nDoing policy '+policyID+': ');
