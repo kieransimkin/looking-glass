@@ -388,3 +388,21 @@ export const getPolicyBySlug = async (slug) => {
         return bindPolicyMethods(policy.rows[0]);
       }
 }
+export const getMetadataStats = async () => { 
+await dbinit();
+let result = await client.query(
+    `
+    select *, 
+        ("withName"::float / "totalName"::float) * 100 as namedPercent, 
+        ("withDescription"::float / "totalDescription"::float) * 100 as describedPercent 
+            from (select *, 
+                ("withName"::int + "noName"::int) as "totalName", 
+                ("withDescription"::int + "noDescription"::int) as "totalDescription"
+                    from (select count(*) as "withName" from policy where "name"!=encode("policyID",'hex')) as "withName",
+                        (select count(*) as "withDescription" from policy where "description" is not null) as "withDescription", 
+                        (select count(*) as "noName" from policy where "name"=encode("policyID",'hex')) as "noName", 
+                        (select count(*) as "noDescription" from policy where "description" is null) as "noDescription") as numberedResults 
+    `,[]);
+
+    return result?.rows;
+}
