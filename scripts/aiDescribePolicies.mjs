@@ -1,5 +1,5 @@
 import fs from 'fs';
-import database, { getPolicy,mysteryPolicies, setPolicyAiDesc } from '../utils/database.mjs'
+import database, { getPolicy,mysteryPolicies, setPolicyAiDesc , indeterminantPolicies} from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import { checkCacheItem, cacheItem } from '../utils/redis.mjs';
 import { default as formatter } from '../utils/formatter.js';
@@ -27,7 +27,7 @@ import {
  }
  Settings.chunkSize = 3072;
  const llm = new Ollama({
-    model: "llama3.1:70b",
+    model: "llama3.1:8b",
     config:{    "request_timeout": 1200},
         options: {   "request_timeout": 1200},
 
@@ -62,9 +62,10 @@ const start = async () => {
         }
     }
 }
-start().then(()=>{ console.log('Main app ended')});
+start().then(()=>{ console.log('Main app ended'); process.exit();});
 async function doIt(policyID) {
     let sampleSet=[];
+    process.stdout.write('\n\n');
     console.log('Doing policy '+policyID);
     const policy = await getPolicy(policyID);
     let tokens = await checkCacheItem('getTokensFromPolicy:'+policy?.policyID);
@@ -113,14 +114,17 @@ async function doIt(policyID) {
   
   
   const descResponse = await queryEngine.query({
-    query: "Below you will find a JSON list of NFT metadata from an NFT project called \""+response+"\" - a random sampling of the "+tokens.length+" tokens which make up the collection, each entry represents one NFT on the Cardano blockchain - Please write a description of this project that would be suitable for use in the meta tags of an HTML page. Try to identify the theme of the project and highlight anything particularly unique or unusual about it, perhaps mention some traits from the metadata, particularly those which would be visually noticable. Try to write in a way that captures attention and makes you want to find out more - use a wide vocabulary.\n\nWhen you have your answer, reply with the description ONLY. Please, I really need your help with this.\n\n"+JSON.stringify(mds),
+    query: "Below you will find a JSON list of NFT metadata from an NFT project called \""+policy.name+"\" - a random sampling of the "+tokens.length+" tokens which make up the collection, each entry represents one NFT on the Cardano blockchain - Please write a description of this project that would be suitable for use in the meta tags of an HTML page. Try to identify the theme of the project and highlight anything particularly unique or unusual about it, perhaps mention some traits from the metadata, particularly those which would be visually noticable. Try to write in a way that captures attention and makes you want to find out more - use a wide vocabulary.\n\nWhen you have your answer, reply with the description ONLY. Please, I really need your help with this.\n\n"+JSON.stringify(mds),
   });
   const descSourceNodes = descResponse.sourceNodes;
-  console.log(descResponse.message.content);
+  
+  let content = descResponse.message.content;
+  if (content && content.substr(0,1)=='"') content = content.substr(1);
+  if (content && content.substr(-1,1)=='"') content = content.slice(0,-1);
   try {
-    if (descResponse.message.content && descResponse.message.content.length>0) { 
-      await setPolicyAiDesc(policyID,descResponse.message.content)
-      process.stdout.write(response);
+    if (content && content.length>0) { 
+      await setPolicyAiDesc(policyID,content)
+      process.stdout.write(content);
     } else { 
       process.stdout.write('No description response received from AI')
     }

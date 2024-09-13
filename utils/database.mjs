@@ -30,7 +30,7 @@ export const setPolicyAiTitle = async(policyID, title, slug) => {
 export const setPolicyAiDesc = async(policyID, desc) => { 
     await dbinit();
     return await client.query(
-        `update policy set "description"=$2, "aiDefault"=true where encode("policyID",'hex')=$3`, [desc, policyID]
+        `update policy set "description"=$1, "aiDefault"=true where encode("policyID",'hex')=$2`, [desc, policyID]
     )
 }
 export const setPolicyAssetCount = async (policy, count) => { 
@@ -152,9 +152,10 @@ export const indeterminantPolicies = async() => {
     const perPage = 50;
     const policies = await client.query(`
         select slug from policy 
-            where encode("policyID",'hex')!=name 
+            where encode("policyID",'hex')!=name
             and "notFeatured"=false 
             and description is null 
+            
                 ORDER BY random()
                 LIMIT $1
     `,[perPage])
