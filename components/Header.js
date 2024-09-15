@@ -517,7 +517,7 @@ const Header = (props) => {
                                 }   
                                 <Link href="/stats" passHref><a><MenuItem onClick={handleItemClick}>📈 Stats</MenuItem></a></Link>
                                 <Link href="/live" passHref><a><MenuItem onClick={handleItemClick}>⚡ Live Feed</MenuItem></a></Link>
-                                <Link href="/randomPolicy" passHref><a><MenuItem onClick={handleItemClick}>⤮ Random Policy</MenuItem></a></Link>
+                                <Link href="/randomPolicy" passHref><a target="_blank"><MenuItem onClick={handleItemClick}>⤮ Random Policy</MenuItem></a></Link>
 
                             </NestedMenuItem>
                             <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-collect" direction="left" parentMenuOpen={Boolean(anchorEl)} label="📂 Create">
