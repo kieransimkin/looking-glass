@@ -123,7 +123,7 @@ async function doIt(policyID) {
   if (content && content.substr(-1,1)=='"') content = content.slice(0,-1);
   try {
     if (content && content.length>0) { 
-      console.log(await setPolicyAiDesc(policyID,content));
+      console.log(await setPolicyAiDesc(policy.policyID,content));
       process.stdout.write(content);
     } else { 
       process.stdout.write('No description response received from AI')
