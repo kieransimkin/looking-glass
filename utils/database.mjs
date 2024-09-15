@@ -388,6 +388,37 @@ export const getPolicyBySlug = async (slug) => {
         return bindPolicyMethods(policy.rows[0]);
       }
 }
+export const getRandomPolicy = async () => { 
+    await dbinit();
+
+    let policy = await client.query(
+        `
+        SELECT 
+             encode("policyID",'hex') as "policyID",
+             name,
+             slug,
+             description,
+             "createdAt",
+             "isFeatured",
+             "lastMinted",
+             "lastMoved",
+             "assetCount",
+             "totalActivity",
+             "totalHits"
+        FROM policy
+        WHERE encode("policyID",'hex')!=name AND encode("policyID",'hex')!="slug" AND "notFeatured"=false
+        ORDER BY random()
+          LIMIT 1;
+        `,
+        [
+        ],
+      );
+      if (!policy?.rows || policy?.rows.length<1) { 
+        return null;
+      } else { 
+        return bindPolicyMethods(policy.rows[0]);
+      }
+}
 export const getMetadataStats = async () => { 
 await dbinit();
 let result = await client.query(
