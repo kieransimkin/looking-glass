@@ -543,9 +543,8 @@ const Header = (props) => {
                                 </div>
                                 </MenuItem>
                                 <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-help" direction="left" parentMenuOpen={Boolean(anchorEl)} label="🩺 Help">
-                                
+                                    <a target="_blank" href="https://github.com/kieransimkin/looking-glass/issues"><MenuItem onClick={handleItemClick}>🐞 Bugs / Feedback</MenuItem></a>
                                     <MenuItem onClick={()=>{ setAboutOpen(true); handleItemClick()}}>📇 About Info</MenuItem>
-
                                 </NestedMenuItem>
                                 
                                 {walletApi &&
