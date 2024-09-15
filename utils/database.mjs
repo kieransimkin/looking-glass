@@ -406,7 +406,7 @@ export const getRandomPolicy = async () => {
              "totalActivity",
              "totalHits"
         FROM policy
-        WHERE encode("policyID",'hex')!=name AND encode("policyID",'hex')!="slug" AND "notFeatured"=false
+        WHERE encode("policyID",'hex')!=name AND encode("policyID",'hex')!="slug" AND "notFeatured"=false AND "assetCount">10
         ORDER BY random()
           LIMIT 1;
         `,
