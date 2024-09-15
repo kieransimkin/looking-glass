@@ -123,8 +123,10 @@ async function doIt(policyID) {
   if (content && content.substr(-1,1)=='"') content = content.slice(0,-1);
   try {
     if (content && content.length>0) { 
-      console.log(await setPolicyAiDesc(policy.slug,content));
+      const result = await setPolicyAiDesc(policy.slug,content);
       process.stdout.write(content);
+      console.log('');
+      console.log('Updated rows: '+result.rowCount);
     } else { 
       process.stdout.write('No description response received from AI')
     }
