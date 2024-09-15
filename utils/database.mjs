@@ -27,10 +27,11 @@ export const setPolicyAiTitle = async(policyID, title, slug) => {
     )
 }
 
-export const setPolicyAiDesc = async(policyID, desc) => { 
+export const setPolicyAiDesc = async(slug, desc) => { 
     await dbinit();
+    console.log('updating policy with slug: '+slug);
     return await client.query(
-        `update policy set "description"=$1, "aiDefault"=true where encode("policyID",'hex')=$2`, [desc, policyID]
+        `update policy set "description"=$1, "aiDefault"=true where "slug"=$2`, [desc, slug]
     )
 }
 export const setPolicyAssetCount = async (policy, count) => { 
