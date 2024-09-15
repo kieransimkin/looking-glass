@@ -106,8 +106,9 @@ const AboutDialog = (props) => {
             
             <Image src="/logo.svg" width="500" height="200" alt="Cardano Looking Glass" style={{filter:'brightness(50%) sepia(100%) saturate(2000%) hue-rotate(9deg)'}} />
             
-            <Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Version:</b> 0.0.1</Typography>
+            <Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Version:</b> <a href="https://github.com/kieransimkin/looking-glass" target="_blank">0.0.1-alpha</a></Typography>
             <br />
+            <Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Author:</b> <a href="https://kieransimkin.co.uk/" target="_blank">Kieran Simkin</a></Typography>
           </DialogContent>
           <DialogActions sx={{backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary}}>
             <Button onClick={handleClose}>Close</Button>
