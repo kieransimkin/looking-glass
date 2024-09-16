@@ -70,7 +70,6 @@ async function doIt(policyID) {
     const policy = await getPolicy(policyID);
     let tokens = await checkCacheItem('getTokensFromPolicy:'+policy?.policyID);
     if (!tokens) {
-        if (cachedOnly) return res.status(425).json({message:'Not cached yet'});
         tokens = await getTokensFromPolicy(policy.policyID);
         await setPolicyAssetCount(policy.policyID, tokens.length);
         await cacheItem('getTokensFromPolicy:'+policy.policyID,tokens)
