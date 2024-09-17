@@ -1,5 +1,6 @@
 import fs from 'fs';
-import database, { getPolicy,mysteryPolicies, setPolicyAiDesc , indeterminantPolicies} from '../utils/database.mjs'
+import database, { getPolicy,mysteryPolicies, setPolicyAiDesc , indeterminantPolicies, setPolicyAssetCount} from '../utils/database.mjs'
+import { getTokensFromPolicy } from 'libcip54';
 import dotenv from 'dotenv';
 import { checkCacheItem, cacheItem } from '../utils/redis.mjs';
 import { default as formatter } from '../utils/formatter.js';
