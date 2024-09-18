@@ -62,17 +62,19 @@ export const getServerSideProps = async (context) => {
     console.log(result);
 
     let props = {};
-    if (result) { 
-        if (token && token.length>0 && !isHexadecimal(token)) { 
-            token=utf8ToHex(token);
-        } else if (token && token.length>0 && utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(token)))) == token && !isHexadecimal(hexToUtf8(token))) { 
-            return {
-                redirect: {
-                    destination: getTokenLinkUrl(result.slug,token),
-                    statusCode: 301
+    if (result) {
+        try {  
+            if (token && token.length>0 && !isHexadecimal(token)) { 
+                token=utf8ToHex(token);
+            } else if (token && token.length>0 && utf8ToHex(decodeURIComponent(encodeURIComponent(hexToUtf8(token)))) == token && !isHexadecimal(hexToUtf8(token))) { 
+                return {
+                    redirect: {
+                        destination: getTokenLinkUrl(result.slug,token),
+                        statusCode: 301
+                    }
                 }
             }
-        }
+        } catch (e) { }
         if (result.slug != policy && context.query.policy[0]!=result.slug) { 
             return {
                 redirect: {
