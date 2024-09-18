@@ -1,5 +1,5 @@
 
-import { getMetadata, getSmartImports, hexToUtf8 } from "libcip54"
+import { getMetadata, getSmartImports, hexToAscii, hexToUtf8 } from "libcip54"
 import { checkCacheItem, cacheItem } from "./redis.mjs";
 import { getDataURL } from "./DataStore";
 export const getTokenData = async function (token, throwOnCacheMiss=false, sparse=false) { 
@@ -16,7 +16,11 @@ export const getTokenData = async function (token, throwOnCacheMiss=false, spars
             tokenData.title = tokenData.metadata?.title;
         }
         if (!tokenData.title || tokenData.title.length<1) { 
-            tokenData.title=hexToUtf8(token.unit.slice(56))
+            try { 
+                tokenData.title=hexToUtf8(token.unit.slice(56))
+            } catch (e) { 
+                tokenData.title=hexToAscii(token.unit.slice(56))
+            }
         }
         if (sparse) return tokenData; // important, we need to not save the cache here, if we do, we'll poison it with dead links
         tokenData.id=token.unit;
