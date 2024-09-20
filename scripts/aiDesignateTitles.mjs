@@ -1,5 +1,5 @@
 import fs from 'fs';
-import database, { getPolicy,mysteryPolicies, setPolicyAiTitle, setPolicyAssetCount } from '../utils/database.mjs'
+import database, { getPolicy,mysteryPolicies, setPolicyAiFailed, setPolicyAiTitle, setPolicyAssetCount } from '../utils/database.mjs'
 import dotenv from 'dotenv';
 import { checkCacheItem, cacheItem } from '../utils/redis.mjs';
 import { default as formatter } from '../utils/formatter.js';
@@ -55,10 +55,11 @@ const start = async () => {
     const mysteries = await mysteryPolicies();
     for (const policy of mysteries) { 
         try { 
-            await doIt(policy.slug);
+            await doIt(policy.slug); // slug and policyID here are actually the same because this policy does not have a title
         } catch (e) { 
             console.log('Exception while trying to generate AI content');
             console.log(e);
+            await setPolicyAiFailed(policy.slug);
         }
     }
 }
@@ -116,14 +117,21 @@ async function doIt(policyID) {
   });
   try {
     if (response && response.length>0) { 
-      await setPolicyAiTitle(policyID,response,slug(response));
+      if (response.toLowerCase().includes('json')) { 
+        console.log('Found \'JSON\' in the string to saving a failure:');
+        await setPolicyAiFailed(policyID);
+      } else { 
+        await setPolicyAiTitle(policyID,response,slug(response));
+      }
       process.stdout.write(response);
     } else { 
+      await setPolicyAiFailed(policyID);
       process.stdout.write('No title response received from AI')
     }
   } catch (e) { 
     console.log('Exception setting policy title');
     console.log(e);
+    console.log('Not marking policy as AI failed because it\'s probably just a duplicate slug');
   }
   /*
   

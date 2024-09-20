@@ -60,6 +60,7 @@ const start = async () => {
         } catch (e) { 
             console.log('Exception while trying to generate AI content');
             console.log(e);
+            await policy.setAiFailed();
         }
     }
 }
@@ -123,11 +124,16 @@ async function doIt(policyID) {
   if (content && content.substr(-1,1)=='"') content = content.slice(0,-1);
   try {
     if (content && content.length>0) { 
-      const result = await setPolicyAiDesc(policy.slug,content);
+      if (content.toLowerCase().includes('json')) { 
+        await policy.setAiFailed(); 
+      } else { 
+        const result = await setPolicyAiDesc(policy.slug,content);
+      }
       process.stdout.write(content);
       console.log('');
       console.log('Updated rows: '+result.rowCount);
     } else { 
+      await policy.setAiFailed();
       process.stdout.write('No description response received from AI')
     }
   } catch (e) { 

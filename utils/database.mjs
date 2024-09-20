@@ -23,14 +23,19 @@ export const dbinit = async() => {
 export const setPolicyAiTitle = async(policyID, title, slug) => { 
     await dbinit();
     return await client.query(
-        `update policy set "name"=$1, "slug"=$2, "aiDefault"=true where encode("policyID",'hex')=$3`, [title, slug, policyID]
+        `update policy set "name"=$1, "slug"=$2, "aiDefault"=true, "aiFailed"=false where encode("policyID",'hex')=$3`, [title, slug, policyID]
     )
 }
-
 export const setPolicyAiDesc = async(slug, desc) => { 
     await dbinit();
     return await client.query(
-        `update policy set "description"=$1, "aiDefault"=true where "slug"=$2`, [desc, slug]
+        `update policy set "description"=$1, "aiDefault"=true, "aiFailed"=false where "slug"=$2`, [desc, slug]
+    )
+}
+export const setPolicyAiFailed = async(policy) => { 
+    await dbinit();
+    return await client.query(
+        `update policy set "aiFailed"=true, "aiDefault"=false where encode("policyID",'hex')=$1`, [policy]
     )
 }
 export const setPolicyAssetCount = async (policy, count) => { 
@@ -141,6 +146,7 @@ export const mysteryPolicies = async() => {
             where encode("policyID",'hex')=name 
             and name=slug 
             and "notFeatured"=false 
+            AND "aiFailed"=false
             and description is null 
                 ORDER BY random()
                 LIMIT $1
@@ -154,6 +160,7 @@ export const indeterminantPolicies = async() => {
         select slug from policy 
             where encode("policyID",'hex')!=name
             and "notFeatured"=false 
+            AND "aiFailed"=false
             and description is null 
             
                 ORDER BY random()
