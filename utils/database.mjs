@@ -432,12 +432,14 @@ let result = await client.query(
     `
     select *, 
         ("withName"::float / "totalName"::float) * 100 as namedPercent, 
+        ("failed"::float / "totalName"::float) * 100 as failedPercent,
         ("withDescription"::float / "totalDescription"::float) * 100 as describedPercent 
             from (select *, 
                 ("withName"::int + "noName"::int) as "totalName", 
                 ("withDescription"::int + "noDescription"::int) as "totalDescription"
                     from (select count(*) as "withName" from policy where "name"!=encode("policyID",'hex')) as "withName",
                         (select count(*) as "withDescription" from policy where "description" is not null) as "withDescription", 
+                        (select count(*) as "failed" from policy where "aiFailed"=true) as "failed",
                         (select count(*) as "noName" from policy where "name"=encode("policyID",'hex')) as "noName", 
                         (select count(*) as "noDescription" from policy where "description" is null) as "noDescription") as numberedResults 
     `,[]);
