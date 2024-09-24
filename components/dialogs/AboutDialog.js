@@ -18,6 +18,12 @@ import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import { javascript } from '@codemirror/lang-javascript';
 import Image from 'next/image';
+import { getVersion } from 'libcip54';
+import portalPkgInfo from  '../../submodules/SmartNFTPortal/package.json'
+import clgPkgInfo from '../../package.json'
+const version = portalPkgInfo.version;
+const clgVersion = clgPkgInfo.version;
+
 const useStyles = makeStyles(theme => {
   let bgImg='';
 
@@ -32,6 +38,16 @@ const useStyles = makeStyles(theme => {
     paddingLeft: 0,
     paddingRight: '0em'
   },
+  infoTable: { 
+    '& td': { 
+      paddingLeft:5,
+      paddingRight:5,
+    },
+    width: '100%',
+    borderSpacing: 50,
+    borderCollapse: 'separate'
+  },
+  
   row: { 
     display: 'flex',
     alignItems: 'center'
@@ -104,11 +120,19 @@ const AboutDialog = (props) => {
               </div>
             </MuiDialogTitle>
             
-            <Image src="/logo.svg" width="500" height="200" alt="Cardano Looking Glass" style={{filter:'brightness(50%) sepia(100%) saturate(2000%) hue-rotate(9deg)'}} />
+            <a href="https://github.com/kieransimkin/looking-glass" target="_blank"><Image src="/logo.svg" width="500" height="200" alt={"Cardano Looking Glass version "+clgVersion} title={"Cardano Looking Glass version "+clgVersion} style={{filter:'brightness(50%) sepia(100%) saturate(2000%) hue-rotate(9deg)'}} /></a>
+            <table className={classes.infoTable}>
+            <tbody>
             
-            <Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Version:</b> <a href="https://github.com/kieransimkin/looking-glass" target="_blank">0.0.1-alpha</a></Typography>
-            <br />
-            <Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Author:</b> <a href="https://kieransimkin.co.uk/" target="_blank">Kieran Simkin</a></Typography>
+            <tr><td><a href="https://github.com/kieransimkin/looking-glass" target="_blank"><Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Version:</b></Typography></a></td><td><Typography variant="h6"><small><a href="https://github.com/kieransimkin/looking-glass" target="_blank">{clgVersion}</a></small></Typography></td></tr>
+            <tr><td><a href="https://kieransimkin.co.uk/" target="_blank"><Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>Author:</b></Typography></a></td><td><Typography variant="h6"><small><a href="https://kieransimkin.co.uk/" target="_blank">Kieran Simkin</a></small></Typography></td></tr>
+
+            <tr><td>&nbsp;</td></tr>
+            <tr><td><a href="https://github.com/kieransimkin/libcip54" target="_blank"><Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>libcip54:</b></Typography></a></td><td><Typography variant="h6"><small><a href="https://github.com/kieransimkin/libcip54" target="_blank">{getVersion()}</a></small></Typography></td></tr>
+            <tr><td><a href="https://github.com/kieransimkin/smartnftportal" target="_blank"><Typography variant='h6' style={{width:'100%',textAlign:'right'}}><b>SmartNFTPortal:</b></Typography></a></td><td><Typography variant="h6"><small><a href="https://github.com/kieransimkin/smartnftportal" target="_blank">{version}</a></small></Typography></td></tr>
+            
+            </tbody>
+            </table>
           </DialogContent>
           <DialogActions sx={{backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary}}>
             <Button onClick={handleClose}>Close</Button>
