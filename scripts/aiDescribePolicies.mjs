@@ -120,6 +120,7 @@ async function doIt(policyID) {
   const descSourceNodes = descResponse.sourceNodes;
   
   let content = descResponse.message.content;
+  let result;
   if (content && content.substr(0,1)=='"') content = content.substr(1);
   if (content && content.substr(-1,1)=='"') content = content.slice(0,-1);
   try {
@@ -127,7 +128,7 @@ async function doIt(policyID) {
       if (content.toLowerCase().includes('json')) { 
         await policy.setAiFailed(); 
       } else { 
-        const result = await setPolicyAiDesc(policy.slug,content);
+        result = await setPolicyAiDesc(policy.slug,content);
       }
       process.stdout.write(content);
       console.log('');
