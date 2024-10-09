@@ -12,7 +12,7 @@ import {default as datastore} from '../utils/DataStore.js'
 import thumbnailer from '../utils/thumbnailer.js';
 import { cacheItem,checkCacheItem } from '../utils/redis.mjs';
 import { getTokenHolders, getTokensFromPolicy } from 'libcip54';
-const getTokenData = (unit, throwOnCacheMiss, sparse) => formatter.getTokenData(unit,throwOnCacheMiss, sparse)
+
 const generate=thumbnailer.generate;
 dotenv.config()
 
@@ -35,7 +35,7 @@ async function doIt() {
         for (var c=0; c<tokens.length;c++) { 
             if (c>100) return null;
             if (tokens[c].unit.length>56) { 
-                const tokenData = await getTokenData(tokens[c]);
+                const tokenData = await formatter.getTokenData(tokens[c]);
                 if (tokenData?.metadata?.image) { 
                     return tokenData;
                     
