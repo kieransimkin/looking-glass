@@ -19,3 +19,10 @@ export async function setAiFailed() {
             UPDATE policy SET "aiFailed"=true, "aiDefault"=false WHERE encode("policyID",'hex')=$1::TEXT
             `,[this.policyID]);
     }
+
+export async function setProfileUnit(unit) { 
+        await db.query(
+                `
+                UPDATE policy SET "aiFailed"=true, "aiDefault"=false WHERE encode("policyID",'hex')=$1::TEXT
+                `,[this.policyID]);
+}

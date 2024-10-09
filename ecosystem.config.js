@@ -57,7 +57,7 @@ module.exports = {
             name:'runHits'
         },
         //*/
-        
+        /*
         {
             script:'npm run generateThumbnails',
             instances:'1',
@@ -65,7 +65,7 @@ module.exports = {
             name:'generateThumbnails',
             env: getEnvVariables()
         },
-        
+        //*/
         {
           script:'npm run aiDesignateTitles',
           instances:'1',
@@ -96,6 +96,14 @@ module.exports = {
         name:'queryTokenHolders',
         env: getEnvVariables()
     },
+    {
+      script:'npm run queryPolicyProfile',
+      instances:'1',
+      args:'scripts/queryPolicyProfile.mjs',
+      name:'queryPolicyProfile',
+      env: getEnvVariables()
+  },
+    
         {
           script:'npm run socket',
           instances:'1',

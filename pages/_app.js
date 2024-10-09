@@ -47,14 +47,13 @@ function CIP54Playground({ Component, pageProps }) {
   }
   const socketInitializer = () => {
     const asy = async () => { 
-      await getData('/socket');
+      
       socket = io(process.env.NODE_ENV=='production'?'/':'http://localhost:'+process.env.SOCKET_PORT+'/',{ transports: ["websocket","polling"]})
       socket.on('connect', () => {
         const engine = socket.io.engine;
   
         console.log('connected')
-      })
-      // probably be best if we only subscribed to the ones we neded
+        // probably be best if we only subscribed to the ones we neded
       socket.on('block',(data)=>{
         console.log(data);
         //alert(data);
@@ -69,6 +68,13 @@ function CIP54Playground({ Component, pageProps }) {
       socket.on('newOwnerList',(data) => { 
         window.postMessage({request:'newTokenHolders',...data},'*');
       });
+      socket.on('newPolicyProfile',(data) => { 
+        console.log('New policy profile');
+        console.log(data);
+        window.postMessage({request:'newPolicyProfile',...data},'*');
+      })
+      })
+      
     }
     asy();
   }

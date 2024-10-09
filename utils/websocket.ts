@@ -59,7 +59,11 @@ console.log('got connection');
             message = JSON.parse(message);
             socket.emit('newTokenHolders', message);
         });
-
+        client.subscribe('newPolicyProfile', (message: any) => { 
+            console.log
+            message = JSON.parse(message);
+            socket.emit('newPolicyProfile', message);
+        });
 
 
     })

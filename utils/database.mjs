@@ -51,6 +51,12 @@ export const setPolicyLastMoved = async (policy, date) => {
     )
 }
 
+export const setPolicyProfileUnit = async (policy, profileUnit) => { 
+    await dbinit();
+    return await client.query(
+        `update policy set "profileUnit"=$1 WHERE encode("policyID",'hex')=$2`, [profileUnit, policy]
+    )
+}
 export const setWalletLastMoved = async (stake, date) => { 
     await dbinit();
     return await client.query(
@@ -83,7 +89,43 @@ export const incrementWalletTotalHits = async (stake, hits) => {
         `update wallet set "totalHits"="totalHits"+$1 WHERE stake=$2`, [hits, stake]
     )
 }
-export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=true) => { 
+export const lastBlock = async() => { 
+    let dbSyncResult = await dbSyncClient.query(
+        `
+       select "time" from block order by "time" desc limit 1
+        `,
+        []
+    );
+    return dbSyncResult.rows[0].time;
+}
+export const countPolicies = async () => { 
+    let count = null;
+    try { 
+        count = await client.query(`
+        select count(*) as "count" from policy where "assetCount">100 and "notFeatured"=false
+    `,[])
+    } catch (e) { 
+        console.log('Exception while doing countPolicies: '+e)
+    }
+    console.log(count);
+    return count?.rows[0].count;
+}
+export const countFeaturedPolicies = async () => { 
+    let count = null;
+    try { 
+        count = await client.query(`
+        select count(*) as "count" from policy where "assetCount">100 and "notFeatured"=false AND "isFeatured"=true
+    `,[])
+    } catch (e) { 
+        console.log('Exception while doing countPolicies: '+e)
+    }
+    console.log(count);
+    return count?.rows[0].count;
+}
+export const getFeaturedPolicies = async(sort, sortOrder, page=0) => { 
+    return await getPolicies(sort, sortOrder, page, true);
+}
+export const getPolicies = async(sort, sortOrder, page=0, featuredOnly=false) => { 
     await dbinit();
     if (!Array.isArray(sort)) sort = [sort];
     const sortOptions = [];
@@ -94,7 +136,7 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
         switch (s) { 
             case 'recentMint':
                 sortOptions.push(`"lastMinted" ${sortOrder}`);
-                whereOptions.push(`"lastMinted" IS NOT NULL`);
+                //whereOptions.push(`"lastMinted" IS NOT NULL`);
                 break;
             case 'totalActivity':
                 sortOptions.push(`"totalActivity" ${sortOrder}`)
@@ -104,12 +146,15 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
                 break;
             case 'recentlyActive':
                 sortOptions.push(`"lastMoved" ${sortOrder}`)
-                whereOptions.push(`"lastMoved" IS NOT NULL`);
+                //whereOptions.push(`"lastMoved" IS NOT NULL`);
                 break;
             case 'random':
                 sortOptions.push(`random()`);
                 break;
         }
+    }
+    if (sortOptions.length<1) { 
+        sortOptions.push('random()');
     }
     let whereString = ' AND '+whereOptions.join(' AND ');
     if (!whereOptions.length) whereString='';
@@ -117,7 +162,9 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
         whereString=whereString+` AND "isFeatured"=true`;
     }
     const sortString = sortOptions.join(", ")
-    const policies = await client.query(`
+    let q,policies;
+    try { 
+        policies = await client.query(q=`
         select         
         encode("policyID",'hex') as "policyID",
         encode("policyID",'hex') as "id",
@@ -125,6 +172,7 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
         slug,
         description,
         to_char("createdAt",'YYYY-MM-DD HH24:MI:SS') as "createdAt",
+        "profileUnit",
         "isFeatured",
         to_char("lastMinted",'YYYY-MM-DD HH24:MI:SS') as "lastMinted",
         to_char("lastMoved",'YYYY-MM-DD HH24:MI:SS') as "lastMoved",
@@ -133,6 +181,10 @@ export const getFeaturedPolicies = async(sort, sortOrder, page=0, featuredOnly=t
         "totalHits" from policy where "assetCount">100 and "notFeatured"=false ${whereString} ORDER BY ${sortString} LIMIT $1
         OFFSET $2 
     `,[perPage, perPage * page])
+    } catch (e) { 
+        console.log('Exception while doing getPolicies: '+e)
+    }
+    console.log(q);
     return policies.rows;
 }
 export const mysteryPolicies = async() => { 
@@ -325,6 +377,7 @@ export const getPolicyByID = async (policyID) => {
              slug,
              description,
              "createdAt",
+             "profileUnit",
              "isFeatured",
              "lastMinted",
              "lastMoved",
@@ -377,6 +430,7 @@ export const getPolicyBySlug = async (slug) => {
              slug,
              description,
              "createdAt",
+             "profileUnit",
              "isFeatured",
              "lastMinted",
              "lastMoved",
@@ -406,6 +460,7 @@ export const getRandomPolicy = async () => {
              slug,
              description,
              "createdAt",
+             "profileUnit",
              "isFeatured",
              "lastMinted",
              "lastMoved",

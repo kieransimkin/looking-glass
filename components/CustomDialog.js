@@ -27,7 +27,7 @@ const CustomDialog = (props) => {
     const {children, url} = props;
     const classes=useStyles();
     return (
-        <Dialog 
+        <Dialog keepMounted
         classes={{ paper: classes.paper }}
         {...props}>{children}</Dialog>
     );

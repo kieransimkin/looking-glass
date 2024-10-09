@@ -7,7 +7,7 @@ import { getData, postData } from '../utils/Api';
 import BigInfoBox from '../components/BigInfoBox';
 import { getDataURL } from '../utils/DataStore';
 import { checkCacheItem, incrementCacheItem, getClient } from '../utils/redis.mjs';
-import { getFeaturedPolicies } from '../utils/database.mjs';
+import { getPolicies } from '../utils/database.mjs';
 import { useState, useEffect, Suspense, useRef, useImperativeHandle } from 'react';
 import { easing } from 'maath'
 import PolicyQuickBrowse from '../components/PolicyQuickBrowse';
@@ -60,12 +60,16 @@ const useStyles = makeStyles(theme => {
   });
 export const getServerSideProps = async (context) => { 
     const props = {};
-    props.mintingPolicies = await getFeaturedPolicies('recentMint','desc',0,false);  
-    props.recentlyActivePolicies = await getFeaturedPolicies('recentlyActive','desc',0,false);  
-    props.activePolicies = await getFeaturedPolicies('totalActivity','desc',0,false);  
-    props.popularPolicies = await getFeaturedPolicies('totalHits', 'desc',0, false);
+    props.mintingPolicies = await getPolicies('recentMint','desc',0,false);  
+    props.recentlyActivePolicies = await getPolicies('recentlyActive','desc',0,false);  
+    props.activePolicies = await getPolicies('totalActivity','desc',0,false);  
+    props.popularPolicies = await getPolicies('totalHits', 'desc',0, false);
     for (const policy of [...props.mintingPolicies, ...props.recentlyActivePolicies, ...props.activePolicies, ...props.popularPolicies]) { 
       const policyProfile = await checkCacheItem('policyProfile:'+policy.policyID);
+      if (!policyProfile) { 
+        const redisClient = await getClient();
+        redisClient.publish('requestPolicyProfile',policy.policyID);
+      }
       let tokenData = await checkCacheItem('getTokenData:'+policyProfile);
       if (!tokenData) tokenData={};
       const thumbName = 'tokenThumb:'+policyProfile+':500:dark';

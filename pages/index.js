@@ -6,7 +6,7 @@ import { alpha } from '@material-ui/core/styles/colorManipulator';
 import PauseIcon from '@material-ui/icons/Pause';
 import Image from 'next/image';
 import VideoCard from '../components/VideoCard';
-import { checkCacheItem } from '../utils/redis.mjs';
+import { checkCacheItem, getClient } from '../utils/redis.mjs';
 import { IconButton } from '@material-ui/core';
 import React, { useState , useMemo, useEffect, useRef, useLayoutEffect } from "react";
 import PictureCard from '../components/PictureCard'
@@ -195,10 +195,15 @@ function CardanoLogo(props) {
   }
 export const getServerSideProps = async (context) => { 
   const props = {};
-  props.featuredPolicies = await getFeaturedPolicies('random','asc',0,true);  
+  
+  props.featuredPolicies = await getFeaturedPolicies('random','asc',0);  
   
   for (const policy of props.featuredPolicies) { 
     const policyProfile = await checkCacheItem('policyProfile:'+policy.policyID);
+    if (!policyProfile) { 
+      const redisClient = await getClient();
+      redisClient.publish('requestPolicyProfile',policy.policyID);
+    }
     let tokenData = await checkCacheItem('getTokenData:'+policyProfile);
     if (!tokenData) tokenData={};
     const thumbName = 'tokenThumb:'+tokenData.unit+':500:dark';

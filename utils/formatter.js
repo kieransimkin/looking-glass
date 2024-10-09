@@ -2,6 +2,7 @@
 import { getMetadata, getSmartImports, hexToAscii, hexToUtf8 } from "libcip54"
 import { checkCacheItem, cacheItem } from "./redis.mjs";
 import { getDataURL } from "./DataStore";
+import { setPolicyProfileUnit } from "./database.mjs";
 export const getTokenData = async function (token, throwOnCacheMiss=false, sparse=false) { 
     
     let tokenData = await checkCacheItem('getTokenData:'+token.unit);
@@ -24,11 +25,15 @@ export const getTokenData = async function (token, throwOnCacheMiss=false, spars
         }
         if (sparse) return tokenData; // important, we need to not save the cache here, if we do, we'll poison it with dead links
         tokenData.id=token.unit;
+        
         const thumbName = 'tokenThumb:'+token.unit+':500:dark';
         let thumbURL;
         if ((thumbURL = getDataURL(thumbName,'jpg'))) {
             tokenData.thumb = thumbURL;
-            if (!(await checkCacheItem('policyProfile:'+token.unit.substring(0,56))) && token.unit.length>56) cacheItem('policyProfile:'+token.unit.substring(0,56), token.unit);
+            if (!(await checkCacheItem('policyProfile:'+token.unit.substring(0,56))) && token.unit.length>56) {
+                setPolicyProfileUnit(token.unit.substr(0,56), token.unit);
+                cacheItem('policyProfile:'+token.unit.substring(0,56), token.unit);
+            }
         } else { 
             tokenData.thumb = '/api/getTokenThumb?unit='+token.unit;
         }
@@ -43,7 +48,9 @@ export const getTokenData = async function (token, throwOnCacheMiss=false, spars
         tokenData.full = '/api/getTokenFull?unit='+token.unit;
         tokenData.video = '/api/getTokenVideo?unit='+token.unit;
         tokenData.files = token.metadata?.files;
-        await cacheItem('getTokenData:'+token.unit,tokenData)
+        if (process.env.NODE_ENV=='production') { 
+            await cacheItem('getTokenData:'+token.unit,tokenData)
+        }
     }
     return tokenData;
 }

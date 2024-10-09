@@ -16,10 +16,13 @@ export default async function Browse(req, res) {
       showAll=false;
     }
     console.log(showAll);
-    let result = await getFeaturedPolicies(sort,sortOrder, page, showAll?false:true);
+    let result = await getPolicies(sort,sortOrder, page, showAll?false:true);
 
     for (const policy of result) { 
       const policyProfile = await checkCacheItem('policyProfile:'+policy.policyID);
+      if (!policyProfile) { 
+        redisClient.publish('requestPolicyProfile',policy.policyID);
+      }
       const tokenData = await checkCacheItem('getTokenData:'+policyProfile);
       policy.policyProfile=tokenData;
     }

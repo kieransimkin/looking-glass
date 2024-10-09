@@ -1,7 +1,7 @@
 import { getData, postData } from '../utils/Api';
 import {SmartNFTPortal} from 'smartnftportal'
 
-export default async (item, ready, width='100%', height='100%') => { 
+export default async function TokenPortal (item, ready, width='100%', height='100%') { 
     let smI = {tokenUnit:''};
     if (item?.metadata?.files[0]?.mediaType?.substring(0,9)!='text/html') return;
     if (item.metadata?.uses) { 

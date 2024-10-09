@@ -279,7 +279,7 @@ export default  function CIP54Playground(props) {
         image = "https://clg.wtf"+props.token.thumb;
     }
     const selectionChange = (item) => { 
-        console.log(item);
+        
         
         router.push({
             pathname: '/wallet/'+props.wallet.slug+'.'+item.unit,

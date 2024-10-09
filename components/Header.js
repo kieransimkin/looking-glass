@@ -120,10 +120,11 @@ const Header = (props) => {
     const [stakeAddr, setStakeAddr] = React.useState(null);
     const [walletApi, setWalletAPI] = React.useState(null);
     const [searchFocused, setSearchFocused] = React.useState(false);
+    const drawRef = React.useRef();
     const [tanchorEl, setAnchorEl] = React.useState(null);
     const [prevAnchor, setPrevAnchor]=React.useState();
     const [aboutOpen, setAboutOpen] =React.useState(false);
-    const drawRef = React.useRef();
+
     const anchorRef = React.useRef();
     let anchorEl = tanchorEl;
     if (searchFocused && anchorRef?.current) {
@@ -463,7 +464,10 @@ const Header = (props) => {
             <Drawer id="drawer" classes={{
                 paper: anchorEl?classes.drawerPaperOpen:classes.drawerPaper,
               }}
-                    
+              keepMounted={true}
+              ModalProps={{
+                keepMounted: true,
+            }}
              variant="persistent" anchor='right' open={!hide} className={className}>
                 
                 
@@ -476,14 +480,16 @@ const Header = (props) => {
                                 </a>
                             </Link>
                             <div ref={anchorRef} style={{position:'absolute', top:'50'}}></div>
+                            
                             <Popper
                             modifiers={{offset:{offset:'200'}}}
                                 id="simple-menu"
                                 classes={{
                                     paper: darkMode==='dark'?classes.menuPaper:classes.menuPaperLight
                                 }}
-                                anchorEl={anchorEl}
-                                keepMounted
+                                anchorEl={anchorEl || drawRef.current}
+                                keepMounted={true}
+                                disablePortal={false}
                                 open={Boolean(anchorEl)}
                                 getContentAnchorEl={null} 
                                 placement='right-start'
@@ -491,12 +497,14 @@ const Header = (props) => {
                                     if (searchFocused) return;
                                     menuCloseTimer=setTimeout(()=>{if (!searchFocused) handleClose();},2000)
                                 }}
-                                style={{position:'relative',top:'50', zIndex:'1000000000'}}
+                                style={{position:'absolute',top:'50', zIndex:'1000000000', right: '500'}}
                                 onMouseEnter={mouseEnter}
                             
                                 
                             >
+                            
                              <Paper id="menupaper" className={darkMode==='dark'?'menupaper':'menupaper-light'} style={{borderTopRightRadius:'0px !important'}}>
+                             
                                 <MenuList>
                                 {isTouch && 
                                     <Link href="/" passHref><MenuItem onClick={handleItemClick}>🏡 Home</MenuItem></Link>
@@ -517,6 +525,7 @@ const Header = (props) => {
                                 {walletApi &&
                                     <Link href={"/wallet/"+stakeAddr} ><MenuItem onClick={handleItemClick}>💸 My Wallet</MenuItem></Link>
                                 }   
+                                <Link href="/policy" passHref><a><MenuItem onClick={handleItemClick}>👉 Project Index</MenuItem></a></Link>
                                 <Link href="/stats" passHref><a><MenuItem onClick={handleItemClick}>📈 Stats</MenuItem></a></Link>
                                 <Link href="/live" passHref><a><MenuItem onClick={handleItemClick}>⚡ Live Feed</MenuItem></a></Link>
                                 <Link href="/randomPolicy" passHref><a target="_blank"><MenuItem onClick={handleItemClick}>⤮ Random Policy</MenuItem></a></Link>

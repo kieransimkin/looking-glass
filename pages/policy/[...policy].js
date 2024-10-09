@@ -51,15 +51,14 @@ export const getServerSideProps = async (context) => {
     if (token) { 
         policy = policy.substr(0,policy.length-(token.length+1));
     }
-    console.log('Token '+token)
-    console.log(policy);
+    
     let result = await getPolicy(policy);
     if (!result && token) { 
         token=null;
         policy = context.query.policy[0];
         result = await getPolicy(policy);
     }
-    console.log(result);
+    
 
     let props = {};
     if (result) {
@@ -85,6 +84,9 @@ export const getServerSideProps = async (context) => {
         }
         props.policy = JSON.parse(JSON.stringify(result));
         props.policyProfile = await checkCacheItem('policyProfile:'+result.policyID);
+        if (!props.policyProfile) { 
+            redisClient.publish('requestPolicyProfile',result.policyID);
+        }
         if (process.env.NODE_ENV=='production' && props.policyProfile) { 
             const thumbName = 'tokenThumb:'+props.policyProfile+':500:dark';
             let thumbURL;
@@ -122,7 +124,7 @@ export const getServerSideProps = async (context) => {
             tokens = tokens.slice(start, end);
             const promises = [];
             for (const token of tokens) { 
-                promises.push(getTokenData(token,true));
+                promises.push(getTokenData(token));
             }
             const tokResult = await Promise.all(promises)
             let failed = false;
