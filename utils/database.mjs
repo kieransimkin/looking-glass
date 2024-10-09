@@ -102,35 +102,35 @@ export const countPolicies = async () => {
     let count = null;
     try { 
         count = await client.query(`
-        select count(*) as "count" from policy where "assetCount">100 and "notFeatured"=false
+        select count(*) as "count" from policy where "notFeatured"=false
     `,[])
     } catch (e) { 
         console.log('Exception while doing countPolicies: '+e)
     }
-    console.log(count);
     return count?.rows[0].count;
 }
 export const countFeaturedPolicies = async () => { 
     let count = null;
     try { 
         count = await client.query(`
-        select count(*) as "count" from policy where "assetCount">100 and "notFeatured"=false AND "isFeatured"=true
+        select count(*) as "count" from policy where "notFeatured"=false AND "isFeatured"=true
     `,[])
     } catch (e) { 
         console.log('Exception while doing countPolicies: '+e)
     }
-    console.log(count);
     return count?.rows[0].count;
 }
 export const getFeaturedPolicies = async(sort, sortOrder, page=0) => { 
     return await getPolicies(sort, sortOrder, page, true);
 }
-export const getPolicies = async(sort, sortOrder, page=0, featuredOnly=false) => { 
+export const getPolicies = async(sort, sortOrder='desc', page=0, featuredOnly=false) => { 
     await dbinit();
     if (!Array.isArray(sort)) sort = [sort];
     const sortOptions = [];
     const whereOptions = [];
     const perPage = 10;
+    if (!sortOrder) sortOrder='desc';
+    if (!page) page=0;
     const args = [];
     for (const s of sort) { 
         switch (s) { 
@@ -178,13 +178,13 @@ export const getPolicies = async(sort, sortOrder, page=0, featuredOnly=false) =>
         to_char("lastMoved",'YYYY-MM-DD HH24:MI:SS') as "lastMoved",
         "assetCount",
         "totalActivity",
-        "totalHits" from policy where "assetCount">100 and "notFeatured"=false ${whereString} ORDER BY ${sortString} LIMIT $1
+        "totalHits" from policy where "notFeatured"=false ${whereString} ORDER BY ${sortString} LIMIT $1
         OFFSET $2 
     `,[perPage, perPage * page])
     } catch (e) { 
         console.log('Exception while doing getPolicies: '+e)
     }
-    console.log(q);
+    
     return policies.rows;
 }
 export const mysteryPolicies = async() => { 

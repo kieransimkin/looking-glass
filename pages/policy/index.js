@@ -19,7 +19,7 @@ export const getServerSideProps = async (context) => {
     let sort = context.query['sort'];
     let page = context.query.page;
     if (!sort || sort==='') { 
-        sort='totalHits';
+        sort='recentMint';
     }
     if (!sortOrder || sortOrder==='') { 
         sortOrder='desc';
@@ -40,7 +40,7 @@ export const getServerSideProps = async (context) => {
         if (!policyProfile) { 
             redisClient.publish('requestPolicyProfile',policy.policyID);
             continue;
-          }
+        }
         
         let tokenData = await checkCacheItem('getTokenData:'+policyProfile);
         

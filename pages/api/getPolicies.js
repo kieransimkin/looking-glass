@@ -28,37 +28,39 @@ export default async function Browse(req, res) {
 
     for (const policy of result) { 
       let policyProfile = policy.profileUnit;
-  
+      policy.title = policy.name;
       if (!policyProfile) { 
         redisClient.publish('requestPolicyProfile',policy.policyID);
-      }
-
-
-
-      policy.title = policy.name;
-      let tokenData = await checkCacheItem('getTokenData:'+policyProfile);
+      } else { 
+        let tokenData = await checkCacheItem('getTokenData:'+policyProfile);
       
-      if (!tokenData) tokenData={unit:policyProfile};
-      const thumbName = 'tokenThumb:'+tokenData.unit+':500:dark';
-      let thumbURL;
-      if ((thumbURL = getDataURL(thumbName,'jpg'))) {
-          tokenData.thumb = thumbURL;
-          policy.thumb = thumbURL;
-      }   else { 
-          tokenData.thumb = '/api/getTokenThumb?unit='+policyProfile;
-          policy.thumb = '/api/getTokenThumb?unit='+policyProfile;
+        if (!tokenData) tokenData={unit:policyProfile};
+        const thumbName = 'tokenThumb:'+tokenData.unit+':500:dark';
+        let thumbURL;
+        if ((thumbURL = getDataURL(thumbName,'jpg'))) {
+            tokenData.thumb = thumbURL;
+            policy.thumb = thumbURL;
+        }   else { 
+            tokenData.thumb = '/api/getTokenThumb?unit='+policyProfile;
+            policy.thumb = '/api/getTokenThumb?unit='+policyProfile;
+        }
+        const tinyName = 'tokenThumb:'+tokenData.unit+':64:dark';
+        let tinyURL;
+        if ((tinyURL = getDataURL(tinyName,'jpg'))) {
+          tokenData.tiny = tinyURL;
+        }else { 
+            tokenData.tiny = '/api/getTokenThumb?unit='+policyProfile+'&size=64';
+        }
+  
+  
+        
+        policy.policyProfile=tokenData;
       }
-      const tinyName = 'tokenThumb:'+tokenData.unit+':64:dark';
-      let tinyURL;
-      if ((tinyURL = getDataURL(tinyName,'jpg'))) {
-        tokenData.tiny = tinyURL;
-      }else { 
-          tokenData.tiny = '/api/getTokenThumb?unit='+policyProfile+'&size=64';
-      }
+
 
 
       
-      policy.policyProfile=tokenData;
+      
     }
     res.status(200).json({policies:result, page, start, end, totalPages, perPage });
     
