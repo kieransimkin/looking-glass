@@ -1,7 +1,7 @@
 import fs from 'fs';
 import * as database from '../utils/database.mjs'
 import dotenv from 'dotenv';
-import * as formatter from '../utils/formatter.js';
+import  {getTokenData} from '../utils/formatter.js';
 import * as redis from '../utils/redis.mjs'
 import * as syncClient from "../utils/dbsync.mjs";
 import * as libcip from "libcip54"
