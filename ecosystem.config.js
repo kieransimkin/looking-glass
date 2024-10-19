@@ -25,6 +25,7 @@ module.exports = {
       script: 'node_modules/.bin/next',
       instances: "16",
       args: "start",
+      cron_restart: '0 0 * * *',
       "exec_mode": "cluster",
       name: 'clg',
       env: getEnvVariables()
@@ -35,6 +36,7 @@ module.exports = {
             args:'daemon --config oura.toml',
             name: 'oura'
         },
+        /*
         {
             script:'npm run refreshWallet',
             instances:'1',
@@ -65,7 +67,7 @@ module.exports = {
             name:'generateThumbnails',
             env: getEnvVariables()
         },
-        //*/
+        
         {
           script:'npm run aiDesignateTitles',
           instances:'1',

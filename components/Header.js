@@ -124,6 +124,7 @@ const Header = (props) => {
     const [tanchorEl, setAnchorEl] = React.useState(null);
     const [prevAnchor, setPrevAnchor]=React.useState();
     const [aboutOpen, setAboutOpen] =React.useState(false);
+    const [shortcutsOpen, setShortcutsOpen] =React.useState(false);
 
     const anchorRef = React.useRef();
     let anchorEl = tanchorEl;
@@ -133,6 +134,9 @@ const Header = (props) => {
     
     const onAboutClose = () => { 
         setAboutOpen(false);
+    }
+    const onShortcutsClose = () => { 
+        setShortcutsOpen(false);
     }
     
     const [callbackFn, setCallbackFn] = React.useState({'fn': () => { return; }, 'fail': () => {return; }});
@@ -554,6 +558,7 @@ const Header = (props) => {
                                 </div>
                                 </MenuItem>
                                 <NestedMenuItem searchFocused={searchFocused} paperClassName="menupaper-help" direction="left" parentMenuOpen={Boolean(anchorEl)} label="🩺 Help">
+                                    <MenuItem onClick={()=>{ setShortcutsOpen(true); handleItemClick()}}>🛴 Shortcuts</MenuItem>
                                     <a target="_blank" href="https://github.com/kieransimkin/looking-glass/issues"><MenuItem onClick={handleItemClick}>🐞 Bugs / Feedback</MenuItem></a>
                                     <MenuItem onClick={()=>{ setAboutOpen(true); handleItemClick()}}>📇 About Info</MenuItem>
                                 </NestedMenuItem>

@@ -88,6 +88,7 @@ export default function Index (props) {
     const [bigInfoOpen, setBigInfoOpen] = useState(false);
     const [currentSelection, setCurrentSelection] = useState(null);
     const imgUrlPrefix = props.imgUrlPrefix;
+    
     const openBigInfo = (item) => { 
         console.log('Biginfo open');
         setBigInfoOpen(true);
@@ -100,6 +101,7 @@ export default function Index (props) {
     
 
     const renderBigInfo = useCallback( (i, onClose, goFullscreen, navbarHeight, newBigInfoOpen) => { 
+        return true;
         setBigInfoOpen(newBigInfoOpen);
         console.log('Called render biginfo');
         return <BigInfoBox onClose={onClose} goFullscreen={goFullscreen(i)} item={i} navbarHeight={navbarHeight} bigInfoOpen={newBigInfoOpen} />
@@ -146,6 +148,16 @@ export default function Index (props) {
         console.log('Called outer load more data function');
         
     }
+    const doClick = (item) => ({detail}) => {  
+        if (typeof window != 'undefined') {     
+            router.push({
+                pathname: '/policy/'+item.slug,
+                query: {  }
+            }, undefined, {shallow:true})
+        }
+    }
+        
+    
     const imgError = (e) => { 
         const origSrc = e.target.src;
         e.target.src='/img-loading.gif'
@@ -161,21 +173,24 @@ export default function Index (props) {
     const slideItemHTML = (click,ts, thumbSpacing) => { 
  
         return (item) => { 
+            let src= imgUrlPrefix+item.thumb;
             // The 60 below is the number of pixels we reserve in the slide bar for the label
-            return <li style={{paddingLeft:thumbSpacing,paddingBottom:thumbSpacing,paddingRight:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={imgUrlPrefix+item.thumb} height={ts-80} /><br />{item.title}</a></Link></li>
+            return <li style={{paddingLeft:thumbSpacing,paddingBottom:thumbSpacing,paddingRight:thumbSpacing}} key={item.id} data-id={item.id} onClick={doClick(item)}><Link passHref href={'/policy/'+item.slug} style={{pointerEvents:'all'}}><a><img data-policythumb={item.policyID} onError={imgError} src={src} height={ts-80} /><br />{item.title}</a></Link></li>
         }
     }
     const listItemHTML = (click,ts, thumbSpacing) => { 
         return (item,s,thumbSpacing) => { 
-            return <li  style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={imgUrlPrefix+item.thumb} width={32} /><br />{item.title}</a></Link></li>
+            let src= imgUrlPrefix+item.thumb;
+            return <li  style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={doClick(item)}><Link passHref href={'/policy/'+item.slug} style={{pointerEvents:'all'}}><a><img data-policythumb={item.policyID} onError={imgError} src={src} width={32} /><br />{item.title}</a></Link></li>
         }
     }
     
 
     const detailsItemHTML=(click,ts, thumbSpacing) => { 
         return (item) => { 
-            return <tr style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}>
-                <td width="30%"><Link passHref href={item.linkUrl}><a><img onError={imgError} src={imgUrlPrefix+item.thumb} width={64} />{item.title}</a></Link></td>
+            let src=imgUrlPrefix+item.thumb;
+            return <tr style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={doClick(item)}>
+                <td width="30%"><Link passHref href={'/policy/'+item.slug} style={{pointerEvents:'all'}}><a><img data-policythumb={item.policyID} onError={imgError} src={src} width={64} />{item.title}</a></Link></td>
                 <td width="auto"><OwnerList unit={item.unit} /></td>
                 </tr>
         }
@@ -184,7 +199,7 @@ export default function Index (props) {
 
     const thumbnailsItemHTML = (click,ts, thumbSpacing) => { 
         return (item) => { 
-            return <li style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={click(item)}><Link passHref href={item.linkUrl}><a><img onError={imgError} src={imgUrlPrefix+item.thumb} width={ts} /><br />{item.title}</a></Link></li>
+            return <li style={{paddingLeft:thumbSpacing,paddingRight:thumbSpacing,paddingBottom:thumbSpacing}} key={item.id} data-id={item.id} onClick={doClick(item)}><Link passHref href={'/policy/'+item.slug}><a><img data-policythumb={item.policyID} onError={imgError} src={imgUrlPrefix+item.thumb} width={ts} /><br />{item.title}</a></Link></li>
         }
     }
   

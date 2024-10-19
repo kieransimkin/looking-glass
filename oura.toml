@@ -2,6 +2,7 @@
 type = "N2N"
 address = ["Tcp", "localhost:3001"]
 magic = "mainnet"
+min_depth = 3
 
 [[filters]]
 type = "Selection"

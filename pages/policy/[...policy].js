@@ -144,7 +144,9 @@ export const getServerSideProps = async (context) => {
                     if ((tinyURL = getDataURL(tinyName,'jpg'))) {   
                         tokResult[c].tiny = tinyURL;
                     }
+                    
                 }
+                if (!tokResult[c].files) tokResult[c].files=[]
                 if (token && tokResult[c].unit==props.policy.policyID+token) { 
                     props.token=tokResult[c];
                 }
