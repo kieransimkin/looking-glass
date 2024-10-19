@@ -25,7 +25,7 @@ module.exports = {
       script: 'node_modules/.bin/next',
       instances: "16",
       args: "start",
-      cron_restart: '0 0 * * *',
+      cron_restart: '30 1 * * *',
       "exec_mode": "cluster",
       name: 'clg',
       env: getEnvVariables()
