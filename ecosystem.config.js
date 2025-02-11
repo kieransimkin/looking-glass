@@ -59,7 +59,7 @@ module.exports = {
             name:'runHits'
         },
         //*/
-        /*
+        
         {
             script:'npm run generateThumbnails',
             instances:'1',
@@ -67,7 +67,7 @@ module.exports = {
             name:'generateThumbnails',
             env: getEnvVariables()
         },
-        
+        /*
         {
           script:'npm run aiDesignateTitles',
           instances:'1',
